@@ -1,24 +1,32 @@
 <template>
 	<view class="content">
-		<image class="logo" src="/static/logo.png"></image>
+		<!-- <image class="logo" src="/static/logo.png"></image> -->
 		<view>
-			<text class="title">{{title}}</text>
+			<div class="title" @click="toMenu">{{title}}</div>
 		</view>
 	</view>
 </template>
 
 <script>
 	export default {
+		
 		data() {
 			return {
-				title: 'Hello'
+				title: '首页'
 			}
 		},
 		onLoad() {
 
 		},
 		methods: {
-
+			toMenu() {
+				this.$myrouter.push({
+					name: 'menu',
+					query: {
+						name: 'jjj'
+					}
+				})
+			}
 		}
 	}
 </script>
@@ -36,6 +44,7 @@
 	}
 
 	.title {
+		text-align: center;
 		font-size: 36upx;
 		color: #8f8f94;
 	}
