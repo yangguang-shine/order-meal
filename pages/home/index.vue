@@ -1,9 +1,9 @@
 <template>
-	<view class="content">
+	<view class="home-container">
 		<!-- <image class="logo" src="/static/logo.png"></image> -->
-		<view>
-			<div class="title" @click="toMenu">{{title}}</div>
-		</view>
+		<div class="banner1" @click="toMenu">点我去点餐页面</div>
+		<div class="banner2" @click="toOrderList">点我去订单列表</div>
+		<div class="banner3" @click="toCenter">点我去个人中心</div>
 	</view>
 </template>
 
@@ -12,7 +12,6 @@
 		
 		data() {
 			return {
-				title: '首页'
 			}
 		},
 		onLoad() {
@@ -26,23 +25,49 @@
 						name: 'jjj'
 					}
 				})
-			}
+			},
+			toOrderList() {
+				this.$myrouter.switchTab({
+					name: 'orderList',
+					query: {
+						name: 'jjj'
+					}
+				})
+			},
+			toCenter() {
+				this.$myrouter.switchTab({
+					name: 'center',
+					query: {
+						name: 'jjj'
+					}
+				})
+			},
 		}
 	}
 </script>
 
 <style>
-	.content {
+	.home-container {
 		text-align: center;
-		height: 400upx;
 	}
-
-	.logo {
-		height: 200upx;
-		width: 200upx;
-		margin-top: 200upx;
+	.banner1 {
+		width: 100%;
+		height: 150upx;
+		line-height: 150upx;
+		background-color: #732184;
 	}
-
+	.banner2 {
+		width: 100%;
+		height: 150upx;
+		line-height: 150upx;
+		background-color: #543615;
+	}
+	.banner3 {
+		width: 100%;
+		height: 150upx;
+		line-height: 150upx;
+		background-color: #124576;
+	}
 	.title {
 		text-align: center;
 		font-size: 36upx;

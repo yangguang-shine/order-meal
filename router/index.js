@@ -4,7 +4,7 @@ const routerList = [
 		path: '/pages/home/index'
 	},
 	{
-		name: 'order',
+		name: 'orderList',
 		path: '/pages/order/index'
 	},
 	{
@@ -14,6 +14,9 @@ const routerList = [
 	{
 		name: 'menu',
 		path: '/pages/menu/index'
+	},{
+		name: 'confirmOrder',
+		path: '/pages/menu/confirmOrder/index'
 	},
 ]
 export default routerList
