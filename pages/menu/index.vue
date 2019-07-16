@@ -1,14 +1,14 @@
 <template>
 	<div class="menu-container flex-col">
-		<div class="menu-header"></div>
+		<!-- <div class="menu-header"></div> -->
 		<div class="order-main flex-item flex-row">
 			<div class="category-aside-box">
-				<div class="aside-cateGory-item flex-row flex-a-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index">{{asideCategoryItem.categoryName}}+{{asideCategoryItem.orderCount}}</div>
+				<div class="aside-cateGory-item flex-row flex-a-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :style="{'border-left': selectCategoryTab.categoryName === asideCategoryItem.categoryName ? '10rpx solid ' + mainColor : '', 'background-color': selectCategoryTab.categoryName === asideCategoryItem.categoryName ? '#fff' : ''}" @click="changeSelectCategoryTab(asideCategoryItem)">{{asideCategoryItem.categoryName}}+{{asideCategoryItem.orderCount}}</div>
 			</div>
-			<scroll-view scroll-y class="food-main-box flex-item">
-				<div class="food-category-list-item" v-for="(foodCateGoryItem, index) in foodCategoryList" :key="index">
-					<div class="food-category-name">{{foodCateGoryItem.categoryName}}</div>
-					<div class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCateGoryItem.foodList" :key="foodIndex">
+			<scroll-view scroll-y :scroll-into-view="selectCategoryTab.id" class="food-main-box flex-item">
+				<div class="food-category-list-item" v-for="(foodCategoryItem, index) in foodCategoryList" :key="index">
+					<div :id="foodCategoryItem.id" class="food-category-name">{{foodCategoryItem.categoryName}}</div>
+					<div class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex">
 						<image class="food-img  flex-shrink" :src="foodItem.imgUrl" :mode="aspectFill"></image>
 						<div class="food-info-box flex-item flex-col flex-j-between">
 							<div class="food-name-description">
@@ -21,11 +21,11 @@
 							</div>
 							<div class="food-price-button flex-row flex-j-between flex-a-center">
 								<div class="food-price">¥{{foodItem.price}}</div>
-								<div v-if="foodItem.orderCount < 1" class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCateGoryItem.categoryName, foodItem)">+</div>
-								<div v-else class="flex-row ">
-									<div class="food-count-minus" :style="{'color': mainColor}" @click="minusCount(foodCateGoryItem.categoryName, foodItem)">-</div>
+								<div v-if="foodItem.orderCount < 1" class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryName, foodItem)">+</div>
+								<div v-else class="flex-row flex-a-center">
+									<div class="food-count-minus" :style="{'color': mainColor}" @click="minusCount(foodCategoryItem.categoryName, foodItem)">-</div>
 									<div class="food-order-count">{{foodItem.orderCount}}</div>
-									<div class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCateGoryItem.categoryName, foodItem)">+</div>
+									<div class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryName, foodItem)">+</div>
 								</div>
 							</div>
 						</div>
@@ -33,7 +33,43 @@
 				</div>
 			</scroll-view>
 		</div>
-		<div class="footer-cart" :style="{'background-color': mainColor}"></div>
+		<div class="footer-cart flex-row flex-j-between flex-a-center" :style="{'background-color': cartFoodList.foodList.length ?  mainColor : ''}">
+			<image class="cart-img" @click="changeShowCartDetail"></image>
+			<div class="flex-item cart-all-amount">
+				57
+			</div>
+			<div class="com-button confirm-order">去下单</div>
+		</div>
+		<div v-if="showCartDetail"  class="cart-detail-mask" @click.stop="showCartDetail = false">
+			<div class="cart-detail-box"  @touchmove.stop>
+				<scroll-view scroll-y class="cart-detail-list-box" @click.stop >
+					<div class="food-category-item" v-for="(foodCategoryItem, index) in cartFoodList" :key="index">
+						<div class="cart-food-item flex-row" v-for="(cartFoodItem, cartFoodIndex) in foodCategoryItem.foodList" :key="cartFoodIndex">
+							<image v-if="cartFoodItem.orderCount" class="food-img flex-shrink" :src="cartFoodItem.imgUrl"></image>
+							<div v-if="cartFoodItem.orderCount" class="food-info-box flex-item flex-col flex-j-between">
+								<div class="food-name-description">
+									<div class="food-name">
+										{{cartFoodItem.foodName}}111{{foodCategoryItem.categoryName}}
+									</div>
+									<div class="food-description">
+										{{cartFoodItem.description}}
+									</div>
+								</div>
+								<div class="food-price-button flex-row flex-j-between flex-a-center">
+									<div class="food-price">¥{{cartFoodItem.price}}</div>
+									<div v-if="cartFoodItem.orderCount < 1" class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryName, cartFoodItem)">+</div>
+									<div v-else class="flex-row flex-a-center">
+										<div class="food-count-minus" :style="{'color': mainColor}" @click="minusCount(foodCategoryItem.categoryName, cartFoodItem)">-</div>
+										<div class="food-order-count">{{cartFoodItem.orderCount}}</div>
+										<div class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryName, cartFoodItem)">+</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</scroll-view>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -54,7 +90,51 @@ export default {
 					// ]
 			addCountState: true,
 			minusCountState: true,
-			foodCategoryList: [
+			selectCategoryTab: '',
+			showCartDetail: false,
+			foodCategoryList: []
+		}
+	},
+	computed: {
+		...mapState({
+			mainColor: state => state.mainColor,
+			cartFoodList: state => state.cartFoodList,
+		}),
+		asideCategoryList() {
+			const asideCategoryList = this.foodCategoryList.map(foodCategoryItem => {
+				const cartFind = this.cartFoodList.find(cartFoodItem => cartFoodItem.categoryName === foodCategoryItem.categoryName)
+				if (cartFind) {
+					const orderCount = cartFind.foodList.reduce((all, item) => {
+						all += item.orderCount
+						return all
+					}, 0)
+					return {
+						categoryName: foodCategoryItem.categoryName,
+						orderCount,
+						id: foodCategoryItem.id
+					}
+				} else {
+					return {
+						categoryName: foodCategoryItem.categoryName,
+						orderCount: 0,
+						id: foodCategoryItem.id
+					}
+				}
+			})
+			return asideCategoryList
+		}
+	},
+
+	onShow() {
+		this.init()
+	},
+	methods: {
+		...mapMutations({
+			cartCountChange: 'cartCountChange',
+		}),
+		async init() {
+			let id = 1000
+			this.foodCategoryList = [
 				{
 					categoryName: '凉菜',
 					foodList: [
@@ -224,52 +304,36 @@ export default {
 					]
 				},
 			]
-		}
-	},
-	computed: {
-		...mapState({
-			mainColor: state => state.mainColor,
-			cartFoodList: state => state.cartFoodList,
-		}),
-		asideCategoryList() {
-			const asideCategoryList = this.foodCategoryList.map(foodCategoryItem => {
-				const cartFind = this.cartFoodList.find(cartFoodItem => cartFoodItem.categoryName === foodCategoryItem.categoryName)
-				if (cartFind) {
-					const orderCount = cartFind.foodList.reduce((all, item) => {
-						console.log(item)
-						all += item.orderCount
-						console.log(all)
-						return all
-					}, 0)
-					return {
-						categoryName: foodCategoryItem.categoryName,
-						orderCount
-					}
-				} else {
-					return {
-						categoryName: foodCategoryItem.categoryName,
-						orderCount: 0
-					}
-				}
+			this.foodCategoryList.forEach(item => {
+				item.id = 'a' + (id++)
 			})
-			console.log(asideCategoryList)
-			console.log(this.cartFoodList)
-			return asideCategoryList
-		}
-	},
-	onLoad() {
-		console.log(this.mainColor)
-	},
-	methods: {
-		...mapMutations({
-			cartCountChange: 'cartCountChange',
-		}),
+			if (this.foodCategoryList.length) {
+				this.selectCategoryTab = {
+					categoryName: this.foodCategoryList[0].categoryName,
+					id: this.foodCategoryList[0].id
+				}
+			}
+		},
+		changeShowCartDetail() {
+			if (!this.cartFoodList.length){
+				this.showCartDetail = false
+				return
+			} 
+			this.showCartDetail = !this.showCartDetail
+		},
+		changeSelectCategoryTab(asideCategoryItem) {
+			this.selectCategoryTab = {
+				categoryName: asideCategoryItem.categoryName,
+				id: asideCategoryItem.id
+			}
+		},
 		addCount(categoryName, foodItem) {
 			if (!this.addCountState) return
 			this.addCountState = false
 			foodItem.orderCount += 1
 			this.cartCountChange({ categoryName, foodItem })
 			this.addCountState = true
+			if (!this.cartFoodList.length) this.showCartDetail = false
 		},
 		minusCount(categoryName, foodItem) {
 			if (!this.minusCountState) return
@@ -277,6 +341,7 @@ export default {
 			foodItem.orderCount -= 1
 			this.cartCountChange({ categoryName, foodItem })
 			this.minusCountState = true
+			if (!this.cartFoodList.length) this.showCartDetail = false
 		}
 	}
 }
@@ -335,7 +400,6 @@ page {
 		}
 		.food-name {
 			font-weight: bold;
-
 		}
 		.food-description {
 			font-size: 24rpx;
@@ -373,5 +437,83 @@ page {
 	width: 100%;
 	height: 100rpx;
 	background-color: #ccc;
+	border-radius: 50rpx;
+	.cart-all-amount {
+		padding-left: 160rpx
+	}
+	.cart-img {
+		position: fixed;
+		bottom: 0;
+		left: 30rpx;
+		height: 100rpx;
+		width: 100rpx;
+		background-color: red;
+	}
+	.confirm-order {
+		margin-right: 10rpx;
+		width: 250rpx;
+		background-color: #aaa;
+	}
+}
+.cart-detail-mask {
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 100rpx;
+	width: 100%;
+	background-color: rgba(0, 0, 0, .5);
+	font-size: 28rpx;
+	-webkit-overflow-scrolling: touch;
+	z-index: 2;
+	.cart-detail-box {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		max-height: 800rpx;
+		box-sizing: border-box;
+		padding: 30rpx;
+		background-color: #fff;
+		overflow-y: auto;
+		z-index: 5;
+	}
+	.cart-detail-list-box {
+		max-height: 700rpx;
+	}
+	.cart-food-item {
+		padding: 10rpx 0;
+	}
+	.food-img {
+		height: 130rpx;
+		width: 130rpx;
+	}
+	.food-name {
+		max-width: 400rpx;
+	}
+	.food-description {
+		font-size: 24rpx;
+	}
+		.food-count-minus {
+			width: 50rpx;
+			height: 50rpx;
+			border: 1px solid;
+			border-radius: 50%;
+			text-align: center;
+			line-height: 40rpx;
+			background-color: #fff;
+			box-sizing: border-box;
+		}
+		.food-order-count {
+			width: 70rpx;
+			text-align: center;
+		}
+		.food-count-add {
+			width: 50rpx;
+			height: 50rpx;
+			border-radius: 50%;
+			text-align: center;
+			line-height: 40rpx;
+			color: #fff;
+		}
 }
 </style>
