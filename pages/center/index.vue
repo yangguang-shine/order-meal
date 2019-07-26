@@ -1,8 +1,8 @@
 <template>
-	<view class="content">
+	<view class="content" @click="toSaveFoodInfo">
 		<!-- <image class="logo" src="/static/logo.png"></image> -->
 		<view>
-			<text class="title">{{title}}</text>
+			
 		</view>
 	</view>
 </template>
@@ -11,14 +11,16 @@
 	export default {
 		data() {
 			return {
-				title: '我的'
+				title: ''
 			}
 		},
 		onLoad() {
 
 		},
 		methods: {
-
+			toSaveFoodInfo() {
+				
+			}
 		}
 	}
 </script>

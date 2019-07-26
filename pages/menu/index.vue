@@ -3,13 +3,13 @@
 		<!-- <div class="menu-header"></div> -->
 		<div class="order-main flex-item flex-row">
 			<div class="category-aside-box">
-				<div class="aside-cateGory-item flex-row flex-a-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :style="{'border-left': selectCategoryTab.categoryName === asideCategoryItem.categoryName ? '10rpx solid ' + mainColor : '', 'background-color': selectCategoryTab.categoryName === asideCategoryItem.categoryName ? '#fff' : ''}" @click="changeSelectCategoryTab(asideCategoryItem)">{{asideCategoryItem.categoryName}}+{{asideCategoryItem.orderCount}}</div>
+				<div class="aside-cateGory-item flex-row flex-a-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :style="{'border-left': selectCategoryTabId === asideCategoryItem.id ? '10rpx solid ' + mainColor : '', 'background-color': selectCategoryTabId === asideCategoryItem.id ? '#fff' : ''}" @click="changeSelectCategoryTab(asideCategoryItem)">{{asideCategoryItem.categoryName}}+{{asideCategoryItem.orderCount}}</div>
 			</div>
-			<scroll-view scroll-y :scroll-into-view="selectCategoryTab.id" class="food-main-box flex-item">
-				<div class="food-category-list-item" v-for="(foodCategoryItem, index) in foodCategoryList" :key="index">
+			<scroll-view scroll-y :scroll-into-view="selectCategoryTabId" class="food-main-box flex-item">
+				<div class="food-category-list-item" :data-food-category-item="JSON.stringify(foodCategoryItem)" v-for="(foodCategoryItem, index) in foodCategoryList" :key="index">
 					<div :id="foodCategoryItem.id" class="food-category-name">{{foodCategoryItem.categoryName}}</div>
 					<div class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex">
-						<image class="food-img  flex-shrink" :src="foodItem.imgUrl" :mode="aspectFill"></image>
+						<image class="food-img  flex-shrink" :src="foodItem.imgUrl" mode="aspectFill"></image>
 						<div class="food-info-box flex-item flex-col flex-j-between">
 							<div class="food-name-description">
 								<div class="food-name">
@@ -33,12 +33,12 @@
 				</div>
 			</scroll-view>
 		</div>
-		<div class="footer-cart flex-row flex-j-between flex-a-center" :style="{'background-color': cartFoodList.foodList.length ?  mainColor : ''}">
+		<div class="footer-cart flex-row flex-j-between flex-a-center" >
 			<image class="cart-img" @click="changeShowCartDetail"></image>
 			<div class="flex-item cart-all-amount">
-				57
+				{{cartFoodList.length}}
 			</div>
-			<div class="com-button confirm-order">去下单</div>
+			<div class="com-button confirm-order" :style="{'background-color': cartFoodListMainColor }" @click="toComfirmOrder">去下单</div>
 		</div>
 		<div v-if="showCartDetail"  class="cart-detail-mask" @click.stop="showCartDetail = false">
 			<div class="cart-detail-box"  @touchmove.stop>
@@ -75,22 +75,13 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+let observer = null
 export default {
 	data() {
 		return {
-					// categoryName: '热菜',
-					// foodList: [
-					// 	{
-					// 		foodName: '鱼香肉丝',
-					// 		unit: '盘',
-					// 		price: 24,
-					// 		description: '嘻嘻嘻',
-					// 		imgUrl: 'http://res.hualala.com/group3/M02/3D/4E/wKgVe1zQAKiNzqqYAAH3cyQfIuE214.png'
-					// 	},
-					// ]
 			addCountState: true,
 			minusCountState: true,
-			selectCategoryTab: '',
+			selectCategoryTabId: '',
 			showCartDetail: false,
 			foodCategoryList: []
 		}
@@ -100,6 +91,9 @@ export default {
 			mainColor: state => state.mainColor,
 			cartFoodList: state => state.cartFoodList,
 		}),
+		cartFoodListMainColor() {
+			return this.cartFoodList.length ? this.mainColor: ''
+		},
 		asideCategoryList() {
 			const asideCategoryList = this.foodCategoryList.map(foodCategoryItem => {
 				const cartFind = this.cartFoodList.find(cartFoodItem => cartFoodItem.categoryName === foodCategoryItem.categoryName)
@@ -121,12 +115,39 @@ export default {
 					}
 				}
 			})
+			console.log(asideCategoryList)
 			return asideCategoryList
 		}
 	},
-
+	onReady() {
+		observer = uni.createIntersectionObserver(this, {
+                observeAll: true
+            });
+		observer.relativeTo('.food-main-box').observe('.food-category-list-item', (res) => {
+					console.log(res.dataset)
+					const foodCategoryItem = JSON.parse(res.dataset.foodCategoryItem)
+				if (res.intersectionRatio === 0 && res.boundingClientRect.bottom < res.relativeRect.top) {
+					this.selectCategoryTabId = foodCategoryItem.nextId
+					console.log(111)
+				} else if (0 < res.intersectionRatio && res.intersectionRatio < 1 && res.boundingClientRect.top < res.intersectionRect.top) {
+					this.selectCategoryTabId = foodCategoryItem.id
+					console.log(333)
+				}
+		})
+	},
+	onUnload() {
+		if (observer) {
+			observer.disconnect()
+		}
+	},
 	onShow() {
 		this.init()
+		// observer = uni.createIntersectionObserver(this, {
+        //         observeAll: true
+        //     });
+		// observer.relativeTo('.food-main-box').observe('.food-category-list-item', (res) => {
+		// 		console.log(res)
+		// })
 	},
 	methods: {
 		...mapMutations({
@@ -304,14 +325,17 @@ export default {
 					]
 				},
 			]
-			this.foodCategoryList.forEach(item => {
-				item.id = 'a' + (id++)
+			this.foodCategoryList.forEach((item, index) => {
+				item.id = 'a' + id
+				if (index >= this.foodCategoryList.length - 1) {
+					item.nextId = 'a' + id
+				} else {
+					item.nextId = 'a' + (id + 1)
+				}
+				id += 1;
 			})
 			if (this.foodCategoryList.length) {
-				this.selectCategoryTab = {
-					categoryName: this.foodCategoryList[0].categoryName,
-					id: this.foodCategoryList[0].id
-				}
+				this.selectCategoryTabId = this.foodCategoryList[0].id
 			}
 		},
 		changeShowCartDetail() {
@@ -322,10 +346,7 @@ export default {
 			this.showCartDetail = !this.showCartDetail
 		},
 		changeSelectCategoryTab(asideCategoryItem) {
-			this.selectCategoryTab = {
-				categoryName: asideCategoryItem.categoryName,
-				id: asideCategoryItem.id
-			}
+			this.selectCategoryTabId = asideCategoryItem.id
 		},
 		addCount(categoryName, foodItem) {
 			if (!this.addCountState) return
@@ -342,6 +363,14 @@ export default {
 			this.cartCountChange({ categoryName, foodItem })
 			this.minusCountState = true
 			if (!this.cartFoodList.length) this.showCartDetail = false
+			console.log(this.cartFoodList.length)
+		},
+		toComfirmOrder() {
+			if (!this.cartFoodList.length) return;
+			console.log(111)
+			this.$myrouter.push({
+				name: 'confirmOrder'
+			})
 		}
 	}
 }
@@ -436,7 +465,7 @@ page {
 	left: 0;
 	width: 100%;
 	height: 100rpx;
-	background-color: #ccc;
+	background-color: #434346;
 	border-radius: 50rpx;
 	.cart-all-amount {
 		padding-left: 160rpx
@@ -452,7 +481,7 @@ page {
 	.confirm-order {
 		margin-right: 10rpx;
 		width: 250rpx;
-		background-color: #aaa;
+		background-color: #666;
 	}
 }
 .cart-detail-mask {

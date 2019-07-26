@@ -1,11 +1,74 @@
 <template>
-	<div>
-		确认订单
+	<div class="comfirm-order-container">
+		<div class="food-category-item" v-for="(foodCategoryItem, index) in cartFoodList" :key="index">
+			<div class="food-item flex-row flex-a-center" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex">
+				<image class="food-img flex-shrink" :src="foodItem.imgUrl"></image>
+				<div class="food-info">
+					<div class="food-name line1">{{foodItem.foodName}}</div>
+					<div class="food-price">¥{{foodItem.price}}</div>
+				</div>
+				<div class="food-count">×{{foodItem.orderCount}}</div>
+				<div class="food-count-price">¥{{foodItem.price * foodItem.orderCount}}</div>
+			</div>
+		</div>
+		<div class="submit-order com-button" @click="submitOrder" :style="{'background-color': mainColor}">提交</div>
 	</div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+export default {
+	data() {
+		return {}
+	},
+	computed: {
+		...mapState({
+			cartFoodList: state => state.cartFoodList,
+			mainColor: state => state.mainColor,
+		})
+	}
+}
 </script>
 
-<style>
+<style lang="scss">
+.comfirm-order-container {
+	padding: 30rpx;
+	font-size: 28rpx;
+	.food-item {
+		padding: 10rpx 0;
+	}
+	.food-img {
+		height: 90rpx;
+		width: 90rpx;
+		border-radius: 8rpx;
+		margin-right: 12rpx;
+	}
+	.food-info {
+		flex: 10
+	}
+	.food-name {
+		max-width: 450rpx;
+	}
+	.font-price {
+		font-size: 24rpx;
+		color: #666;
+	}
+	.food-count {
+		flex: 1;
+		font-size: 26rpx;
+		text-align: center;
+		color: #666;
+	}
+	.food-count-price {
+		flex: 2;
+		font-size: 26rpx;
+		text-align: center;
+	}
+	.submit-order {
+		position: fixed;
+		bottom: 10rpx;
+		left: 0;
+		width: 100%;
+	} 
+}
 </style>
