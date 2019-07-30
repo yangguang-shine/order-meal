@@ -1,0 +1,24 @@
+{
+  "name": "my-uni-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "flyio": "^0.6.14"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yangguang-shine/my-uni-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yangguang-shine/my-uni-app/issues"
+  },
+  "homepage": "https://github.com/yangguang-shine/my-uni-app#readme"
+}

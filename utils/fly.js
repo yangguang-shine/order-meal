@@ -1,4 +1,4 @@
-const Fly = retuire('flyio')
+const Fly = require('flyio/dist/npm/wx')
 const fly = new Fly;
 // {
 //     method:"",//请求方法， GET 、POST ...
@@ -24,11 +24,11 @@ fly.interceptors.response.use(
         console.log(err)
     }
 )
-const flyRequest = async (url, params, method) => {
-    return new Promise((resolve, reject) => {
+const flyRequest = (url, params, method) => {
+    return new Promise(async (resolve, reject) => {
         try {
             const res = await fly[method](url, params);
-            if (res.data.code === 000) {
+            if (res.code === '000') {
                 resolve(res)
             } else {
                 reject(res)
