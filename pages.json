@@ -6,27 +6,73 @@
 				"navigationBarTitleText": "首页",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
-		}, {
+		}, 
+		{
 			"path": "pages/order/index",
 			"style": {
 				"navigationBarTitleText": "订单"	,
 				"navigationBarBackgroundColor": "#ffffff"
 				
 			}
-		} ,{
+		},
+		{
 			"path": "pages/center/index",
 			"style": {
 				"navigationBarTitleText": "我的",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
-		},{
+		},
+		{
 			"path": "pages/menu/index",
 			"style": {
 				"navigationBarTitleText": "点餐",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
-		},{
+		},
+		{
 			"path": "pages/menu/confirmOrder/index",
+			"style": {
+				"navigationBarTitleText": "点餐",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/category/list/index",
+			"style": {
+				"navigationBarTitleText": "点餐",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/category/add/index",
+			"style": {
+				"navigationBarTitleText": "点餐",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/category/edit/index",
+			"style": {
+				"navigationBarTitleText": "点餐",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/food/list/index",
+			"style": {
+				"navigationBarTitleText": "点餐",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/food/add/index",
+			"style": {
+				"navigationBarTitleText": "点餐",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/food/edit/index",
 			"style": {
 				"navigationBarTitleText": "点餐",
 				"navigationBarBackgroundColor": "#ffffff"

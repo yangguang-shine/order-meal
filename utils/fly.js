@@ -31,6 +31,10 @@ const flyRequest = (url, params, method) => {
             if (res.code === '000') {
                 resolve(res)
             } else {
+                uni.showModal({
+                    title: '提示',
+                    content: res.msg
+                })
                 reject(res)
             }
         } catch (e) {

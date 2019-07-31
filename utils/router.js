@@ -5,7 +5,9 @@ const routerMap = routerList.reduce((obj, item) => {
 }, {})
 const router = (api) => (params = {}) => {
 	const path = routerMap[params.name]
-	const search =  Object.keys(params.query || {}).map(key => `key=${params.query[key]}`).join('&')
+	console.log(params)
+	const search =  Object.keys(params.query || {}).map(key => `${key}=${params.query[key]}`).join('&')
+	console.log(search)
 	const url = `${path}${search ? `?${search}` : ''}`
 	uni[api]({
 		url
