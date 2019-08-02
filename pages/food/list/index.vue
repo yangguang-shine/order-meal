@@ -1,8 +1,23 @@
 <template>
-	<view class="center-container flex-col">
+	<view class="food-list-container flex-col">
 		<!-- <image class="logo" src="/static/logo.png"></image> -->
-		<div class="category-item" @click="toCategoryList">
-			<div>分类</div>
+		<div v-for="(foodItem, index) in foodList" :key="index" class="food-item flex-row " @click="toCategoryList" @click="toEdit(foodItem.foodID)">
+			<image class="food-img" :src="foodItem.imgUrl"></image>
+			<div class="food-info flex-item flex-col flex-j-around">
+				<div class="line1 food-name">
+					{{foodItem.foodName}}/{{foodItem.unit}}
+				</div>
+				<div class="food-description">
+					{{foodItem.description}}
+				</div>
+				<div class="food-price">
+					{{foodItem.price}}
+				</div>
+			</div>
+			<div class="food-delete" @click="deleteFood">×</div>
+		</div>
+		<div class="food-add" @click="toAddFood">
+			增加food
 		</div>
 	</view>
 </template>
@@ -10,57 +25,92 @@
 	export default {
 		data() {
 			return {
-				title: ''
+				categoryID: ''
 			}
 		},
-		onLoad() {
-
+		onLoad(options) {
+			this.categoryID = options.categoryID
+			this.init()
 		},
 		methods: {
-			toCategoryList() {
+			async init() {
+				try {
+					const res = await this.$fetch.get('/api/food/list', { categoryID })
+					this.foodList = res.data || []
+				} catch(e) {
+					console.log(e)
+				}
+			}, 
+			toEdit(foodID) {
 				this.$myrouter.push({
-					name: 'category/list'
+					name: 'food/edit',
+					query: {
+						foodID: foodID
+					}
 				})
 			},
-			// addFoodInfo() {
-			// 	this.$fetch.post('/api/foodInfo/add', {
-			// 				foodName: '鱼香肉丝14',
-			// 				unit: '盘',
-			// 				price: 24,
-			// 				description: '哦哦哦',
-			// 				orderCount: 0,
-			// 				imgUrl: 'http://res.hualala.com/group3/M03/3D/7C/wKgVbVzQALiMc1TJAAG4mjhZiPs692.png',
-			// 				categoryName: '水果',
-			// 				categoryID: 1000
-			// 			})
-			// },
-			// deleteFoodInfo() {
-			// 	this.$fetch.post('/api/foodInfo/delete', {
-			// 				foodName: '鱼香肉丝14',
-			// 				foodID: 10006
-			// 			})
-			// },
-			// updateFoodInfo() {
-			// 	this.$fetch.post('/api/foodInfo/update', {
-			// 				foodName: '鱼香肉丝14',
-			// 				description: '嘻嘻嘻',
-			// 			})
-			// },
-			// findFoodInfo() {
-			// 	this.$fetch.get('/api/foodInfo/find', {
-			// 				foodName: '鱼香肉丝14',
-			// 			})
-			// },
+			toAddFood() {
+				this.myrouter.push({
+					name: 'food/add',
+					query: {
+						isAddFood: 1
+					}
+				})
+			},
+			deleteFood(foodID) {
+				uni.showModal({
+					async success() {
+						try {
+							const res = await this.$fetch.post('/api/food/delete', { foodID } )
+						} catch(e) {
+							console.log(e)
+						}
+					}
+				})
+			},
 		}
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
 	height: 100%;
 }
-.center-container  {
-	height: 100%;
+.food-list-container  {
+	min-height: 100%;
 	font-size: 28rpx;
+	padding: 20rpx;
+	box-sizing: border-box;
+	.food-item  {
+		margin-bottom: 30rpx;
+		position: relative;
+	}
+	.food-img {
+		height: 100rpx;
+		width: 100rpx;
+		margin-right: 10rpx;
+	}
+	.food-info {
+		height: 100rpx;
+	}
+	.food-description {
+		font-size: 24rpx;
+		color: #666;
+	}
+	.food-delete {
+		position: absolute;
+		right: 10rpx;
+		top: 10rpx;
+		font-size: 40rpx;
+	}
+	.food-add {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		height: 100rpx;
+		width: 100%;
+		text-align: center;
+		line-height: 100rpx;
+	}
 }
 </style>

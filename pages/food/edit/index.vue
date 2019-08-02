@@ -1,66 +1,109 @@
 <template>
-	<view class="center-container flex-col">
+	<view class="food-info-container">
 		<!-- <image class="logo" src="/static/logo.png"></image> -->
-		<div class="category-item" @click="toCategoryList">
-			<div>分类</div>
+		<div class="food-info-item flex-row flex-a-center">
+			<div>foodName:</div>
+			<input type="text" v-model="foodInfo.foodName">
 		</div>
+		<div class="food-info-item flex-row flex-a-center">
+			<div>price:</div>
+			<input type="text"  v-model="foodInfo.price">
+		</div>
+		<div class="food-info-item flex-row flex-a-center">
+			<div>unit:</div>
+			<input type="text" v-model="foodInfo.unit">
+		</div>
+		<div class="food-info-item flex-row flex-a-center">
+			<div>description:</div>
+			<input type="text" v-model="foodInfo.description">
+		</div>
+		<div class="food-info-item flex-row flex-a-center">
+			<div>imgUrl:</div>
+			<image v-if="foodID.imgUrl" class="food-img" :src="foodID.imgUrl" @click="chooseImg"></image>
+			<div v-else class="food-no-img" @click="chooseImg">+</div>
+		</div>
+		<div v-if="foodID" class="food-button" @click="editFood">
+			修改			
+		</div>
+		<div v-else class="food-button" @click="addFood">
+			增加			
+		</div>
+		
 	</view>
 </template>
 <script>
 	export default {
 		data() {
 			return {
-				title: ''
+				foodInfo: {},
+				foodID: '',
+				isAddFood: ''
 			}
 		},
-		onLoad() {
-
+		onLoad(options) {
+			this.foodID = options.foodID
+			if (!this.foodID) {
+				foodInfo.imgUrl = ''
+			}
+			this.init()
 		},
 		methods: {
-			toCategoryList() {
-				this.$myrouter.push({
-					name: 'category/list'
-				})
+			async init() {
+				try {
+					this.foodInfo = await this.$fetch.post('/api/food/find', { foodID: this.foodID})
+				} catch(e) {
+					console.log(e)
+				}
 			},
-			// addFoodInfo() {
-			// 	this.$fetch.post('/api/foodInfo/add', {
-			// 				foodName: '鱼香肉丝14',
-			// 				unit: '盘',
-			// 				price: 24,
-			// 				description: '哦哦哦',
-			// 				orderCount: 0,
-			// 				imgUrl: 'http://res.hualala.com/group3/M03/3D/7C/wKgVbVzQALiMc1TJAAG4mjhZiPs692.png',
-			// 				categoryName: '水果',
-			// 				categoryID: 1000
-			// 			})
-			// },
-			// deleteFoodInfo() {
-			// 	this.$fetch.post('/api/foodInfo/delete', {
-			// 				foodName: '鱼香肉丝14',
-			// 				foodID: 10006
-			// 			})
-			// },
-			// updateFoodInfo() {
-			// 	this.$fetch.post('/api/foodInfo/update', {
-			// 				foodName: '鱼香肉丝14',
-			// 				description: '嘻嘻嘻',
-			// 			})
-			// },
-			// findFoodInfo() {
-			// 	this.$fetch.get('/api/foodInfo/find', {
-			// 				foodName: '鱼香肉丝14',
-			// 			})
-			// },
+			async addFood() {
+				try {
+					const res = await this.$fetch.post('/api/food/add', { ...this.foodInfo })
+				} catch(e) {
+					console.log(e)
+				}
+			},
+			async editFood() {
+				try {
+					const res = await this.$fetch.post('/api/food/edit', { ...foodInfo })
+				} catch(e) {
+					console.log(e)
+				}
+			},
 		}
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 page {
 	height: 100%;
 }
-.center-container  {
-	height: 100%;
+.food-info-container {
+	min-height: 100%;
 	font-size: 28rpx;
+	box-sizing: border-box;
+	padding: 20rpx;
+	.food-info-item {
+		padding: 16rpx;
+		border-bottom: 1px solid #eee
+	}
+	.food-img {
+		height: 100rpx;
+		width: 100rpx;
+	}
+	.food-no-img {
+		height: 100rpx;
+		width: 100rpx;
+		text-align: center;
+		line-height: 92rpx;
+		font-size: 60rpx;
+	}
+	.food-button {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		height: 80rpx;
+		width: 100%;
+		background-color: #fff;
+	}
 }
 </style>
