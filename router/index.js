@@ -7,10 +7,6 @@ const categoryList = [
 		name: 'category/edit',
 		path: '/pages/category/edit/index'
 	},
-	{
-		name: 'category/add',
-		path: '/pages/category/add/index'
-	},
 ]
 const foodList = [
 	{
@@ -20,10 +16,6 @@ const foodList = [
 	{
 		name: 'food/edit',
 		path: '/pages/food/edit/index'
-	},
-	{
-		name: 'food/add',
-		path: '/pages/food/add/index'
 	},
 ]
 const routerList = [

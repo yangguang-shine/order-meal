@@ -33,7 +33,6 @@ export default {
             })
         },
         editCategory(categoryItem) {
-            console.log(categoryItem)
             this.$myrouter.push({
                 name: 'category/edit',
                 query: {
@@ -43,9 +42,8 @@ export default {
             })
         },
         addCategory() {
-            console.log(11)
             this.$myrouter.push({
-                name: 'category/add'
+                name: 'category/edit'
             })
         },
     }

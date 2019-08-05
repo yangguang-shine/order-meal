@@ -22,11 +22,18 @@
 			<image v-if="foodID.imgUrl" class="food-img" :src="foodID.imgUrl" @click="chooseImg"></image>
 			<div v-else class="food-no-img" @click="chooseImg">+</div>
 		</div>
-		<div v-if="foodID" class="food-button" @click="editFood">
-			修改			
+		<div v-if="foodID" class="flex-row flex-j-around">
+			<div class="food-button" @click="editFood">
+				修改			
+			</div>
+			<div class="food-button" @click="editFood">
+				修改			
+			</div>
 		</div>
-		<div v-else class="food-button" @click="addFood">
-			增加			
+		<div v-else class="felx-row flex-ja-center">
+			<div class="food-button" @click="addFood">
+				增加			
+			</div>
 		</div>
 		
 	</view>
@@ -35,29 +42,39 @@
 	export default {
 		data() {
 			return {
-				foodInfo: {},
+				foodInfo: {
+					foodName: '',
+					price: '',
+					unit: '',
+					description: '',
+					imgUrl: '',
+				},
+				categoryID: '',
 				foodID: '',
-				isAddFood: ''
 			}
 		},
 		onLoad(options) {
 			this.foodID = options.foodID
+			this.categoryID = options.categoryID
 			if (!this.foodID) {
-				foodInfo.imgUrl = ''
+				this.foodInfo.imgUrl = ''
 			}
-			this.init()
+			if (this.foodID) {
+				this.init()
+			}
 		},
 		methods: {
 			async init() {
 				try {
-					this.foodInfo = await this.$fetch.post('/api/food/find', { foodID: this.foodID})
+					const res = await this.$fetch.post('/api/food/find', { foodID: this.foodID})
+					this.foodInfo = res.data 
 				} catch(e) {
 					console.log(e)
 				}
 			},
 			async addFood() {
 				try {
-					const res = await this.$fetch.post('/api/food/add', { ...this.foodInfo })
+					const res = await this.$fetch.post('/api/food/add', { ...this.foodInfo, categoryID: this.categoryID })
 				} catch(e) {
 					console.log(e)
 				}
@@ -65,6 +82,13 @@
 			async editFood() {
 				try {
 					const res = await this.$fetch.post('/api/food/edit', { ...foodInfo })
+				} catch(e) {
+					console.log(e)
+				}
+			},
+			async deleteFood() {
+				try {
+					const res = await this.$fetch.post('/api/food/delete', { foodID: this.foodID })
 				} catch(e) {
 					console.log(e)
 				}
@@ -98,12 +122,12 @@ page {
 		font-size: 60rpx;
 	}
 	.food-button {
-		position: fixed;
-		bottom: 0;
-		left: 0;
+		margin-top: 30rpx;
+		line-height: 80rpx;
+		text-align: center;
 		height: 80rpx;
-		width: 100%;
-		background-color: #fff;
+		width: 200rpx;
+        border: 1px solid #eee;
 	}
 }
 </style>

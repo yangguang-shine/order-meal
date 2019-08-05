@@ -4,9 +4,12 @@
             <span>名称：</span>
             <input type="text" v-model="categoryName">
         </div>
-        <div class="button-box flex-row">
-            <div class="flex-item" @click="changeCategory">修改</div>
-            <div class="flex-item" @click="deleteCategory">删除</div>
+        <div v-if="categoryID" class="flex-row flex-j-around">
+            <div class="category-button" @click="changeCategory">修改</div>
+            <div class="category-button" @click="deleteCategory">删除</div>
+        </div>
+        <div v-else class="flex-row flex-j-center">
+            <div class="category-button" @click="addCategory">增加</div>
         </div>
     </div>
 </template>
@@ -20,10 +23,10 @@ export default {
         }
     },
     onLoad(params) {
-        console.log(1111)
         console.log(params)
-        this.categoryName = params.categoryName
-        this.categoryID = params.categoryID
+        this.categoryName = params.categoryName || ''
+        this.categoryID = params.categoryID || ''
+        console.log(typeof this.categoryID)
     },
     methods: {
         async changeCategory() {
@@ -42,6 +45,14 @@ export default {
                 console.log(e)
             }
         },
+        async addCategory() {
+            try {
+                await this.$fetch.post('/api/category/add', { categoryName: this.categoryName })
+                this.$myrouter.back()
+            } catch (e) {
+                console.log(e)
+            }
+        },
     }
 }
 </script>
@@ -49,6 +60,14 @@ export default {
 .category-name-box {
     .submit {
         margin-top: 20rpx;
+        text-align: center;
+    }
+    .category-button {
+        margin-top: 30rpx;
+        height: 80rpx;
+        width: 200rpx;
+        border: 1px solid #eee;
+        line-height: 80rpx;
         text-align: center;
     }
 }

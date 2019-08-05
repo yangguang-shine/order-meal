@@ -1,7 +1,7 @@
 <template>
 	<view class="food-list-container flex-col">
 		<!-- <image class="logo" src="/static/logo.png"></image> -->
-		<div v-for="(foodItem, index) in foodList" :key="index" class="food-item flex-row " @click="toCategoryList" @click="toEdit(foodItem.foodID)">
+		<div v-for="(foodItem, index) in foodList" :key="index" class="food-item flex-row " @click="toEdit(foodItem.foodID)">
 			<image class="food-img" :src="foodItem.imgUrl"></image>
 			<div class="food-info flex-item flex-col flex-j-around">
 				<div class="line1 food-name">
@@ -14,7 +14,6 @@
 					{{foodItem.price}}
 				</div>
 			</div>
-			<div class="food-delete" @click="deleteFood">×</div>
 		</div>
 		<div class="food-add" @click="toAddFood">
 			增加food
@@ -25,6 +24,7 @@
 	export default {
 		data() {
 			return {
+				foodList: [],
 				categoryID: ''
 			}
 		},
@@ -35,7 +35,8 @@
 		methods: {
 			async init() {
 				try {
-					const res = await this.$fetch.get('/api/food/list', { categoryID })
+					const res = await this.$fetch.get('/api/food/list', { categoryID: this.categoryID })
+					console.log(res)
 					this.foodList = res.data || []
 				} catch(e) {
 					console.log(e)
@@ -45,26 +46,15 @@
 				this.$myrouter.push({
 					name: 'food/edit',
 					query: {
-						foodID: foodID
+						foodID: foodID,
 					}
 				})
 			},
 			toAddFood() {
-				this.myrouter.push({
-					name: 'food/add',
+				this.$myrouter.push({
+					name: 'food/edit',
 					query: {
-						isAddFood: 1
-					}
-				})
-			},
-			deleteFood(foodID) {
-				uni.showModal({
-					async success() {
-						try {
-							const res = await this.$fetch.post('/api/food/delete', { foodID } )
-						} catch(e) {
-							console.log(e)
-						}
+						categoryID: this.categoryID
 					}
 				})
 			},
