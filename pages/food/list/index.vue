@@ -25,11 +25,16 @@
 		data() {
 			return {
 				foodList: [],
-				categoryID: ''
+				categoryID: '',
+				categoryName: '',
 			}
 		},
 		onLoad(options) {
+			console.log(this)
 			this.categoryID = options.categoryID
+			this.categoryName = options.categoryName
+		},
+		onShow() {
 			this.init()
 		},
 		methods: {
@@ -54,7 +59,8 @@
 				this.$myrouter.push({
 					name: 'food/edit',
 					query: {
-						categoryID: this.categoryID
+						categoryID: this.categoryID,
+						categoryName: this.categoryName
 					}
 				})
 			},

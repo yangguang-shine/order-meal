@@ -26,8 +26,8 @@
 			<div class="food-button" @click="editFood">
 				修改			
 			</div>
-			<div class="food-button" @click="editFood">
-				修改			
+			<div class="food-button" @click="deleteFood">
+				删除		
 			</div>
 		</div>
 		<div v-else class="felx-row flex-ja-center">
@@ -50,12 +50,14 @@
 					imgUrl: '',
 				},
 				categoryID: '',
+				categoryName: '',
 				foodID: '',
 			}
 		},
 		onLoad(options) {
 			this.foodID = options.foodID
 			this.categoryID = options.categoryID
+			this.categoryName = options.categoryName
 			if (!this.foodID) {
 				this.foodInfo.imgUrl = ''
 			}
@@ -66,22 +68,25 @@
 		methods: {
 			async init() {
 				try {
-					const res = await this.$fetch.post('/api/food/find', { foodID: this.foodID})
-					this.foodInfo = res.data 
+					const res = await this.$fetch.get('/api/food/find', { foodID: this.foodID})
+					this.foodInfo = res.data || {}
+					console.log()
 				} catch(e) {
-					console.log(e)
+					console.log(this.foodInfo)
 				}
 			},
 			async addFood() {
 				try {
-					const res = await this.$fetch.post('/api/food/add', { ...this.foodInfo, categoryID: this.categoryID })
+					const res = await this.$fetch.post('/api/food/add', { ...this.foodInfo, categoryID: this.categoryID, categoryName: this.categoryName })
+					this.$myrouter.back()
 				} catch(e) {
 					console.log(e)
 				}
 			},
 			async editFood() {
 				try {
-					const res = await this.$fetch.post('/api/food/edit', { ...foodInfo })
+					const res = await this.$fetch.post('/api/food/edit', { ...this.foodInfo })
+					this.$myrouter.back()
 				} catch(e) {
 					console.log(e)
 				}
@@ -89,9 +94,28 @@
 			async deleteFood() {
 				try {
 					const res = await this.$fetch.post('/api/food/delete', { foodID: this.foodID })
+					this.$myrouter.back()
 				} catch(e) {
 					console.log(e)
 				}
+			},
+			chooseImg() {
+				uni.chooseImage({
+					count: 1,
+					success: (res) => {
+						console.log(res.tempFiles)
+						const file = res.tempFiles[0]
+						uni.uploadFile({
+							url: 'http://localhost:8090/api/img/uploadImg',
+							filePath: file.path,
+							name: 'img',
+							success: (res) => {
+								console.log(res.data)
+								this.foodInfo.imgUrl = (res.data || {}).imgUrl
+							}
+						})
+					}
+				})
 			},
 		}
 	}

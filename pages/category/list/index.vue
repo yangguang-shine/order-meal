@@ -1,6 +1,6 @@
 <template>
     <div class="category-list-container">
-        <div v-for="(categoryItem, index) in categoryList" :key="index" class="category-item flex-row flex-j-between" @click="toFoodList(categoryItem.categoryID)">
+        <div v-for="(categoryItem, index) in categoryList" :key="index" class="category-item flex-row flex-j-between" @click="toFoodList(categoryItem)">
             <div>{{categoryItem.categoryName}}</div>
             <div @click.stop="editCategory(categoryItem)">×</div>
         </div>
@@ -24,11 +24,12 @@ export default {
         }
     },
     methods: {
-        toFoodList(categoryID) {
+        toFoodList(categoryItem) {
             this.$myrouter.push({
                 name: 'food/list',
                 query: {
-                    categoryID
+                    categoryID: categoryItem.categoryID,
+                    categoryName: categoryItem.categoryName,
                 }
             })
         },
