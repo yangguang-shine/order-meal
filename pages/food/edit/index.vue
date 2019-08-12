@@ -109,6 +109,9 @@
 							url: 'http://localhost:8090/api/img/uploadImg',
 							filePath: file.path,
 							name: 'img',
+							formData: {
+								foodID: this.foodID
+							},
 							success: (res) => {
 								console.log(res.data)
 								this.foodInfo.imgUrl = (res.data || {}).imgUrl

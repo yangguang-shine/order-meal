@@ -1,22 +1,10 @@
 <template>
 	<view class="home-container">
-		<!-- <div class="flex-row">
-			<div>name</div>
-			<input type="text" v-model="foodName">
-		</div>
-		<div class="flex-row">
-			<div>name</div>
-			<input type="text" v-model="price">
-		</div>
-		<div class="flex-row">
-			<div>name</div>
-			<input type="text" v-model="unit">
-		</div>
-
-		<div class="flex-row">
-			<div>name</div>
-			<input type="text" v-model="description">
-		</div> -->
+		<swiper class="swiper-box" indicator-dots="true" autoplay="true" easing-function="easeInOutCubic">
+			<swiper-item class="swiper-item">
+				<image class="swiper-item-img" src=""></image>
+			</swiper-item>
+		</swiper>
 		<div class="flex-row">
 			<div>name</div>
 			<div @click="chooseImg">上传图片</div>
@@ -100,9 +88,17 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.home-container {
 		text-align: center;
+		.swiper-box {
+			height: 350rpx;
+			width: 100%;
+		}
+		.swiper-item-box {
+			width: 100%;
+			height: 100%;
+		}
 	}
 	.banner1 {
 		width: 100%;
