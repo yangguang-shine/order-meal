@@ -19,7 +19,7 @@
 		</div>
 		<div class="food-info-item flex-row flex-a-center">
 			<div>imgUrl:</div>
-			<image v-if="foodID.imgUrl" class="food-img" :src="foodID.imgUrl" @click="chooseImg"></image>
+			<image v-if="foodInfo.imgUrl" class="food-img" :src="foodInfo.imgUrl" @click="chooseImg"></image>
 			<div v-else class="food-no-img" @click="chooseImg">+</div>
 		</div>
 		<div v-if="foodID" class="flex-row flex-j-around">
@@ -103,18 +103,37 @@
 				uni.chooseImage({
 					count: 1,
 					success: (res) => {
-						console.log(res.tempFiles)
+						const maxSize = 100 * 2 ** 10
+						console.log(res)
 						const file = res.tempFiles[0]
+						const size = file.size
+						if (size > maxSize) {
+							uni.showModal({
+								title: '提示',
+								content: '选择图片要小于100KB'
+							})
+							return;
+						}
+						let imgUrl = ''
+						if (this.foodInfo.imgUrl) {
+							var reg = /.+\/(\d+\.)/
+							var a = 'http://localhost:8090/images/upload/1565681342882.png'
+							imgUrl = this.foodInfo.imgUrl.replace(reg, '$1')
+						}
+						// http://localhost:8090/images/upload/1565681342882.png
 						uni.uploadFile({
 							url: 'http://localhost:8090/api/img/uploadImg',
 							filePath: file.path,
 							name: 'img',
 							formData: {
-								foodID: this.foodID
+								foodID: this.foodID,
+								imgUrl
 							},
 							success: (res) => {
-								console.log(res.data)
-								this.foodInfo.imgUrl = (res.data || {}).imgUrl
+								const data = JSON.parse(res.data)
+								console.log(data)
+								this.foodInfo.imgUrl = (data.data || {}).imgUrl
+								console.log(this.foodInfo)
 							}
 						})
 					}
