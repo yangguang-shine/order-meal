@@ -1,15 +1,15 @@
 <template>
 	<view class="home-container">
-		<swiper class="swiper-box" indicator-dots="true" autoplay="true" easing-function="easeInOutCubic">
+		<swiper class="swiper-box" indicator-dots="true" autoplay="true" easing-function="easeInOutCubic" @click="toMenu">
 			<swiper-item class="swiper-item">
 				<image class="swiper-item-img" src=""></image>
 			</swiper-item>
 		</swiper>
-		<div class="flex-row">
+		<!-- <div class="flex-row">
 			<div>name</div>
 			<div @click="chooseImg">上传图片</div>
 		</div>
-		<div @click="submit">提交</div>
+		<div @click="submit">提交</div> -->
 		<!-- <image class="logo" src="/static/logo.png"></image> -->
 		<!-- <div class="banner1" @click="toMenu">点我去点餐页面</div>
 		<div class="banner2" @click="toOrderList">点我去订单列表</div>

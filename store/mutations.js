@@ -1,7 +1,7 @@
 const mutations = {
 }
-mutations['cartCountChange'] = (state, { categoryName = '', foodItem = {} } = {}) => {
-    const findCategory = state.cartFoodList.find(item => item.categoryName === categoryName)
+mutations['cartCountChange'] = function(state, { categoryID = '', foodItem = {}, fromCart = true } = {}) {
+    const findCategory = state.cartFoodList.find(item => item.categoryID === categoryID)
     if (findCategory) {
         const findFood = findCategory.foodList.find(item => item.foodName === foodItem.foodName)
         if (!findFood) {
@@ -9,7 +9,7 @@ mutations['cartCountChange'] = (state, { categoryName = '', foodItem = {} } = {}
         }
     } else {
         state.cartFoodList.push({
-            categoryName,
+            categoryID,
             foodList: [foodItem]
         }) 
     }
@@ -17,5 +17,26 @@ mutations['cartCountChange'] = (state, { categoryName = '', foodItem = {} } = {}
         item.foodList = item.foodList.filter(foodItem => foodItem.orderCount > 0)
     })
     state.cartFoodList = state.cartFoodList.filter(item => item.foodList.length > 0)
+    if (fromCart) {
+        uni.setStorage({
+            key: 'storageFoodList',
+            data: state.cartFoodList
+        })
+    }
+}
+mutations['initCart'] = function (state, { foodCategoryList = [], storageFoodList = [] } = {}) {
+    storageFoodList.forEach((storageFoodItem) => {
+        const foodCatrgoryFind = foodCategoryList.find(foodCategoryItem => foodCategoryItem.categoryID === storageFoodItem.categoryID)
+        if (foodCatrgoryFind) {
+            foodCatrgoryFind.foodList.forEach((foodItem) => {
+                storageFoodItem.foodList.forEach((item) => {
+                    if (item.foodID === foodItem.foodID) {
+                        foodItem.orderCount = item.orderCount
+                        this.commit('cartCountChange', { categoryID: foodCatrgoryFind.categoryID, foodItem, fromCart: false })
+                    }
+                })
+            })
+        }
+    })
 }
 export default mutations

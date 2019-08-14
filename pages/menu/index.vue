@@ -1,13 +1,13 @@
-ddddddd<template>
+<template>
 	<div class="menu-container flex-col">
 		<!-- <div class="menu-header"></div> -->
 		<div class="order-main flex-item flex-row">
 			<div class="category-aside-box">
-				<div class="aside-cateGory-item flex-row flex-a-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :style="{'border-left': selectCategoryTabId === asideCategoryItem.id ? '10rpx solid ' + mainColor : '', 'background-color': selectCategoryTabId === asideCategoryItem.id ? '#fff' : ''}" @click="changeSelectCategoryTab(asideCategoryItem)">{{asideCategoryItem.categoryName}}+{{asideCategoryItem.orderCount}}</div>
+				<div class="aside-cateGory-item flex-row flex-a-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :style="{'border-left': selectCategoryTabId === asideCategoryItem.scrollID ? '10rpx solid ' + mainColor : '', 'background-color': selectCategoryTabId === asideCategoryItem.scrollID ? '#fff' : ''}" @click="changeSelectCategoryTab(asideCategoryItem.scrollID)">{{asideCategoryItem.scrollID}}+{{asideCategoryItem.orderCount}}</div>
 			</div>
-			<scroll-view scroll-y :scroll-into-view="selectCategoryTabId" class="food-main-box flex-item">
+			<scroll-view scroll-y :scroll-into-view="scrollCategoryID" class="food-main-box flex-item">
 				<div class="food-category-list-item" :data-food-category-item="JSON.stringify(foodCategoryItem)" v-for="(foodCategoryItem, index) in foodCategoryList" :key="index">
-					<div :id="foodCategoryItem.id" class="food-category-name">{{foodCategoryItem.categoryName}}</div>
+					<div :id="foodCategoryItem.scrollID" class="food-category-name">{{foodCategoryItem.categoryID}}</div>
 					<div class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex">
 						<image class="food-img  flex-shrink" :src="foodItem.imgUrl" mode="aspectFill"></image>
 						<div class="food-info-box flex-item flex-col flex-j-between">
@@ -21,11 +21,11 @@ ddddddd<template>
 							</div>
 							<div class="food-price-button flex-row flex-j-between flex-a-center">
 								<div class="food-price">¥{{foodItem.price}}</div>
-								<div v-if="foodItem.orderCount < 1" class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryName, foodItem)">+</div>
+								<div v-if="foodItem.orderCount < 1" class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryID, foodItem)">+</div>
 								<div v-else class="flex-row flex-a-center">
-									<div class="food-count-minus" :style="{'color': mainColor}" @click="minusCount(foodCategoryItem.categoryName, foodItem)">-</div>
+									<div class="food-count-minus" :style="{'color': mainColor}" @click="minusCount(foodCategoryItem.categoryID, foodItem)">-</div>
 									<div class="food-order-count">{{foodItem.orderCount}}</div>
-									<div class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryName, foodItem)">+</div>
+									<div class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryID, foodItem)">+</div>
 								</div>
 							</div>
 						</div>
@@ -49,7 +49,7 @@ ddddddd<template>
 							<div v-if="cartFoodItem.orderCount" class="food-info-box flex-item flex-col flex-j-between">
 								<div class="food-name-description">
 									<div class="food-name">
-										{{cartFoodItem.foodName}}111{{foodCategoryItem.categoryName}}
+										{{cartFoodItem.foodName}}111{{foodCategoryItem.categoryID}}
 									</div>
 									<div class="food-description">
 										{{cartFoodItem.description}}
@@ -57,11 +57,11 @@ ddddddd<template>
 								</div>
 								<div class="food-price-button flex-row flex-j-between flex-a-center">
 									<div class="food-price">¥{{cartFoodItem.price}}</div>
-									<div v-if="cartFoodItem.orderCount < 1" class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryName, cartFoodItem)">+</div>
+									<div v-if="cartFoodItem.orderCount < 1" class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryID, cartFoodItem)">+</div>
 									<div v-else class="flex-row flex-a-center">
-										<div class="food-count-minus" :style="{'color': mainColor}" @click="minusCount(foodCategoryItem.categoryName, cartFoodItem)">-</div>
+										<div class="food-count-minus" :style="{'color': mainColor}" @click="minusCount(foodCategoryItem.categoryID, cartFoodItem)">-</div>
 										<div class="food-order-count">{{cartFoodItem.orderCount}}</div>
-										<div class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryName, cartFoodItem)">+</div>
+										<div class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryID, cartFoodItem)">+</div>
 									</div>
 								</div>
 							</div>
@@ -82,6 +82,7 @@ export default {
 			addCountState: true,
 			minusCountState: true,
 			selectCategoryTabId: '',
+			scrollCategoryID: '',
 			showCartDetail: false,
 			foodCategoryList: []
 		}
@@ -96,7 +97,7 @@ export default {
 		},
 		asideCategoryList() {
 			const asideCategoryList = this.foodCategoryList.map(foodCategoryItem => {
-				const cartFind = this.cartFoodList.find(cartFoodItem => cartFoodItem.categoryName === foodCategoryItem.categoryName)
+				const cartFind = this.cartFoodList.find(cartFoodItem => cartFoodItem.categoryID === foodCategoryItem.categoryID)
 				if (cartFind) {
 					const orderCount = cartFind.foodList.reduce((all, item) => {
 						all += item.orderCount
@@ -104,43 +105,33 @@ export default {
 					}, 0)
 					return {
 						categoryName: foodCategoryItem.categoryName,
+						categoryID: foodCategoryItem.categoryID,
 						orderCount,
-						id: foodCategoryItem.id
+						scrollID: foodCategoryItem.scrollID
 					}
 				} else {
 					return {
 						categoryName: foodCategoryItem.categoryName,
+						categoryID: foodCategoryItem.categoryID,
 						orderCount: 0,
-						id: foodCategoryItem.id
+						scrollID: foodCategoryItem.scrollID
 					}
 				}
 			})
-			console.log(asideCategoryList)
 			return asideCategoryList
 		}
 	},
 	onReady() {
-		observer = uni.createIntersectionObserver(this, {
-                observeAll: true
-            });
-		observer.relativeTo('.food-main-box').observe('.food-category-list-item', (res) => {
-					console.log(res.dataset)
-					const foodCategoryItem = JSON.parse(res.dataset.foodCategoryItem)
-				if (res.intersectionRatio === 0 && res.boundingClientRect.bottom < res.relativeRect.top) {
-					this.selectCategoryTabId = foodCategoryItem.nextId
-					console.log(111)
-				} else if (0 < res.intersectionRatio && res.intersectionRatio < 1 && res.boundingClientRect.top < res.intersectionRect.top) {
-					this.selectCategoryTabId = foodCategoryItem.id
-					console.log(333)
-				}
-		})
+		setTimeout(() => {
+			this.creatObserve()
+		}, 2000)
 	},
 	onUnload() {
 		if (observer) {
 			observer.disconnect()
 		}
 	},
-	onShow() {
+	onLoad() {
 		this.init()
 		// observer = uni.createIntersectionObserver(this, {
         //         observeAll: true
@@ -152,191 +143,48 @@ export default {
 	methods: {
 		...mapMutations({
 			cartCountChange: 'cartCountChange',
+			initCart: 'initCart',
 		}),
+		creatObserve() {
+			observer = uni.createIntersectionObserver(this, {
+					observeAll: true
+				});
+			observer.relativeTo('.food-main-box').observe('.food-category-list-item', (res) => {
+				// console.log(res)
+						console.log(res)
+						const foodCategoryItem = JSON.parse(res.dataset.foodCategoryItem)
+					if (res.intersectionRatio === 0 && res.boundingClientRect.bottom <= res.relativeRect.top) {
+						this.selectCategoryTabId = foodCategoryItem.nextscrollID
+						console.log(111)
+					} else if ((0 < res.intersectionRatio && res.intersectionRatio < 1 && res.boundingClientRect.top < res.intersectionRect.top) || (res.intersectionRatio === 1  && res.boundingClientRect.top === res.intersectionRect.top)) {
+						this.selectCategoryTabId = foodCategoryItem.scrollID
+						console.log(333)
+					}
+			})
+		},
 		async init() {
-			let id = 1000
-			this.foodCategoryList = [
-				{
-					categoryName: '凉菜',
-					foodList: [
-						{
-							foodName: '鱼香肉丝22',
-							unit: '盘',
-							price: 12,
-							orderCount: 0,
-							description: '哈哈哈',
-							imgUrl: 'http://res.hualala.com/group3/M02/3D/4E/wKgVe1zQAKiNzqqYAAH3cyQfIuE214.png'
-						},
-						{
-							foodName: '鱼香肉丝33',
-							unit: '盘',
-							price: 12,
-							orderCount: 0,
-							description: '哈哈哈',
-							imgUrl: 'http://res.hualala.com/group3/M02/3D/4E/wKgVe1zQAKiNzqqYAAH3cyQfIuE214.png'
-						},
-					]
-				},
-				{
-					categoryName: '热菜',
-					foodList: [
-						{
-							foodName: '鱼香肉丝1',
-							unit: '盘',
-							price: 24,
-							description: '嘻嘻嘻',
-							imgUrl: 'http://res.hualala.com/group3/M02/3D/4E/wKgVe1zQAKiNzqqYAAH3cyQfIuE214.png',
-							orderCount: 0
-						},
-						{
-							foodName: '鱼香肉丝2',
-							unit: '盘',
-							price: 24,
-							description: '嘻嘻嘻',
-							imgUrl: 'http://res.hualala.com/group3/M02/3D/4E/wKgVe1zQAKiNzqqYAAH3cyQfIuE214.png',
-							orderCount: 0,
-						},
-					]
-				},
-				{
-					categoryName: '冒菜',
-					foodList: [
-						{
-							foodName: '鱼香肉丝3',
-							unit: '盘',
-							price: 24,
-							orderCount: 0,
-							description: '哦哦哦',
-							imgUrl: 'http://res.hualala.com/group3/M03/3D/7C/wKgVbVzQALiMc1TJAAG4mjhZiPs692.png',
-						},
-						{
-							foodName: '鱼香肉丝4',
-							unit: '盘',
-							price: 24,
-							description: '哦哦哦',
-							orderCount: 0,
-							imgUrl: 'http://res.hualala.com/group3/M03/3D/7C/wKgVbVzQALiMc1TJAAG4mjhZiPs692.png'
-						},
-					]
-				},
-				{
-					categoryName: '套餐',
-					foodList: [
-						{
-							foodName: '鱼香肉丝5',
-							unit: '盘',
-							price: 24,
-							description: '哦哦哦',
-							orderCount: 0,
-							imgUrl: 'http://res.hualala.com/group3/M03/3D/7C/wKgVbVzQALiMc1TJAAG4mjhZiPs692.png'
-						},
-						{
-							foodName: '鱼香肉丝6',
-							unit: '盘',
-							price: 24,
-							description: '哦哦哦',
-							orderCount: 0,
-							imgUrl: 'http://res.hualala.com/group3/M03/3D/7C/wKgVbVzQALiMc1TJAAG4mjhZiPs692.png'
-						},
-					]
-				},
-				{
-					categoryName: '菜名1',
-					foodList: [
-						{
-							foodName: '鱼香肉丝7',
-							unit: '盘',
-							price: 24,
-							description: '哦哦哦',
-							orderCount: 0,
-							imgUrl: 'http://res.hualala.com/group3/M03/3D/7C/wKgVbVzQALiMc1TJAAG4mjhZiPs692.png'
-						},
-						{
-							foodName: '鱼香肉丝8',
-							unit: '盘',
-							price: 24,
-							description: '哦哦哦',
-							orderCount: 0,
-							imgUrl: 'http://res.hualala.com/group3/M03/3D/7C/wKgVbVzQALiMc1TJAAG4mjhZiPs692.png'
-						},
-					]
-				},
-				{
-					categoryName: '菜名2',
-					foodList: [
-						{
-							foodName: '鱼香肉丝9',
-							unit: '盘',
-							price: 24,
-							description: '哦哦哦',
-							orderCount: 0,
-							imgUrl: 'http://res.hualala.com/group3/M03/3D/7C/wKgVbVzQALiMc1TJAAG4mjhZiPs692.png'
-						},
-						{
-							foodName: '鱼香肉丝10',
-							unit: '盘',
-							price: 24,
-							description: '哦哦哦',
-							orderCount: 0,
-							imgUrl: 'http://res.hualala.com/group3/M03/3D/7C/wKgVbVzQALiMc1TJAAG4mjhZiPs692.png'
-						},
-					]
-				},
-				{
-					categoryName: '菜名3',
-					foodList: [
-						{
-							foodName: '鱼香肉丝11',
-							unit: '盘',
-							price: 24,
-							description: '哦哦哦',
-							orderCount: 0,
-							imgUrl: 'http://res.hualala.com/group3/M03/3D/7C/wKgVbVzQALiMc1TJAAG4mjhZiPs692.png'
-						},
-						{
-							foodName: '鱼香肉丝12',
-							unit: '盘',
-							price: 24,
-							description: '哦哦哦',
-							orderCount: 0,
-							imgUrl: 'http://res.hualala.com/group3/M03/3D/7C/wKgVbVzQALiMc1TJAAG4mjhZiPs692.png'
-						},
-					]
-				},
-				{
-					categoryName: '菜名4',
-					foodList: [
-						{
-							foodName: '鱼香肉丝13',
-							unit: '盘',
-							price: 24,
-							description: '哦哦哦',
-							orderCount: 0,
-							imgUrl: 'http://res.hualala.com/group3/M03/3D/7C/wKgVbVzQALiMc1TJAAG4mjhZiPs692.png'
-						},
-						{
-							foodName: '鱼香肉丝14',
-							unit: '盘',
-							price: 24,
-							description: '哦哦哦',
-							orderCount: 0,
-							imgUrl: 'http://res.hualala.com/group3/M03/3D/7C/wKgVbVzQALiMc1TJAAG4mjhZiPs692.png'
-						},
-					]
-				},
-			]
+			const res = await this.$fetch.get('/api/order/menuList')
+			this.foodCategoryList = res.data || []
 			this.foodCategoryList.forEach((item, index) => {
-				item.id = 'a' + id
+				item.scrollID = 'c' + item.categoryID
 				if (index >= this.foodCategoryList.length - 1) {
-					item.nextId = 'a' + id
+					item.nextscrollID = 'c' + item.categoryID
 				} else {
-					item.nextId = 'a' + (id + 1)
+					item.nextscrollID = 'c' + this.foodCategoryList[index + 1].categoryID
 				}
-				id += 1;
 			})
 			if (this.foodCategoryList.length) {
-				this.selectCategoryTabId = this.foodCategoryList[0].id
+				this.selectCategoryTabId = this.foodCategoryList[0].scrollID
+				this.scrollCategoryID = this.foodCategoryList[0].scrollID
 			}
+			this.getStorageCart()
+		},
+		getStorageCart() {
+			const storageFoodList =  uni.getStorageSync('storageFoodList')
+			if (!storageFoodList || !storageFoodList.length) return;
+			console.log('storageFoodList')
+			console.log(storageFoodList)
+			this.initCart({ foodCategoryList: this.foodCategoryList, storageFoodList })
 		},
 		changeShowCartDetail() {
 			if (!this.cartFoodList.length){
@@ -345,32 +193,38 @@ export default {
 			} 
 			this.showCartDetail = !this.showCartDetail
 		},
-		changeSelectCategoryTab(asideCategoryItem) {
-			this.selectCategoryTabId = asideCategoryItem.id
+		changeSelectCategoryTab(scrollID) {
+			this.selectCategoryTabId = scrollID
+			this.scrollCategoryID = scrollID
 		},
-		addCount(categoryName, foodItem) {
+		addCount(categoryID, foodItem) {
 			if (!this.addCountState) return
 			this.addCountState = false
 			foodItem.orderCount += 1
-			this.cartCountChange({ categoryName, foodItem })
+			this.cartCountChange({ categoryID, foodItem })
 			this.addCountState = true
 			if (!this.cartFoodList.length) this.showCartDetail = false
 		},
-		minusCount(categoryName, foodItem) {
+		minusCount(categoryID, foodItem) {
 			if (!this.minusCountState) return
 			this.minusCountState = false
 			foodItem.orderCount -= 1
-			this.cartCountChange({ categoryName, foodItem })
+			this.cartCountChange({ categoryID, foodItem })
 			this.minusCountState = true
 			if (!this.cartFoodList.length) this.showCartDetail = false
 			console.log(this.cartFoodList.length)
 		},
-		toComfirmOrder() {
+		async toComfirmOrder() {
 			if (!this.cartFoodList.length) return;
-			console.log(111)
-			this.$myrouter.push({
-				name: 'confirmOrder'
+			const foodList = [];
+			this.cartFoodList.forEach((item) => {
+				foodList.push(...item.foodList)
 			})
+			console.log(foodList)
+			const res = await this.$fetch.post('/api/order/submit', { foodList })
+			// this.$myrouter.push({
+			// 	name: 'confirmOrder'
+			// })
 		}
 	}
 }
@@ -410,12 +264,13 @@ page {
 	.food-main-box {
 		// background-color: blue;
 		.food-category-list-item {
-			padding: 0 30rpx
+			padding: 0 30rpx;
+			margin-bottom: 20rpx;
 		}
 		.food-category-name {
 			font-size: 24rpx;
 			color: #666;
-			margin: 20rpx 0 10rpx;
+			margin: 0 0 20rpx;
 		}
 		.food-item {
 			padding: 10rpx 0;
