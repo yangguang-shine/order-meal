@@ -1,10 +1,11 @@
 <template>
 	<view class="home-container">
-		<swiper class="swiper-box" indicator-dots="true" autoplay="true" easing-function="easeInOutCubic" @click="toMenu">
+		<swiper class="swiper-box" autoplay="true" easing-function="easeInOutCubic" @click="toMenu">
 			<swiper-item class="swiper-item">
 				<image class="swiper-item-img" src=""></image>
 			</swiper-item>
 		</swiper>
+		<button open-type="getUserInfo">授权</button>
 		<!-- <div class="flex-row">
 			<div>name</div>
 			<div @click="chooseImg">上传图片</div>
@@ -30,7 +31,7 @@
 			}
 		},
 		onLoad() {
-
+			uni.get
 		},
 		methods: {
 			submit() {
@@ -61,12 +62,19 @@
 				})
 			},
 			toMenu() {
-				this.$myrouter.push({
-					name: 'menu',
-					query: {
-						name: 'jjj'
+				uni.authorize({
+					scope: 'scope.userLocation',
+					success() {
+						uni.getLocation()
 					}
 				})
+				uni.login()
+				// this.$myrouter.push({
+				// 	name: 'menu',
+				// 	query: {
+				// 		name: 'jjj'
+				// 	}
+				// })
 			},
 			toOrderList() {
 				this.$myrouter.switchTab({
