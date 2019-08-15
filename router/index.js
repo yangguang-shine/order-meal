@@ -1,3 +1,13 @@
+const shopList = [
+	{
+		name: 'shop/list',
+		path: '/pages/shop/list/index'
+	},
+	{
+		name: 'shop/edit',
+		path: '/pages/shop/edit/index'
+	},
+]
 const categoryList = [
 	{
 		name: 'category/list',
@@ -39,6 +49,7 @@ const routerList = [
 		name: 'confirmOrder',
 		path: '/pages/menu/confirmOrder/index'
 	},
+	...shopList,
 	...categoryList,
 	...foodList
 ]

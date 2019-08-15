@@ -12,12 +12,16 @@
 export default {
     data() {
         return {
-            categoryList: []
+            categoryList: [],
+            shopID: ''
         }
+    },
+    onLoad(options) {
+        this.shopID = options.shopID
     },
     async onShow() {
         try {
-            const res = await this.$fetch.get('/api/category/list')
+            const res = await this.$fetch.get('/api/category/list', { shopID: this.shopID })
             this.categoryList = res.data || [] 
         } catch(e) {
             console.log(e)
@@ -30,6 +34,7 @@ export default {
                 query: {
                     categoryID: categoryItem.categoryID,
                     categoryName: categoryItem.categoryName,
+                    shopID: this.shopID
                 }
             })
         },
@@ -39,12 +44,16 @@ export default {
                 query: {
                     categoryID: categoryItem.categoryID,
                     categoryName: categoryItem.categoryName,
+                    shopID: this.shopID
                 }
             })
         },
         addCategory() {
             this.$myrouter.push({
-                name: 'category/edit'
+                name: 'category/edit',
+                query: {
+                    shopID: this.shopID
+                }
             })
         },
     }

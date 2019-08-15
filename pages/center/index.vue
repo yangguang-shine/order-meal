@@ -1,8 +1,11 @@
 <template>
 	<view class="center-container flex-col">
 		<!-- <image class="logo" src="/static/logo.png"></image> -->
-		<div class="category-item" @click="toCategoryList">
+		<div class="item" @click="toCategoryList">
 			<div>分类</div>
+		</div>
+		<div class="item" @click="toShopList">
+			<div>店铺</div>
 		</div>
 	</view>
 </template>
@@ -22,6 +25,11 @@
 					name: 'category/list'
 				})
 			},
+			toShopList() {
+				this.$myrouter.push({
+					name: 'shop/list'
+				})
+			},
 		}
 	}
 </script>
@@ -33,5 +41,8 @@ page {
 .center-container  {
 	height: 100%;
 	font-size: 28rpx;
+	.item {
+		margin-top: 50rpx;
+	} 
 }
 </style>

@@ -37,6 +37,20 @@
 			}
 		},
 		{
+			"path": "pages/shop/list/index",
+			"style": {
+				"navigationBarTitleText": "点餐",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/shop/edit/index",
+			"style": {
+				"navigationBarTitleText": "点餐",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
 			"path": "pages/category/list/index",
 			"style": {
 				"navigationBarTitleText": "点餐",

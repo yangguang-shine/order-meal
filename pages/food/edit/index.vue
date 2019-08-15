@@ -52,10 +52,12 @@
 				categoryID: '',
 				categoryName: '',
 				foodID: '',
+				shopID: ''
 			}
 		},
 		onLoad(options) {
 			this.foodID = options.foodID
+			this.shopID = options.shopID
 			this.categoryID = options.categoryID
 			this.categoryName = options.categoryName
 			if (!this.foodID) {
@@ -68,7 +70,7 @@
 		methods: {
 			async init() {
 				try {
-					const res = await this.$fetch.get('/api/food/find', { foodID: this.foodID})
+					const res = await this.$fetch.get('/api/food/find', { foodID: this.foodID, shopID: this.shopID })
 					this.foodInfo = res.data || {}
 					console.log()
 				} catch(e) {
@@ -77,7 +79,7 @@
 			},
 			async addFood() {
 				try {
-					const res = await this.$fetch.post('/api/food/add', { ...this.foodInfo, categoryID: this.categoryID, categoryName: this.categoryName })
+					const res = await this.$fetch.post('/api/food/add', { ...this.foodInfo, categoryID: this.categoryID, categoryName: this.categoryName, shopID: this.shopID })
 					this.$myrouter.back()
 				} catch(e) {
 					console.log(e)
@@ -85,7 +87,7 @@
 			},
 			async editFood() {
 				try {
-					const res = await this.$fetch.post('/api/food/edit', { ...this.foodInfo })
+					const res = await this.$fetch.post('/api/food/edit', { ...this.foodInfo, shopID: this.shopID })
 					this.$myrouter.back()
 				} catch(e) {
 					console.log(e)
@@ -93,7 +95,7 @@
 			},
 			async deleteFood() {
 				try {
-					const res = await this.$fetch.post('/api/food/delete', { foodID: this.foodID })
+					const res = await this.$fetch.post('/api/food/delete', { foodID: this.foodID, shopID: this.shopID })
 					this.$myrouter.back()
 				} catch(e) {
 					console.log(e)

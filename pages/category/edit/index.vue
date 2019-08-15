@@ -20,18 +20,19 @@ export default {
         return {
             categoryName: '',
             categoryID: '',
+            shopID: ''
         }
     },
     onLoad(params) {
         console.log(params)
         this.categoryName = params.categoryName || ''
         this.categoryID = params.categoryID || ''
-        console.log(typeof this.categoryID)
+        this.shopID = params.shopID || ''
     },
     methods: {
         async changeCategory() {
             try {
-                await this.$fetch.post('/api/category/edit', { categoryName: this.categoryName, categoryID: this.categoryID })
+                await this.$fetch.post('/api/category/edit', { categoryName: this.categoryName, categoryID: this.categoryID, shopID: this.shopID })
                 this.$myrouter.back()
             } catch (e) {
                 console.log(e)
@@ -39,7 +40,7 @@ export default {
         },
         async deleteCategory() {
             try {
-                await this.$fetch.post('/api/category/delete', { categoryID: this.categoryID })
+                await this.$fetch.post('/api/category/delete', { categoryID: this.categoryID, shopID: this.shopID })
                 this.$myrouter.back()
             } catch (e) {
                 console.log(e)
@@ -47,7 +48,7 @@ export default {
         },
         async addCategory() {
             try {
-                await this.$fetch.post('/api/category/add', { categoryName: this.categoryName })
+                await this.$fetch.post('/api/category/add', { categoryName: this.categoryName, shopID: this.shopID })
                 this.$myrouter.back()
             } catch (e) {
                 console.log(e)

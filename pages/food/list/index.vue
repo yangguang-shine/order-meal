@@ -27,12 +27,14 @@
 				foodList: [],
 				categoryID: '',
 				categoryName: '',
+				shopID: ''
 			}
 		},
 		onLoad(options) {
 			console.log(this)
 			this.categoryID = options.categoryID
 			this.categoryName = options.categoryName
+			this.shopID = options.shopID
 		},
 		onShow() {
 			this.init()
@@ -40,7 +42,7 @@
 		methods: {
 			async init() {
 				try {
-					const res = await this.$fetch.get('/api/food/list', { categoryID: this.categoryID })
+					const res = await this.$fetch.get('/api/food/list', { categoryID: this.categoryID, shopID: this.shopID })
 					console.log(res)
 					this.foodList = res.data || []
 				} catch(e) {
@@ -52,6 +54,7 @@
 					name: 'food/edit',
 					query: {
 						foodID: foodID,
+						shopID: this.shopID
 					}
 				})
 			},
@@ -60,7 +63,8 @@
 					name: 'food/edit',
 					query: {
 						categoryID: this.categoryID,
-						categoryName: this.categoryName
+						categoryName: this.categoryName,
+						shopID: this.shopID
 					}
 				})
 			},

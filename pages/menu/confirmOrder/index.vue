@@ -26,6 +26,17 @@ export default {
 			cartFoodList: state => state.cartFoodList,
 			mainColor: state => state.mainColor,
 		})
+	},
+	methods: {
+		async toSubmit() {
+			if (!this.cartFoodList.length) return;
+			const foodList = [];
+			this.cartFoodList.forEach((item) => {
+				foodList.push(...item.foodList)
+			})
+			console.log(foodList)
+			const res = await this.$fetch.post('/api/order/submit', { foodList })
+		},
 	}
 }
 </script>

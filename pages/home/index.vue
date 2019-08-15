@@ -62,19 +62,12 @@
 				})
 			},
 			toMenu() {
-				uni.authorize({
-					scope: 'scope.userLocation',
-					success() {
-						uni.getLocation()
+				this.$myrouter.push({
+					name: 'menu',
+					query: {
+						name: 'jjj'
 					}
 				})
-				uni.login()
-				// this.$myrouter.push({
-				// 	name: 'menu',
-				// 	query: {
-				// 		name: 'jjj'
-				// 	}
-				// })
 			},
 			toOrderList() {
 				this.$myrouter.switchTab({

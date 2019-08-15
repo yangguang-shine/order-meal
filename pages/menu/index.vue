@@ -215,16 +215,16 @@ export default {
 			console.log(this.cartFoodList.length)
 		},
 		async toComfirmOrder() {
-			if (!this.cartFoodList.length) return;
-			const foodList = [];
-			this.cartFoodList.forEach((item) => {
-				foodList.push(...item.foodList)
-			})
-			console.log(foodList)
-			const res = await this.$fetch.post('/api/order/submit', { foodList })
-			// this.$myrouter.push({
-			// 	name: 'confirmOrder'
+			// if (!this.cartFoodList.length) return;
+			// const foodList = [];
+			// this.cartFoodList.forEach((item) => {
+			// 	foodList.push(...item.foodList)
 			// })
+			// console.log(foodList)
+			// const res = await this.$fetch.post('/api/order/submit', { foodList })
+			this.$myrouter.push({
+					name: 'confirmOrder'
+			})
 		}
 	}
 }
