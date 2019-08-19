@@ -52,7 +52,8 @@
 				categoryID: '',
 				categoryName: '',
 				foodID: '',
-				shopID: ''
+				shopID: '',
+				addStatus: false
 			}
 		},
 		onLoad(options) {
@@ -67,6 +68,31 @@
 				this.init()
 			}
 		},
+		async onUnload() {
+			if (!this.foodID && this.foodInfo.imgUrl && !this.addStatus) {
+				await this.$fetch.post('/api/img/delete', { imgUrl: this.foodInfo.imgUrl })
+			}
+			this.addStatus = false
+			this.shopID = ''
+			this.shopInfo = {
+					shopName: '',
+					imgUrl: '',
+					address: '',
+					startTime: '',
+					endTime: '',
+				};
+			this.foodInfo = {
+				foodName: '',
+				price: '',
+				unit: '',
+				description: '',
+				imgUrl: '',
+			},
+			this.categoryID = ''
+			this.categoryName = ''
+			this.foodID = ''
+			this.shopID = ''
+		},
 		methods: {
 			async init() {
 				try {
@@ -80,6 +106,7 @@
 			async addFood() {
 				try {
 					const res = await this.$fetch.post('/api/food/add', { ...this.foodInfo, categoryID: this.categoryID, categoryName: this.categoryName, shopID: this.shopID })
+					this.addStatus = true
 					this.$myrouter.back()
 				} catch(e) {
 					console.log(e)

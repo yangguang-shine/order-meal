@@ -2,7 +2,7 @@
     <div class="shop-edit-container">
         <div class="flex-row flex-a-center">
             <div>name:</div>
-            <input type="text">
+            <input type="text" v-model="shopInfo.shopName">
         </div>
         <div class="flex-row flex-a-center" @click="chooseAddress">
             <div>address</div>
@@ -27,7 +27,7 @@
             <div class="button" @click="editShop">修改</div>
             <div class="button" @click="deleteShop">删除</div>
         </div>
-        <div class="flex-row flex-j-center">
+        <div v-else class="flex-row flex-j-center">
             <div class="button" @click="addShop">新增</div>
         </div>
     </div>
