@@ -1,10 +1,13 @@
 <template>
     <div class="category-list-container">
-        <div v-for="(categoryItem, index) in categoryList" :key="index" class="category-item flex-row flex-j-between" @click="toFoodList(categoryItem)">
+        <div v-for="(categoryItem, index) in categoryList" :key="index" class="category-item flex-row flex-j-between flex-a-center" @click="toFoodList(categoryItem)">
             <div>{{categoryItem.categoryName}}</div>
-            <div @click.stop="editCategory(categoryItem)">×</div>
+            <div class="flex-row flex-a-center">
+                <image class="edit-img" src='/static/img/shop-edit.svg' @click.stop="editCategory(categoryItem)"></image>
+                <image class="delete-img" src='/static/img/shop-delete.svg' @click.stop="deleteCategory(categoryItem.categoryID)"></image>
+            </div>
         </div>
-        <div class="add" @click="addCategory">增加</div>
+        <div class="add" @click="addCategory" :style="{'color': $mainColor}">增加</div>
     </div>
 </template>
 
@@ -48,6 +51,10 @@ export default {
                 }
             })
         },
+        deleteCategory(categoryID) {
+            console.log(this.shopID)
+            console.log(categoryID)
+        },
         addCategory() {
             this.$myrouter.push({
                 name: 'category/edit',
@@ -61,16 +68,32 @@ export default {
 </script>
 <style scoped lang="scss">
 .category-list-container {
-    padding: 30rpx;
+    padding: 30rpx 30rpx 70rpx;
+    font-size: 34rpx;
     .category-item {
-        margin-bottom: 20rpx;
+        padding: 30rpx;
+    }
+    .delete-img, .edit-img {
+        height: 30rpx;
+        width: 30rpx
+    }
+    .delete-img {
+        padding: 10rpx;
+    }
+    .edit-img {
+        padding: 10rpx;
+        margin-right: 40rpx;
     }
     .add {
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
+        height: 80rpx;
+        line-height: 80rpx;
         text-align: center;
+        font-weight: bold;
+        background-color: #fff;
     }
 }
 </style>

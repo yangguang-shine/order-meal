@@ -1,12 +1,22 @@
 <template>
     <div class="shop-list-container">
-        <div v-for="(shopItem, index) in shopList" :key="index" class="shop-item" @click="toCategoryList(shopItem)">
-            <div>{{shopItem.shopName}}</div>
-            <div>{{shopItem.address}}</div>
-            <div>开放时间：{{shopItem.startTime}}--{{shopItem.endTime}}</div>
-            <div class="edit" @click.stop="toEditShop(shopItem)">×</div>
+        <div class="shop-list">
+            <div v-for="(shopItem, index) in shopList" :key="index" class="shop-item flex-row" @click="toCategoryList(shopItem)">
+                <image :src="shopItem.imgUrl || '/static/img/default-img.svg'" class="shop-img" mode="aspectFill"></image>
+                <div class="shop-info-box flex-item flex-col flex-j-between">
+                    <div>
+                        <div class="shop-name line1">{{shopItem.shopName}}</div>
+                        <div class="shop-open-time">{{shopItem.startTime}}--{{shopItem.endTime}}</div>
+                    </div>
+                    <div class="shop-address">{{shopItem.address}}</div>
+                </div>
+                <image class="delete-icon" src="/static/img/shop-delete.svg" @click.stop="toDeleteShop(shopItem)"></image>
+                <image class="edit-icon" src="/static/img/shop-edit.svg" @click.stop="toEditShop(shopItem)"></image>
+            </div>
         </div>
-        <div class="add" @click="toAddShop">增加</div>
+        <div class="add-box flex-row flex-ja-center" @click="toAddShop" >
+            <image class="add-icon" src="/static/img/shop-add.svg"></image>
+        </div> 
     </div>
 </template>
 
@@ -20,6 +30,7 @@ export default {
     onLoad() {
     },
     async onShow() {
+        console.log(this.$mainColor)
         try {
             const res = await this.$fetch.get('/api/shop/list')
             this.shopList = res.data || [] 
@@ -39,6 +50,9 @@ export default {
         pickerChange(e) {
             console.log(e)
         },
+        toDeleteShop(shopItem) {
+            console.log(shopItem)
+        },
         toEditShop(shopItem = {}) {
             this.$myrouter.push({
                 name: 'shop/edit',
@@ -57,10 +71,69 @@ export default {
 </script>
 <style scoped lang="scss">
 .shop-list-container {
-    padding: 30rpx;
+    font-size: 28rpx;
+    color: #333;
+    line-height: 1;
+    padding-bottom: 70rpx;
+    .shop-list {
+        padding: 30rpx;
+    }
     .shop-item {
-        margin-bottom: 20rpx;
+        margin-bottom: 30rpx;
         position: relative;
+    }
+    .shop-img {
+        width: 120rpx;
+        height: 120rpx;
+        margin-right: 20rpx;
+    }
+    .shop-info-box {
+        height: 120rpx;
+        line-height: 1.3;
+    }
+    .shop-name {
+        font-size: 32rpx;
+        font-weight: bold;
+        max-width: 500rpx;
+    }
+    .shop-open-time {
+        font-size: 24rpx;
+        margin-top: 10rpx;
+        color: #999;
+    }
+    .shop-address {
+        max-width: 500rpx;
+        color: #666; 
+    }
+    .delete-icon {
+        position: absolute;
+        top: 0rpx;
+        right: 0rpx;
+        padding: 10rpx 20rpx;
+        width: 30rpx;
+        height: 30rpx;
+    }
+    .edit-icon {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        padding: 10rpx 20rpx;
+        width: 30rpx;
+        height: 30rpx;
+    }
+    .add-box {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100rpx;
+        background-color: #fff;
+        line-height: 100rpx;
+        text-align: center;
+    }
+    .add-icon {
+        width: 50rpx;
+        height: 50rpx;
     }
     .edit {
         position: absolute;
@@ -75,9 +148,6 @@ export default {
         left: 0;
         width: 100%;
         text-align: center;
-    }
-    div {
-        margin-top: 10rpx;
     }
 }
 </style>

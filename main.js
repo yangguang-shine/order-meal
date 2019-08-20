@@ -9,10 +9,20 @@ Vue.config.productionTip = false
 Vue.prototype.$myrouter = router
 Vue.prototype.$store = store
 Vue.prototype.$fetch = fetch
+console.log(Vue.prototype)
+// Vue.prototype.$data.$mainColor = '#47ff56'
+// Vue.prototype.$mainColor = '#47ff56'
 App.mpType = 'app'
-
+const $mainColor = "#54e047"
 const app = new Vue({
     ...App,
     store
 })
+Vue.mixin({ // 用得比较多且需要在模板里用可以放到这里，如果用jsx就没有这么多事
+    computed: { // 不能修改
+        $mainColor () {
+            return $mainColor 
+        },
+    }
+});
 app.$mount()

@@ -1,11 +1,11 @@
 <template>
 	<view class="home-container">
-		<swiper class="swiper-box" autoplay="true" easing-function="easeInOutCubic" @click="toMenu">
-			<swiper-item class="swiper-item">
-				<image class="swiper-item-img" src=""></image>
+		<swiper class="swiper-box" autoplay="true" easing-function="easeInOutCubic" @click="toMenu" circular="true">
+			<swiper-item class="swiper-item" v-for="(img, index) in imgList">
+				<image class="swiper-item-img" :src="img"></image>
 			</swiper-item>
 		</swiper>
-		<button open-type="getUserInfo">授权</button>
+		<!-- <button open-type="getUserInfo">授权</button> -->
 		<!-- <div class="flex-row">
 			<div>name</div>
 			<div @click="chooseImg">上传图片</div>
@@ -23,27 +23,13 @@
 		
 		data() {
 			return {
-				description: '',
-				imgUrl: '',
-				unit: '',
-				price: '',
-				foodName: '',
+				imgList: ['http://localhost:8090/images/static/1.png', 'http://localhost:8090/images/static/2.png', 'http://localhost:8090/images/static/3.png', ]
 			}
 		},
 		onLoad() {
 			uni.get
 		},
 		methods: {
-			submit() {
-				this.$fetch.post('/api/foodInfo/add', {
-					description: this.description,
-					imgUrl: this.imgUrl,
-					unit: this.unit,
-					price: this.price,
-					foodName: this.foodName,
-					orderCount: this.orderCount
-				})
-			},
 			chooseImg() {
 				uni.chooseImage({
 					count: 1,
