@@ -5,6 +5,7 @@
 				<image class="swiper-item-img" :src="img"></image>
 			</swiper-item>
 		</swiper>
+		<div class="" @click="toShopList">点餐</div>
 		<!-- <button open-type="getUserInfo">授权</button> -->
 		<!-- <div class="flex-row">
 			<div>name</div>
@@ -30,6 +31,14 @@
 			uni.get
 		},
 		methods: {
+			toShopList() {
+				this.$myrouter.push({
+					name: 'shop/list',
+					query: {
+						toOrder: 1
+					}
+				})
+			},
 			chooseImg() {
 				uni.chooseImage({
 					count: 1,

@@ -3,13 +3,13 @@
 		<!-- <div class="menu-header"></div> -->
 		<div class="order-main flex-item flex-row">
 			<div class="category-aside-box">
-				<div class="aside-cateGory-item flex-row flex-a-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :style="{'border-left': selectCategoryTabId === asideCategoryItem.scrollID ? '10rpx solid ' + mainColor : '', 'background-color': selectCategoryTabId === asideCategoryItem.scrollID ? '#fff' : ''}" @click="changeSelectCategoryTab(asideCategoryItem.scrollID)">{{asideCategoryItem.scrollID}}+{{asideCategoryItem.orderCount}}</div>
+				<div class="aside-cateGory-item flex-row flex-a-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :style="{'border-left': selectCategoryTabId === asideCategoryItem.scrollID ? '10rpx solid ' + $mainColor : '', 'background-color': selectCategoryTabId === asideCategoryItem.scrollID ? '#fff' : ''}" @click="changeSelectCategoryTab(asideCategoryItem.scrollID)">{{asideCategoryItem.scrollID}}+{{asideCategoryItem.orderCount}}</div>
 			</div>
-			<scroll-view scroll-y :scroll-into-view="scrollCategoryID" class="food-main-box flex-item">
+			<scroll-view scroll-y :scroll-into-view="scrollCategoryID" class="food-main-box flex-item" @scroll="listScroll">
 				<div class="food-category-list-item" :data-food-category-item="JSON.stringify(foodCategoryItem)" v-for="(foodCategoryItem, index) in foodCategoryList" :key="index">
 					<div :id="foodCategoryItem.scrollID" class="food-category-name">{{foodCategoryItem.categoryID}}</div>
 					<div class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex">
-						<image class="food-img  flex-shrink" :src="foodItem.imgUrl" mode="aspectFill"></image>
+						<image class="food-img  flex-shrink" :src="foodItem.imgUrl || '/static/img/default-img.svg'" mode="aspectFill"></image>
 						<div class="food-info-box flex-item flex-col flex-j-between">
 							<div class="food-name-description">
 								<div class="food-name">
@@ -21,11 +21,11 @@
 							</div>
 							<div class="food-price-button flex-row flex-j-between flex-a-center">
 								<div class="food-price">¥{{foodItem.price}}</div>
-								<div v-if="foodItem.orderCount < 1" class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryID, foodItem)">+</div>
+								<div v-if="foodItem.orderCount < 1" class="food-count-add" :style="{'background-color': $mainColor}" @click="addCount(foodCategoryItem.categoryID, foodItem)">+</div>
 								<div v-else class="flex-row flex-a-center">
-									<div class="food-count-minus" :style="{'color': mainColor}" @click="minusCount(foodCategoryItem.categoryID, foodItem)">-</div>
+									<div class="food-count-minus" :style="{'color': $mainColor}" @click="minusCount(foodCategoryItem.categoryID, foodItem)">-</div>
 									<div class="food-order-count">{{foodItem.orderCount}}</div>
-									<div class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryID, foodItem)">+</div>
+									<div class="food-count-add" :style="{'background-color': $mainColor}" @click="addCount(foodCategoryItem.categoryID, foodItem)">+</div>
 								</div>
 							</div>
 						</div>
@@ -57,11 +57,11 @@
 								</div>
 								<div class="food-price-button flex-row flex-j-between flex-a-center">
 									<div class="food-price">¥{{cartFoodItem.price}}</div>
-									<div v-if="cartFoodItem.orderCount < 1" class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryID, cartFoodItem)">+</div>
+									<div v-if="cartFoodItem.orderCount < 1" class="food-count-add" :style="{'background-color': $mainColor}" @click="addCount(foodCategoryItem.categoryID, cartFoodItem)">+</div>
 									<div v-else class="flex-row flex-a-center">
-										<div class="food-count-minus" :style="{'color': mainColor}" @click="minusCount(foodCategoryItem.categoryID, cartFoodItem)">-</div>
+										<div class="food-count-minus" :style="{'color': $mainColor}" @click="minusCount(foodCategoryItem.categoryID, cartFoodItem)">-</div>
 										<div class="food-order-count">{{cartFoodItem.orderCount}}</div>
-										<div class="food-count-add" :style="{'background-color': mainColor}" @click="addCount(foodCategoryItem.categoryID, cartFoodItem)">+</div>
+										<div class="food-count-add" :style="{'background-color': $mainColor}" @click="addCount(foodCategoryItem.categoryID, cartFoodItem)">+</div>
 									</div>
 								</div>
 							</div>
@@ -84,16 +84,16 @@ export default {
 			selectCategoryTabId: '',
 			scrollCategoryID: '',
 			showCartDetail: false,
-			foodCategoryList: []
+			foodCategoryList: [],
+			shopID: ''
 		}
 	},
 	computed: {
 		...mapState({
-			mainColor: state => state.mainColor,
 			cartFoodList: state => state.cartFoodList,
 		}),
 		cartFoodListMainColor() {
-			return this.cartFoodList.length ? this.mainColor: ''
+			return this.cartFoodList.length ? this.$mainColor: ''
 		},
 		asideCategoryList() {
 			const asideCategoryList = this.foodCategoryList.map(foodCategoryItem => {
@@ -131,7 +131,8 @@ export default {
 			observer.disconnect()
 		}
 	},
-	onLoad() {
+	onLoad(query) {
+		this.shopID = query.shopID
 		this.init()
 		// observer = uni.createIntersectionObserver(this, {
         //         observeAll: true
@@ -145,6 +146,9 @@ export default {
 			cartCountChange: 'cartCountChange',
 			initCart: 'initCart',
 		}),
+		listScroll(e) {
+			// console.log(e)
+		},
 		creatObserve() {
 			observer = uni.createIntersectionObserver(this, {
 					observeAll: true
@@ -156,14 +160,14 @@ export default {
 					if (res.intersectionRatio === 0 && res.boundingClientRect.bottom <= res.relativeRect.top) {
 						this.selectCategoryTabId = foodCategoryItem.nextscrollID
 						console.log(111)
-					} else if ((0 < res.intersectionRatio && res.intersectionRatio < 1 && res.boundingClientRect.top < res.intersectionRect.top) || (res.intersectionRatio === 1  && res.boundingClientRect.top === res.intersectionRect.top)) {
+					} else if ((0 < res.intersectionRatio && res.intersectionRatio <= 1 && res.boundingClientRect.top < res.relativeRect.top)) {
 						this.selectCategoryTabId = foodCategoryItem.scrollID
 						console.log(333)
 					}
 			})
 		},
 		async init() {
-			const res = await this.$fetch.get('/api/order/menuList')
+			const res = await this.$fetch.get('/api/order/menuList', { shopID: this.shopID })
 			this.foodCategoryList = res.data || []
 			this.foodCategoryList.forEach((item, index) => {
 				item.scrollID = 'c' + item.categoryID
@@ -182,8 +186,6 @@ export default {
 		getStorageCart() {
 			const storageFoodList =  uni.getStorageSync('storageFoodList')
 			if (!storageFoodList || !storageFoodList.length) return;
-			console.log('storageFoodList')
-			console.log(storageFoodList)
 			this.initCart({ foodCategoryList: this.foodCategoryList, storageFoodList })
 		},
 		changeShowCartDetail() {

@@ -10,8 +10,8 @@
                     </div>
                     <div class="shop-address">{{shopItem.address}}</div>
                 </div>
-                <image class="delete-icon" src="/static/img/shop-delete.svg" @click.stop="toDeleteShop(shopItem)"></image>
-                <image class="edit-icon" src="/static/img/shop-edit.svg" @click.stop="toEditShop(shopItem)"></image>
+                <image v-if="!toOrder" class="delete-icon" src="/static/img/shop-delete.svg" @click.stop="toDeleteShop(shopItem)"></image>
+                <image v-if="!toOrder" class="edit-icon" src="/static/img/shop-edit.svg" @click.stop="toEditShop(shopItem)"></image>
             </div>
         </div>
         <div class="add-box flex-row flex-ja-center" @click="toAddShop" >
@@ -21,13 +21,17 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
     data() {
         return {
             shopList: [],
+            toOrder: 0
         }
     },
-    onLoad() {
+    onLoad(query) {
+        this.toOrder = +query.toOrder || 0
     },
     async onShow() {
         console.log(this.$mainColor)
@@ -39,7 +43,20 @@ export default {
         }
     },
     methods: {
+        ...mapMutations({
+            saveOrderShopInfo: 'saveOrderShopInfo'
+        }),
         toCategoryList(shopItem) {
+            if (this.toOrder) {
+                this.saveOrderShopInfo(shopItem)
+ 				this.$myrouter.push({
+					name: 'menu',
+					query: {
+						shopID: shopItem.shopID
+					}
+                })
+                return
+            }
             this.$myrouter.push({
                 name: 'category/list',
                 query: {

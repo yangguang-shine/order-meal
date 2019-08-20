@@ -2,7 +2,7 @@
 	<div class="comfirm-order-container">
 		<div class="food-category-item" v-for="(foodCategoryItem, index) in cartFoodList" :key="index">
 			<div class="food-item flex-row flex-a-center" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex">
-				<image class="food-img flex-shrink" :src="foodItem.imgUrl"></image>
+				<image class="food-img flex-shrink" :src="foodItem.imgUrl || '/static/img/default-img.svg'"></image>
 				<div class="food-info">
 					<div class="food-name line1">{{foodItem.foodName}}</div>
 					<div class="food-price">¥{{foodItem.price}}</div>
@@ -11,7 +11,7 @@
 				<div class="food-count-price">¥{{foodItem.price * foodItem.orderCount}}</div>
 			</div>
 		</div>
-		<div class="submit-order com-button" @click="submitOrder" :style="{'background-color': mainColor}">提交</div>
+		<div class="submit-order com-button" @click="submitOrder" :style="{'background-color': $mainColor}">提交</div>
 	</div>
 </template>
 
@@ -24,7 +24,6 @@ export default {
 	computed: {
 		...mapState({
 			cartFoodList: state => state.cartFoodList,
-			mainColor: state => state.mainColor,
 		})
 	},
 	methods: {
@@ -65,13 +64,13 @@ export default {
 		color: #666;
 	}
 	.food-count {
-		flex: 1;
+		flex: 2;
 		font-size: 26rpx;
 		text-align: center;
 		color: #666;
 	}
 	.food-count-price {
-		flex: 2;
+		flex: 3;
 		font-size: 26rpx;
 		text-align: center;
 	}

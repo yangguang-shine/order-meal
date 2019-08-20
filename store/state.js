@@ -1,5 +1,5 @@
 const state = {
-    mainColor: '#62b900',
+    shopInfo: {},
     cartFoodList: []
 }
 export default state

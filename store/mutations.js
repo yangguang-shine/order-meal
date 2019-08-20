@@ -39,4 +39,13 @@ mutations['initCart'] = function (state, { foodCategoryList = [], storageFoodLis
         }
     })
 }
+mutations['saveOrderShopInfo'] = (state, shopInfo = {}) => {
+    if (String(state.shopInfo.shopID) === String(shopInfo.shopID)) {
+        return
+    } else {
+        wx.removeStorageSync('storageFoodList')
+        state.cartFoodList = []
+        state.shopInfo = shopInfo
+    }
+}
 export default mutations
