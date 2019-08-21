@@ -3,7 +3,10 @@
 		<!-- <div class="menu-header"></div> -->
 		<div class="order-main flex-item flex-row">
 			<div class="category-aside-box">
-				<div class="aside-cateGory-item flex-row flex-a-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :style="{'border-left': selectCategoryTabId === asideCategoryItem.scrollID ? '10rpx solid ' + $mainColor : '', 'background-color': selectCategoryTabId === asideCategoryItem.scrollID ? '#fff' : ''}" @click="changeSelectCategoryTab(asideCategoryItem.scrollID)">{{asideCategoryItem.scrollID}}+{{asideCategoryItem.orderCount}}</div>
+				<div class="aside-category-item flex-row flex-a-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :style="{'border-left': selectCategoryTabId === asideCategoryItem.scrollID ? '10rpx solid ' + $mainColor : '', 'background-color': selectCategoryTabId === asideCategoryItem.scrollID ? '#fff' : ''}" @click="changeSelectCategoryTab(asideCategoryItem.scrollID)">
+					{{asideCategoryItem.categoryName}}
+					<div v-if="asideCategoryItem.orderCount" class="category-order-count" :style="{'background': $mainColor}">{{asideCategoryItem.orderCount}}</div>
+				</div>
 			</div>
 			<scroll-view scroll-y :scroll-into-view="scrollCategoryID" class="food-main-box flex-item" @scroll="listScroll">
 				<div class="food-category-list-item" :data-food-category-item="JSON.stringify(foodCategoryItem)" v-for="(foodCategoryItem, index) in foodCategoryList" :key="index">
@@ -23,9 +26,11 @@
 								<div class="food-price">¥{{foodItem.price}}</div>
 								<div v-if="foodItem.orderCount < 1" class="food-count-add" :style="{'background-color': $mainColor}" @click="addCount(foodCategoryItem.categoryID, foodItem)">+</div>
 								<div v-else class="flex-row flex-a-center">
-									<div class="food-count-minus" :style="{'color': $mainColor}" @click="minusCount(foodCategoryItem.categoryID, foodItem)">-</div>
+									<div class="food-count-minus" :style="{'color': $mainColor}" @click="minusCount(foodCategoryItem.categoryID, foodItem)">
+										<div class="reduce-icon-css" :style="{'background-color': $mainColor}"></div>
+									</div>
 									<div class="food-order-count">{{foodItem.orderCount}}</div>
-									<div class="food-count-add" :style="{'background-color': $mainColor}" @click="addCount(foodCategoryItem.categoryID, foodItem)">+</div>
+									<div class="food-count-add" :style="{'background-color': $mainColor}" @click="addCount(foodCategoryItem.categoryID, foodItem)"></div>
 								</div>
 							</div>
 						</div>
@@ -34,34 +39,47 @@
 			</scroll-view>
 		</div>
 		<div class="footer-cart flex-row flex-j-between flex-a-center" >
-			<image class="cart-img" @click="changeShowCartDetail"></image>
+			<div class="cart-img-box">
+					<image class="cart-img" @click="changeShowCartDetail" src="/static/img/cart-icon.png"></image>
+					<div v-if="allCartFoodCount" class="cart-all-count" :style="{'background': $mainColor}">
+						{{allCartFoodCount}}
+					</div>
+			</div>
 			<div class="flex-item cart-all-amount">
-				{{cartFoodList.length}}
+				{{cartSumAmount}}
 			</div>
 			<div class="com-button confirm-order" :style="{'background-color': cartFoodListMainColor }" @click="toComfirmOrder">去下单</div>
 		</div>
 		<div v-if="showCartDetail"  class="cart-detail-mask" @click.stop="showCartDetail = false">
 			<div class="cart-detail-box"  @touchmove.stop>
-				<scroll-view scroll-y class="cart-detail-list-box" @click.stop >
+				<div class="cart-select-box flex-row flex-j-between flex-a-center" @click.stop>
+					<div class="select-goods-title">
+						已选商品
+					</div>
+					<image class="delete-all-icon" src="/static/img/shop-delete.svg" @click="cartClearCart"></image>
+				</div>
+				<scroll-view scroll-y class="cart-detail-list-box" @click.stop>
 					<div class="food-category-item" v-for="(foodCategoryItem, index) in cartFoodList" :key="index">
 						<div class="cart-food-item flex-row" v-for="(cartFoodItem, cartFoodIndex) in foodCategoryItem.foodList" :key="cartFoodIndex">
-							<image v-if="cartFoodItem.orderCount" class="food-img flex-shrink" :src="cartFoodItem.imgUrl"></image>
-							<div v-if="cartFoodItem.orderCount" class="food-info-box flex-item flex-col flex-j-between">
-								<div class="food-name-description">
-									<div class="food-name">
+							<image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="cartFoodItem.imgUrl || '/static/img/default-img.svg'"></image>
+							<div v-if="cartFoodItem.orderCount" class="cart-food-info-box flex-item flex-col flex-j-between">
+								<div class="cart-food-name-description">
+									<div class="cart-food-name">
 										{{cartFoodItem.foodName}}111{{foodCategoryItem.categoryID}}
 									</div>
-									<div class="food-description">
+									<div class="cart-food-description">
 										{{cartFoodItem.description}}
 									</div>
 								</div>
-								<div class="food-price-button flex-row flex-j-between flex-a-center">
-									<div class="food-price">¥{{cartFoodItem.price}}</div>
+								<div class="cart-food-price-button flex-row flex-j-between flex-a-center">
+									<div class="cart-food-price">¥{{cartFoodItem.price}}</div>
 									<div v-if="cartFoodItem.orderCount < 1" class="food-count-add" :style="{'background-color': $mainColor}" @click="addCount(foodCategoryItem.categoryID, cartFoodItem)">+</div>
 									<div v-else class="flex-row flex-a-center">
-										<div class="food-count-minus" :style="{'color': $mainColor}" @click="minusCount(foodCategoryItem.categoryID, cartFoodItem)">-</div>
+										<div class="food-count-minus" :style="{'color': $mainColor}" @click="minusCount(foodCategoryItem.categoryID, cartFoodItem)">
+											<div class="reduce-icon-css" :style="{'background-color': $mainColor}"></div>
+										</div>
 										<div class="food-order-count">{{cartFoodItem.orderCount}}</div>
-										<div class="food-count-add" :style="{'background-color': $mainColor}" @click="addCount(foodCategoryItem.categoryID, cartFoodItem)">+</div>
+										<div class="food-count-add" :style="{'background-color': $mainColor}" @click="addCount(foodCategoryItem.categoryID, cartFoodItem)"></div>
 									</div>
 								</div>
 							</div>
@@ -94,6 +112,27 @@ export default {
 		}),
 		cartFoodListMainColor() {
 			return this.cartFoodList.length ? this.$mainColor: ''
+		},
+		cartSumAmount() {
+			return (this.cartFoodList.reduce((amount, item) => {
+				const categoryItemSum = item.foodList.reduce((all, foodItem) => {
+					const price = foodItem.price * foodItem.orderCount
+					all += price 
+					return all
+				}, 0)
+				amount += categoryItemSum
+				return amount
+			}, 0)).toFixed(2)
+		},
+		allCartFoodCount() {
+			return this.cartFoodList.reduce((all, item) => {
+				const itemFoodAll = item.foodList.reduce((all, item) => {
+						all += item.orderCount
+						return all
+					}, 0)
+				all += itemFoodAll
+				return all
+			}, 0)
 		},
 		asideCategoryList() {
 			const asideCategoryList = this.foodCategoryList.map(foodCategoryItem => {
@@ -134,20 +173,19 @@ export default {
 	onLoad(query) {
 		this.shopID = query.shopID
 		this.init()
-		// observer = uni.createIntersectionObserver(this, {
-        //         observeAll: true
-        //     });
-		// observer.relativeTo('.food-main-box').observe('.food-category-list-item', (res) => {
-		// 		console.log(res)
-		// })
 	},
 	methods: {
 		...mapMutations({
 			cartCountChange: 'cartCountChange',
 			initCart: 'initCart',
+			clearCart: 'clearCart',
 		}),
 		listScroll(e) {
 			// console.log(e)
+		},
+		cartClearCart() {
+			this.clearCart()
+			this.showCartDetail = false
 		},
 		creatObserve() {
 			observer = uni.createIntersectionObserver(this, {
@@ -160,7 +198,7 @@ export default {
 					if (res.intersectionRatio === 0 && res.boundingClientRect.bottom <= res.relativeRect.top) {
 						this.selectCategoryTabId = foodCategoryItem.nextscrollID
 						console.log(111)
-					} else if ((0 < res.intersectionRatio && res.intersectionRatio <= 1 && res.boundingClientRect.top < res.relativeRect.top)) {
+					} else if ((0 < res.intersectionRatio && res.intersectionRatio <= 1 && res.boundingClientRect.top <= res.relativeRect.top)) {
 						this.selectCategoryTabId = foodCategoryItem.scrollID
 						console.log(333)
 					}
@@ -237,120 +275,187 @@ page {
 	height: 100%;
 }
 .menu-container {
+	font-size: 30rpx;
 	width: 100%;
 	height: 100%;
 	box-sizing: border-box;
 	padding-bottom: 100rpx;
-	color:#333
-}
-.menu-header {
-	background-color: red;
-	height: 300rpx;
-}
-.order-main {
-	.category-aside-box {
-		width: 200rpx;
-		height: 100%;
-		overflow-y: auto;
-		background-color: #f5f5f5;
-		.aside-cateGory-item {
-			padding: 0 30rpx;
-			height: 80rpx;
-			font-size: 26rpx;
-			line-height: 32rpx;
-			text-align: center;
-			box-sizing: border-box;
-			border-left: 10rpx solid transparent;
+	color:#333;
+	.food-count-minus {
+		position: relative;
+		width: 50rpx;
+		height: 50rpx;
+		border: 1px solid;
+		border-radius: 50%;
+		text-align: center;
+		line-height: 40rpx;
+		background-color: #fff;
+		box-sizing: border-box;
+	}
+	.food-order-count {
+		width: 70rpx;
+		text-align: center;
+	}
+	.reduce-icon-css {
+		position: absolute;
+		top: 50%;
+		left:50%;
+		height: 6rpx;
+		width: 30rpx;
+		transform: translate(-50%, -50%);
+	}
+	.food-count-add {
+		position: relative;
+		width: 50rpx;
+		height: 50rpx;
+		border-radius: 50%;
+		text-align: center;
+		line-height: 40rpx;
+		color: #fff;
+	}
+	.food-count-add::after {
+		content: '';
+		position: absolute;
+		width: 30rpx;
+		height: 6rpx;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: #fff;
+	}
+	.food-count-add::before {
+		content: '';
+		position: absolute;
+		width: 6rpx;
+		height: 30rpx;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: #fff;
+	}
+	.add-icon-css {
+		position: relative;
+	}
+	.menu-header {
+		background-color: red;
+		height: 300rpx;
+	}
+	.order-main {
+		.category-aside-box {
+			width: 200rpx;
+			height: 100%;
+			overflow-y: auto;
+			background-color: #f5f5f5;
+			.aside-category-item {
+				position: relative;
+				padding: 0 20rpx;
+				height: 80rpx;
+				font-size: 26rpx;
+				line-height: 32rpx;
+				text-align: center;
+				box-sizing: border-box;
+				border-left: 10rpx solid transparent;
+			}
+			.category-order-count {
+				position: absolute;
+				top: 10rpx;
+				right: 10rpx;
+				width: 32rpx;
+				height: 32rpx;
+				line-height: 32rpx;
+				border-radius: 50%;
+				font-size: 22rpx;
+				color: #fff;
+				text-align: center;
+			}
+		}
+		.food-main-box {
+			// background-color: blue;
+			.food-category-list-item {
+				padding: 0 30rpx;
+				margin-bottom: 20rpx;
+			}
+			.food-category-name {
+				font-size: 24rpx;
+				color: #666;
+				margin: 0 0 20rpx;
+			}
+			.food-item {
+				padding: 10rpx 0;
+			}
+			.food-img {
+				height: 170rpx;
+				width: 170rpx;
+			}
+			.food-info-box {
+				padding-left: 20rpx;
+			}
+			.food-name {
+				font-weight: bold;
+				font-size: 34rpx;
+			}
+			.food-description {
+				font-size: 26rpx;
+				color: #999;
+				margin-top: 10rpx;
+			}
+			
 		}
 	}
-	.food-main-box {
-		// background-color: blue;
-		.food-category-list-item {
-			padding: 0 30rpx;
-			margin-bottom: 20rpx;
-		}
-		.food-category-name {
-			font-size: 24rpx;
-			color: #666;
-			margin: 0 0 20rpx;
-		}
-		.food-item {
-			padding: 10rpx 0;
-		}
-		.food-img {
-			height: 170rpx;
-			width: 170rpx;
-		}
-		.food-info-box {
-			padding-left: 20rpx;
-		}
-		.food-name {
-			font-weight: bold;
-		}
-		.food-description {
-			font-size: 24rpx;
-			color: #999
-		}
-		.food-count-minus {
-			width: 50rpx;
-			height: 50rpx;
-			border: 1px solid;
-			border-radius: 50%;
-			text-align: center;
-			line-height: 40rpx;
-			background-color: #fff;
-			box-sizing: border-box;
-		}
-		.food-order-count {
-			width: 70rpx;
-			text-align: center;
-		}
-		.food-count-add {
-			width: 50rpx;
-			height: 50rpx;
-			border-radius: 50%;
-			text-align: center;
-			line-height: 40rpx;
-			color: #fff;
-		}
-	}
-}
-
-.footer-cart {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: 100rpx;
-	background-color: #434346;
-	border-radius: 50rpx;
-	.cart-all-amount {
-		padding-left: 160rpx
-	}
-	.cart-img {
+	.footer-cart {
 		position: fixed;
 		bottom: 0;
-		left: 30rpx;
+		left: 0;
+		width: 100%;
 		height: 100rpx;
-		width: 100rpx;
-		background-color: red;
+		background-color: #434346;
+		border-radius: 50rpx;
+		color: #fff;
+		z-index: 8;
+	}
+	.cart-all-amount {
+		padding-left: 200rpx
+	}
+	.cart-img-box {
+		position: fixed;
+		bottom: 20rpx;
+		left: 40rpx;
+		height: 140rpx;
+		width: 140rpx;
+		z-index: 10
+	}
+	.cart-img {
+		height: 140rpx;
+		width: 140rpx;
+	}
+
+	.cart-all-count {
+		position: absolute;
+		right: -20rpx;
+		top: 10rpx;
+		height: 40rpx;
+		width: 40rpx;
+		font-size: 22rpx;
+		line-height: 40rpx;
+		border-radius: 50%;
+		text-align: center;
 	}
 	.confirm-order {
 		margin-right: 10rpx;
 		width: 250rpx;
 		background-color: #666;
 	}
-}
-.cart-detail-mask {
-	position: fixed;
-	top: 0;
-	left: 0;
-	bottom: 100rpx;
-	width: 100%;
-	background-color: rgba(0, 0, 0, .5);
-	font-size: 28rpx;
-	-webkit-overflow-scrolling: touch;
-	z-index: 2;
+	.cart-detail-mask {
+		position: fixed;
+		top: 0;
+		left: 0;
+		bottom: 100rpx;
+		width: 100%;
+		background-color: rgba(0, 0, 0, .5);
+		font-size: 28rpx;
+		-webkit-overflow-scrolling: touch;
+		z-index: 2;
+	}
 	.cart-detail-box {
 		position: absolute;
 		bottom: 0;
@@ -358,48 +463,39 @@ page {
 		width: 100%;
 		max-height: 800rpx;
 		box-sizing: border-box;
-		padding: 30rpx;
+		padding: 0 30rpx 40rpx;;
 		background-color: #fff;
 		overflow-y: auto;
-		z-index: 5;
+	}
+	.cart-select-box {
+		font-size: 28rpx;
+		color: #999;
+	}
+	.delete-all-icon {
+		padding: 20rpx;
+		height: 36rpx;
+		width: 36rpx;
 	}
 	.cart-detail-list-box {
-		max-height: 700rpx;
+		max-height: 650rpx;
 	}
 	.cart-food-item {
 		padding: 10rpx 0;
 	}
-	.food-img {
+	.cart-food-img {
 		height: 130rpx;
 		width: 130rpx;
 	}
-	.food-name {
+	.cart-food-name {
+		font-weight: bold;
 		max-width: 400rpx;
 	}
-	.food-description {
+	.cart-food-description {
 		font-size: 24rpx;
 	}
-		.food-count-minus {
-			width: 50rpx;
-			height: 50rpx;
-			border: 1px solid;
-			border-radius: 50%;
-			text-align: center;
-			line-height: 40rpx;
-			background-color: #fff;
-			box-sizing: border-box;
-		}
-		.food-order-count {
-			width: 70rpx;
-			text-align: center;
-		}
-		.food-count-add {
-			width: 50rpx;
-			height: 50rpx;
-			border-radius: 50%;
-			text-align: center;
-			line-height: 40rpx;
-			color: #fff;
-		}
+	.cart-food-info-box {
+		padding-left: 20rpx;
+	}
 }
+
 </style>

@@ -48,4 +48,13 @@ mutations['saveOrderShopInfo'] = (state, shopInfo = {}) => {
         state.shopInfo = shopInfo
     }
 }
+mutations['clearCart'] = (state, shopInfo = {}) => {
+    state.cartFoodList.forEach((categoryTtem) => {
+        categoryTtem.foodList.forEach((foodItem) => {
+            foodItem.orderCount = 0
+        })
+    })
+    state.cartFoodList = []
+    uni.removeStorageSync('storageFoodList')
+}
 export default mutations
