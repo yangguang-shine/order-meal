@@ -1,5 +1,6 @@
 const state = {
     shopInfo: {},
-    cartFoodList: []
+    cartFoodList: [],
+    orderListUpdate: [true, true, true, true]
 }
 export default state

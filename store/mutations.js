@@ -57,4 +57,13 @@ mutations['clearCart'] = (state, shopInfo = {}) => {
     state.cartFoodList = []
     uni.removeStorageSync('storageFoodList')
 }
+
+mutations['changeAllOrderListUpdate'] = (state, status = [true, true, true, true]) => {
+    state.orderListUpdate = status
+}
+
+mutations['changeOrderListUpdate'] = (state,{ index, status = true } = {}) => {
+    state.orderListUpdate[index] = status
+
+}
 export default mutations

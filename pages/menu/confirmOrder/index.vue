@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
 	data() {
 		return {
@@ -44,6 +44,9 @@ export default {
 		})
 	},
 	methods: {
+		...mapMutations({
+			changeAllOrderListUpdate: 'changeAllOrderListUpdate'
+		}),
 		async orderKeyDelete() {
 			try {
 				const res = await this.$fetch.get('/api/order/deleteOrderKey', {  })
@@ -59,6 +62,10 @@ export default {
 			})
 			console.log(foodList)
 			const res = await this.$fetch.post('/api/order/submit', { foodList, shopID: this.shopInfo.shopID, orderAmount: this.orderAmount })
+			this.changeAllOrderListUpdate()
+			this.$myrouter.switchTab({
+				name: 'orderList'
+			})
 		},
 	}
 }

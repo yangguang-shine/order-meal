@@ -6,6 +6,7 @@
 			</swiper-item>
 		</swiper>
 		<div class="" @click="toShopList">点餐</div>
+		<div class="login" @click="toLogin">login</div>
 		<!-- <button open-type="getUserInfo">授权</button> -->
 		<!-- <div class="flex-row">
 			<div>name</div>
@@ -36,6 +37,23 @@
 					name: 'shop/list',
 					query: {
 						toOrder: 1
+					}
+				})
+			},
+			toLogin() {
+				wx.login({
+					success (res) {
+						if (res.code) {
+						//发起网络请求
+							wx.request({
+								url: 'http://localhost:8090/wechat/wx/login',
+								data: {
+									code: res.code
+								}
+							})
+						} else {
+						console.log('登录失败！' + res.errMsg)
+						}
 					}
 				})
 			},
@@ -95,7 +113,6 @@
 			width: 100%;
 			height: 100%;
 		}
-	}
 	.banner1 {
 		width: 100%;
 		height: 150upx;
@@ -119,4 +136,8 @@
 		font-size: 36upx;
 		color: #8f8f94;
 	}
+	.login {
+		margin-top: 20rpx;
+	}
+}
 </style>
