@@ -26,3 +26,25 @@ Vue.mixin({ // 用得比较多且需要在模板里用可以放到这里，如�
     }
 });
 app.$mount()
+uni.login({
+    success (res) {
+        if (res.code) {
+        //发起网络请求
+            uni.request({
+                url: 'http://localhost:8090/wechat/wx/login',
+                data: {
+                    code: res.code
+                },
+                success(res) {
+                    console.log(res)
+                    // uni.setStorageSync('user', res.data.data)
+                },
+                fail(res) {
+                    console.log('接口调用失败')
+                }
+            })
+        } else {
+            console.log('登录失败！' + res.errMsg)
+        }
+    }
+})

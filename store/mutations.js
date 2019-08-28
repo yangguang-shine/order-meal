@@ -43,7 +43,7 @@ mutations['saveOrderShopInfo'] = (state, shopInfo = {}) => {
     if (String(state.shopInfo.shopID) === String(shopInfo.shopID)) {
         return
     } else {
-        wx.removeStorageSync('storageFoodList')
+        uni.removeStorageSync('storageFoodList')
         state.cartFoodList = []
         state.shopInfo = shopInfo
     }

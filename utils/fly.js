@@ -12,6 +12,12 @@ fly.config.timeout = 1000;
 fly.config.baseURL = 'http://localhost:8090';
 fly.interceptors.request.use((request)=>{
     request.headers["X-Tag"]="flyio";
+    const user = uni.getStorageSync('user')
+    request.headers['Set-Cookie']=`user=${user};`;
+    request.headers['cookie']=`user=${user};`;
+    console.log(uni.getStorageSync('user'))
+    console.log(request.headers.Cookie)
+    console.log(request.headers)
       console.log(request.body)
     return request;
 })
