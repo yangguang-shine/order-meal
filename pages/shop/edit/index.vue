@@ -27,7 +27,7 @@
         </picker>
         <div class="flex-row flex-a-center">
 			<div class="title">店铺图片：</div>
-			<image class="food-img" :src="shopInfo.imgUrl || '/static/img/default-img.svg'" @click="chooseImg"></image>
+			<image class="food-img" :src="shopInfo.imgUrl ? host + shopInfo.imgUrl : '/static/img/default-img.svg'" @click="chooseImg"></image>
 		</div>
         <div v-if="shopID" class="flex-row flex-j-around">
             <div class="button" :style="{'background-color': $mainColor}" @click="editShop">修改</div>
@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import host from '@/config/host'
+
 export default {
     data() {
         return {
@@ -49,6 +51,7 @@ export default {
                 address: '西直门凯德茂地铁站',
                 startTime: '09:00',
                 endTime: '18:00',
+                host
             },
             shopID: '',
             addStatus: false

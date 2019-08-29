@@ -6,7 +6,7 @@
 			</swiper-item>
 		</swiper>
 		<div class="" @click="toShopList">点餐</div>
-		<div class="login" @click="toLogin">login</div>
+		<!-- <div class="login" @click="toLogin">login</div> -->
 		<!-- <button open-type="getUserInfo">授权</button> -->
 		<!-- <div class="flex-row">
 			<div>name</div>
@@ -21,11 +21,12 @@
 </template>
 
 <script>
+import host from '@/config/host'
 	export default {
 		
 		data() {
 			return {
-				imgList: ['http://localhost:8090/images/static/1.png', 'http://localhost:8090/images/static/2.png', 'http://localhost:8090/images/static/3.png', ]
+				imgList: [`${host}/images/static/1.png`, `${host}/images/static/2.png`, `${host}/images/static/3.png`, ]
 			}
 		},
 		onLoad() {
@@ -41,7 +42,6 @@
 				})
 			},
 			toLogin() {
-
 			},
 			chooseImg() {
 				uni.chooseImage({

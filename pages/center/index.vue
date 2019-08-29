@@ -1,9 +1,6 @@
 <template>
 	<view class="center-container flex-col">
 		<!-- <image class="logo" src="/static/logo.png"></image> -->
-		<div class="item" @click="toCategoryList">
-			<div>分类</div>
-		</div>
 		<div class="item" @click="toShopList">
 			<div>店铺</div>
 		</div>

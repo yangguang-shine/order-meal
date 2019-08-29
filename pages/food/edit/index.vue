@@ -18,7 +18,7 @@
         </div>
 		<div class="flex-row flex-a-center">
 			<div class="title">店铺图片：</div>
-			<image class="food-img" :src="foodInfo.imgUrl || '/static/img/default-img.svg'" @click="chooseImg"></image>
+			<image class="food-img" :src="foodInfo.imgUrl ? host + foodInfo.imgUrl :'/static/img/default-img.svg'" @click="chooseImg"></image>
 		</div>
 		<div v-if="foodID" class="flex-row flex-j-around">
 			<div class="food-button" @click="editFood" :style="{'background-color': $mainColor}">
@@ -37,6 +37,8 @@
 	</view>
 </template>
 <script>
+import host from '@/config/host'
+
 	export default {
 		data() {
 			return {
@@ -146,12 +148,14 @@
 						let imgUrl = ''
 						if (this.foodInfo.imgUrl) {
 							var reg = /.+\/(\d+\.)/
-							var a = 'http://localhost:8090/images/upload/1565681342882.png'
 							imgUrl = this.foodInfo.imgUrl.replace(reg, '$1')
 						}
 						// http://localhost:8090/images/upload/1565681342882.png
+						console.log(this.foodID)
+						console.log(imgUrl)
+						console.log(file.path)
 						uni.uploadFile({
-							url: 'http://localhost:8090/api/img/uploadImg',
+							url: `${host}/api/img/uploadImg`,
 							filePath: file.path,
 							name: 'img',
 							formData: {

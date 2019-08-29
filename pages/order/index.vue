@@ -7,7 +7,7 @@
 		<view v-show="tabIndex === allOrderIndex" class="order-list-box" v-for="(orderList, allOrderIndex) in allOrderList" :key="allOrderIndex">
 			<div class="order-list-item" v-for="(orderItem, index) in orderList" :key="index">
 				<div class="flex-row">
-					<image class="shop-img" :src="orderItem.imgUrl"></image>
+					<image class="shop-img" :src="orderItem.imgUrl ? host + orderItem.imgUrl : '/static/img/default-img.svg'"></image>
 					<div class="flex-item flex-col flex-j-between">
 						<div class="flex-row felx-a-center">
 							<div class="shop-name line1">{{orderItem.shopName}}</div>
@@ -30,12 +30,14 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import host from '@/config/host'
 
 	export default {
 		data() {
 			return {
 				tabIndex: 0,
-				allOrderList: [[], [], [], []]
+				allOrderList: [[], [], [], []],
+				host
 			}
 		},
 		onShow() {
@@ -52,7 +54,7 @@ import { mapState, mapMutations } from 'vuex'
 			}),
 			async getOrderList() {
 				try {
-					if (!this.orderListUpdate[this.tabIndex]) return;
+					// if (!this.orderListUpdate[this.tabIndex]) return;
 					this.$set(this.allOrderList, this.tabIndex, [])
 					const res = await this.$fetch.get('/api/order/orderList', {
 						status: this.tabIndex
@@ -61,9 +63,9 @@ import { mapState, mapMutations } from 'vuex'
 						...orderItem,
 						orderTime: `${new Date(orderItem.orderTime).toLocaleDateString().replace(/\//g, '-')} ${new Date(orderItem.orderTime).toTimeString().slice(0, 8)}`
 					}))
-					this.changeOrderListUpdate({ index: this.tabIndex, status: false})
+					console.log(orderList)
+					// this.changeOrderListUpdate({ index: this.tabIndex, status: false})
 					this.allOrderList[this.tabIndex].push(...orderList)
-					console.log(this.allOrderList[this.tabIndex])
 				} catch (e) {
 					console.log(e)
 				}
@@ -71,7 +73,7 @@ import { mapState, mapMutations } from 'vuex'
 			changeTabIndex(index) {
 				if (index === this.tabIndex) return;
 				this.tabIndex = index;
-				if (this.allOrderList[this.tabIndex].length) return;
+				// if (this.allOrderList[this.tabIndex].length) return;
 				this.getOrderList()
 			}
 		}

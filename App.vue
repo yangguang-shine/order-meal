@@ -1,14 +1,16 @@
 <script>
+	import toLogin from '@/utils/wx'
 	export default {
-		onLaunch: function() {
+		async onLaunch() {
 			console.log('App Launch')
+			await toLogin()
 		},
-		onShow: function() {
+		onShow() {
 			console.log('App Show')
 		},
-		onHide: function() {
+		onHide() {
 			console.log('App Hide')
-		}
+		},
 	}
 </script>
 

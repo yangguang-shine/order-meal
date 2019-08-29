@@ -1,3 +1,7 @@
+import toLogin from '@/utils/wx'
+import router from '@/utils/router'
+import host from '@/config/host'
+
 const Fly = require('flyio/dist/npm/wx')
 const fly = new Fly;
 // {
@@ -9,15 +13,12 @@ const fly = new Fly;
 //     timeout:""//超时时间
 //   }
 fly.config.timeout = 1000;
-fly.config.baseURL = 'http://localhost:8090';
+fly.config.baseURL = host;
 fly.interceptors.request.use((request)=>{
     request.headers["X-Tag"]="flyio";
-    const user = uni.getStorageSync('user')
-    request.headers['Set-Cookie']=`user=${user};`;
-    request.headers['cookie']=`user=${user};`;
-    console.log(uni.getStorageSync('user'))
-    console.log(request.headers.Cookie)
-    console.log(request.headers)
+    const token = uni.getStorageSync('token')
+    request.headers['Set-Cookie']=`token=${token};`;
+    request.headers['cookie']=`token=${token};`;
       console.log(request.body)
     return request;
 })
@@ -33,9 +34,36 @@ fly.interceptors.response.use(
 const flyRequest = (url, params, method) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(url)
             const res = await fly[method](url, params);
-            if (res.code === '000') {
+            const code = res.code
+            if (code === '000') {
                 resolve(res)
+            } else if (code === '555'){
+                new Promise((resolve, reject) => {
+                    uni.showModal({
+                        title: '提示',
+                        content: res.msg,
+                        confirmText: '去登录',
+                        cancelText: '取消登录',
+                        success: async () => {
+                            uni.showLoading({
+                                title: '登录中'
+                            })
+                            uni.removeStorageSync('token')
+                            await toLogin()  
+                            uni.showToast({
+                                title: '登录成功',
+                            })
+                            setTimeout(() => {
+                                router.reLaunch({
+                                    name: 'home'
+                                })
+                            }, 1500)
+                        }
+                    })
+                })
+                reject(res)
             } else {
                 uni.showModal({
                     title: '提示',

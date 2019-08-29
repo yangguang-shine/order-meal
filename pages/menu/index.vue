@@ -12,7 +12,7 @@
 				<div class="food-category-list-item" :data-food-category-item="JSON.stringify(foodCategoryItem)" v-for="(foodCategoryItem, index) in foodCategoryList" :key="index">
 					<div :id="foodCategoryItem.scrollID" class="food-category-name">{{foodCategoryItem.categoryID}}</div>
 					<div class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex">
-						<image class="food-img  flex-shrink" :src="foodItem.imgUrl || '/static/img/default-img.svg'" mode="aspectFill"></image>
+						<image class="food-img  flex-shrink" :src="foodItem.imgUrl ? host + foodItem.imgUrl : '/static/img/default-img.svg'" mode="aspectFill"></image>
 						<div class="food-info-box flex-item flex-col flex-j-between">
 							<div class="food-name-description">
 								<div class="food-name">
@@ -93,6 +93,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import host from '@/config/host'
 let observer = null
 export default {
 	data() {
@@ -103,7 +104,8 @@ export default {
 			scrollCategoryID: '',
 			showCartDetail: false,
 			foodCategoryList: [],
-			shopID: ''
+			shopID: '',
+			host
 		}
 	},
 	computed: {
