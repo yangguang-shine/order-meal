@@ -23,14 +23,18 @@ export default {
         this.shopID = options.shopID
     },
     async onShow() {
-        try {
-            const res = await this.$fetch.get('/api/category/list', { shopID: this.shopID })
-            this.categoryList = res.data || [] 
-        } catch(e) {
-            console.log(e)
-        }
+        this.init()
+
     },
     methods: {
+        async init() {
+            try {
+                const res = await this.$fetch.get('/api/category/list', { shopID: this.shopID })
+                this.categoryList = res.data || [] 
+            } catch(e) {
+                console.log(e)
+            }
+        },
         toFoodList(categoryItem) {
             this.$myrouter.push({
                 name: 'food/list',
@@ -51,9 +55,21 @@ export default {
                 }
             })
         },
-        deleteCategory(categoryID) {
-            console.log(this.shopID)
-            console.log(categoryID)
+        async deleteCategory(categoryID) {
+            try {
+                uni.showLoading({
+                    title: '删除中'
+                })
+                const res = await this.$fetch.post('/api/category/delete', { shopID: this.shopID, categoryID })
+                uni.hideLoading()
+                await this.init()
+                uni.showToast({
+                    title: '删除成功'
+                })
+            } catch (e) {
+                console.log(e)
+                uni.hideLoading()
+            }
         },
         addCategory() {
             this.$myrouter.push({

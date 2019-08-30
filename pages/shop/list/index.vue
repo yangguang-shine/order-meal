@@ -35,19 +35,21 @@ export default {
     onLoad(query) {
         this.toOrder = +query.toOrder || 0
     },
-    async onShow() {
-        console.log(this.$mainColor)
-        try {
-            const res = await this.$fetch.get('/api/shop/list')
-            this.shopList = res.data || [] 
-        } catch(e) {
-            console.log(e)
-        }
+    onShow() {
+        this.init()
     },
     methods: {
         ...mapMutations({
             saveOrderShopInfo: 'saveOrderShopInfo'
         }),
+        async init() {
+            try {
+                const res = await this.$fetch.get('/api/shop/list')
+                this.shopList = res.data || [] 
+            } catch(e) {
+                console.log(e)
+            }
+        },
         toCategoryList(shopItem) {
             if (this.toOrder) {
                 this.saveOrderShopInfo(shopItem)
@@ -69,8 +71,21 @@ export default {
         pickerChange(e) {
             console.log(e)
         },
-        toDeleteShop(shopItem) {
-            console.log(shopItem)
+        async toDeleteShop(shopItem) {
+            try {
+                uni.showLoading({
+                    title: '删除中'
+                });
+                await this.$fetch.post('/api/shop/delete', { shopID: shopItem.shopID });
+                await this.init()
+                uni.hideLoading();
+                uni.showToast({
+                    title: '删除成功'
+                })
+            } catch(e) {
+                console.log(e)
+                uni.hideLoading();
+            } 
         },
         toEditShop(shopItem = {}) {
             this.$myrouter.push({

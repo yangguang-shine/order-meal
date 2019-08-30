@@ -1,2 +1,2 @@
-const host = 'http://htak36.natappfree.cc'
+const host = 'http://localhost:443'
 export default host
