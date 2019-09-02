@@ -29,10 +29,16 @@ export default {
     methods: {
         async init() {
             try {
+                this.$showLoading()
                 const res = await this.$fetch.get('/api/category/list', { shopID: this.shopID })
                 this.categoryList = res.data || [] 
+                this.$hideLoading()
             } catch(e) {
                 console.log(e)
+                this.$hideLoading()
+                this.$showModal({
+                    content: '菜品分类获取失败'
+                })
             }
         },
         toFoodList(categoryItem) {
@@ -57,18 +63,40 @@ export default {
         },
         async deleteCategory(categoryID) {
             try {
-                uni.showLoading({
+                try {
+                    await this.$showModal({
+                        content: '删除菜品分类将一并删除菜品信息',
+                        showCancell: true,
+                        confirmText: '确认删除'
+                    })
+                } catch (e) {
+                    return
+                }
+                this.$showLoading({
                     title: '删除中'
                 })
                 const res = await this.$fetch.post('/api/category/delete', { shopID: this.shopID, categoryID })
-                uni.hideLoading()
-                await this.init()
-                uni.showToast({
-                    title: '删除成功'
+                this.$hideLoading()
+                this.$showModal({
+                    content: '删除成功'
                 })
             } catch (e) {
+                this.$hideLoading()
+                this.$showModal({
+                    content: '删除失败'
+                })
+                return 
+            }
+            try {
+                this.$showLoading()
+                await this.init()
+                this.$hideLoading()
+            } catch (e) {
                 console.log(e)
-                uni.hideLoading()
+                this.$hideLoading()
+                this.$showModal({
+                    content: '菜品分类获取失败'
+                })
             }
         },
         addCategory() {

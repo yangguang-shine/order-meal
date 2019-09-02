@@ -3,12 +3,18 @@ import App from '@/App'
 import router from '@/utils/router.js'
 import fetch from '@/utils/fly.js'
 import store from '@/store'
+import { showModal, showLoading, showToast, hideLoading, hideToast} from '@/utils'
 import '@/style/flex.css'
 import '@/style/common.css'
 Vue.config.productionTip = false
 Vue.prototype.$myrouter = router
 Vue.prototype.$store = store
 Vue.prototype.$fetch = fetch
+Vue.prototype.$showModal = showModal
+Vue.prototype.$showLoading = showLoading
+Vue.prototype.$showToast = showToast
+Vue.prototype.$hideLoading = hideLoading
+Vue.prototype.$hideToast = hideToast
 console.log(Vue.prototype)
 // Vue.prototype.$data.$mainColor = '#47ff56'
 // Vue.prototype.$mainColor = '#47ff56'

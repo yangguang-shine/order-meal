@@ -4,12 +4,9 @@
             <div class="categpry-title">名称：</div>
             <input class="categpry-info" type="text" v-model="categoryName">
         </div>
-        <div v-if="categoryID" class="flex-row flex-j-around">
-            <div class="category-button" :style="{'background': $mainColor}" @click="changeCategory">修改</div>
-            <div class="category-button button-delete"  @click="deleteCategory">删除</div>
-        </div>
-        <div v-else class="flex-row flex-j-center">
-            <div class="category-button" :style="{'background': $mainColor}" @click="addCategory">增加</div>
+        <div class="flex-row flex-j-center">
+            <div v-if="categoryID" class="category-button" :style="{'background': $mainColor}" @click="editCategory">修改</div>
+            <div v-else class="category-button" :style="{'background': $mainColor}" @click="addCategory">增加</div>
         </div>
     </div>
 </template>
@@ -30,28 +27,46 @@ export default {
         this.shopID = params.shopID || ''
     },
     methods: {
-        async changeCategory() {
+        async editCategory() {
             try {
+                this.$showLoading()
                 await this.$fetch.post('/api/category/edit', { categoryName: this.categoryName, categoryID: this.categoryID, shopID: this.shopID })
+                this.$hideLoading()
+                await this.$showModal({
+                    content: '修改成功'
+                })
                 this.$myrouter.back()
             } catch (e) {
                 console.log(e)
+                this.$hideLoading()
+                this.$showModal({
+                    content: '修改失败'
+                })
             }
         },
-        async deleteCategory() {
-            try {
-                await this.$fetch.post('/api/category/delete', { categoryID: this.categoryID, shopID: this.shopID })
-                this.$myrouter.back()
-            } catch (e) {
-                console.log(e)
-            }
-        },
+        // async deleteCategory() {
+        //     try {
+        //         await this.$fetch.post('/api/category/delete', { categoryID: this.categoryID, shopID: this.shopID })
+        //         this.$myrouter.back()
+        //     } catch (e) {
+        //         console.log(e)
+        //     }
+        // },
         async addCategory() {
             try {
+                this.$showLoading()
                 await this.$fetch.post('/api/category/add', { categoryName: this.categoryName, shopID: this.shopID })
+                this.$hideLoading()
+                await this.$showModal({
+                    content: '添加成功'
+                })
                 this.$myrouter.back()
             } catch (e) {
                 console.log(e)
+                this.$hideLoading()
+                this.$showModal({
+                    content: '添加失败'
+                })
             }
         },
     }

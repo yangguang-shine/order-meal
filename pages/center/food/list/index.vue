@@ -48,10 +48,16 @@ import host from '@/config/host'
 		methods: {
 			async init() {
 				try {
+					this.$showLoading()
 					const res = await this.$fetch.get('/api/food/list', { categoryID: this.categoryID, shopID: this.shopID })
 					console.log(res)
 					this.foodList = res.data || []
+					this.$hideLoading()
 				} catch(e) {
+					this.$hideLoading()
+					this.$showModal({
+						content: '菜品列表获取失败'
+					})
 					console.log(e)
 				}
 			}, 
@@ -66,11 +72,31 @@ import host from '@/config/host'
 			},
 			async deleteFood(foodID) {
 				try {
+					try {
+						await this.$showModal({
+							content: '删除该菜品信息',
+							showCancel: true,
+							confirmText: '确认删除'
+						})
+					} catch(e) {
+						console.log(e)
+						return
+					}
+					this.$showLoading()
 					const res = await this.$fetch.post('/api/food/delete', { foodID, shopID: this.shopID })
-					this.init()
+					this.$hideLoading()
+					this.$showModal({
+						content: '删除成功'
+					})
 				} catch (e) {
+					this.$hideLoading()
+					this.$showModal({
+						content: '删除失败'
+					})
 					console.log(e)
+					return
 				}
+				this.init()
 			},
 			toAddFood() {
 				this.$myrouter.push({

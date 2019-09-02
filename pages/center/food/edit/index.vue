@@ -20,16 +20,11 @@
 			<div class="title">店铺图片：</div>
 			<image class="food-img" :src="foodInfo.imgUrl ? host + foodInfo.imgUrl :'/static/img/default-img.svg'" @click="chooseImg"></image>
 		</div>
-		<div v-if="foodID" class="flex-row flex-j-around">
-			<div class="food-button" @click="editFood" :style="{'background-color': $mainColor}">
+		<div class="flex-row flex-ja-center">
+			<div v-if="foodID" class="food-button" @click="editFood" :style="{'background-color': $mainColor}">
 				修改			
 			</div>
-			<div class="food-button delete-button" @click="deleteFood">
-				删除		
-			</div>
-		</div>
-		<div v-else class="flex-row flex-ja-center">
-			<div class="food-button" @click="addFood" :style="{'background-color': $mainColor}">
+			<div v-else class="food-button" @click="addFood" :style="{'background-color': $mainColor}">
 				增加			
 			</div>
 		</div>
@@ -98,36 +93,52 @@ import host from '@/config/host'
 		methods: {
 			async init() {
 				try {
+					this.$showLoading()
 					const res = await this.$fetch.get('/api/food/find', { foodID: this.foodID, shopID: this.shopID })
 					this.foodInfo = res.data || {}
+					this.$hideLoading()
 					console.log()
 				} catch(e) {
-					console.log(this.foodInfo)
+					console.log(e)
+					this.$hideLoading()
+					this.$showModal({
+						content: '菜品信息获取失败'
+					})
 				}
 			},
 			async addFood() {
 				try {
+					this.$showLoading()
 					const res = await this.$fetch.post('/api/food/add', { ...this.foodInfo, categoryID: this.categoryID, categoryName: this.categoryName, shopID: this.shopID })
 					this.addStatus = true
+					this.$hideLoading()
+					await this.$showModal({
+						content: '添加成功'
+					})
 					this.$myrouter.back()
 				} catch(e) {
 					console.log(e)
+					this.$hideLoading()
+					this.$showModal({
+						content: '添加失败'
+					})
 				}
 			},
 			async editFood() {
 				try {
+					this.$showLoading()
 					const res = await this.$fetch.post('/api/food/edit', { ...this.foodInfo, shopID: this.shopID })
+					this.$hideLoading()
+					await this.$showModal({
+						content: '修改成功'
+					})
 					this.$myrouter.back()
 				} catch(e) {
 					console.log(e)
-				}
-			},
-			async deleteFood() {
-				try {
-					const res = await this.$fetch.post('/api/food/delete', { foodID: this.foodID, shopID: this.shopID })
-					this.$myrouter.back()
-				} catch(e) {
-					console.log(e)
+					this.$hideLoading()
+					this.$showModal({
+						content: '修改失败'
+					})
 				}
 			},
 			chooseImg() {

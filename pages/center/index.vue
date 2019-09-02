@@ -1,8 +1,9 @@
 <template>
 	<view class="center-container flex-col">
 		<!-- <image class="logo" src="/static/logo.png"></image> -->
-		<div class="item" @click="toShopList">
-			<div>店铺</div>
+		<div class="list" @click="toShopList">
+			<div class="item center">店铺列表->菜品分类->详细菜品</div>
+			<div class="item center">店铺列表->订单列表->订单详情</div>
 		</div>
 	</view>
 </template>
@@ -37,9 +38,12 @@ page {
 }
 .center-container  {
 	height: 100%;
-	font-size: 28rpx;
+	font-size: 30rpx;
+	.list {
+		padding-top: 60rpx;
+	}
 	.item {
-		margin-top: 50rpx;
+		padding: 30rpx;
 	} 
 }
 </style>
