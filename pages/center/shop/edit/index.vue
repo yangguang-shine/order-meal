@@ -250,7 +250,7 @@ export default {
                     }
                     // http://localhost:8090/images/upload/1565681342882.png
                     uni.uploadFile({
-                        url: 'http://localhost:8090/api/img/uploadImg',
+                        url: `${host}/api/img/uploadImg`,
                         filePath: file.path,
                         name: 'img',
                         formData: {

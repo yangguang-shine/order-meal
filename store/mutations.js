@@ -19,7 +19,7 @@ mutations['cartCountChange'] = function(state, { categoryID = '', foodItem = {},
     state.cartFoodList = state.cartFoodList.filter(item => item.foodList.length > 0)
     if (fromCart) {
         uni.setStorage({
-            key: 'storageFoodList',
+            key: `storageFoodList_${state.shopInfo.shopID}`,
             data: state.cartFoodList
         })
     }
@@ -43,7 +43,20 @@ mutations['saveOrderShopInfo'] = (state, shopInfo = {}) => {
     if (String(state.shopInfo.shopID) === String(shopInfo.shopID)) {
         return
     } else {
-        uni.removeStorageSync('storageFoodList')
+        let minusList = []
+        const minusSplit = shopInfo.minus.split(',')
+        if (minusSplit[0] === '') {
+            minusList = []
+        } else {                
+            minusList = minusSplit.map((item) => {
+                const splitMinus = item.split('-')
+                return {
+                    reach: Number(splitMinus[0]),
+                    reduce: Number(splitMinus[1]),
+                }
+            })
+        }
+        shopInfo.minusList = minusList
         state.cartFoodList = []
         state.shopInfo = shopInfo
     }
@@ -55,7 +68,7 @@ mutations['clearCart'] = (state, shopInfo = {}) => {
         })
     })
     state.cartFoodList = []
-    uni.removeStorageSync('storageFoodList')
+    uni.removeStorageSync(`storageFoodList_${state.shopInfo.shopID}`)
 }
 
 mutations['changeAllOrderListUpdate'] = (state, status = [true, true, true, true]) => {

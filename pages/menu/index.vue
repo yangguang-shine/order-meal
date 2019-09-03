@@ -46,7 +46,7 @@
 					</div>
 			</div>
 			<div class="flex-item cart-all-amount">
-				{{cartSumAmount}}
+				{{cartSumAmount !== '0.00' ? cartSumAmount : ''}}
 			</div>
 			<div class="com-button confirm-order" :style="{'background-color': cartFoodListMainColor }" @click="toComfirmOrder">去下单</div>
 		</div>
@@ -65,7 +65,7 @@
 							<div v-if="cartFoodItem.orderCount" class="cart-food-info-box flex-item flex-col flex-j-between">
 								<div class="cart-food-name-description">
 									<div class="cart-food-name">
-										{{cartFoodItem.foodName}}111{{foodCategoryItem.categoryID}}
+										{{cartFoodItem.foodName}}
 									</div>
 									<div class="cart-food-description">
 										{{cartFoodItem.description}}
@@ -104,19 +104,19 @@ export default {
 			scrollCategoryID: '',
 			showCartDetail: false,
 			foodCategoryList: [],
-			shopID: '',
 			host
 		}
 	},
 	computed: {
 		...mapState({
 			cartFoodList: state => state.cartFoodList,
+			shopInfo: state => state.shopInfo
 		}),
 		cartFoodListMainColor() {
 			return this.cartFoodList.length ? this.$mainColor: ''
 		},
 		cartSumAmount() {
-			return (this.cartFoodList.reduce((amount, item) => {
+			return `${(this.cartFoodList.reduce((amount, item) => {
 				const categoryItemSum = item.foodList.reduce((all, foodItem) => {
 					const price = foodItem.price * foodItem.orderCount
 					all += price 
@@ -124,7 +124,7 @@ export default {
 				}, 0)
 				amount += categoryItemSum
 				return amount
-			}, 0)).toFixed(2)
+			}, 0)).toFixed(2)}`
 		},
 		allCartFoodCount() {
 			return this.cartFoodList.reduce((all, item) => {
@@ -173,7 +173,6 @@ export default {
 		}
 	},
 	onLoad(query) {
-		this.shopID = query.shopID
 		this.init()
 	},
 	methods: {
@@ -207,7 +206,7 @@ export default {
 			})
 		},
 		async init() {
-			const res = await this.$fetch.get('/api/order/menuList', { shopID: this.shopID })
+			const res = await this.$fetch.get('/api/order/menuList', { shopID: this.shopInfo.shopID })
 			this.foodCategoryList = res.data || []
 			this.foodCategoryList.forEach((item, index) => {
 				item.scrollID = 'c' + item.categoryID
@@ -224,7 +223,7 @@ export default {
 			this.getStorageCart()
 		},
 		getStorageCart() {
-			const storageFoodList =  uni.getStorageSync('storageFoodList')
+			const storageFoodList =  uni.getStorageSync(`storageFoodList_${this.shopInfo.shopID}`)
 			if (!storageFoodList || !storageFoodList.length) return;
 			this.initCart({ foodCategoryList: this.foodCategoryList, storageFoodList })
 		},
