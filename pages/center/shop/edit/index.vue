@@ -65,12 +65,12 @@ export default {
                 address: '西直门凯德茂地铁站',
                 startTime: '09:00',
                 endTime: '18:00',
-                host,
-                minus: ''
+                minus: '',
+                addState: false
             },
             minusList: [], 
             shopID: '',
-            addStatus: false
+            host
         }
     },
     async onLoad(options) {
@@ -108,11 +108,12 @@ export default {
         }
     },
     async onUnload() {
-        if (!this.shopID && this.shopInfo.imgUrl && !this.addStatus) {
-            await this.$fetch.post('/api/img/delete', { imgUrl: this.shopInfo.imgUrl })
+        console.log(!this.shopID && this.shopInfo.imgUrl && !this.addState)
+        if(!this.shopID && this.shopInfo.imgUrl && !this.addState) {
+            await this.$fetch.post('/api/img/delete', { imgUrl: this.shopInfo.imgUrl, deleteShop: true })
         }
-        this.addStatus = false
         this.shopID = ''
+        this.addState = false
         this.shopInfo = {
                 shopName: '',
                 imgUrl: '',
@@ -205,7 +206,7 @@ export default {
                     title: '添加中'
                 })
                 await this.$fetch.post('/api/shop/add', { ...this.shopInfo })
-                this.addStatus = true
+                this.addState = true
                 this.$hideLoading()
                 await this.$showModal({
                     content: '添加成功'
@@ -248,18 +249,23 @@ export default {
                         const reg = /.+\/(\d+\.)/
                         imgUrl = this.shopInfo.imgUrl.replace(reg, '$1')
                     }
-                    // http://localhost:8090/images/upload/1565681342882.png
-                    uni.uploadFile({
-                        url: `${host}/api/img/uploadImg`,
-                        filePath: file.path,
-                        name: 'img',
-                        formData: {
-                            shopID: this.shopID,
-                            imgUrl
-                        },
-                        success: (res) => {
-                            const data = JSON.parse(res.data)
-                            this.shopInfo.imgUrl = (data.data || {}).imgUrl;
+                    console.log(file.path)
+                    const fileSplit = file.path.split(".")
+                    const ext = fileSplit[fileSplit.length -1];
+                    wx.getFileSystemManager().readFile({
+                        filePath: file.path, //选择图片返回的相对路径
+                        encoding: 'base64', //编码格式
+                        success: async (res) => { //成功的回调
+                            console.log(res)
+                            const data = res.data
+                            const postData = `data:image/${ext};base64,${res.data}`
+                            // console.log('data:image/png;base64,' + res.data)
+                            const imgRes =await this.$fetch.post('/api/img/shop/uploadImg', { imgData: postData, ext, shopID: this.shopID, imgUrl })
+                            this.shopInfo.imgUrl = (imgRes.data || {}).imgUrl
+                            this.$showModal({
+                                content: '上传成功'
+                            }) 
+                            console.log(host + this.shopInfo.imgUrl)
                         }
                     })
                 }

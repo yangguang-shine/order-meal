@@ -48,7 +48,8 @@ import host from '@/config/host'
 				categoryName: '',
 				foodID: '',
 				shopID: '',
-				addStatus: false,
+				host,
+				addStatus: false
 			}
 		},
 		onLoad(options) {
@@ -67,17 +68,8 @@ import host from '@/config/host'
 		},
 		async onUnload() {
 			if (!this.foodID && this.foodInfo.imgUrl && !this.addStatus) {
-				await this.$fetch.post('/api/img/delete', { imgUrl: this.foodInfo.imgUrl })
+            	await this.$fetch.post('/api/img/delete', { imgUrl: this.foodInfo.imgUrl, deleteFood: true })
 			}
-			this.addStatus = false
-			this.shopID = ''
-			this.shopInfo = {
-					shopName: '',
-					imgUrl: '',
-					address: '',
-					startTime: '',
-					endTime: '',
-				};
 			this.foodInfo = {
 				foodName: '',
 				price: '',
@@ -146,7 +138,6 @@ import host from '@/config/host'
 					count: 1,
 					success: (res) => {
 						const maxSize = 100 * 2 ** 10
-						console.log(res)
 						const file = res.tempFiles[0]
 						const size = file.size
 						if (size > maxSize) {
@@ -158,31 +149,73 @@ import host from '@/config/host'
 						}
 						let imgUrl = ''
 						if (this.foodInfo.imgUrl) {
-							var reg = /.+\/(\d+\.)/
+							const reg = /.+\/(\d+\.)/
 							imgUrl = this.foodInfo.imgUrl.replace(reg, '$1')
 						}
-						// http://localhost:8090/images/upload/1565681342882.png
-						console.log(this.foodID)
-						console.log(imgUrl)
 						console.log(file.path)
-						uni.uploadFile({
-							url: `${host}/api/img/uploadImg`,
-							filePath: file.path,
-							name: 'img',
-							formData: {
-								foodID: this.foodID,
-								imgUrl
-							},
-							success: (res) => {
-								const data = JSON.parse(res.data)
-								console.log(data)
-								this.foodInfo.imgUrl = (data.data || {}).imgUrl
-								console.log(this.foodInfo)
+						const fileSplit = file.path.split(".")
+						const ext = fileSplit[fileSplit.length -1];
+						wx.getFileSystemManager().readFile({
+							filePath: file.path, //选择图片返回的相对路径
+							encoding: 'base64', //编码格式
+							success: async (res) => { //成功的回调
+								console.log(res)
+								const data = res.data
+								const postData = `data:image/${ext};base64,${res.data}`
+								// console.log('data:image/png;base64,' + res.data)
+								const imgRes =await this.$fetch.post('/api/img/food/uploadImg', { imgData: postData, ext, shopID: this.shopID, foodID: this.foodID, imgUrl })
+								this.foodInfo.imgUrl = (imgRes.data || {}).imgUrl
+								this.$showModal({
+									content: '上传成功'
+								}) 
+								console.log(host + this.foodInfo.imgUrl)
 							}
 						})
 					}
 				})
 			},
+			// chooseImg() {
+			// 	uni.chooseImage({
+			// 		count: 1,
+			// 		success: (res) => {
+			// 			const maxSize = 100 * 2 ** 10
+			// 			console.log(res)
+			// 			const file = res.tempFiles[0]
+			// 			const size = file.size
+			// 			if (size > maxSize) {
+			// 				uni.showModal({
+			// 					title: '提示',
+			// 					content: '选择图片要小于100KB'
+			// 				})
+			// 				return;
+			// 			}
+			// 			let imgUrl = ''
+			// 			if (this.foodInfo.imgUrl) {
+			// 				var reg = /.+\/(\d+\.)/
+			// 				imgUrl = this.foodInfo.imgUrl.replace(reg, '$1')
+			// 			}
+			// 			// http://localhost:8090/images/upload/1565681342882.png
+			// 			console.log(this.foodID)
+			// 			console.log(imgUrl)
+			// 			console.log(file.path)
+			// 			uni.uploadFile({
+			// 				url: `${host}/api/img/uploadImg`,
+			// 				filePath: file.path,
+			// 				name: 'img',
+			// 				formData: {
+			// 					foodID: this.foodID,
+			// 					imgUrl
+			// 				},
+			// 				success: (res) => {
+			// 					const data = JSON.parse(res.data)
+			// 					console.log(data)
+			// 					this.foodInfo.imgUrl = (data.data || {}).imgUrl
+			// 					console.log(this.foodInfo)
+			// 				}
+			// 			})
+			// 		}
+			// 	})
+			// },
 		}
 	}
 </script>

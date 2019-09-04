@@ -2,7 +2,7 @@
     <div class="shop-list-container">
         <div class="shop-list">
             <div v-for="(shopItem, index) in shopList" :key="index" class="shop-item flex-row" @click="toCategoryList(shopItem)">
-                <image :src="shopInfo.imgUrl ? host + shopInfo.imgUrl : '/static/img/default-img.svg'" class="shop-img" mode="aspectFill"></image>
+                <image :src="shopItem.imgUrl ? host + shopItem.imgUrl : '/static/img/default-img.svg'" class="shop-img" mode="aspectFill"></image>
                 <div class="shop-info-box flex-item flex-col flex-j-between">
                     <div>
                         <div class="shop-name line1">{{shopItem.shopName}}</div>
