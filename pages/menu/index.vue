@@ -10,7 +10,7 @@
 			</div>
 			<scroll-view scroll-y :scroll-into-view="scrollCategoryID" class="food-main-box flex-item" @scroll="listScroll">
 				<div class="food-category-list-item" :data-food-category-item="JSON.stringify(foodCategoryItem)" v-for="(foodCategoryItem, index) in foodCategoryList" :key="index">
-					<div :id="foodCategoryItem.scrollID" class="food-category-name">{{foodCategoryItem.categoryID}}</div>
+					<div :id="foodCategoryItem.scrollID" class="food-category-name">{{foodCategoryItem.categoryName}}</div>
 					<div class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex">
 						<image class="food-img  flex-shrink" :src="foodItem.imgUrl ? host + foodItem.imgUrl : '/static/img/default-img.svg'" mode="aspectFill"></image>
 						<div class="food-info-box flex-item flex-col flex-j-between">
@@ -38,6 +38,9 @@
 				</div>
 			</scroll-view>
 		</div>
+		<div class="promotion-title">
+
+		</div>
 		<div class="footer-cart flex-row flex-j-between flex-a-center" >
 			<div class="cart-img-box">
 					<image class="cart-img" @click="changeShowCartDetail" src="/static/img/cart-icon.png"></image>
@@ -46,7 +49,8 @@
 					</div>
 			</div>
 			<div class="flex-item cart-all-amount">
-				{{cartSumAmount !== '0.00' ? cartSumAmount : ''}}
+				<span v-if="cartFoodList.length" class="cart-all-discount-price">{{cartPriceInfo.cartAlldiscountPrice}}</span>
+				<span v-if="cartPriceInfo.discountPrice" class="cart-all-origin-price">{{cartPriceInfo.cartAllOriginPrice}}</span>
 			</div>
 			<div class="com-button confirm-order" :style="{'background-color': cartFoodListMainColor }" @click="toComfirmOrder">去下单</div>
 		</div>
@@ -61,7 +65,7 @@
 				<scroll-view scroll-y class="cart-detail-list-box" @click.stop>
 					<div class="food-category-item" v-for="(foodCategoryItem, index) in cartFoodList" :key="index">
 						<div class="cart-food-item flex-row" v-for="(cartFoodItem, cartFoodIndex) in foodCategoryItem.foodList" :key="cartFoodIndex">
-							<image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="cartFoodItem.imgUrl || '/static/img/default-img.svg'"></image>
+							<image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="cartFoodItem.imgUrl ? host + cartFoodItem.imgUrl : '/static/img/default-img.svg'"></image>
 							<div v-if="cartFoodItem.orderCount" class="cart-food-info-box flex-item flex-col flex-j-between">
 								<div class="cart-food-name-description">
 									<div class="cart-food-name">
@@ -115,16 +119,46 @@ export default {
 		cartFoodListMainColor() {
 			return this.cartFoodList.length ? this.$mainColor: ''
 		},
-		cartSumAmount() {
-			return `${(this.cartFoodList.reduce((amount, item) => {
+		minusPromotionsTitle() {
+			if (!this.shopInfo.minusList.length) return ''
+			const 
+
+		},
+		cartPriceInfo() {
+			const cartAllOriginPrice = (this.cartFoodList.reduce((amount, item) => {
 				const categoryItemSum = item.foodList.reduce((all, foodItem) => {
 					const price = foodItem.price * foodItem.orderCount
-					all += price 
+					all += price
 					return all
 				}, 0)
 				amount += categoryItemSum
 				return amount
-			}, 0)).toFixed(2)}`
+			}, 0)).toFixed(2)
+			let discountPrice = 0
+			const discountItem = this.shopInfo.minusList.find((item, index) => {
+				if (index === (this.shopInfo.minusList.length - 1)) {
+					if (Number(cartAllOriginPrice) >= Number(item.reach)) {
+						return true
+					} else {
+						return false
+					}
+				} else {
+					if (Number(cartAllOriginPrice) >= Number(item.reach) && Number(cartAllOriginPrice) < Number(this.shopInfo.minusList[index + 1].reach)) {
+						return true
+					} else {
+						return false
+					}
+				}
+			});
+			if (discountItem) {
+				discountPrice = discountItem.reduce
+			}
+			const cartAlldiscountPrice = (cartAllOriginPrice - discountPrice).toFixed(2)
+			return {
+				cartAllOriginPrice,
+				cartAlldiscountPrice,
+				discountPrice,
+			}
 		},
 		allCartFoodCount() {
 			return this.cartFoodList.reduce((all, item) => {
@@ -185,6 +219,7 @@ export default {
 			// console.log(e)
 		},
 		cartClearCart() {
+			
 			this.clearCart()
 			this.showCartDetail = false
 		},
@@ -194,14 +229,11 @@ export default {
 				});
 			observer.relativeTo('.food-main-box').observe('.food-category-list-item', (res) => {
 				// console.log(res)
-						console.log(res)
 						const foodCategoryItem = JSON.parse(res.dataset.foodCategoryItem)
 					if (res.intersectionRatio === 0 && res.boundingClientRect.bottom <= res.relativeRect.top) {
 						this.selectCategoryTabId = foodCategoryItem.nextscrollID
-						console.log(111)
 					} else if ((0 < res.intersectionRatio && res.intersectionRatio <= 1 && res.boundingClientRect.top <= res.relativeRect.top)) {
 						this.selectCategoryTabId = foodCategoryItem.scrollID
-						console.log(333)
 					}
 			})
 		},
@@ -253,7 +285,6 @@ export default {
 			this.cartCountChange({ categoryID, foodItem })
 			this.minusCountState = true
 			if (!this.cartFoodList.length) this.showCartDetail = false
-			console.log(this.cartFoodList.length)
 		},
 		async toComfirmOrder() {
 			// if (!this.cartFoodList.length) return;
@@ -415,7 +446,16 @@ page {
 		z-index: 8;
 	}
 	.cart-all-amount {
-		padding-left: 200rpx
+		padding-left: 200rpx;
+	}
+	.cart-all-discount-price {
+		font-size: 36rpx;
+	}
+	.cart-all-origin-price {
+		margin-left: 20rpx;
+		font-size: 26rpx;
+		color: #888;
+		text-decoration:line-through
 	}
 	.cart-img-box {
 		position: fixed;

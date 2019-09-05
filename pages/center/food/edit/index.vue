@@ -163,8 +163,12 @@ import host from '@/config/host'
 								const data = res.data
 								const postData = `data:image/${ext};base64,${res.data}`
 								// console.log('data:image/png;base64,' + res.data)
+								this.$showLoading({
+									title: '上传中'
+								})
 								const imgRes =await this.$fetch.post('/api/img/food/uploadImg', { imgData: postData, ext, shopID: this.shopID, foodID: this.foodID, imgUrl })
-								this.foodInfo.imgUrl = (imgRes.data || {}).imgUrl
+								this.foodInfo.imgUrl = (imgRes.data || {}).imgUrl;
+								this.$hideLoading()
 								this.$showModal({
 									content: '上传成功'
 								}) 

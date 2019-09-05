@@ -260,12 +260,15 @@ export default {
                             const data = res.data
                             const postData = `data:image/${ext};base64,${res.data}`
                             // console.log('data:image/png;base64,' + res.data)
+                            this.$showLoading({
+                                title: '上传中'
+                            })
                             const imgRes =await this.$fetch.post('/api/img/shop/uploadImg', { imgData: postData, ext, shopID: this.shopID, imgUrl })
                             this.shopInfo.imgUrl = (imgRes.data || {}).imgUrl
+                            this.$hideLoading()
                             this.$showModal({
                                 content: '上传成功'
                             }) 
-                            console.log(host + this.shopInfo.imgUrl)
                         }
                     })
                 }

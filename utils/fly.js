@@ -12,7 +12,7 @@ const fly = new Fly;
 //     parseJson:true,
 //     timeout:""//超时时间
 //   }
-fly.config.timeout = 1000;
+fly.config.timeout = 30000;
 fly.config.baseURL = host;
 fly.interceptors.request.use((request)=>{
     request.headers["X-Tag"]="flyio";
@@ -29,13 +29,26 @@ fly.interceptors.response.use(
     (err) => {
         console.log('请求失败')
         console.log(err)
+        if (err.status === 404) {
+            uni.showToast({
+                title: '服务异常',
+                icon: 'none',
+            })
+            return null
+        }
+        uni.showToast({
+            title: '网络错误，请稍候再试',
+            icon: 'none',
+        })
+        return null
     }
 )
 const flyRequest = (url, params, method) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(url)
             const res = await fly[method](url, params);
+            console.log(222222)
+            console.log(res)
             const code = res.code
             if (code === '000') {
                 resolve(res)
@@ -46,20 +59,22 @@ const flyRequest = (url, params, method) => {
                         content: res.msg,
                         confirmText: '去登录',
                         cancelText: '取消登录',
-                        success: async () => {
-                            uni.showLoading({
-                                title: '登录中'
-                            })
-                            uni.removeStorageSync('token')
-                            await toLogin()  
-                            uni.showToast({
-                                title: '登录成功',
-                            })
-                            setTimeout(() => {
-                                router.reLaunch({
-                                    name: 'home'
+                        success: async (res) => {
+                            if (res.confirm) {
+                                uni.showLoading({
+                                    title: '登录中'
                                 })
-                            }, 1500)
+                                uni.removeStorageSync('token')
+                                await toLogin()  
+                                uni.showToast({
+                                    title: '登录成功',
+                                })
+                                setTimeout(() => {
+                                    router.reLaunch({
+                                        name: 'home'
+                                    })
+                                }, 1500)
+                            }
                         }
                     })
                 })
@@ -67,11 +82,13 @@ const flyRequest = (url, params, method) => {
             } else {
                 uni.showModal({
                     title: '提示',
+                    icon: 'none',
                     content: res.msg
                 })
                 reject(res)
             }
         } catch (e) {
+            reject()
             console.log(e)
         }
     })
