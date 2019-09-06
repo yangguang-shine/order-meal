@@ -120,9 +120,16 @@ export default {
 			return this.cartFoodList.length ? this.$mainColor: ''
 		},
 		minusPromotionsTitle() {
-			if (!this.shopInfo.minusList.length) return ''
-			const 
-
+			if (!this.shopInfo.minusList.length) return '';
+			if (!this.cartPriceInfo.minusIndex) {
+				return '';
+			}else {
+				if (this.shopInfo.minusList.length === this.cartPriceInfo.minusIndex) {
+					return `已减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex - 1].reduce}`
+				} else {
+					const hasReduce = `已减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex - 1].reduce}`
+				}
+			}
 		},
 		cartPriceInfo() {
 			const cartAllOriginPrice = (this.cartFoodList.reduce((amount, item) => {
@@ -135,15 +142,18 @@ export default {
 				return amount
 			}, 0)).toFixed(2)
 			let discountPrice = 0
+			let minusIndex = null
 			const discountItem = this.shopInfo.minusList.find((item, index) => {
 				if (index === (this.shopInfo.minusList.length - 1)) {
 					if (Number(cartAllOriginPrice) >= Number(item.reach)) {
+						minusIndex = index + 1
 						return true
 					} else {
 						return false
 					}
 				} else {
 					if (Number(cartAllOriginPrice) >= Number(item.reach) && Number(cartAllOriginPrice) < Number(this.shopInfo.minusList[index + 1].reach)) {
+						minusIndex = index + 1
 						return true
 					} else {
 						return false
@@ -158,6 +168,7 @@ export default {
 				cartAllOriginPrice,
 				cartAlldiscountPrice,
 				discountPrice,
+				minusIndex
 			}
 		},
 		allCartFoodCount() {

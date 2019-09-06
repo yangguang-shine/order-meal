@@ -1,2 +1,2 @@
-const host = 'http://pepmer.natappfree.cc'
+const host = 'http://nhsi8u.natappfree.cc'
 export default host
