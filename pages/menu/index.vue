@@ -38,8 +38,8 @@
 				</div>
 			</scroll-view>
 		</div>
-		<div class="promotion-title">
-
+		<div v-if="minusPromotionsTitle" class="promotion-title center">
+			{{minusPromotionsTitle}}
 		</div>
 		<div class="footer-cart flex-row flex-j-between flex-a-center" >
 			<div class="cart-img-box">
@@ -55,7 +55,7 @@
 			<div class="com-button confirm-order" :style="{'background-color': cartFoodListMainColor }" @click="toComfirmOrder">去下单</div>
 		</div>
 		<div v-if="showCartDetail"  class="cart-detail-mask" @click.stop="showCartDetail = false">
-			<div class="cart-detail-box"  @touchmove.stop>
+			<div class="cart-detail-box" :style="{'padding-bottom': minusPromotionsTitle ? '60rpx' : ''}" @touchmove.stop>
 				<div class="cart-select-box flex-row flex-j-between flex-a-center" @click.stop>
 					<div class="select-goods-title">
 						已选商品
@@ -127,7 +127,13 @@ export default {
 				if (this.shopInfo.minusList.length === this.cartPriceInfo.minusIndex) {
 					return `已减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex - 1].reduce}`
 				} else {
-					const hasReduce = `已减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex - 1].reduce}`
+					console.log(this.cartPriceInfo.cartAllOriginPrice)
+					console.log(this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reach)
+					console.log(this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reach - this.cartPriceInfo.cartAllOriginPrice)
+					console.log((this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reach - this.cartPriceInfo.cartAllOriginPrice).toFixed(2))
+					// const hasReduce = `已减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex - 1].reduce}`;
+					// const secondMinus = `再买${this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reach - this.cartPriceInfo.cartAllOriginPrice}`
+					return `已减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex - 1].reduce}元,再买${Number((this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reach - this.cartPriceInfo.cartAllOriginPrice).toFixed(2))}元减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reduce}元`
 				}
 			}
 		},
@@ -455,6 +461,17 @@ page {
 		border-radius: 50rpx;
 		color: #fff;
 		z-index: 8;
+	}
+	.promotion-title {
+		position: fixed;
+		left: 0;
+		bottom: 100rpx;
+		width: 100%;
+		height: 50rpx;
+		background-color: rgb(247, 255, 142);
+		z-index: 3;
+		line-height: 50rpx;
+		font-size: 24rpx;
 	}
 	.cart-all-amount {
 		padding-left: 200rpx;

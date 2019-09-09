@@ -1,11 +1,10 @@
 <template>
 	<view class="home-container">
 		<swiper class="swiper-box" autoplay="true" easing-function="easeInOutCubic" @click="toMenu" circular="true">
-			<swiper-item class="swiper-item" v-for="(img, index) in imgList" :key="index">
+			<swiper-item class="swiper-item" v-for="(img, index) in imgList" :key="index" @click="toShopList">
 				<image class="swiper-item-img" :src="img"></image>
 			</swiper-item>
 		</swiper>
-		<div class="" @click="toShopList">点餐</div>
 		<!-- <div class="login" @click="toLogin">login</div> -->
 		<!-- <button open-type="getUserInfo">授权</button> -->
 		<!-- <div class="flex-row">
