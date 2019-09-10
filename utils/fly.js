@@ -43,17 +43,19 @@ fly.interceptors.response.use(
         return null
     }
 )
-const flyRequest = (url, params, method) => {
+const flyRequest = (url, params, options, method) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(1564165)
+            console.log(params)
             const res = await fly[method](url, params);
             console.log(222222)
             console.log(res)
             const code = res.code
             if (code === '000') {
                 resolve(res)
-            } else if (code === '555'){
-                new Promise((resolve, reject) => {
+            } else if (options.error) {
+                if (code === '555') {
                     uni.showModal({
                         title: '提示',
                         content: res.msg,
@@ -77,14 +79,15 @@ const flyRequest = (url, params, method) => {
                             }
                         }
                     })
-                })
+                } else {
+                    uni.showModal({
+                        title: '提示',
+                        icon: 'none',
+                        content: res.msg
+                    })
+                }
                 reject(res)
             } else {
-                uni.showModal({
-                    title: '提示',
-                    icon: 'none',
-                    content: res.msg
-                })
                 reject(res)
             }
         } catch (e) {
@@ -94,6 +97,6 @@ const flyRequest = (url, params, method) => {
     })
 } 
 export default {
-    get: (url = '', params = {}) => flyRequest(url, params, 'get'),
-    post: (url = '', params = {}) => flyRequest(url, params, 'post')
+    get: (url = '', params = {}, options = { error: true }) => flyRequest(url, params, options, 'get'),
+    post: (url = '', params = {}, options = { error: true }) => flyRequest(url, params, options, 'post')
 }

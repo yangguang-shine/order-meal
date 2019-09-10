@@ -77,6 +77,20 @@
 				"navigationBarTitleText": "点餐",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
+		},
+		{
+			"path": "pages/center/address/list/index",
+			"style": {
+				"navigationBarTitleText": "点餐",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/center/address/edit/index",
+			"style": {
+				"navigationBarTitleText": "点餐",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
 		}
 	],
 	"tabBar": {

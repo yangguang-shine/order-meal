@@ -137,6 +137,9 @@ export default {
                     console.log(res)
                     this.shopInfo.address = res.address
                 },
+                fail: (res) => {
+                    console.log(res)
+                }
             })
         },
         checkoutMinus() {

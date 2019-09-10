@@ -8,6 +8,7 @@ const shopList = [
 		path: '/pages/center/shop/edit/index'
 	},
 ]
+
 const categoryList = [
 	{
 		name: 'category/list',
@@ -18,6 +19,7 @@ const categoryList = [
 		path: '/pages/center/category/edit/index'
 	},
 ]
+
 const foodList = [
 	{
 		name: 'food/list',
@@ -28,6 +30,18 @@ const foodList = [
 		path: '/pages/center/food/edit/index'
 	},
 ]
+
+const addressList = [
+	{
+		name: 'address/list',
+		path: '/pages/center/address/list/index'
+	},
+	{
+		name: 'address/edit',
+		path: '/pages/center/address/edit/index'
+	},
+]
+
 const routerList = [
 	{
 		name: 'home',
@@ -51,6 +65,7 @@ const routerList = [
 	},
 	...shopList,
 	...categoryList,
-	...foodList
+	...foodList,
+	...addressList
 ]
 export default routerList

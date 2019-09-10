@@ -59,7 +59,12 @@
         "setting" : {
             "urlCheck" : false
         },
-        "usingComponents" : true
+        "usingComponents" : true,
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "根据你的地理位置为你推荐附近门店进行点餐服务"
+            }
+        }
     },
     "mp-alipay" : {
         "usingComponents" : true

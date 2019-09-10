@@ -2,15 +2,34 @@ export const getSetting = (scopeName) => {
     return new Promise((resolve, reject) => {
         uni.getSetting({
             success: (res) => {
-                if (res.authSetting[`scope.${scopeName}`]) resolve()
-                else reject()
+                if (res.authSetting[scopeName]) resolve()
+                else reject(res)
             },
-            fail: () => {
-                reject()
+            fail: (res) => {
+                reject(res)
             }
         })
     })
 }
+
+export const authorize = (scopeName) => {
+    return new Promise((resolve, reject) => {
+        uni.authorize({
+            scope: scopeName,
+            success: (res) => {
+                console.log(111)
+                console.log(scopeName)
+                resolve(res)
+            },
+            fail: (res) => {
+                console.log(148564)
+                console.log(scopeName)
+                reject(res)
+            }
+        })
+    })
+}
+
 export const showModal = ({ title = '提示', content = '', showCancel = false, cancelText = '取消', confirmText = '确定'}) => {
     return new Promise((resolve, reject) => {
         uni.showModal({
@@ -20,7 +39,13 @@ export const showModal = ({ title = '提示', content = '', showCancel = false, 
             cancelText,
             confirmText,
             success: (res) => {
-                resolve(res)
+                if (res.confirm) {
+                    resolve(res);
+                } else if(res.cancel) {
+                    reject(res);
+                } else {
+                    reject(res)
+                }
             },
             fail: () => {
                 reject()
@@ -29,7 +54,7 @@ export const showModal = ({ title = '提示', content = '', showCancel = false, 
     })
 }
 
-export const showLoading = ({ title = '加载中', mask = false} = {}) => {
+export const showLoading = ({ title = '加载中', mask = true} = {}) => {
     return new Promise((resolve, reject) => {
         uni.showLoading({
             title,
