@@ -48,6 +48,14 @@ const routerList = [
 		path: '/pages/home/index'
 	},
 	{
+		name: 'register',
+		path: '/pages/register/index'
+	},
+	{
+		name: 'login',
+		path: '/pages/login/index'
+	},
+	{
 		name: 'orderList',
 		path: '/pages/order/index'
 	},

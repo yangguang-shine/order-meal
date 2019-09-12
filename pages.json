@@ -16,6 +16,22 @@
 			}
 		},
 		{
+			"path": "pages/login/index",
+			"style": {
+				"navigationBarTitleText": "登录"	,
+				"navigationBarBackgroundColor": "#ffffff"
+				
+			}
+		},
+		{
+			"path": "pages/register/index",
+			"style": {
+				"navigationBarTitleText": "注册"	,
+				"navigationBarBackgroundColor": "#ffffff"
+				
+			}
+		},
+		{
 			"path": "pages/center/index",
 			"style": {
 				"navigationBarTitleText": "我的",

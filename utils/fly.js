@@ -2,8 +2,14 @@ import toLogin from '@/utils/wx'
 import router from '@/utils/router'
 import host from '@/config/host'
 
+// #ifdef H5
+const Fly = require("flyio/dist/npm/fly")
+const fly = new Fly;
+// #endif
+// #ifdef MP-WEIXIN
 const Fly = require('flyio/dist/npm/wx')
 const fly = new Fly;
+// #endif
 // {
 //     method:"",//请求方法， GET 、POST ...
 //     headers:{},//请求头

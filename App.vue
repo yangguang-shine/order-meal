@@ -1,9 +1,37 @@
 <script>
+	// #ifdef MP-WEIXIN
 	import toLogin from '@/utils/wx'
+	// endif
 	export default {
 		async onLaunch() {
-			console.log('App Launch')
-			await toLogin()
+			try {
+				console.log('App Launch')
+				// #ifdef H5
+				const token = uni.getStorageSync('token')
+				if (token) {
+					const res = await this.$fetch.post('/h5/user/check', { token })
+					const status = res.data
+					if (status) {
+						this.$myrouter.push({
+							name: 'home'
+						})
+					}
+					return
+				} else {
+					this.$myrouter.push({
+						name: 'login'
+					})
+				}
+				this.$myrouter.push({
+					name: 'login'
+				})
+				// endif
+				// #ifdef MP-WEIXIN
+				await toLogin()
+				// endif
+			} catch (e) {
+				console.log(e)
+			}
 		},
 		onShow() {
 			console.log('App Show')
