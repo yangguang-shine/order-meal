@@ -77,9 +77,10 @@
     },
     "h5" : {
         "router" : {
-            "mode" : "hash"
+            "mode" : "hash",
+            "base" : ""
         },
-        "title" : "1111",
-        "domain" : "http://y6666n.natappfree.cc"
+        "title" : "公众号",
+        "domain" : ""
     }
 }

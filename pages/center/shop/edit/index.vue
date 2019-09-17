@@ -252,28 +252,49 @@ export default {
                         const reg = /.+\/(\d+\.)/
                         imgUrl = this.shopInfo.imgUrl.replace(reg, '$1')
                     }
-                    console.log(file.path)
-                    const fileSplit = file.path.split(".")
-                    const ext = fileSplit[fileSplit.length -1];
-                    wx.getFileSystemManager().readFile({
-                        filePath: file.path, //选择图片返回的相对路径
-                        encoding: 'base64', //编码格式
+                    uni.uploadFile({
+                        url: `${host}/api/img/shop/h5uploadImg`,
+                        filePath: file.path,
+                        name: 'image',
+                        formData: {
+                            shopID: this.shopID, imgUrl
+                        },
                         success: async (res) => { //成功的回调
                             console.log(res)
-                            const data = res.data
-                            const postData = `data:image/${ext};base64,${res.data}`
-                            // console.log('data:image/png;base64,' + res.data)
+                            const data = JSON.parse(res.data)
                             this.$showLoading({
                                 title: '上传中'
                             })
-                            const imgRes =await this.$fetch.post('/api/img/shop/uploadImg', { imgData: postData, ext, shopID: this.shopID, imgUrl })
-                            this.shopInfo.imgUrl = (imgRes.data || {}).imgUrl
+                            this.shopInfo.imgUrl = (data.data || {}).imgUrl
                             this.$hideLoading()
                             this.$showModal({
                                 content: '上传成功'
                             }) 
                         }
                     })
+                    // #ifdef  MP-WEIXIN
+                    // const fileSplit = file.path.split(".")
+                    // const ext = fileSplit[fileSplit.length -1];
+                    // wx.getFileSystemManager().readFile({
+                    //     filePath: file.path, //选择图片返回的相对路径
+                    //     encoding: 'base64', //编码格式
+                    //     success: async (res) => { //成功的回调
+                    //         console.log(res)
+                    //         const data = res.data
+                    //         const postData = `data:image/${ext};base64,${res.data}`
+                    //         // console.log('data:image/png;base64,' + res.data)
+                    //         this.$showLoading({
+                    //             title: '上传中'
+                    //         })
+                    //         const imgRes =await this.$fetch.post('/api/img/shop/uploadImg', { imgData: postData, ext, shopID: this.shopID, imgUrl })
+                    //         this.shopInfo.imgUrl = (imgRes.data || {}).imgUrl
+                    //         this.$hideLoading()
+                    //         this.$showModal({
+                    //             content: '上传成功'
+                    //         }) 
+                    //     }
+                    // })
+                    // #endif
                 }
             })
         },

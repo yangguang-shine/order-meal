@@ -1,6 +1,7 @@
 import toLogin from '@/utils/wx'
 import router from '@/utils/router'
 import host from '@/config/host'
+import Cookies from 'js-cookie'
 
 // #ifdef H5
 const Fly = require("flyio/dist/npm/fly")
@@ -20,12 +21,16 @@ const fly = new Fly;
 //   }
 fly.config.timeout = 30000;
 fly.config.baseURL = host;
+
 fly.interceptors.request.use((request)=>{
-    request.headers["X-Tag"]="flyio";
     const token = uni.getStorageSync('token')
-    request.headers['Set-Cookie']=`token=${token};`;
+    if (token) {
+        Cookies.set('token', `${token}`)
+        request.headers.token = `${token}`;
+    }
+    // #ifdef MP-WEIXIN
     request.headers['cookie']=`token=${token};`;
-      console.log(request.body)
+    // #endif
     return request;
 })
 fly.interceptors.response.use(
@@ -52,10 +57,7 @@ fly.interceptors.response.use(
 const flyRequest = (url, params, options, method) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(1564165)
-            console.log(params)
             const res = await fly[method](url, params);
-            console.log(222222)
             console.log(res)
             const code = res.code
             if (code === '000') {
