@@ -77,6 +77,8 @@ mutations['changeAllOrderListUpdate'] = (state, status = [true, true, true, true
 
 mutations['changeOrderListUpdate'] = (state,{ index, status = true } = {}) => {
     state.orderListUpdate[index] = status
-
+}
+mutations['saveDefaultAddress'] = (state, address = {}) => {
+    state.defaultAddress = address
 }
 export default mutations

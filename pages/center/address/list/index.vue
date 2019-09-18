@@ -1,7 +1,7 @@
 <template>
 	<view class="address-list-container">
 		<div class="address-lsit">
-			<div class="address-item" v-for="(addressItem, index) in addressList" :key="index" @click="defaultAddress(addressItem.addressID)">
+			<div class="address-item" v-for="(addressItem, index) in addressList" :key="index" @click="setDefaultAddress(addressItem.addressID)">
 				<div class="address-title line1">
 					{{addressItem.address1}} {{addressItem.address2}}
 				</div>
@@ -11,8 +11,8 @@
 				</div>
 				<image class="delete-icon" src="/static/img/shop-delete.svg" @click.stop="toDeleteAddress(addressItem.addressID)"></image>
                 <image class="edit-icon" src="/static/img/shop-edit.svg" @click.stop="toEditAddress(addressItem.addressID)"></image>
-				<div v-if="defaultAddressID === addressItem.addressID" class="default-bgc" :style="{'color': $mainColor}"></div>
-				<div v-if="defaultAddressID === addressItem.addressID" class="default-title">默认</div>
+				<div v-if="defaultAddress.addressID === addressItem.addressID" class="default-bgc" :style="{'color': $mainColor}"></div>
+				<div v-if="defaultAddress.addressID === addressItem.addressID" class="default-title">默认</div>
 			</div>
 		</div>
 		<div class="address-add" :style="{'background': $mainColor}" @click="toAddAddress">
@@ -21,24 +21,36 @@
 	</view>
 </template>
 <script>
+	import { mapState, mapMutations } from 'vuex'
 	export default {
 		data() {
 			return {
 				addressList: [],
-				defaultAddressID: ''
+				fromPage: ''
 			}
+		},
+		onLoad(query) {
+			this.fromPage = query.fromPage
 		},
 		onShow() {
 			this.init()
 		},
+		computed: {
+			...mapState({
+				defaultAddress: state => state.defaultAddress
+			})
+		},
 		methods: {
+			...mapMutations({
+				saveDefaultAddress: 'saveDefaultAddress'
+			}),
 			async init() {
 				try {
 					this.$showLoading()
 					const res = await this.$fetch.get('/api/address/list')
 					this.addressList = res.data || []
 					if (this.addressList.length) {
-						this.defaultAddressID = this.addressList[0].addressID
+						this.saveDefaultAddress(this.addressList[0])
 					}
 					this.$hideLoading()
 				} catch (e) {
@@ -62,9 +74,9 @@
 				}
 				this.init()
 			},
-			async defaultAddress(addressID) {
+			async setDefaultAddress(addressID) {
 				console.log(addressID)
-				if (this.defaultAddressID === addressID) return;
+				if (this.defaultAddress.addressID === addressID) return;
 				try {
 					await this.$showModal({
 						content: '确认设置为默认地址吗？',
@@ -78,6 +90,9 @@
 					this.$showLoading()
 					await this.$fetch.post('/api/address/default', { addressID })
 					await this.init()
+					if (this.fromPage) {
+						this.$myrouter.back()
+					}
 					this.$hideLoading()
 				} catch (e) {
 					this.$hideLoading()

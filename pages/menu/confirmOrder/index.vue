@@ -2,42 +2,46 @@
 	<div class="comfirm-order-container">
 		<div class="order-type-box">
 			<div class="order-type flex-row flex-a-center">
-				<div class="order-take" :style="{'color': selectType === 1 ? $mainColor : ''}" @click="changeOrderType(1)">外卖</div>
-				<div class="order-self" :style="{'color': selectType === 2 ? $mainColor : ''}" @click="changeOrderType(2)">自提</div>
-				<div class="orer-type-bgc" :style="{'left': selectType === 1 ? '0' : '200rpx'}"></div>
+				<div class="order-take" :style="{'color': selectType === 2 ? $mainColor : ''}" @click="changeOrderType(2)">外卖</div>
+				<div class="order-self" :style="{'color': selectType === 3 ? $mainColor : ''}" @click="changeOrderType(3)">自提</div>
+				<div class="orer-type-bgc" :style="{'left': selectType === 2 ? '0' : '200rpx'}"></div>
 			</div>
 		</div>
-		<div v-if="selectType === 1" class="take-out-box">
-			<div class="address-box">
-				<div class="address-title line1">哈哈哈哈哈哈哈哈哈哈哈哈或或</div>
+		<div v-if="selectType === 2" class="take-out-box">
+			<div class="address-box" @click="toSelectAddress">
+				<div class="address-title line1">{{defaultAddress.address1 || ''}} {{defaultAddress.address2 || ''}}</div>
 				<div class="address-user-info flex-row flex-a-center">
-					<div class="user-name">哈哈哈</div>
-					<div>1111</div>
+					<div class="user-name">{{defaultAddress.name || ''}}</div>
+					<div>{{defaultAddress.mobile || ''}}</div>
 				</div>
-				<image class="arrow-right"></image>
+				<image class="arrow-right" src="/static/img/right-arrow.png"></image>
 			</div>
-			<div class="delivery-box flex-row flex-a-center">
-				<div class="delivery-title">
-					送达时间
+			<picker mode="time" :value="takeOutTime" start="09:00" end="23:00" @change="takeOutTimeChange">
+				<div class="delivery-box flex-row flex-a-center">
+					<div class="delivery-title">
+						送达时间:
+					</div>
+					<div class="deliver-time" :style="{'color': $mainColor}">
+						{{takeOutTime}}
+					</div>
+					<image class="arrow-right" src="/static/img/right-arrow.png"></image>
 				</div>
-				<div class="deliver-time" :style="{'color': $mainColor}">
-					18：00
-				</div>
-				<image class="arrow-right"></image>
-			</div>
+			</picker>
 		</div>
-		<div v-if="selectType === 2" class="self-take-box">
-			<div class="shop-address">哈哈哈哈哈哈哈</div>
+		<div v-if="selectType === 3" class="self-take-box">
+			<div class="shop-address">{{shopInfo.shopName}}</div>
 			<div class="time-phone-box flex-row flex-a-center">
-				<div class="self-time-box flex-item">
-					<div class="self-take-title">取餐时间</div>
-					<div class="self-take-time">05:00</div>
-					<image class="arrow-right"></image>
-				</div>
-				<div class="self-phone-box flex-item">
+				<picker mode="time" :value="selfTakeTime" start="09:00" end="23:00" @change="selfTakeTimeChange" class="self-time-picker flex-col flex-j-between">
+					<div class="self-time-box flex-col flex-j-between">
+						<div class="self-take-title">取餐时间</div>
+						<div class="self-take-time">{{selfTakeTime}}</div>
+						<image class="arrow-right" src="/static/img/right-arrow.png"></image>
+					</div>
+				</picker>
+				<div class="self-phone-box  flex-col flex-j-between">
 					<div class="self-take-title">预留电话</div>
-					<input type="text" value="1235462215">
-					<image class="arrow-right"></image>
+					<input type="number" class="reserve-phone-input" value="1235462215" placeholder="请输入手机号" maxlength="20">
+					<image class="arrow-right" src="/static/img/right-arrow.png"></image>
 				</div>
 			</div>
 		</div>
@@ -46,19 +50,38 @@
 				<div class="order-info">
 					订单信息
 				</div>
-				<div class="continue-order center" :style="{'color': $mainColor}">
+				<div class="continue-order center" :style="{'color': $mainColor}" @click="continueOrder">
 					继续点单
 				</div>
 			</div>
 			<div class="food-category-item" v-for="(foodCategoryItem, index) in cartFoodList" :key="index">
 				<div class="food-item flex-row flex-a-center" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex">
 					<image class="food-img flex-shrink" :src="foodItem.imgUrl ? host + foodItem.imgUrl : '/static/img/default-img.svg'"></image>
-					<div class="food-info">
+					<div class="food-info flex-col flex-j-between">
 						<div class="food-name line1">{{foodItem.foodName}}</div>
-						<div class="food-price">¥{{foodItem.price}}</div>
+						<div class="food-price"><span class="money-unit">¥</span>{{foodItem.price}}</div>
 					</div>
 					<div class="food-count">×{{foodItem.orderCount}}</div>
-					<div class="food-count-price">¥{{foodItem.price * foodItem.orderCount}}</div>
+					<div class="food-count-price"><span class="money-unit">¥</span>{{foodItem.price * foodItem.orderCount}}</div>
+				</div>
+			</div>
+			<div class="minus-info-box flex-row flex-a-center" v-if="minusPrice">
+				<image class="minus-icon" src="/static/img/orderMinus.svg"></image>
+				<div class="flex-item flex-row flex-j-between flex-a-center" :style="{color: $mainColor}">
+					<div class="minus-title">
+						满减优惠
+					</div>
+					<div class="minus-price">-¥{{minusPrice}}</div>
+				</div>
+			</div>
+			<div class="total-info-info flex-row flex-j-between">
+				<div>
+				</div>
+				<div class="flex-row flex-a-center">
+					<div v-if="minusPrice">已优惠</div>
+					<div class="order-minus-price" v-if="minusPrice" :style="{color: $mainColor}" ><span class="money-unit">¥</span>{{minusPrice}}</div>
+					<div class="order-due-amount-title">总计</div>
+					<div class="order-due-amount"><span class="money-unit">¥</span>{{dueAmount}}</div>
 				</div>
 			</div>
 		</div>
@@ -77,13 +100,16 @@ import host from '@/config/host'
 export default {
 	data() {
 		return {
-			orderAmount: '',
+			originOrderAmount: '',
 			host,
-			selectType: 1
+			selectType: 2,
+			takeOutTime: '12:00',
+			selfTakeTime: '12:00'
 		}
 	},
 	onLoad() {
-		this.orderAmount = (this.cartFoodList.reduce((amount, item) => {
+		this.init()
+		this.originOrderAmount = (this.cartFoodList.reduce((amount, item) => {
 				const categoryItemSum = item.foodList.reduce((all, foodItem) => {
 					const price = foodItem.price * foodItem.orderCount
 					all += price 
@@ -97,11 +123,40 @@ export default {
 		...mapState({
 			cartFoodList: state => state.cartFoodList,
 			shopInfo: state => state.shopInfo,
-		})
+			defaultAddress: state => state.defaultAddress,
+			shopInfo: state => state.shopInfo,
+		}),
+		dueAmount() {
+			return Number((Number(this.originOrderAmount) - this.minusPrice).toFixed(2))
+		},
+		minusPrice() {
+			if (!this.shopInfo.minusList.length) {
+				return 0
+			} else {
+				const length = this.shopInfo.minusList.length
+				const findMinusItem = this.shopInfo.minusList.find((item, index, arr) => {
+					if (index === length - 1) {
+						if (Number(item.reach) <= Number(this.originOrderAmount)) {
+							return true
+						} 
+						return false
+					} else {
+						if (Number(item.reach) <= Number(this.originOrderAmount) && Number(this.originOrderAmount) < Number(arr[index + 1].reach)) {
+							return true
+						}
+						return false
+					}
+				})
+				if (findMinusItem) {
+					return findMinusItem.reduce
+				} else return 0
+			}
+		}
 	},
 	methods: {
 		...mapMutations({
-			changeAllOrderListUpdate: 'changeAllOrderListUpdate'
+			changeAllOrderListUpdate: 'changeAllOrderListUpdate',
+			saveDefaultAddress: 'saveDefaultAddress',
 		}),
 		// async orderKeyDelete() {
 		// 	try {
@@ -113,6 +168,20 @@ export default {
 		changeOrderType(index) {
 			this.selectType = index
 		},
+		async init() {
+			const res = await this.$fetch.get('/api/address/list', {  })
+			const addressList = res.data || []
+			if (addressList.length) {
+				this.saveDefaultAddress(addressList[0])
+			}
+		},
+		async getAddressList() {
+			const res = await this.$fetch.get('/api/address/list', {  });
+			const addressList = res.data || []
+			if (addressList.length) {
+				this.saveDefaultAddress(addressList[0])
+			}
+		},
 		async submitOrder() {
 			if (!this.cartFoodList.length) return;
 			const foodList = [];
@@ -120,22 +189,42 @@ export default {
 				foodList.push(...item.foodList)
 			})
 			console.log(foodList)
-			const res = await this.$fetch.post('/api/order/submit', { foodList, shopID: this.shopInfo.shopID, orderAmount: this.orderAmount })
+			const res = await this.$fetch.post('/api/order/submit', { foodList, shopID: this.shopInfo.shopID, orderAmount: this.dueAmount })
 			this.changeAllOrderListUpdate()
 			this.$myrouter.switchTab({
 				name: 'orderList'
 			})
+		},
+		toSelectAddress() {
+			this.$myrouter.push({
+				name: 'address/list',
+				query: {
+					fromPage: 'confirmOrder'
+				}
+			})
+		},
+		takeOutTimeChange(e) {
+			this.takeOutTime = e.detail.value
+		},
+		selfTakeTimeChange(e) {
+			this.selfTakeTime = e.detail.value
+		},
+		continueOrder() {
+			this.$myrouter.back()
 		},
 	}
 }
 </script>
 
 <style lang="scss">
+page {
+	background-color: #f5f5f5;
+	height: 100%;
+}
 .comfirm-order-container {
-	padding: 30rpx 30rpx 150rpx;
+	padding: 20rpx 20rpx 150rpx;
 	font-size: 28rpx;
 	color: #333;
-	background-color: #f5f5f5;
 	.order-type-box {
 		padding: 30rpx;
 		background-color: #fff;
@@ -177,13 +266,13 @@ export default {
 	}
 	.address-box {
 		position: relative;
-		padding-bottom: 20rpx;
+		margin-bottom: 34rpx;
 	}
 	.address-title {
 		font-size: 30rpx;
 		font-weight: bold;
 		max-width: 500rpx;
-		margin-bottom: 8rpx;
+		margin-bottom: 14rpx;
 	}
 	.address-user-info {
 		font-size: 24rpx;
@@ -196,18 +285,21 @@ export default {
 		position: absolute;
 		top: 50%;
 		right: 10rpx;
-		width: 10rpx;
-		height: 10rpx;
+		width: 18rpx;
+		height: 27rpx;
 		transform: translateY(-50%);
-		background-color: red;
+		// background-color: red;
 	}
 	.delivery-box {
 		position: relative;
-		padding-top: 20rpx; 
+		// padding-top: 20rpx; 
 	}
 	.delivery-title {
 		font-weight: bold;
-		margin-right: 16rpx;
+		margin-right: 24rpx;
+	}
+	.time-phone-box {
+		height: 90rpx;
 	}
 	.shop-address {
 		font-weight: bold;
@@ -215,17 +307,30 @@ export default {
 	}
 	.self-time-box, .self-phone-box {
 		position: relative;
+		height: 90rpx;;
+	}
+	.self-time-picker {
+		flex: 1;
+		height: 100%;
 	}
 	.self-take-title {
 		font-size: 24rpx;
 		color: #999;
-		margin-bottom: 6rpx;
+		line-height: 1
+	}
+	.reserve-phone-input {
+		padding-top: 10rpx;
 	}
 	.self-take-time {
+		padding-top: 10rpx;
 		font-weight: bold;
-		font-size: 26rpx;
+		font-size: 28rpx;
+		height: 1.4rem;
+		min-height: 1.4rem;
+		line-height: 1.4rem;
 	}
 	.self-phone-box {
+		flex: 1.1;
 		padding-left: 40rpx; 
 	}
 	.deliver-time {
@@ -261,7 +366,9 @@ export default {
 		margin-right: 12rpx;
 	}
 	.food-info {
-		flex: 10
+		flex: 10;
+		height: 90rpx;
+		line-height: 1;
 	}
 	.food-name {
 		max-width: 450rpx;
@@ -279,7 +386,32 @@ export default {
 	.food-count-price {
 		flex: 3;
 		font-size: 26rpx;
-		text-align: center;
+		text-align: right;
+	}
+	.minus-info-box {
+		margin-top: 30rpx;
+	}
+	.minus-icon {
+		width: 32rpx;
+		height: 32rpx;
+		margin-right: 20rpx;
+	}
+	.order-minus-price {
+		margin-left: 8rpx;
+	}
+	.total-info-info {
+		margin-top: 30rpx;
+	}
+	.money-unit {
+		font-size: 24rpx;
+	}
+	.order-due-amount-title {
+		margin-left: 10rpx;
+	}
+	.order-due-amount {
+		margin-left: 8rpx;
+		font-weight: bold;
+		font-size: 32rpx;
 	}
 	.submit-order {
 		position: fixed;

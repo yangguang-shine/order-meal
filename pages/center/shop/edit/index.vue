@@ -85,7 +85,7 @@ export default {
                 const minusSplit = this.shopInfo.minus.split(',')
                 if (minusSplit[0] === '')
                 this.minusList = []
-                else {                
+                else {  
                     this.minusList = minusSplit.map((item) => {
                         const splitMinus = item.split('-')
                         return {
@@ -253,7 +253,7 @@ export default {
                         imgUrl = this.shopInfo.imgUrl.replace(reg, '$1')
                     }
                     uni.uploadFile({
-                        url: `${host}/api/img/shop/h5uploadImg`,
+                        url: `${host}/api/img/shop/uploadImg`,
                         filePath: file.path,
                         name: 'image',
                         formData: {
@@ -272,29 +272,6 @@ export default {
                             }) 
                         }
                     })
-                    // #ifdef  MP-WEIXIN
-                    // const fileSplit = file.path.split(".")
-                    // const ext = fileSplit[fileSplit.length -1];
-                    // wx.getFileSystemManager().readFile({
-                    //     filePath: file.path, //选择图片返回的相对路径
-                    //     encoding: 'base64', //编码格式
-                    //     success: async (res) => { //成功的回调
-                    //         console.log(res)
-                    //         const data = res.data
-                    //         const postData = `data:image/${ext};base64,${res.data}`
-                    //         // console.log('data:image/png;base64,' + res.data)
-                    //         this.$showLoading({
-                    //             title: '上传中'
-                    //         })
-                    //         const imgRes =await this.$fetch.post('/api/img/shop/uploadImg', { imgData: postData, ext, shopID: this.shopID, imgUrl })
-                    //         this.shopInfo.imgUrl = (imgRes.data || {}).imgUrl
-                    //         this.$hideLoading()
-                    //         this.$showModal({
-                    //             content: '上传成功'
-                    //         }) 
-                    //     }
-                    // })
-                    // #endif
                 }
             })
         },

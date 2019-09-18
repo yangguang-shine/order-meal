@@ -232,9 +232,6 @@ export default {
 			initCart: 'initCart',
 			clearCart: 'clearCart',
 		}),
-		listScroll(e) {
-			// console.log(e)
-		},
 		cartClearCart() {
 			
 			this.clearCart()
@@ -395,6 +392,7 @@ page {
 			height: 100%;
 			overflow-y: auto;
 			background-color: #f5f5f5;
+			flex-shrink: 0;
 			.aside-category-item {
 				position: relative;
 				padding: 0 20rpx;

@@ -1,2 +1,2 @@
-const host = 'http://localHost:8080'
+const host = 'http://ivyk6c.natappfree.cc'
 export default host
