@@ -15,7 +15,6 @@
                     {{shopInfo.startTime || ''}}
                 </div>
             </div>
-
         </picker>
         <picker mode="time" @change="endPickerChange" value="18:00">
             <div class="edit-item flex-row flex-a-center">
@@ -25,11 +24,24 @@
                 </div>
             </div>
         </picker>
+        <div class="flex-row">
+            <div class="title">业务类型：</div>
+            <div class="business-type-list">
+                <div v-for="(businessTypeItem, index) in businessTypeList" :key="index" class=" flex-row flex-a-center business-type-item center" @click="changeSelected(businessTypeItem)">
+                    <div class="icon-box flex-row flex-ja-center" :style="{'color': businessTypeItem.selected ? $mainColor : ''}">
+                        <icon class="icon-img" v-if="businessTypeItem.selected" type="success_no_circle" :color="$mainColor" size="20"></icon>
+                    </div> 
+                    <div class="business-type-title">
+                        {{businessTypeItem.title}}
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="flex-row flex-a-center">
 			<div class="title">店铺图片：</div>
 			<image class="food-img" :src="shopInfo.imgUrl ? host + shopInfo.imgUrl : '/static/img/default-img.svg'" @click="chooseImg"></image>
 		</div>
-        <div class="edit-item-minus flex-row" @click="chooseAddress">
+        <div class="edit-item-minus flex-row">
             <div class="title">满减营销：</div>
             <div class="flex-item">
                 <div v-if="!minusList.length" class="no-minus minus-item center"> 暂无满减营销</div>
@@ -66,8 +78,21 @@ export default {
                 startTime: '09:00',
                 endTime: '18:00',
                 minus: '',
-                addState: false
+                addState: false,
+                businessTypes: ''
             },
+            businessTypeList: [
+                {
+                    title: '外卖',
+                    businessType: 2,
+                    selected: false
+                },
+                {
+                    title: '自提',
+                    businessType: 3,
+                    selected: false
+                },
+            ],
             minusList: [], 
             shopID: '',
             host
@@ -95,6 +120,13 @@ export default {
                         }
                     })
                 }
+                if (this.shopInfo.businessTypes) {
+                    const businessTypeList = this.shopInfo.businessTypes.split(',')
+                    this.businessTypeList.forEach((item) => {
+                        const find = businessTypeList.find(a => Number(a) === item.businessType)
+                        if (find) item.selected = true
+                    })
+                } 
             } else {
                 this.shopInfo.shopName = `店铺${Math.random().toString(36).slice(2, 4)}`
             }
@@ -114,13 +146,6 @@ export default {
         }
         this.shopID = ''
         this.addState = false
-        this.shopInfo = {
-                shopName: '',
-                imgUrl: '',
-                address: '',
-                startTime: '',
-                endTime: '',
-            };
     },
     methods: {
         startPickerChange(e) {
@@ -172,6 +197,7 @@ export default {
         },
         async editShop() {
             try {
+                this.getShopBusinessTypes()
                 const result = this.checkoutMinus()
                 if (!result.minusStatus) return;
                 this.shopInfo.minus = result.minusArray.join(',')
@@ -202,6 +228,7 @@ export default {
         // },
         async addShop() {
             try {
+                this.getShopBusinessTypes()
                 const result = this.checkoutMinus()
                 if (!result.minusStatus) return;
                 this.shopInfo.minus = result.minusArray.join(',')
@@ -223,6 +250,18 @@ export default {
                 console.log(e)
             }
         },
+        getShopBusinessTypes() {
+            const selectBusinessType = []
+            this.businessTypeList.forEach((item) => {
+                if(item.selected) {
+                    selectBusinessType.push(item.businessType)
+                }
+            })
+            this.shopInfo.businessTypes = selectBusinessType.join(',')
+        },
+        changeSelected(businessTypeItem) {
+            businessTypeItem.selected = !businessTypeItem.selected
+        }, 
         addMinus() {
             this.minusList.push({
                 reach: '',
@@ -317,15 +356,15 @@ export default {
         color: #999
     }
     .input-minus {
-        line-height: 40rpx;
         width: 80rpx;
-        border: 2rpx solid;
+        border-bottom: 2rpx solid;
         border-radius: 8rpx;
         box-sizing: border-box;
-        min-height: 40rpx;
-        height: 40rpx;
         margin-right: 20rpx;
         font-size: 26rpx;
+    }
+    .input-minus::after {
+        border: none;
     }
     .delete-icon {
         height: 40rpx;
@@ -351,6 +390,20 @@ export default {
     .delete-button {
         background-color: #999;
         color: #fff;
+    }
+
+    .business-type-item {
+        margin-bottom: 20rpx;
+    }
+    .business-type-title {
+        padding-left: 30rpx;
+    }
+    .icon-box {
+        height: 24px;
+        width: 24px;
+        border: 2rpx solid;
+        color: #999;
+        border-radius: 10rpx;
     }
 }
 </style>

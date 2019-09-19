@@ -33,7 +33,8 @@ export default {
         }
     },
     onLoad(query) {
-        this.toOrder = +query.toOrder || 0
+        this.toOrder = Number(query.toOrder) || 0
+        this.businessType = Number(query.businessType) || 0
     },
     onShow() {
         this.init()
@@ -45,7 +46,11 @@ export default {
         async init() {
             try {
                 this.$showLoading()
-                const res = await this.$fetch.get('/api/shop/list')
+                const query = {}
+                if (this.businessType) {
+                    query.businessType = this.businessType
+                }
+                const res = await this.$fetch.get('/api/shop/list', { ...query })
                 this.shopList = res.data || [];
                 this.$hideLoading()
             } catch(e) {

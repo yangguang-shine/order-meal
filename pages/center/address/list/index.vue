@@ -83,7 +83,7 @@
 						showCancel: true,
 					})
 				} catch(e) {
-					console(e)
+					console.log(e)
 					return
 				}
 				try {
@@ -181,8 +181,8 @@ page {
 	}
 	.default-title {
 		position: absolute;
-		top: 8rpx;
-		right: 2rpx;
+		top: 14rpx;
+		right: 4rpx;
 		transform: rotate(45deg);
 		color: #fff;
 		font-size: 18rpx;

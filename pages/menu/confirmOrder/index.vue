@@ -2,12 +2,12 @@
 	<div class="comfirm-order-container">
 		<div class="order-type-box">
 			<div class="order-type flex-row flex-a-center">
-				<div class="order-take" :style="{'color': selectType === 2 ? $mainColor : ''}" @click="changeOrderType(2)">外卖</div>
-				<div class="order-self" :style="{'color': selectType === 3 ? $mainColor : ''}" @click="changeOrderType(3)">自提</div>
-				<div class="orer-type-bgc" :style="{'left': selectType === 2 ? '0' : '200rpx'}"></div>
+				<div class="order-take" :style="{'color': businessType === 2 ? $mainColor : ''}" @click="changeOrderType(2)">外卖</div>
+				<div class="order-self" :style="{'color': businessType === 3 ? $mainColor : ''}" @click="changeOrderType(3)">自提</div>
+				<div class="orer-type-bgc" :style="{'left': businessType === 2 ? '0' : '200rpx'}"></div>
 			</div>
 		</div>
-		<div v-if="selectType === 2" class="take-out-box">
+		<div v-if="businessType === 2" class="take-out-box">
 			<div class="address-box" @click="toSelectAddress">
 				<div class="address-title line1">{{defaultAddress.address1 || ''}} {{defaultAddress.address2 || ''}}</div>
 				<div class="address-user-info flex-row flex-a-center">
@@ -28,7 +28,7 @@
 				</div>
 			</picker>
 		</div>
-		<div v-if="selectType === 3" class="self-take-box">
+		<div v-if="businessType === 3" class="self-take-box">
 			<div class="shop-address">{{shopInfo.shopName}}</div>
 			<div class="time-phone-box flex-row flex-a-center">
 				<picker mode="time" :value="selfTakeTime" start="09:00" end="23:00" @change="selfTakeTimeChange" class="self-time-picker flex-col flex-j-between">
@@ -85,10 +85,6 @@
 				</div>
 			</div>
 		</div>
-
-		<!-- <div class="center" @click="orderKeyDelete">
-			清除
-		</div> -->
 		<div class="submit-order com-button" @click="submitOrder" :style="{'background-color': $mainColor}">提交</div>
 	</div>
 </template>
@@ -102,14 +98,15 @@ export default {
 		return {
 			originOrderAmount: '',
 			host,
-			selectType: 2,
+			businessType: 2,
 			takeOutTime: '12:00',
-			selfTakeTime: '12:00'
+			selfTakeTime: '12:00',
+			reservePhone: ''
 		}
 	},
 	onLoad() {
 		this.init()
-		this.originOrderAmount = (this.cartFoodList.reduce((amount, item) => {
+		this.originOrderAmount = Number((this.cartFoodList.reduce((amount, item) => {
 				const categoryItemSum = item.foodList.reduce((all, foodItem) => {
 					const price = foodItem.price * foodItem.orderCount
 					all += price 
@@ -117,7 +114,7 @@ export default {
 				}, 0)
 				amount += categoryItemSum
 				return amount
-			}, 0)).toFixed(2)
+			}, 0)).toFixed(2))
 	},
 	computed: {
 		...mapState({
@@ -127,7 +124,7 @@ export default {
 			shopInfo: state => state.shopInfo,
 		}),
 		dueAmount() {
-			return Number((Number(this.originOrderAmount) - this.minusPrice).toFixed(2))
+			return Number((this.originOrderAmount - this.minusPrice).toFixed(2))
 		},
 		minusPrice() {
 			if (!this.shopInfo.minusList.length) {
@@ -158,15 +155,8 @@ export default {
 			changeAllOrderListUpdate: 'changeAllOrderListUpdate',
 			saveDefaultAddress: 'saveDefaultAddress',
 		}),
-		// async orderKeyDelete() {
-		// 	try {
-		// 		const res = await this.$fetch.get('/api/order/deleteOrderKey', {  })
-		// 	} catch (e) {
-		// 		console.log(e)
-		// 	}
-		// },
 		changeOrderType(index) {
-			this.selectType = index
+			this.businessType = index
 		},
 		async init() {
 			const res = await this.$fetch.get('/api/address/list', {  })
@@ -189,7 +179,15 @@ export default {
 				foodList.push(...item.foodList)
 			})
 			console.log(foodList)
-			const res = await this.$fetch.post('/api/order/submit', { foodList, shopID: this.shopInfo.shopID, orderAmount: this.dueAmount })
+			const query = {}
+			if (this.businessType === 2) {
+				query.takeOutTime = this.takeOutTime
+				query.address = JSON.stringify(this.defaultAddress)
+			}else if (this.businessType === 3) {
+				query.selfTakeTime = this.selfTakeTime
+				query.reservePhone = this.reservePhone
+			}
+			const res = await this.$fetch.post('/api/order/submit', { foodList, shopID: this.shopInfo.shopID, orderAmount: this.dueAmount, businessType: this.businessType, ...query, minusPrice: this.minusPrice })
 			this.changeAllOrderListUpdate()
 			this.$myrouter.switchTab({
 				name: 'orderList'
