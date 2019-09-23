@@ -71,6 +71,10 @@ const routerList = [
 		name: 'confirmOrder',
 		path: '/pages/menu/confirmOrder/index'
 	},
+	{
+		name: 'orderDetail',
+		path: '/pages/order/orderDetail/index'
+	},
 	...shopList,
 	...categoryList,
 	...foodList,

@@ -5,7 +5,7 @@
 			<div class="tab-bottom" :style="{'background': $mainColor, 'left': ((tabIndex * 2 + 1) * 12.5) + '%'}"></div>
 		</div>
 		<view v-show="tabIndex === allOrderIndex" class="order-list-box" v-for="(orderList, allOrderIndex) in allOrderList" :key="allOrderIndex">
-			<div class="order-list-item" v-for="(orderItem, index) in orderList" :key="index">
+			<div class="order-list-item" v-for="(orderItem, index) in orderList" :key="index" @click="toOrderDetail(orderItem)">
 				<div class="flex-row">
 					<image class="shop-img" :src="orderItem.imgUrl ? host + orderItem.imgUrl : '/static/img/default-img.svg'"></image>
 					<div class="flex-item flex-col flex-j-between">
@@ -75,7 +75,15 @@ import host from '@/config/host'
 				this.tabIndex = index;
 				// if (this.allOrderList[this.tabIndex].length) return;
 				this.getOrderList()
-			}
+			},
+			toOrderDetail(orderItem) {
+				this.$myrouter.push({
+					name: 'orderDetail',
+					query: {
+						orderKey: orderItem.orderKey
+					}
+				})
+			},
 		}
 	}
 </script>

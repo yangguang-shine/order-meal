@@ -16,6 +16,14 @@
 			}
 		},
 		{
+			"path": "pages/order/orderDetail/index",
+			"style": {
+				"navigationBarTitleText": "订单详情"	,
+				"navigationBarBackgroundColor": "#ffffff"
+				
+			}
+		},
+		{
 			"path": "pages/login/index",
 			"style": {
 				"navigationBarTitleText": "登录"	,
