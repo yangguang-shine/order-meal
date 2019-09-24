@@ -6,16 +6,28 @@
 				<div v-if="orerDetail.businessType === 2" class="order-type">外卖</div>
 				<div v-else-if="orerDetail.businessType === 3" class="order-type">自提</div>
 			</div>
-			<div class="order-tip-title">感谢</div>
-			<div class="order-button-box flex-row" v-if="orderStatus === 10 || orderStatus === 20 ">
+			<!-- <div class="order-tip-title">感谢</div> -->
+			<div class="flex-row flex-j-between">
+				<div>
+					当前订单状态
+				</div>
+				<div>
+					{{orderDetail.orderTypeTitle}}
+				</div>
+			</div>
+			<div class="order-button-box flex-row flex-j-between" v-if="orderStatus === 10 || orderStatus === 20 ">
+				<div v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20 || orderDetail.orderStatus === 30" class="button-item" :style="{'color': $mainColor}" @click="toChangeOrderStatus">下一级状态： <span :style="{'color': $mainColor}">{{orerDetail.nextStatus}}</span></div>
 				<div class="button-item" :style="{'color': $mainColor}" @click="cancellOrder">取消订单</div>
 			</div>
+			<!-- <div class="order-button-box flex-row" v-if="orderStatus === 10 || orderStatus === 20 ">
+				<div class="button-item" :style="{'color': $mainColor}" @click="cancellOrder">取消订单</div>
+			</div> -->
 		</div>
 		<div class="order-info-box">
 			<div class="shop-info-box line1">
 				新微信餐厅正餐店
 			</div>
-			<div class="order-list-box" v-for="(foodItem, index) in orderDetail.foodList" :key="index">
+			<div v-show="orderDetail.foodList.length" class="order-list-box" v-for="(foodItem, index) in orderDetail.foodList" :key="index">
 				<div class="order-item flex-row">
 					<image class="food-img" src=""></image>
 					<div class="flex-item flex-row flex-a-center">
@@ -104,7 +116,7 @@ import host from '@/config/host'
 			return {
 				host,
 				orderKey: '',
-				orderDetail: {}
+				orderDetail: {},
 			}
 		},
 		onLoad(query) {
@@ -118,11 +130,27 @@ import host from '@/config/host'
 		},
 		methods: {
 			async init() {
-				const res = await this.$fetch.get('/api/order/orderDetail', { orderKey: this.orderKey })
-				console.log(res)
+				const res = await this.$fetch.get('/api/order/orderDetail', { orderKey: this.orderKey, shopID: this.orderDetail.shopID })
 				const orderDetail = res.data || {}
 				orderDetail.orderTypeTitle = this.getOrderTypeTitle(orderDetail.orderStatus, orderDetail.businessType)
+				orderDetail.nextStatus = this.getOrderNextStatus(orderDetail.orderStatus, orderDetail.businessType)
 				this.orderDetail = res.data || {}
+			},
+			copyOrderKey() {
+				wx.setClipboardData({
+					data: this.orderDetail.orderKey,
+					success: () => {
+						wx.getClipboardData({
+							success: () => {
+								wx.showToast({
+									title: '订单号已复制',
+									icon: 'none',
+									duration: 2000
+								})
+							}
+						})
+					}
+				})
 			},
 			getOrderTypeTitle(orderStatus, businessType) {
 				if (orderStatus === 10) {
@@ -148,21 +176,37 @@ import host from '@/config/host'
 				}
 				return ''
 			},
-			copyOrderKey() {
-				wx.setClipboardData({
-					data: this.orderDetail.orderKey,
-					success: () => {
-						wx.getClipboardData({
-							success: () => {
-								wx.showToast({
-									title: '订单号已复制',
-									icon: 'none',
-									duration: 2000
-								})
-							}
-						})
+			getOrderNextStatus(orderStatus, businessType) {
+				if (orderStatus === 10) {
+					return '接单'
+				} else if (orderStatus === 20) {
+					if (businessType === 2) {
+						return '送出'
+					} else if (businessType === 3) {
+						return '待自提'
 					}
-				})
+				} else if (orderStatus === 30) {
+					if (businessType === 2) {
+						return '送达完成'
+					} else if (businessType === 3) {
+						return '自提完成'
+					}
+					return ''
+				}
+				return ''
+			},
+			toChangeOrderStatus() {
+				try {
+					this.$showLoading()
+					await this.$fetch.post('/api/order/changeOrderStatus', { orderStatus: this.orderDetail.orderStatus, shopID: this.orderDetail.shopID, orderKey: this.orderKey })
+					this.$hideLoading()
+					await this.$showModal({
+						content: '订单状态修改成功'
+					})
+					this.init()
+				} catch(e) {
+					console.log(e)
+				}
 			},
 			async cancellOrder() {
 				try {

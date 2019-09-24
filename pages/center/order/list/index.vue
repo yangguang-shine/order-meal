@@ -37,8 +37,12 @@ import host from '@/config/host'
 			return {
 				tabIndex: 0,
 				allOrderList: [[], [], [], []],
-				host
+				host,
+				shopID: ''
 			}
+		},
+		onLoad(query) {
+			this.shopID = query.shopID
 		},
 		onShow() {
 			this.getOrderList()
@@ -57,42 +61,14 @@ import host from '@/config/host'
 					// if (!this.orderListUpdate[this.tabIndex]) return;
 					this.$set(this.allOrderList, this.tabIndex, [])
 					const res = await this.$fetch.get('/api/order/orderList', {
-						status: this.tabIndex
+						status: this.tabIndex,
+						shopID: this.shopID
 					})
-					const orderList = (res.data || []).map((orderItem) => ({
-						...orderItem,
-						orderTypeTitle: getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType)
-					}))
-					console.log(orderList)
 					// this.changeOrderListUpdate({ index: this.tabIndex, status: false})
 					this.allOrderList[this.tabIndex].push(...orderList)
 				} catch (e) {
 					console.log(e)
 				}
-			},
-			getOrderTypeTitle(orderStatus, businessType) {
-				if (orderStatus === 10) {
-					return '待接单'
-				} else if (orderStatus === 20) {
-					return '已接单'
-				} else if (orderStatus === 30) {
-					if (businessType === 2) {
-						return '已送出'
-					} else if (businessType === 3) {
-						return '待自提'
-					}
-					return ''
-				} else if (orderStatus === 40) {
-					if (businessType === 2) {
-						return '已送达'
-					} else if (businessType === 3) {
-						return '已自提'
-					}
-					return ''
-				} else if (orderStatus === 50) {
-					return '已取消'
-				}
-				return ''
 			},
 			changeTabIndex(index) {
 				if (index === this.tabIndex) return;

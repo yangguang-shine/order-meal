@@ -148,6 +148,9 @@
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#ccc",
 		"backgroundColor": "#ccc"
+		// #ifdef H5
+		,"navigationStyle": "custom"
+		// #endif
 	},
 	"condition" : { //模式配置，仅开发期间生效
 	}

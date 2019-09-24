@@ -1,5 +1,5 @@
 <template>
-	<view class="home-container">
+	<view class="login-container">
 
 	</view>
 </template>
@@ -74,41 +74,7 @@ import host from '@/config/host'
 </script>
 
 <style lang="scss">
-	.home-container {
-		text-align: center;
-		.swiper-box {
-			height: 350rpx;
-			width: 100%;
-		}
-		.swiper-item-box {
-			width: 100%;
-			height: 100%;
-		}
-	.banner1 {
-		width: 100%;
-		height: 150upx;
-		line-height: 150upx;
-		background-color: #732184;
-	}
-	.banner2 {
-		width: 100%;
-		height: 150upx;
-		line-height: 150upx;
-		background-color: #543615;
-	}
-	.banner3 {
-		width: 100%;
-		height: 150upx;
-		line-height: 150upx;
-		background-color: #124576;
-	}
-	.title {
-		text-align: center;
-		font-size: 36upx;
-		color: #8f8f94;
-	}
-	.login {
-		margin-top: 20rpx;
-	}
+.login-container {
+
 }
 </style>

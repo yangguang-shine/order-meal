@@ -5,9 +5,7 @@
 </template>
 
 <script>
-import host from '@/config/host'
 	export default {
-		
 		data() {
 			return {
 			}
