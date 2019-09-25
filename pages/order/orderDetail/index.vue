@@ -155,7 +155,7 @@ import host from '@/config/host'
 			},
 			copyOrderKey() {
 				wx.setClipboardData({
-					data: this.orderDetail.orderKey,
+					data: `${this.orderDetail.orderKey}`,
 					success: () => {
 						wx.getClipboardData({
 							success: () => {

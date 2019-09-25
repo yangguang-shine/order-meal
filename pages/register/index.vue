@@ -17,7 +17,7 @@
 				<div class="title">昵称</div>
 				<input class="input-item flex-item" type="text" v-model="nickname" max-length="50" placeholder="请输入昵称">
 			</div>
-			<div class="submit-button" :style="{'background-color': $mainColor}" @click="submit">提交</div>
+			<div class="register-button" :style="{'background-color': $mainColor}" @click="register">注册</div>
 			<div class="to-login-box">有账号，<span :style="{'color': $mainColor}" @click="toLoginPage">去登录</span></div>
 		</div>
 	</view>
@@ -38,7 +38,7 @@ import host from '@/config/host'
 		onUnload() {
 		},
 		methods: {
-			async submit() {
+			async register() {
 				const phonereg = /^\d+$/
 				const passwordreg = /^\w+$/
 				if (!phonereg.test(this.phone)) {
@@ -68,7 +68,7 @@ import host from '@/config/host'
 				try {
 					this.$showLoading()
 					const res = await this.$fetch.post('/user/h5/register', { phone: this.phone, password: this.password, nickname: this.nickname })
-
+					uni.setStorageSync('token', res.data.token || '')
 					this.$hideLoading()
 					await this.$showModal({
 						content: '注册成功'
@@ -114,7 +114,7 @@ page {
 	.title {
 		width: 150rpx;
 	}
-	.submit-button {
+	.register-button {
 		height: 60rpx;
 		width: 150rpx;
 		line-height: 60rpx;

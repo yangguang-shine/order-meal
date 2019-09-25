@@ -48,16 +48,24 @@ export default async () => {
     try {
         if (!uni.getStorageSync('token')) {
             await login()
-        } else {
-            try {
-                await checkSession()
-            } catch (e) {
-                console.log(e)
-                await login()
-            }
-    
         }
     } catch (e) {
         console.log()
     }
 }
+// export default async () => {
+//     try {
+//         if (!uni.getStorageSync('token')) {
+//             await login()
+//         } else {
+//             try {
+//                 await checkSession()
+//             } catch (e) {
+//                 console.log(e)
+//                 await login()
+//             }
+//         }
+//     } catch (e) {
+//         console.log()
+//     }
+// }
