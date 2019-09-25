@@ -1,19 +1,19 @@
 <template>
 	<view class="register-container">
 		<div class="register-box">
-			<div class="input-item-box flex-row flex-j-center">
+			<div class="input-item-box flex-row flex-a-center">
 				<div class="title">手机号</div>
 				<input class="input-item flex-item" type="text" v-model="phone" max-length="50" placeholder="请输入手机号">
 			</div>
-			<div class="input-item-box flex-row flex-j-center">
+			<div class="input-item-box flex-row flex-a-center">
 				<div class="title">密码</div>
 				<input class="input-item flex-item" type="text" v-model="password" max-length="50" placeholder="请输入密码">
 			</div>
-			<div class="input-item-box flex-row flex-j-center">
+			<div class="input-item-box flex-row flex-a-center">
 				<div class="title">确认密码</div>
 				<input class="input-item flex-item" type="text" v-model="confirmPassword" max-length="50" placeholder="请确认密码">
 			</div>
-			<div class="input-item-box flex-row flex-j-center">
+			<div class="input-item-box flex-row flex-a-center">
 				<div class="title">昵称</div>
 				<input class="input-item flex-item" type="text" v-model="nickname" max-length="50" placeholder="请输入昵称">
 			</div>
@@ -37,8 +37,8 @@ import host from '@/config/host'
 		},
 		onUnload() {
 		},
-		onLoad() {
-			submit() {
+		methods: {
+			async submit() {
 				const phonereg = /^\d+$/
 				const passwordreg = /^\w+$/
 				if (!phonereg.test(this.phone)) {
@@ -68,7 +68,7 @@ import host from '@/config/host'
 				try {
 					this.$showLoading()
 					const res = await this.$fetch.post('/user/h5/register', { phone: this.phone, password: this.password, nickname: this.nickname })
-					
+
 					this.$hideLoading()
 					await this.$showModal({
 						content: '注册成功'
@@ -81,8 +81,6 @@ import host from '@/config/host'
 
 			}
 		},
-		methods: {
-		}
 	}
 </script>
 
@@ -105,19 +103,30 @@ page {
 		background-color: #fff;
 		border-radius: 12rpx;
 	}
+	.input-item-box {
+		height: 70rpx;
+		padding-bottom: 10rpx; 
+	}
 	.input-item {
+		height: 70rpx;
 		border-bottom: 1px solid #eee;
 	}
 	.title {
-		width: 180rpx;
+		width: 150rpx;
 	}
 	.submit-button {
-		height: 80rpx;
-		width: 200rpx;
-		line-height: 80rpx;
+		height: 60rpx;
+		width: 150rpx;
+		line-height: 60rpx;
 		text-align: center;
 		border-radius: 10rpx;
 		margin: 30rpx auto; 
+	}
+	.to-login-box {
+		padding-top: 10rpx;
+		margin: 0 auto;
+		width: 400rpx;
+		text-align: center;
 	}
 }
 </style>

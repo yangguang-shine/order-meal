@@ -7,16 +7,14 @@
 				<div v-else-if="orerDetail.businessType === 3" class="order-type">自提</div>
 			</div>
 			<!-- <div class="order-tip-title">感谢</div> -->
-			<div class="flex-row flex-j-between">
-				<div>
-					当前订单状态
-				</div>
-				<div>
-					{{orderDetail.orderTypeTitle}}
-				</div>
+			<div class="order-current-status">
+				当前订单状态： <span :style="{'color': $mainColor}">{{orderDetail.orderTypeTitle}}</span>
 			</div>
-			<div class="order-button-box flex-row flex-j-between" v-if="orderStatus === 10 || orderStatus === 20 ">
-				<div v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20 || orderDetail.orderStatus === 30" class="button-item" :style="{'color': $mainColor}" @click="toChangeOrderStatus">下一级状态： <span :style="{'color': $mainColor}">{{orerDetail.nextStatus}}</span></div>
+			<div class="order-button-box flex-row flex-j-between" v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20 || orderDetail.orderStatus === 30 ">
+				<div class="flex-row flex-a-center">
+					<div>下一级状态：</div>
+					<div v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20 || orderDetail.orderStatus === 30" class="button-item" :style="{'color': $mainColor}" @click="toChangeOrderStatus">{{orderDetail.nextStatus}}</div>
+				</div>
 				<div class="button-item" :style="{'color': $mainColor}" @click="cancellOrder">取消订单</div>
 			</div>
 			<!-- <div class="order-button-box flex-row" v-if="orderStatus === 10 || orderStatus === 20 ">
@@ -30,7 +28,7 @@
 			<div class="order-list-box">
 				<div class="order-item" v-for="(foodItem, index) in orderDetail.foodList" :key="index">
 					<div class="order-item flex-row">
-						<image class="food-img" :src="foodInfo.imgUrl ? host + foodInfo.imgUrl :'/static/img/default-img.svg'"></image>
+						<image class="food-img" :src="foodItem.imgUrl ? host + foodItem.imgUrl :'/static/img/default-img.svg'"></image>
 						<div class="flex-item flex-row flex-a-center">
 							<div class="food-info flex-col flex-j-between">
 								<div class="food-name">
@@ -119,10 +117,12 @@ import host from '@/config/host'
 				host,
 				orderKey: '',
 				orderDetail: {},
+				shopID: '',
 			}
 		},
 		onLoad(query) {
 			this.orderKey = query.orderKey;
+			this.shopID = query.shopID;
 			this.init()
 		},
 		onShow() {
@@ -132,14 +132,14 @@ import host from '@/config/host'
 		},
 		methods: {
 			async init() {
-				const res = await this.$fetch.get('/api/order/orderDetail', { orderKey: this.orderKey, shopID: this.orderDetail.shopID })
-				const orderDetail = res.data || {}
+				const res = await this.$fetch.get('/api/order/orderDetail', { orderKey: this.orderKey, shopID: this.shopID })
+				const orderDetail = res.data || {};
 				(orderDetail.foodList || []).forEach((foodItem) => {
 					foodItem.totalPrice = (foodItem.price * foodItem.orderCount).toFixed(2)
-				})
+				});
 				orderDetail.orderTypeTitle = this.getOrderTypeTitle(orderDetail.orderStatus, orderDetail.businessType)
 				orderDetail.nextStatus = this.getOrderNextStatus(orderDetail.orderStatus, orderDetail.businessType)
-				this.orderDetail = res.data || {}
+				this.orderDetail = orderDetail
 			},
 			copyOrderKey() {
 				wx.setClipboardData({
@@ -203,7 +203,7 @@ import host from '@/config/host'
 			async toChangeOrderStatus() {
 				try {
 					this.$showLoading()
-					await this.$fetch.post('/api/order/changeOrderStatus', { orderStatus: this.orderDetail.orderStatus, shopID: this.orderDetail.shopID, orderKey: this.orderKey })
+					await this.$fetch.post('/api/order/changeOrderStatus', { orderStatus: this.orderDetail.orderStatus, shopID: this.shopID, orderKey: this.orderKey })
 					this.$hideLoading()
 					await this.$showModal({
 						content: '订单状态修改成功'
@@ -217,7 +217,7 @@ import host from '@/config/host'
 			async cancellOrder() {
 				try {
 					this.$showLoading()
-					await this.$fetch.post('/api/order/cancell', { orderKey: this.orderKey, shopID: this.orderDetail.shopID })
+					await this.$fetch.post('/api/order/cancell', { orderKey: this.orderKey, shopID: this.shopID })
 					this.$hideLoading()
 					await this.$showModal({
 						content: '取消订单成功'
@@ -291,8 +291,6 @@ page {
 		height: 80rpx;
 		flex: 12
 	}
-	.food-name {
-	}
 	.food-count {
 		flex: 2
 	}
@@ -322,6 +320,9 @@ page {
 	}
 	.order-key-copy {
 		padding-left: 30rpx;
+	}
+	.order-current-status {
+		margin-top: 30rpx;
 	}
 }
 </style>
