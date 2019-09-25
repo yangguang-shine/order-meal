@@ -1,7 +1,7 @@
 <template>
     <div class="shop-list-container">
         <div class="shop-list">
-            <div v-for="(shopItem, index) in shopList" :key="index" class="shop-item flex-row" @click="toCategoryList(shopItem)">
+            <div v-for="(shopItem, index) in shopList" :key="index" class="shop-item flex-row" @click="toNextPage(shopItem)">
                 <image :src="shopItem.imgUrl ? host + shopItem.imgUrl : '/static/img/default-img.svg'" class="shop-img" mode="aspectFill"></image>
                 <div class="shop-info-box flex-item flex-col flex-j-between">
                     <div>
@@ -10,8 +10,8 @@
                     </div>
                     <div class="shop-address">{{shopItem.address}}</div>
                 </div>
-                <image v-if="!toOrder" class="delete-icon" src="/static/img/shop-delete.svg" @click.stop="toDeleteShop(shopItem)"></image>
-                <image v-if="!toOrder" class="edit-icon" src="/static/img/shop-edit.svg" @click.stop="toEditShop(shopItem)"></image>
+                <image v-if="!pageSign" class="delete-icon" src="/static/img/shop-delete.svg" @click.stop="toDeleteShop(shopItem)"></image>
+                <image v-if="!pageSign" class="edit-icon" src="/static/img/shop-edit.svg" @click.stop="toEditShop(shopItem)"></image>
             </div>
         </div>
         <div class="add-box flex-row flex-ja-center" @click="toAddShop" >
@@ -28,12 +28,14 @@ export default {
     data() {
         return {
             shopList: [],
-            toOrder: 0,
-            host
+            pageSign: '',
+            host,
+            businessType: 0
         }
     },
     onLoad(query) {
-        this.toOrder = Number(query.toOrder) || 0
+        console.log(query)
+        this.pageSign =query.pageSign || ''
         this.businessType = Number(query.businessType) || 0
     },
     onShow() {
@@ -61,23 +63,35 @@ export default {
                 })
             }
         },
-        toCategoryList(shopItem) {
-            if (this.toOrder) {
+        toNextPage(shopItem) {
+            if (this.pageSign === 'menu') {
                 this.saveOrderShopInfo(shopItem)
+                const query = {
+                    shopID: shopItem.shopID,
+                }
+                if (this.businessType) {
+                    query.businessType = this.businessType
+                }
  				this.$myrouter.push({
 					name: 'menu',
-					query: {
-						shopID: shopItem.shopID
-					}
+					query
                 })
-                return
+            } else if (this.pageSign === 'shop/orderList') {
+                this.$myrouter.push({
+                    name: 'shop/orderList',
+                    query: {
+                        shopID: shopItem.shopID
+                    }
+                })
+            } else {
+                this.$myrouter.push({
+                    name: 'category/list',
+                    query: {
+                        shopID: shopItem.shopID
+                    }
+                })
             }
-            this.$myrouter.push({
-                name: 'category/list',
-                query: {
-                    shopID: shopItem.shopID
-                }
-            })
+
         },
         pickerChange(e) {
             console.log(e)

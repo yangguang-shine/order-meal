@@ -61,7 +61,7 @@ import host from '@/config/host'
 					})
 					const orderList = (res.data || []).map((orderItem) => ({
 						...orderItem,
-						orderTypeTitle: getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType)
+						orderTypeTitle: this.getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType)
 					}))
 					console.log(orderList)
 					// this.changeOrderListUpdate({ index: this.tabIndex, status: false})
@@ -148,7 +148,7 @@ page {
 		width: 100rpx;
 	}
 	.order-list-box {
-		margin-top: 130rpx;
+		padding-top: 130rpx;
 	}
 	.order-list-item {
 		padding: 40rpx 30rpx;

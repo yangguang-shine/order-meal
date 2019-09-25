@@ -38,7 +38,7 @@ import host from '@/config/host'
 				this.$myrouter.push({
 					name: 'shop/list',
 					query: {
-						toOrder: 1,
+						pageSign: 'menu',
 						businessType
 					}
 				})

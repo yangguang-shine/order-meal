@@ -1,6 +1,10 @@
-import toLogin from '@/utils/wx'
 import router from '@/utils/router'
 import host from '@/config/host'
+import vuex from '@/store'
+
+// #ifdef MP-WEIXIN
+import toLogin from '@/utils/wx'
+// #endif
 import Cookies from 'js-cookie'
 
 // #ifdef H5
@@ -22,15 +26,25 @@ const fly = new Fly;
 fly.config.timeout = 30000;
 fly.config.baseURL = host;
 
-fly.interceptors.request.use((request)=>{
+fly.interceptors.request.use(async (request)=>{
+
+    // #ifdef MP-WEIXIN
+    await toLogin()
+    // #endif
+
     const token = uni.getStorageSync('token')
+
+    // #ifdef H5
     if (token) {
         Cookies.set('token', `${token}`)
         request.headers.token = `${token}`;
     }
+    // #endif
+
     // #ifdef MP-WEIXIN
     request.headers['cookie']=`token=${token};`;
     // #endif
+    request.params.channel = vuex.state.channel
     return request;
 })
 fly.interceptors.response.use(
@@ -71,6 +85,7 @@ const flyRequest = (url, params, options, method) => {
                         cancelText: '取消登录',
                         success: async (res) => {
                             if (res.confirm) {
+                                // #ifdef MP-WEIXIN
                                 uni.showLoading({
                                     title: '登录中'
                                 })
@@ -84,6 +99,7 @@ const flyRequest = (url, params, options, method) => {
                                         name: 'home'
                                     })
                                 }, 1500)
+                                // #endif
                             }
                         }
                     })

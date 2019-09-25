@@ -27,20 +27,22 @@
 			<div class="shop-info-box line1">
 				新微信餐厅正餐店
 			</div>
-			<div v-show="orderDetail.foodList.length" class="order-list-box" v-for="(foodItem, index) in orderDetail.foodList" :key="index">
-				<div class="order-item flex-row">
-					<image class="food-img" src=""></image>
-					<div class="flex-item flex-row flex-a-center">
-						<div class="food-info flex-col flex-j-between">
-							<div class="food-name">
-								{{foodItem.foodName}}
+			<div class="order-list-box">
+				<div class="order-item" v-for="(foodItem, index) in orderDetail.foodList" :key="index">
+					<div class="order-item flex-row">
+						<image class="food-img" :src="foodInfo.imgUrl ? host + foodInfo.imgUrl :'/static/img/default-img.svg'"></image>
+						<div class="flex-item flex-row flex-a-center">
+							<div class="food-info flex-col flex-j-between">
+								<div class="food-name">
+									{{foodItem.foodName}}
+								</div>
+								<div class="food-price">
+									¥{{foodItem.price}}
+								</div>
 							</div>
-							<div class="food-price">
-								¥{{foodItem.price}}
-							</div>
+							<div class="food-count">×{{foodItem.orderCount}}</div>
+							<div class="food-total-price">¥{{foodItem.totalPrice}}</div>
 						</div>
-						<div class="food-count">×{{foodItem.orderCount}}</div>
-						<div class="food-item-price">¥{{(foodItem.price * foodItem.orderCount).toFixed(2)}}</div>
 					</div>
 				</div>
 			</div>
@@ -59,13 +61,13 @@
 						已优惠
 					</div>
 					<div v-if="orderDetail.minusPrice">
-						¥8.12
+						¥{{orderDetail.minusPrice}}
 					</div>
 					<div>
 						总价
 					</div>
 					<div>
-						¥8.12
+						¥{{orderDetail.orderAmount}}
 					</div>
 				</div>
 			</div>
@@ -85,13 +87,13 @@
 					{{orderDetail.orderTime}}
 				</div>
 			</div>
-			<div class="order-ext-item flex-row flex-j-between">
+			<div v-if="orderDetail.selfTakeTime" class="order-ext-item flex-row flex-j-between">
 				<div>自提时间</div>
 				<div>
 					{{orderDetail.selfTakeTime}}
 				</div>
 			</div>
-			<div class="order-ext-item flex-row flex-j-between">
+			<div v-if="orderDetail.takeOutTime" class="order-ext-item flex-row flex-j-between">
 				<div>送达时间</div>
 				<div>
 					{{orderDetail.takeOutTime}}
@@ -132,6 +134,9 @@ import host from '@/config/host'
 			async init() {
 				const res = await this.$fetch.get('/api/order/orderDetail', { orderKey: this.orderKey, shopID: this.orderDetail.shopID })
 				const orderDetail = res.data || {}
+				(orderDetail.foodList || []).forEach((foodItem) => {
+					foodItem.totalPrice = (foodItem.price * foodItem.orderCount).toFixed(2)
+				})
 				orderDetail.orderTypeTitle = this.getOrderTypeTitle(orderDetail.orderStatus, orderDetail.businessType)
 				orderDetail.nextStatus = this.getOrderNextStatus(orderDetail.orderStatus, orderDetail.businessType)
 				this.orderDetail = res.data || {}
@@ -195,7 +200,7 @@ import host from '@/config/host'
 				}
 				return ''
 			},
-			toChangeOrderStatus() {
+			async toChangeOrderStatus() {
 				try {
 					this.$showLoading()
 					await this.$fetch.post('/api/order/changeOrderStatus', { orderStatus: this.orderDetail.orderStatus, shopID: this.orderDetail.shopID, orderKey: this.orderKey })
@@ -205,6 +210,7 @@ import host from '@/config/host'
 					})
 					this.init()
 				} catch(e) {
+					this.$hideLoading()
 					console.log(e)
 				}
 			},
@@ -218,6 +224,7 @@ import host from '@/config/host'
 					})
 					this.init()
 				} catch(e) {
+					this.$hideLoading()
 					console.log(e)
 				}
 			}
@@ -238,6 +245,7 @@ page {
 		padding: 40rpx 30rpx 30rpx;
 		border-radius: 12rpx;
 		margin-bottom: 20rpx;
+		background-color: #fff;
 	}
 	.order-status {
 		font-size: 36rpx;
@@ -258,9 +266,10 @@ page {
 		border: 2rpx solid;
 	}
 	.order-info-box {
-		padding: 40rpx 30rpx 30rpx;
+		padding: 30rpx;
 		border-radius: 12rpx;
 		margin-bottom: 20rpx;
+		background-color: #fff;
 	}
 	.shop-info-box {
 		font-size: 36rpx;
@@ -276,17 +285,18 @@ page {
 	.food-img {
 		height: 80rpx;
 		width: 80rpx;
+		margin-right: 20rpx;
 	}
 	.food-info {
 		height: 80rpx;
+		flex: 12
 	}
 	.food-name {
-		flex: 12
 	}
 	.food-count {
 		flex: 2
 	}
-	.food-price {
+	.food-total-price {
 		flex: 3
 	}
 	.minus-box {
@@ -298,9 +308,10 @@ page {
 		margin-right: 20rpx;
 	}
 	.order-ext-box {
-		padding: 40rpx 30rpx 30rpx;
+		padding: 30rpx;
 		border-radius: 12rpx;
 		margin-bottom: 20rpx;
+		background-color: #fff;
 	}
 	.order-ext-title {
 		font-size: 34rpx;

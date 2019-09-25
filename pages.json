@@ -56,63 +56,77 @@
 		{
 			"path": "pages/menu/confirmOrder/index",
 			"style": {
-				"navigationBarTitleText": "点餐",
+				"navigationBarTitleText": "确认订单",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
 			"path": "pages/center/shop/list/index",
 			"style": {
-				"navigationBarTitleText": "点餐",
+				"navigationBarTitleText": "店铺列表",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
 			"path": "pages/center/shop/edit/index",
 			"style": {
-				"navigationBarTitleText": "点餐",
+				"navigationBarTitleText": "店铺编辑",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
 			"path": "pages/center/category/list/index",
 			"style": {
-				"navigationBarTitleText": "点餐",
+				"navigationBarTitleText": "菜品分类列表",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
 			"path": "pages/center/category/edit/index",
 			"style": {
-				"navigationBarTitleText": "点餐",
+				"navigationBarTitleText": "菜品分类编辑",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
 			"path": "pages/center/food/list/index",
 			"style": {
-				"navigationBarTitleText": "点餐",
+				"navigationBarTitleText": "菜品列表",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
 			"path": "pages/center/food/edit/index",
 			"style": {
-				"navigationBarTitleText": "点餐",
+				"navigationBarTitleText": "菜品编辑",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
 			"path": "pages/center/address/list/index",
 			"style": {
-				"navigationBarTitleText": "点餐",
+				"navigationBarTitleText": "地址列表",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
 			"path": "pages/center/address/edit/index",
 			"style": {
-				"navigationBarTitleText": "点餐",
+				"navigationBarTitleText": "地址编辑",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/center/shop/order/list/index",
+			"style": {
+				"navigationBarTitleText": "店铺订单列表",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/center/shop/order/detail/index",
+			"style": {
+				"navigationBarTitleText": "店铺订单详情",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		}

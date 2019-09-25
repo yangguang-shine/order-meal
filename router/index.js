@@ -7,6 +7,14 @@ const shopList = [
 		name: 'shop/edit',
 		path: '/pages/center/shop/edit/index'
 	},
+	{
+		name: 'shop/orderList',
+		path: '/pages/center/shop/order/list/index'
+	},
+	{
+		name: 'shop/orderDetail',
+		path: '/pages/center/shop/order/detail/index'
+	},
 ]
 
 const categoryList = [

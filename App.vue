@@ -1,14 +1,9 @@
 <script>
-	// #ifdef MP-WEIXIN
-	import toLogin from '@/utils/wx'
-	// #endif
+
 	export default {
 		async onLaunch() {
 			try {
 				console.log('App Launch')
-				// #ifdef MP-WEIXIN
-				await toLogin()
-				// #endif
 			} catch (e) {
 				console.log(e)
 			}
