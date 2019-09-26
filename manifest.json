@@ -77,10 +77,10 @@
     },
     "h5" : {
         "router" : {
-            "mode" : "hash",
-            "base" : ""
+            "mode" : "history",
+            "base" : "/h5/"
         },
         "title" : "公众号",
-        "domain" : ""
+        "domain" : "http://9bw7hb.natappfree.cc"
     }
 }

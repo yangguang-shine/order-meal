@@ -122,13 +122,6 @@
 				"navigationBarTitleText": "店铺订单列表",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
-		},
-		{
-			"path": "pages/center/shop/order/detail/index",
-			"style": {
-				"navigationBarTitleText": "店铺订单详情",
-				"navigationBarBackgroundColor": "#ffffff"
-			}
 		}
 	],
 	"tabBar": {

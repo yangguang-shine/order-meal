@@ -30,13 +30,13 @@ export default {
             shopList: [],
             pageSign: '',
             host,
-            businessType: 0
+            businessType: ''
         }
     },
     onLoad(query) {
         console.log(query)
         this.pageSign =query.pageSign || ''
-        this.businessType = Number(query.businessType) || 0
+        this.businessType = Number(query.businessType) || ''
     },
     onShow() {
         this.init()
@@ -66,15 +66,12 @@ export default {
         toNextPage(shopItem) {
             if (this.pageSign === 'menu') {
                 this.saveOrderShopInfo(shopItem)
-                const query = {
-                    shopID: shopItem.shopID,
-                }
-                if (this.businessType) {
-                    query.businessType = this.businessType
-                }
  				this.$myrouter.push({
 					name: 'menu',
-					query
+					query: {
+                        shopID: shopItem.shopID,
+                        businessType: this.businessType
+                    }
                 })
             } else if (this.pageSign === 'shop/orderList') {
                 this.$myrouter.push({
