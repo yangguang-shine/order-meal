@@ -33,11 +33,19 @@ import host from '@/config/host'
 				password: '',
 				confirmPassword: '',
 				nickname: '',
+				manage: ''
 			}
 		},
-		onUnload() {
+		onLoad(query) {
+			this.manage = query.manage
 		},
 		methods: {
+			toLoginPage() {
+				this.$myrouter.replace({
+					name: 'login',
+					manage: this.manage
+				})
+			},
 			async register() {
 				const phonereg = /^\d+$/
 				const passwordreg = /^\w+$/
@@ -67,13 +75,30 @@ import host from '@/config/host'
 				}
 				try {
 					this.$showLoading()
-					const res = await this.$fetch.post('/user/h5/register', { phone: this.phone, password: this.password, nickname: this.nickname })
-					uni.setStorageSync('token', res.data.token || '')
+					let res = ''
+					if (this.manage) {
+						res = await this.$fetch.post('/manage/user/register', { phone: this.phone, password: this.password })
+					} else {
+						res = await this.$fetch.post('/user/h5/register', { phone: this.phone, password: this.password })
+					}
+					if (this.manage) {
+						uni.setStorageSync('manageToken', res.data.manageToken || '')
+					} else {
+						uni.setStorageSync('token', res.data.token || '')
+					}
 					this.$hideLoading()
 					await this.$showModal({
 						content: '注册成功'
 					})
-					this.r
+					if (this.manage) {
+						this.$myrouter.reLaunch ({
+							name: 'manage'
+						})
+					} else {
+						this.$myrouter.reLaunch ({
+							name: 'home'
+						})
+					}
 				} catch (e) {
 					console.log(e)
 					this.$hideLoading()

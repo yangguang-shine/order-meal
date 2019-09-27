@@ -10,7 +10,7 @@
 				<input class="input-item flex-item" type="text" v-model="password" max-length="50" placeholder="请输入密码">
 			</div>
 			<div class="submit-button" :style="{'background-color': $mainColor}" @click="login">登录</div>
-			<div class="to-login-box">没有账号，<span :style="{'color': $mainColor}" @click="toLoginPage">去注册</span></div>
+			<div class="to-login-box">没有账号，<span :style="{'color': $mainColor}" @click="toRegisterPage">去注册</span></div>
 		</div>
 	</view>
 </template>
@@ -23,11 +23,23 @@ import host from '@/config/host'
 			return {
 				phone: '',
 				password: '',
+				manage: ''
 			}
+		},
+		onLoad(query) {
+			this.manage = query.manage
 		},
 		onUnload() {
 		},
 		methods: {
+			toRegisterPage() {
+				this.$myrouter.replace({
+					name: 'register',
+					query: {
+						manage: this.manage
+					}
+				})
+			},
 			async login() {
 				const phonereg = /^\d+$/
 				const passwordreg = /^\w+$/
@@ -45,15 +57,30 @@ import host from '@/config/host'
 				}
 				try {
 					this.$showLoading()
-					const res = await this.$fetch.post('/user/h5/login', { phone: this.phone, password: this.password })
+					let res = {}
+					if (this.manage) {
+						res = await this.$fetch.post('/manage/user/login', { phone: this.phone, password: this.password })
+					} else {
+						res = await this.$fetch.post('/user/h5/login', { phone: this.phone, password: this.password })
+					}
 					this.$hideLoading()
-					uni.setStorageSync('token', res.data.token || '')
+					if (this.manage) {
+						uni.setStorageSync('manageToken', res.data.manageToken || '')
+					} else {
+						uni.setStorageSync('token', res.data.token || '')
+					}
 					await this.$showModal({
 						content: '登录成功'
 					})
-					this.$myrouter.relaunch({
-						name: 'home'
-					})
+					if (this.manage) {
+						this.$myrouter.reLaunch ({
+							name: 'manage'
+						})
+					} else {
+						this.$myrouter.reLaunch ({
+							name: 'home'
+						})
+					}
 				} catch (e) {
 					console.log(e)
 					this.$hideLoading()

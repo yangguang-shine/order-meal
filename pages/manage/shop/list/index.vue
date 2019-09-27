@@ -10,11 +10,11 @@
                     </div>
                     <div class="shop-address">{{shopItem.address}}</div>
                 </div>
-                <image v-if="!pageSign" class="delete-icon" src="/static/img/shop-delete.svg" @click.stop="toDeleteShop(shopItem)"></image>
-                <image v-if="!pageSign" class="edit-icon" src="/static/img/shop-edit.svg" @click.stop="toEditShop(shopItem)"></image>
+                <image v-if="!pageSign || !allShopList" class="delete-icon" src="/static/img/shop-delete.svg" @click.stop="toDeleteShop(shopItem)"></image>
+                <image v-if="!pageSign || !allShopList" class="edit-icon" src="/static/img/shop-edit.svg" @click.stop="toEditShop(shopItem)"></image>
             </div>
         </div>
-        <div class="add-box flex-row flex-ja-center" @click="toAddShop" >
+        <div v-if="!allShopList" class="add-box flex-row flex-ja-center" @click="toAddShop" >
             <image class="add-icon" src="/static/img/shop-add.svg"></image>
         </div> 
     </div>
@@ -30,12 +30,14 @@ export default {
             shopList: [],
             pageSign: '',
             host,
-            businessType: ''
+            businessType: '',
+            allShopList: ''
         }
     },
     onLoad(query) {
         console.log(query)
         this.pageSign =query.pageSign || ''
+        this.allShopList =query.allShopList || ''
         this.businessType = Number(query.businessType) || ''
     },
     onShow() {
@@ -48,7 +50,9 @@ export default {
         async init() {
             try {
                 this.$showLoading()
-                const query = {}
+                const query = {
+                    allShopList: this.allShopList
+                }
                 if (this.businessType) {
                     query.businessType = this.businessType
                 }

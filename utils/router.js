@@ -15,7 +15,7 @@ const router = (api) => (params = {}) => {
 }
 export default {
 	push: router('navigateTo'),
-	raplace: router('redirectTo'),
+	replace: router('redirectTo'),
 	reLaunch: router('reLaunch'),
 	switchTab: router('switchTab'),
 	back: router('navigateBack'),

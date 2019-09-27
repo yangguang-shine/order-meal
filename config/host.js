@@ -1,2 +1,2 @@
-const host = 'http://localhost:8080'
+const host = 'http://5tfgsf.natappfree.cc'
 export default host
