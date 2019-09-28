@@ -61,6 +61,7 @@ mutations['saveOrderShopInfo'] = (state, shopInfo = {}) => {
         state.shopInfo = shopInfo
     }
 }
+
 mutations['clearCart'] = (state, shopInfo = {}) => {
     state.cartFoodList.forEach((categoryTtem) => {
         categoryTtem.foodList.forEach((foodItem) => {
@@ -78,7 +79,12 @@ mutations['changeAllOrderListUpdate'] = (state, status = [true, true, true, true
 mutations['changeOrderListUpdate'] = (state,{ index, status = true } = {}) => {
     state.orderListUpdate[index] = status
 }
+
 mutations['saveDefaultAddress'] = (state, address = {}) => {
     state.defaultAddress = address
 }
+mutations['saveBusinessType'] = (state, businessType) => {
+    state.businessType = Number(businessType)
+}
+
 export default mutations

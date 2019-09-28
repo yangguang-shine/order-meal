@@ -18,7 +18,7 @@
         </div>
 		<div class="flex-row flex-a-center">
 			<div class="title">店铺图片：</div>
-			<image class="food-img" :src="foodInfo.imgUrl ? host + foodInfo.imgUrl :'/static/img/default-img.svg'" @click="chooseImg"></image>
+			<image class="food-img" mode="aspectFill" :src="foodInfo.imgUrl ? host + foodInfo.imgUrl :'/static/img/default-img.svg'" @click="chooseImg"></image>
 		</div>
 		<div class="flex-row flex-ja-center">
 			<div v-if="foodID" class="food-button" @click="editFood" :style="{'background-color': $mainColor}">

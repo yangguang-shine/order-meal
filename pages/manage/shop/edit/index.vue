@@ -39,7 +39,7 @@
         </div>
         <div class="flex-row flex-a-center">
 			<div class="title">店铺图片：</div>
-			<image class="food-img" :src="shopInfo.imgUrl ? host + shopInfo.imgUrl : '/static/img/default-img.svg'" @click="chooseImg"></image>
+			<image class="food-img" mode="aspectFill" :src="shopInfo.imgUrl ? host + shopInfo.imgUrl : '/static/img/default-img.svg'" @click="chooseImg"></image>
 		</div>
         <div class="edit-item-minus flex-row">
             <div class="title">满减营销：</div>

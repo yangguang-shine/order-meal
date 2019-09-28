@@ -7,7 +7,7 @@
 		<view v-show="tabIndex === allOrderIndex" class="order-list-box" v-for="(orderList, allOrderIndex) in allOrderList" :key="allOrderIndex">
 			<div class="order-list-item" v-for="(orderItem, index) in orderList" :key="index">
 				<div class="flex-row">
-					<image class="shop-img" :src="orderItem.imgUrl ? host + orderItem.imgUrl : '/static/img/default-img.svg'"></image>
+					<image class="shop-img" mode="aspectFill" :src="orderItem.imgUrl ? host + orderItem.imgUrl : '/static/img/default-img.svg'"></image>
 					<div class="flex-item flex-col flex-j-between">
 						<div class="flex-row felx-a-center">
 							<div class="shop-name line1">{{orderItem.shopName}}</div>

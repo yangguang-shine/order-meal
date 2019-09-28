@@ -3,6 +3,7 @@ const state = {
     cartFoodList: [],
     orderListUpdate: [true, true, true, true],
     defaultAddress: {},
+    businessType: '',
     // #ifdef MP-WEIXIN
     channel: 10,
     // #endif

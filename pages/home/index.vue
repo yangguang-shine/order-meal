@@ -7,6 +7,7 @@
 		</swiper> -->
 		<div @click="toShopList(2)">外卖</div>
 		<div @click="toShopList(3)">自提</div>
+		<div @click="toShopList('')">所有类型</div>
 		<!-- <div class="login" @click="toLogin">login</div> -->
 		<!-- <button open-type="getUserInfo">授权</button> -->
 		<!-- <div class="flex-row">

@@ -33,7 +33,7 @@
 			<div class="order-list-box">
 				<div class="order-item" v-for="(foodItem, index) in orderDetail.foodList" :key="index">
 					<div class="order-item flex-row">
-						<image class="food-img" :src="foodItem.imgUrl ? host + foodItem.imgUrl :'/static/img/default-img.svg'"></image>
+						<image class="food-img" :src="foodItem.imgUrl ? host + foodItem.imgUrl :'/static/img/default-img.svg'" mode="aspectFill" ></image>
 						<div class="flex-item flex-row flex-a-center">
 							<div class="food-info flex-col flex-j-between">
 								<div class="food-name">
@@ -50,7 +50,7 @@
 				</div>
 			</div>
 			<div class="minus-box flex-row" v-if="orderDetail.minusPrice">
-				<image class="minus-icon" src="/static/img/orderMinus.svg"></image>
+				<image class="minus-icon" src="/static/img/orderMinus.svg" ></image>
 				<div class="flex-row flex-j-between">
 					<div class="minus-title">满减优惠</div>
 					<div class="minus-price">-¥{{orderDetail.minusPrice}}</div>
@@ -207,14 +207,10 @@ import host from '@/config/host'
 				wx.setClipboardData({
 					data: `${this.orderDetail.orderKey}`,
 					success: () => {
-						wx.getClipboardData({
-							success: () => {
-								wx.showToast({
-									title: '订单号已复制',
-									icon: 'none',
-									duration: 2000
-								})
-							}
+						wx.showToast({
+							title: '订单号已复制',
+							icon: 'none',
+							duration: 2000
 						})
 					}
 				})
@@ -295,8 +291,6 @@ page {
 	.food-info {
 		height: 80rpx;
 		flex: 12
-	}
-	.food-name {
 	}
 	.food-count {
 		flex: 2

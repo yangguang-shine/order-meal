@@ -2,12 +2,12 @@
 	<div class="menu-container flex-col">
 		<!-- <div class="menu-header"></div> -->
 		<div class="order-main flex-item flex-row">
-			<div class="category-aside-box">
+			<scroll-view scroll-y class="category-aside-box">
 				<div class="aside-category-item flex-row flex-a-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :style="{'border-left': selectCategoryTabId === asideCategoryItem.scrollID ? '10rpx solid ' + $mainColor : '', 'background-color': selectCategoryTabId === asideCategoryItem.scrollID ? '#fff' : ''}" @click="changeSelectCategoryTab(asideCategoryItem.scrollID)">
 					{{asideCategoryItem.categoryName}}
 					<div v-if="asideCategoryItem.orderCount" class="category-order-count" :style="{'background': $mainColor}">{{asideCategoryItem.orderCount}}</div>
 				</div>
-			</div>
+			</scroll-view>
 			<scroll-view scroll-y :scroll-into-view="scrollCategoryID" class="food-main-box flex-item" @scroll="listScroll">
 				<div class="food-category-list-item" :data-food-category-item="JSON.stringify(foodCategoryItem)" v-for="(foodCategoryItem, index) in foodCategoryList" :key="index">
 					<div :id="foodCategoryItem.scrollID" class="food-category-name">{{foodCategoryItem.categoryName}}</div>
@@ -43,7 +43,7 @@
 		</div>
 		<div class="footer-cart flex-row flex-j-between flex-a-center" >
 			<div class="cart-img-box">
-					<image class="cart-img" @click="changeShowCartDetail" src="/static/img/cart-icon.png"></image>
+					<image class="cart-img" @click="changeShowCartDetail" src="/static/img/cart-icon.png" mode="aspectFill" ></image>
 					<div v-if="allCartFoodCount" class="cart-all-count" :style="{'background': $mainColor}">
 						{{allCartFoodCount}}
 					</div>
@@ -65,7 +65,7 @@
 				<scroll-view scroll-y class="cart-detail-list-box" @click.stop>
 					<div class="food-category-item" v-for="(foodCategoryItem, index) in cartFoodList" :key="index">
 						<div class="cart-food-item flex-row" v-for="(cartFoodItem, cartFoodIndex) in foodCategoryItem.foodList" :key="cartFoodIndex">
-							<image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="cartFoodItem.imgUrl ? host + cartFoodItem.imgUrl : '/static/img/default-img.svg'"></image>
+							<image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="cartFoodItem.imgUrl ? host + cartFoodItem.imgUrl : '/static/img/default-img.svg'" mode="aspectFill" ></image>
 							<div v-if="cartFoodItem.orderCount" class="cart-food-info-box flex-item flex-col flex-j-between">
 								<div class="cart-food-name-description">
 									<div class="cart-food-name">
@@ -114,7 +114,8 @@ export default {
 	computed: {
 		...mapState({
 			cartFoodList: state => state.cartFoodList,
-			shopInfo: state => state.shopInfo
+			shopInfo: state => state.shopInfo,
+			businessType: state => state.businessType
 		}),
 		cartFoodListMainColor() {
 			return this.cartFoodList.length ? this.$mainColor: ''
@@ -309,7 +310,7 @@ export default {
 			// console.log(foodList)
 			// const res = await this.$fetch.post('/api/order/submit', { foodList })
 			this.$myrouter.push({
-					name: 'confirmOrder'
+				name: 'confirmOrder'
 			})
 		}
 	}
@@ -390,7 +391,6 @@ page {
 		.category-aside-box {
 			width: 200rpx;
 			height: 100%;
-			overflow-y: auto;
 			background-color: #f5f5f5;
 			flex-shrink: 0;
 			.aside-category-item {
@@ -418,6 +418,8 @@ page {
 		}
 		.food-main-box {
 			// background-color: blue;
+			height: 100%;
+			flex-shrink: 0;
 			.food-category-list-item {
 				padding: 0 30rpx;
 				margin-bottom: 20rpx;

@@ -1,7 +1,16 @@
 <script>
+// #ifdef H5
+import Cookies from 'js-cookie'
+// #endif
 
 	export default {
-		async onLaunch() {
+		onLaunch() {
+			// #ifdef H5
+        	const token = Cookies.get('token')
+			const manageToken = Cookies.get('manageToken')
+			uni.setStorageSync('token', token)
+			uni.setStorageSync('manageToken', manageToken)
+			// #endif
 			try {
 				console.log('App Launch')
 			} catch (e) {

@@ -2,7 +2,7 @@
 	<view class="food-list-container flex-col">
 		<!-- <image class="logo" src="/static/logo.png"></image> -->
 		<div v-for="(foodItem, index) in foodList" :key="index" class="food-item flex-row " @click="toEdit(foodItem.foodID)">
-			<image class="food-img" :src="foodItem.imgUrl ? host + foodItem.imgUrl : '/static/img/default-img.svg'"></image>
+			<image class="food-img" mode="aspectFill" :src="foodItem.imgUrl ? host + foodItem.imgUrl : '/static/img/default-img.svg'"></image>
 			<div class="food-info flex-item flex-col flex-j-between">
 				<div>
 					<div class="line1 food-name">

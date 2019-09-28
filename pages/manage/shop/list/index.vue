@@ -45,7 +45,8 @@ export default {
     },
     methods: {
         ...mapMutations({
-            saveOrderShopInfo: 'saveOrderShopInfo'
+            saveOrderShopInfo: 'saveOrderShopInfo',
+            saveBusinessType: 'saveBusinessType'
         }),
         async init() {
             try {
@@ -70,11 +71,11 @@ export default {
         toNextPage(shopItem) {
             if (this.pageSign === 'menu') {
                 this.saveOrderShopInfo(shopItem)
+                this.saveBusinessType(this.businessType)
  				this.$myrouter.push({
 					name: 'menu',
 					query: {
                         shopID: shopItem.shopID,
-                        businessType: this.businessType
                     }
                 })
             } else if (this.pageSign === 'shop/orderList') {
