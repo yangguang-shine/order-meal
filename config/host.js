@@ -1,2 +1,2 @@
-const host = 'http://kc783r.natappfree.cc'
+const host = 'http://6nxhaf.natappfree.cc'
 export default host

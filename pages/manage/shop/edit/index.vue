@@ -212,20 +212,9 @@ export default {
                 this.$myrouter.back()
             } catch (e) {
                 this.$hideLoading()
-                this.$showModal({
-                    content: '修改失败'
-                })
                 console.log(e)
             }
         },
-        // async deleteShop() {
-        //     try {
-        //         await this.$fetch.post('/api/shop/delete', { shopID: this.shopID })
-        //         this.$myrouter.back()
-        //     } catch (e) {
-        //         console.log(e)
-        //     }
-        // },
         async addShop() {
             try {
                 this.getShopBusinessTypes()
@@ -244,9 +233,6 @@ export default {
                 this.$myrouter.back()
             } catch (e) {
                 this.$hideLoading()
-                await this.$showModal({
-                    content: '添加失败'
-                })
                 console.log(e)
             }
         },

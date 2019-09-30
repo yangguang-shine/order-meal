@@ -2,13 +2,13 @@
 	<div class="menu-container flex-col">
 		<!-- <div class="menu-header"></div> -->
 		<div class="order-main flex-item flex-row">
-			<scroll-view scroll-y class="category-aside-box">
+			<scroll-view scroll-y class="category-aside-box" :style="{'padding-bottom': minusPromotionsTitle ? '50rpx' : ''}">
 				<div class="aside-category-item flex-row flex-a-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :style="{'border-left': selectCategoryTabId === asideCategoryItem.scrollID ? '10rpx solid ' + $mainColor : '', 'background-color': selectCategoryTabId === asideCategoryItem.scrollID ? '#fff' : ''}" @click="changeSelectCategoryTab(asideCategoryItem.scrollID)">
 					{{asideCategoryItem.categoryName}}
 					<div v-if="asideCategoryItem.orderCount" class="category-order-count" :style="{'background': $mainColor}">{{asideCategoryItem.orderCount}}</div>
 				</div>
 			</scroll-view>
-			<scroll-view scroll-y :scroll-into-view="scrollCategoryID" class="food-main-box flex-item" @scroll="listScroll">
+			<scroll-view scroll-y :scroll-into-view="scrollCategoryID" class="food-main-box flex-item" :style="{'padding-bottom': minusPromotionsTitle ? '50rpx' : ''}">
 				<div class="food-category-list-item" :data-food-category-item="JSON.stringify(foodCategoryItem)" v-for="(foodCategoryItem, index) in foodCategoryList" :key="index">
 					<div :id="foodCategoryItem.scrollID" class="food-category-name">{{foodCategoryItem.categoryName}}</div>
 					<div class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex">
@@ -393,6 +393,8 @@ page {
 			height: 100%;
 			background-color: #f5f5f5;
 			flex-shrink: 0;
+			box-sizing: border-box;
+			padding-bottom: 40rpx;
 			.aside-category-item {
 				position: relative;
 				padding: 0 20rpx;
@@ -420,6 +422,7 @@ page {
 			// background-color: blue;
 			height: 100%;
 			flex-shrink: 0;
+			box-sizing: border-box;
 			.food-category-list-item {
 				padding: 0 30rpx;
 				margin-bottom: 20rpx;

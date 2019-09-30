@@ -1,20 +1,9 @@
 <template>
     <div class="shop-list-container">
         <div class="shop-list">
-            <div v-for="(shopItem, index) in shopList" :key="index" class="shop-item flex-row" @click="toNextPage(shopItem)">
-                <image :src="shopItem.imgUrl ? host + shopItem.imgUrl : '/static/img/default-img.svg'" class="shop-img" mode="aspectFill"></image>
-                <div class="shop-info-box flex-item flex-col flex-j-between">
-                    <div>
-                        <div class="shop-name line1">{{shopItem.shopName}}</div>
-                        <div class="shop-open-time">{{shopItem.startTime}}--{{shopItem.endTime}}</div>
-                    </div>
-                    <div class="shop-address">{{shopItem.address}}</div>
-                </div>
-                <image v-if="!pageSign || !allShopList" class="delete-icon" src="/static/img/shop-delete.svg" @click.stop="toDeleteShop(shopItem)"></image>
-                <image v-if="!pageSign || !allShopList" class="edit-icon" src="/static/img/shop-edit.svg" @click.stop="toEditShop(shopItem)"></image>
-            </div>
+            <shop v-for="(shopItem, index) in shopList" :key="index" :shopItem="shopItem" :pageSign="pageSign" :allShopList="allShopList" @clickShopItem="toNextPage"></shop>
         </div>
-        <div v-if="!allShopList" class="add-box flex-row flex-ja-center" @click="toAddShop" >
+        <div v-if="!pageSign && !allShopList" class="add-box flex-row flex-ja-center" @click="toAddShop" >
             <image class="add-icon" src="/static/img/shop-add.svg"></image>
         </div> 
     </div>
@@ -23,8 +12,12 @@
 <script>
 import { mapMutations } from 'vuex'
 import host from '@/config/host'
+import shop from '@/components/shop'
 
 export default {
+    components:{
+        shop
+    },
     data() {
         return {
             shopList: [],

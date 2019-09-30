@@ -33,19 +33,23 @@ fly.interceptors.request.use(async (request)=>{
     // #endif
 
     const token = uni.getStorageSync('token')
+    let manageToken = uni.getStorageSync('manageToken') || Cookies.get('manageToken')
 
     // #ifdef H5
-    let manageToken = uni.getStorageSync('manageToken') || Cookies.get('manageToken')
     if (token) {
         Cookies.set('token', `${token}`)
         Cookies.set('manageToken', `${manageToken}`)
         request.headers.token = `${token}`;
         request.headers.manageToken = `${manageToken}`;
+    } else {
+        // #ifdef MP-WEIXIN
+        await toLogin()
+        // #endif
     }
     // #endif
 
     // #ifdef MP-WEIXIN
-    request.headers['cookie']=`token=${token};`;
+    request.headers['cookie']=`token=${token};manageToken=${manageToken}`;
     // #endif
     request.params.channel = vuex.state.channel
     return request;

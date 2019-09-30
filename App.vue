@@ -2,9 +2,13 @@
 // #ifdef H5
 import Cookies from 'js-cookie'
 // #endif
+// #ifdef MP-WEIXIN
+import toLogin from '@/utils/wx'
+// #endif
 
 	export default {
 		onLaunch() {
+			toLogin()
 			// #ifdef H5
         	const token = Cookies.get('token')
 			const manageToken = Cookies.get('manageToken')

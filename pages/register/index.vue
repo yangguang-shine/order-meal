@@ -69,7 +69,7 @@ import host from '@/config/host'
 				}
 				if (!this.nickname) {
 					this.$showModal({
-						content: '两次输入昵称'
+						content: '请输入昵称'
 					})
 					return
 				}
@@ -77,9 +77,9 @@ import host from '@/config/host'
 					this.$showLoading()
 					let res = ''
 					if (this.manage) {
-						res = await this.$fetch.post('/manage/user/register', { phone: this.phone, password: this.password })
+						res = await this.$fetch.post('/manage/user/register', { phone: this.phone, password: this.password, nickname: this.nickname })
 					} else {
-						res = await this.$fetch.post('/user/h5/register', { phone: this.phone, password: this.password })
+						res = await this.$fetch.post('/user/h5/register', { phone: this.phone, password: this.password, nickname: this.nickname })
 					}
 					if (this.manage) {
 						uni.setStorageSync('manageToken', res.data.manageToken || '')
