@@ -1,10 +1,10 @@
 <template>
 	<view class="home-container">
-		<!-- <swiper class="swiper-box" autoplay="true" easing-function="easeInOutCubic" circular="true">
+		<swiper class="swiper-box" autoplay="true" easing-function="easeInOutCubic" circular="true">
 			<swiper-item class="swiper-item" v-for="(img, index) in imgList" :key="index" @click="toShopList">
 				<image class="swiper-item-img" :src="img" mode="widthFix"></image>
 			</swiper-item>
-		</swiper> -->
+		</swiper>
 		<div class="business-type-box flex-row">
 			<div class="type-item-box flex-item flex-col flex-ja-center">
 				<div class="type-item flex-col flex-ja-center" :style="{'background': $mainColor}" @click="toShopList('')">

@@ -141,26 +141,26 @@
 			{
 				"pagePath": "pages/home/index",
 				"text": "首页",
-				"selectedIconPath": "/static/img/IntegralToNowActive.png",
-				"iconPath": "/static/img/IntegralToNow.png"
+				"selectedIconPath": "/static/img/home-active.png",
+				"iconPath": "/static/img/home.png"
 			},
 			{
 				"pagePath": "pages/order/index",
 				"text": "订单",
-				"selectedIconPath": "static/img/IntegralPresentActive.png",
-				"iconPath": "static/img/IntegralPresent.png"
+				"selectedIconPath": "static/img/order-active.png",
+				"iconPath": "static/img/order.png"
 			},
 			{
 				"pagePath": "pages/center/index",
 				"text": "我的",
-				"selectedIconPath": "/static/img/vipPriceActive.png",
-				"iconPath": "/static/img/vipPrice.png"
+				"selectedIconPath": "/static/img/center-active.png",
+				"iconPath": "/static/img/center.png"
 			},
 			{
 				"pagePath": "pages/manage/index",
 				"text": "管理",
-				"selectedIconPath": "/static/img/vipPriceActive.png",
-				"iconPath": "/static/img/vipPrice.png"
+				"selectedIconPath": "/static/img/manage-active.png",
+				"iconPath": "/static/img/manage.png"
 			}
 		]
 	},

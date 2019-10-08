@@ -262,13 +262,13 @@ export default {
             uni.chooseImage({
                 count: 1,
                 success: (res) => {
-                    const maxSize = 100 * 2 ** 10
+                    const maxSize = 1024 * 2 ** 10
                     const file = res.tempFiles[0]
                     const size = file.size
                     if (size > maxSize) {
                         uni.showModal({
                             title: '提示',
-                            content: '选择图片要小于100KB'
+                            content: '选择图片要小于1M'
                         })
                         return;
                     }

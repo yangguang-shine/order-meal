@@ -1,7 +1,7 @@
 <template>
     <div class="shop-list-container">
         <div class="shop-list">
-            <shop v-for="(shopItem, index) in shopList" :key="index" :shopItem="shopItem" :pageSign="pageSign" :managerShopList="managerShopList" @clickShopItem="toNextPage"></shop>
+            <shop v-for="(shopItem, index) in shopList" :key="index" :shopItem="shopItem" :pageSign="pageSign" :managerShopList="managerShopList" @clickShopItem="toNextPage" @toDeleteShop=toDeleteShop></shop>
         </div>
         <div v-if="!pageSign && managerShopList" class="add-box flex-row flex-ja-center" @click="toAddShop" >
             <image class="add-icon" src="/static/img/shop-add.svg"></image>
@@ -13,6 +13,7 @@
 import { mapMutations } from 'vuex'
 import host from '@/config/host'
 import shop from '@/components/shop'
+import getShopMinusList from '@/utils/getShopMinusList';
 
 export default {
     components:{
@@ -51,7 +52,11 @@ export default {
                     query.businessType = this.businessType
                 }
                 const res = await this.$fetch.get('/api/shop/list', { ...query })
-                this.shopList = res.data || [];
+                const shopList = res.data || [];
+                shopList.forEach((item) => {
+                    item.minusList = getShopMinusList(item.minus || '')
+                })
+                this.shopList = shopList
                 this.$hideLoading()
             } catch(e) {
                 console.log(e)

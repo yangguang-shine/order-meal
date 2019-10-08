@@ -9,10 +9,15 @@
 		</div>
 		<div v-if="businessType === 2 || selectBusinessType === 2" class="take-out-box">
 			<div class="address-box" @click="toSelectAddress">
-				<div class="address-title line1">{{defaultAddress.address1 || ''}} {{defaultAddress.address2 || ''}}</div>
-				<div class="address-user-info flex-row flex-a-center">
-					<div class="user-name">{{defaultAddress.name || ''}}</div>
-					<div>{{defaultAddress.mobile || ''}}</div>
+				<div v-if="defaultAddress.addressID">
+					<div class="address-title line1">{{defaultAddress.address1 || ''}} {{defaultAddress.address2 || ''}}</div>
+					<div class="address-user-info flex-row flex-a-center">
+						<div class="user-name">{{defaultAddress.name || ''}}</div>
+						<div>{{defaultAddress.mobile || ''}}</div>
+					</div>
+				</div>
+				<div v-else class="no-address">
+					请选择外卖地址
 				</div>
 				<image class="arrow-right" src="/static/img/right-arrow.png"></image>
 			</div>
@@ -258,6 +263,12 @@ page {
 		text-align: center;
 		transition: all 300ms;
 		z-index: 1;
+	}
+	.no-address {
+		color: #999;
+		height: 86rpx;
+		line-height: 86rpx;
+		text-align: center;
 	}
 	.take-out-box, .self-take-box {
 		padding: 30rpx;

@@ -3,9 +3,11 @@ import App from '@/App'
 import router from '@/utils/router.js'
 import fetch from '@/utils/fly.js'
 import store from '@/store'
+import NoData from '@/components/no-data.vue'
 import { showModal, showLoading, showToast, hideLoading, hideToast} from '@/utils'
 import '@/style/flex.css'
 import '@/style/common.css'
+Vue.component('no-data',NoData)
 Vue.config.productionTip = false
 Vue.prototype.$myrouter = router
 Vue.prototype.$store = store

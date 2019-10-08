@@ -4,7 +4,7 @@
 		<div class="list" >
 			<div class="item center" @click="toMyShopList">我的店铺列表</div>
 			<div class="item center" @click="toMyShopOrderList">我的店铺订单列表</div>
-			<div class="item center" @click="toAllShopOrderList">其他的店铺订单列表</div>
+			<div class="item center" @click="toAllShopOrderList">所有店铺订单列表</div>
 		</div>
 	</view>
 </template>

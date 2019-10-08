@@ -1,11 +1,11 @@
 <template>
-	<view class="center-container flex-col">
-		<!-- <image class="logo" src="/static/logo.png"></image> -->
+	<div class="center-container">
 		<div class="list" >
 			<div class="item center" @click="toMyAddress">我的地址</div>
 		</div>
-	</view>
+	</div>
 </template>
+
 <script>
 	export default {
 		data() {
