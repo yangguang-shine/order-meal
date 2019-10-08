@@ -106,7 +106,7 @@ import host from '@/config/host'
 			},
 			toOrderDetail(orderItem) {
 				this.$myrouter.push({
-					name: 'shop/orderDetail',
+					name: 'orderDetail',
 					query: {
 						orderKey: orderItem.orderKey,
 						shopID: this.shopID

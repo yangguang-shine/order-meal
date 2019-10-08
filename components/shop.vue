@@ -8,8 +8,8 @@
                 <div class="shop-address line1">店铺地址：{{shopItem.address}}</div>
                 <div class="shop-minus line1">满减信息：<span v-for="(minusItem, index) in shopItem.minusList" :key="index">满{{minusItem.reach}}减{{minusItem.reduce}}{{index === shopItem.minusList.length - 1 ? '' : '，'}}</span></div>
             </div>
-            <image v-if="!pageSign && !allShopList" class="delete-icon" src="/static/img/shop-delete.svg" @click.stop="toDeleteShop(shopItem)"></image>
-            <image v-if="!pageSign && !allShopList" class="edit-icon" src="/static/img/shop-edit.svg" @click.stop="toEditShop(shopItem)"></image>
+            <image v-if="!pageSign && managerShopList" class="delete-icon" src="/static/img/shop-delete.svg" @click.stop="toDeleteShop(shopItem)"></image>
+            <image v-if="!pageSign && managerShopList" class="edit-icon" src="/static/img/shop-edit.svg" @click.stop="toEditShop(shopItem)"></image>
         </div>
     </div>
 </template>
@@ -28,7 +28,7 @@ export default {
             type: String,
             default: ''
         },
-        pageSign: {
+        managerShopList: {
             type: String,
             default:''
         },

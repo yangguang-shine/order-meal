@@ -274,7 +274,7 @@ page {
 		font-size: 30rpx;
 		font-weight: bold;
 		max-width: 500rpx;
-		margin-bottom: 14rpx;
+		margin-bottom: 18rpx;
 	}
 	.address-user-info {
 		font-size: 24rpx;

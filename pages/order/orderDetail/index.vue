@@ -144,6 +144,7 @@ import host from '@/config/host'
 					foodItem.totalPrice = (foodItem.price * foodItem.orderCount).toFixed(2)
 				})
 				orderDetail.orderTypeTitle = this.getOrderTypeTitle(orderDetail.orderStatus, orderDetail.businessType)
+				orderDetail.nextStatus = this.getOrderNextStatus(orderDetail.orderStatus, orderDetail.businessType)
 				this.orderDetail = orderDetail
 			},
 			getOrderTypeTitle(orderStatus, businessType) {

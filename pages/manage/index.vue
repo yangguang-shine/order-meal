@@ -4,7 +4,6 @@
 		<div class="list" >
 			<div class="item center" @click="toMyShopList">我的店铺列表</div>
 			<div class="item center" @click="toMyShopOrderList">我的店铺订单列表</div>
-			<div class="item center" @click="toAllShopList">所有的店铺列表</div>
 			<div class="item center" @click="toAllShopOrderList">其他的店铺订单列表</div>
 		</div>
 	</view>
@@ -40,25 +39,10 @@
 				const status = await this.checkManageLogin()
 				if (!status) return;
 				this.$myrouter.push({
-					name: 'shop/list'
-				})
-			},
-			async toMyShopOrderList() {
-				const status = await this.checkManageLogin()
-				if (!status) return;
-				this.$myrouter.push({
 					name: 'shop/list',
 					query: {
-						pageSign: 'shop/orderList'
+						managerShopList: 'true'
 					}
-				})
-			},
-			async toAllShopList() {
-				const status = await this.checkManageLogin()
-				if (!status) return;
-				this.$myrouter.push({
-					name: 'shop/list',
-					allShopList: 'true'
 				})
 			},
 			async toMyShopOrderList() {
@@ -68,7 +52,17 @@
 					name: 'shop/list',
 					query: {
 						pageSign: 'shop/orderList',
-						allShopList: 'true'
+						managerShopList: 'true'
+					}
+				})
+			},
+			async toAllShopOrderList() {
+				const status = await this.checkManageLogin()
+				if (!status) return;
+				this.$myrouter.push({
+					name: 'shop/list',
+					query: {
+						pageSign: 'shop/orderList',
 					}
 				})
 			},

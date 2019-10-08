@@ -1,9 +1,9 @@
 <template>
     <div class="shop-list-container">
         <div class="shop-list">
-            <shop v-for="(shopItem, index) in shopList" :key="index" :shopItem="shopItem" :pageSign="pageSign" :allShopList="allShopList" @clickShopItem="toNextPage"></shop>
+            <shop v-for="(shopItem, index) in shopList" :key="index" :shopItem="shopItem" :pageSign="pageSign" :managerShopList="managerShopList" @clickShopItem="toNextPage"></shop>
         </div>
-        <div v-if="!pageSign && !allShopList" class="add-box flex-row flex-ja-center" @click="toAddShop" >
+        <div v-if="!pageSign && managerShopList" class="add-box flex-row flex-ja-center" @click="toAddShop" >
             <image class="add-icon" src="/static/img/shop-add.svg"></image>
         </div> 
     </div>
@@ -24,13 +24,13 @@ export default {
             pageSign: '',
             host,
             businessType: '',
-            allShopList: ''
+            managerShopList: ''
         }
     },
     onLoad(query) {
         console.log(query)
         this.pageSign =query.pageSign || ''
-        this.allShopList =query.allShopList || ''
+        this.managerShopList = query.managerShopList || ''
         this.businessType = Number(query.businessType) || ''
     },
     onShow() {
@@ -45,7 +45,7 @@ export default {
             try {
                 this.$showLoading()
                 const query = {
-                    allShopList: this.allShopList
+                    managerShopList: this.managerShopList
                 }
                 if (this.businessType) {
                     query.businessType = this.businessType

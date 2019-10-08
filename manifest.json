@@ -57,7 +57,9 @@
     "mp-weixin" : {
         "appid" : "wx5e8fc6bbef84c4c3",
         "setting" : {
-            "urlCheck" : false
+            "urlCheck" : true,
+            "minified" : true,
+            "postcss" : false
         },
         "usingComponents" : true,
         "permission" : {
@@ -81,6 +83,12 @@
             "base" : "/h5/"
         },
         "title" : "公众号",
-        "domain" : "http://kc783r.natappfree.cc"
+		"publicPath": "https://yangguang.natappvip.cc",
+		"optimization": {
+			"treeShaking": {
+				"enable": true
+			}
+		},
+        "domain" : "https://yangguang.natappvip.cc"
     }
 }
