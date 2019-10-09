@@ -83,12 +83,11 @@
             "base" : "/h5/"
         },
         "title" : "公众号",
-		"publicPath": "https://yangguang.natappvip.cc",
-		"optimization": {
-			"treeShaking": {
-				"enable": true
-			}
-		},
-        "domain" : "https://yangguang.natappvip.cc"
+        "optimization" : {
+            "treeShaking" : {
+                "enable" : true
+            }
+        },
+        "domain" : "http://sku2dd.natappfree.cc"
     }
 }

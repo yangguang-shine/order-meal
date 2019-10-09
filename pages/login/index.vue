@@ -27,7 +27,7 @@ import host from '@/config/host'
 			}
 		},
 		onLoad(query) {
-			this.manage = query.manage
+			this.manage = query.manage || ''
 		},
 		onUnload() {
 		},
@@ -111,20 +111,20 @@ page {
 		border-radius: 12rpx;
 	}
 	.input-item-box {
-		height: 70rpx;
+		height: 100rpx;
 		padding-bottom: 10rpx; 
 	}
 	.input-item {
-		height: 70rpx;
+		height: 100rpx;
 		border-bottom: 1px solid #eee;
 	}
 	.title {
 		width: 150rpx;
 	}
 	.submit-button {
-		height: 60rpx;
+		height: 80rpx;
 		width: 150rpx;
-		line-height: 60rpx;
+		line-height: 80rpx;
 		text-align: center;
 		border-radius: 10rpx;
 		margin: 30rpx auto; 

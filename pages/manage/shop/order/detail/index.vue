@@ -75,7 +75,7 @@
 			<div class="order-ext-item flex-row flex-j-between">
 				<div>订单号</div>
 				<div class="flex-row ">
-					<div class="order-key">{{this.orderKey}}</div>
+					<div class="order-key">{{orderKey}}</div>
 					<div class="order-key-copy" @click="copyOrderKey" :style="{'color': $mainColor}">复制</div>
 				</div>
 			</div>
@@ -121,8 +121,8 @@ import host from '@/config/host'
 			}
 		},
 		onLoad(query) {
-			this.orderKey = query.orderKey;
-			this.shopID = query.shopID;
+			this.orderKey = query.orderKey || '';
+			this.shopID = query.shopID || '';
 			this.init()
 		},
 		onShow() {

@@ -30,7 +30,7 @@
 			}
 		},
 		onLoad(query) {
-			this.fromPage = query.fromPage
+			this.fromPage = query.fromPage || ''
 		},
 		onShow() {
 			this.init()

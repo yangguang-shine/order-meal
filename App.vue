@@ -14,6 +14,11 @@ import toLogin from '@/utils/wx'
 			const manageToken = Cookies.get('manageToken')
 			uni.setStorageSync('token', token)
 			uni.setStorageSync('manageToken', manageToken)
+			if (!token) {
+				this.$myrouter.reLaunch({
+					name: 'login'
+				})
+			}
 			// #endif
 			try {
 				console.log('App Launch')

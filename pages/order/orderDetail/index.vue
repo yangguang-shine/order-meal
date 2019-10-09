@@ -49,9 +49,9 @@
 					</div>
 				</div>
 			</div>
-			<div class="minus-box flex-row" v-if="orderDetail.minusPrice">
+			<div class="minus-box flex-row flex-a-center" v-if="orderDetail.minusPrice">
 				<image class="minus-icon" src="/static/img/orderMinus.svg" ></image>
-				<div class="flex-row flex-j-between">
+				<div class="flex-item flex-row flex-j-between">
 					<div class="minus-title">满减优惠</div>
 					<div class="minus-price">-¥{{orderDetail.minusPrice}}</div>
 				</div>
@@ -80,8 +80,10 @@
 			<div class="order-ext-item flex-row flex-j-between">
 				<div>订单号</div>
 				<div class="flex-row ">
-					<div class="order-key">{{this.orderKey}}</div>
+					<div class="order-key">{{orderKey}}</div>
+					<!-- #ifdef MP-WEIXIN -->
 					<div class="order-key-copy" @click="copyOrderKey" :style="{'color': $mainColor}">复制</div>
+					<!-- #endif -->
 				</div>
 			</div>
 			<div class="order-ext-item flex-row flex-j-between">
@@ -126,7 +128,7 @@ import host from '@/config/host'
 			}
 		},
 		onLoad(query) {
-			this.orderKey = query.orderKey;
+			this.orderKey = query.orderKey || '';
 			this.shopID = query.shopID || '';
 			this.init()
 		},
@@ -297,7 +299,8 @@ page {
 		flex: 2
 	}
 	.food-total-price {
-		flex: 3
+		flex: 3;
+		text-align: right;
 	}
 	.minus-box {
 		margin-bottom: 30rpx;

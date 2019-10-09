@@ -40,26 +40,22 @@ mutations['initCart'] = function (state, { foodCategoryList = [], storageFoodLis
     })
 }
 mutations['saveOrderShopInfo'] = (state, shopInfo = {}) => {
-    if (String(state.shopInfo.shopID) === String(shopInfo.shopID)) {
-        return
-    } else {
-        let minusList = []
-        const minusSplit = shopInfo.minus.split(',')
-        if (minusSplit[0] === '') {
-            minusList = []
-        } else {                
-            minusList = minusSplit.map((item) => {
-                const splitMinus = item.split('-')
-                return {
-                    reach: Number(splitMinus[0]),
-                    reduce: Number(splitMinus[1]),
-                }
-            })
-        }
-        shopInfo.minusList = minusList
-        state.cartFoodList = []
-        state.shopInfo = shopInfo
+    let minusList = []
+    const minusSplit = shopInfo.minus.split(',')
+    if (minusSplit[0] === '') {
+        minusList = []
+    } else {                
+        minusList = minusSplit.map((item) => {
+            const splitMinus = item.split('-')
+            return {
+                reach: Number(splitMinus[0]),
+                reduce: Number(splitMinus[1]),
+            }
+        })
     }
+    shopInfo.minusList = minusList
+    state.cartFoodList = []
+    state.shopInfo = shopInfo
 }
 
 mutations['clearCart'] = (state, shopInfo = {}) => {

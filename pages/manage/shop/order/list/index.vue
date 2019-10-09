@@ -42,7 +42,7 @@ import host from '@/config/host'
 			}
 		},
 		onLoad(query) {
-			this.shopID = query.shopID
+			this.shopID = query.shopID || ''
 		},
 		onShow() {
 			this.getOrderList()

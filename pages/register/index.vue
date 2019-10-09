@@ -37,7 +37,7 @@ import host from '@/config/host'
 			}
 		},
 		onLoad(query) {
-			this.manage = query.manage
+			this.manage = query.manage || ''
 		},
 		methods: {
 			toLoginPage() {

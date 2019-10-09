@@ -84,7 +84,7 @@ const flyRequest = (url, params, options, method) => {
             if (code === '000') {
                 resolve(res)
             } else if (options.error) {
-                if (code === '555') {
+                if (code === '555' || code === "666") {
                     uni.showModal({
                         title: '提示',
                         content: res.msg,
@@ -106,6 +106,11 @@ const flyRequest = (url, params, options, method) => {
                                         name: 'home'
                                     })
                                 }, 1500)
+                                // #endif
+                                // #ifdef H5
+                                router.reLaunch({
+                                    name: 'login'
+                                })
                                 // #endif
                             }
                         }
