@@ -1,2 +1,2 @@
-const host = 'http://sku2dd.natappfree.cc'
+const host = 'https://yangguang.natappvip.cc'
 export default host
