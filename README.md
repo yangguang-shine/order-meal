@@ -15,7 +15,7 @@
 
 ## 在线使用
 
-手机浏览器访问：[菜鸟教程](https://yangguang.natappvip.cc/h5/pages/home/index)
+手机浏览器访问：[个人点餐项目](https://yangguang.natappvip.cc/h5/pages/home/index)
 
 H5版:   手机浏览器访问 https://yangguang.natappvip.cc/h5/pages/home/index
 
