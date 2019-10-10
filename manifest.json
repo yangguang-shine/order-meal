@@ -83,11 +83,6 @@
             "base" : "/h5/"
         },
         "title" : "公众号",
-        "optimization" : {
-            "treeShaking" : {
-                "enable" : true
-            }
-        },
-        "domain" : "http://yangguang.natappvip.cc"
+        "domain" : "https://yangguang.natappvip.cc"
     }
 }

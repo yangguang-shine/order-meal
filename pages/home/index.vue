@@ -47,7 +47,8 @@ import { mapMutations } from 'vuex'
 		data() {
 			return {
 				nearShopList: [],
-				imgList: [`${host}/images/static/1.jpg`, `${host}/images/static/2.jpg`, `${host}/images/static/3.jpg`, `${host}/images/static/4.jpg`, `${host}/images/static/5.jpg` ]
+				imgList: [`${host}/images/static/1.png`, `${host}/images/static/2.png`, `${host}/images/static/3.png`],
+				// imgList: [`${host}/images/static/1.jpg`, `${host}/images/static/2.jpg`, `${host}/images/static/3.jpg`, `${host}/images/static/4.jpg`, `${host}/images/static/5.jpg` ],
 			}
 		},
 		onLoad() {
@@ -112,6 +113,7 @@ import { mapMutations } from 'vuex'
 			box-sizing: border-box;
 		}
 		.business-type-box {
+			margin-top: 10rpx;
 			margin-bottom: 20rpx;
 		}
 		.type-item-box {

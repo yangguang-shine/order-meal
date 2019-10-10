@@ -8,7 +8,9 @@ import toLogin from '@/utils/wx'
 
 	export default {
 		onLaunch() {
+			// #ifdef MP-WEIXIN
 			toLogin()
+			// #endif
 			// #ifdef H5
         	const token = Cookies.get('token')
 			const manageToken = Cookies.get('manageToken')

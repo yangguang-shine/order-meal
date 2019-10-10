@@ -33,7 +33,22 @@
 					})
 					return false;
 				}
-				return true
+				try {
+					const res = await this.$fetch.post('/manage/user/checkManageLogin', { })
+					return true
+				} catch (e) {
+					console.log(e)
+					await this.$showModal({
+						content: '店铺管理员需要登录'
+					})
+					this.$myrouter.push({
+						name: 'login',
+						query: {
+							manage: 'true'
+						}
+					})
+					return false
+				}
 			},
 			async toMyShopList() {
 				const status = await this.checkManageLogin()

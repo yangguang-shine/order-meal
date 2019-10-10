@@ -8,7 +8,7 @@
             <div class="title">门店地址：</div>
             <div class="flex-item flex-item">{{shopInfo.address || '请选择地址'}}</div>
         </div>
-        <picker mode="time" @change="startPickerChange" value="09:00">
+        <picker class="picker-box" mode="time" @change="startPickerChange" value="09:00">
             <div class="edit-item flex-row flex-a-center">
                 <div class="title">开店时间：</div>
                 <div class="flex-item">
@@ -16,7 +16,7 @@
                 </div>
             </div>
         </picker>
-        <picker mode="time" @change="endPickerChange" value="18:00">
+        <picker class="picker-box" mode="time" @change="endPickerChange" value="18:00">
             <div class="edit-item flex-row flex-a-center">
                 <div class="title">闭店时间：</div>
                 <div class="flex-item">
@@ -149,10 +149,14 @@ export default {
     },
     methods: {
         startPickerChange(e) {
+            console.log(111)
+            console.log(e)
             const value = e.detail.value || []
             this.shopInfo.startTime = value
         },
         endPickerChange(e) {
+            console.log(111)
+            console.log(e)
             const value = e.detail.value || []
             this.shopInfo.endTime = value
         },
