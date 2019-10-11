@@ -115,6 +115,23 @@ const flyRequest = (url, params, options, method) => {
                             }
                         }
                     })
+                } else if (code === '777' || code === "888") {
+                    uni.showModal({
+                        title: '提示',
+                        content: res.msg,
+                        confirmText: '去登录',
+                        cancelText: '取消登录',
+                        success: async (res) => {
+                            if (res.confirm) {
+                                // #ifdef H5
+                                router.push({
+                                    name: 'login',
+                                    manage: 'true'
+                                })
+                                // #endif
+                            }
+                        }
+                    })
                 } else {
                     uni.showModal({
                         title: '提示',

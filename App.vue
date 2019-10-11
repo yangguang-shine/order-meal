@@ -11,22 +11,6 @@ import toLogin from '@/utils/wx'
 			// #ifdef MP-WEIXIN
 			toLogin()
 			// #endif
-			// #ifdef H5
-        	const token = Cookies.get('token')
-			const manageToken = Cookies.get('manageToken')
-			uni.setStorageSync('token', token)
-			uni.setStorageSync('manageToken', manageToken)
-			if (!token) {
-				this.$myrouter.reLaunch({
-					name: 'login'
-				})
-			}
-			// #endif
-			try {
-				console.log('App Launch')
-			} catch (e) {
-				console.log(e)
-			}
 		},
 		onShow() {
 			console.log('App Show')

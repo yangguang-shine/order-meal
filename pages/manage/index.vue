@@ -19,67 +19,56 @@
 
 		},
 		methods: {
-			async checkManageLogin() {
-				const manageToken = uni.getStorageSync('manageToken')
-				if(!manageToken) {
-					await this.$showModal({
-						content: '店铺管理员需要登录'
-					})
+			async toMyShopList() {
+				try {
+					this.$showLoading()
+					await this.$fetch.post('/manage/user/checkManageLogin', { })
+					this.$hideLoading()
 					this.$myrouter.push({
-						name: 'login',
+						name: 'shop/list',
 						query: {
-							manage: 'true'
+							managerShopList: 'true'
 						}
 					})
-					return false;
-				}
-				try {
-					const res = await this.$fetch.post('/manage/user/checkManageLogin', { })
-					return true
 				} catch (e) {
 					console.log(e)
-					await this.$showModal({
-						content: '店铺管理员需要登录'
-					})
-					this.$myrouter.push({
-						name: 'login',
-						query: {
-							manage: 'true'
-						}
-					})
-					return false
+					this.$hideLoading()
 				}
 			},
-			async toMyShopList() {
-				const status = await this.checkManageLogin()
-				if (!status) return;
-				this.$myrouter.push({
-					name: 'shop/list',
-					query: {
-						managerShopList: 'true'
-					}
-				})
-			},
 			async toMyShopOrderList() {
-				const status = await this.checkManageLogin()
-				if (!status) return;
-				this.$myrouter.push({
-					name: 'shop/list',
-					query: {
-						pageSign: 'shop/orderList',
-						managerShopList: 'true'
-					}
-				})
+				try {
+					this.$showLoading()
+					const status = await this.$fetch.post('/manage/user/checkManageLogin', { })
+					this.$hideLoading()
+					this.$myrouter.push({
+						name: 'shop/list',
+						query: {
+							pageSign: 'shop/orderList',
+							managerShopList: 'true'
+						}
+					})
+				} catch (e) {
+					console.log(e)
+					this.$hideLoading()
+				}
+
 			},
 			async toAllShopOrderList() {
-				const status = await this.checkManageLogin()
-				if (!status) return;
-				this.$myrouter.push({
-					name: 'shop/list',
-					query: {
-						pageSign: 'shop/orderList',
-					}
-				})
+				try {
+					this.$showLoading()
+					await this.this.$fetch.post('/manage/user/checkManageLogin', { })
+					this.$myrouter.push({
+						name: 'shop/list',
+						query: {
+							pageSign: 'shop/orderList',
+						}
+					})
+					this.$hideLoading()
+				} catch (e) {
+					this.$hideLoading()
+					console.log(e)
+				}
+
 			},
 		}
 	}
