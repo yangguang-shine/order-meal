@@ -126,7 +126,9 @@ const flyRequest = (url, params, options, method) => {
                                 // #ifdef H5
                                 router.push({
                                     name: 'login',
-                                    manage: 'true'
+                                    query: {
+                                        manage: 'true'
+                                    }
                                 })
                                 // #endif
                             }

@@ -27,6 +27,7 @@ import host from '@/config/host'
 			}
 		},
 		onLoad(query) {
+			console.log(query)
 			this.manage = query.manage || ''
 		},
 		onUnload() {
