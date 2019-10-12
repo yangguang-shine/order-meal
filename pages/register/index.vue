@@ -17,8 +17,8 @@
 				<div class="title">昵称</div>
 				<input class="input-item flex-item" type="text" v-model="nickname" max-length="50" placeholder="请输入昵称">
 			</div>
-			<div class="register-button" :style="{'background-color': $mainColor}" @click="register">注册</div>
-			<div class="to-login-box">有账号，<span :style="{'color': $mainColor}" @click="toLoginPage">去登录</span></div>
+			<div class="register-button" :style="{'background-color': $mainColor}" @click="register">{{manage ? '管理员' : '用户'}}注册</div>
+			<div class="to-login-box">有{{manage ? '管理员' : '用户'}}账号，<span :style="{'color': $mainColor}" @click="toLoginPage">去登录</span></div>
 		</div>
 	</view>
 </template>
@@ -43,7 +43,9 @@ import host from '@/config/host'
 			toLoginPage() {
 				this.$myrouter.replace({
 					name: 'login',
-					manage: this.manage
+					query: {
+						manage: this.manage
+					}
 				})
 			},
 			async register() {
@@ -120,20 +122,17 @@ page {
 	color: #333;
 	.register-box {
 		padding: 30rpx;
-		position: fixed;
-		top: 50%;
-		left: 50%;
 		width: 550rpx;
-		transform: translate(-50%, -50%);
+		margin: 50rpx auto;
 		background-color: #fff;
 		border-radius: 12rpx;
 	}
 	.input-item-box {
-		height: 70rpx;
+		height: 100rpx;
 		padding-bottom: 10rpx; 
 	}
 	.input-item {
-		height: 70rpx;
+		height: 100rpx;
 		border-bottom: 1px solid #eee;
 	}
 	.title {
@@ -141,7 +140,7 @@ page {
 	}
 	.register-button {
 		height: 60rpx;
-		width: 150rpx;
+		width: 200rpx;
 		line-height: 60rpx;
 		text-align: center;
 		border-radius: 10rpx;

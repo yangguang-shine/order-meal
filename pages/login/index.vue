@@ -9,8 +9,8 @@
 				<div class="title">密码</div>
 				<input class="input-item flex-item" type="text" v-model="password" max-length="50" placeholder="请输入密码">
 			</div>
-			<div class="submit-button" :style="{'background-color': $mainColor}" @click="login">登录</div>
-			<div class="to-login-box">没有账号，<span :style="{'color': $mainColor}" @click="toRegisterPage">去注册</span></div>
+			<div class="submit-button" :style="{'background-color': $mainColor}" @click="login">{{manage ? '管理员' : '用户'}}登录</div>
+			<div class="to-login-box">没有{{manage ? '管理员' : '用户'}}账号，<span :style="{'color': $mainColor}" @click="toRegisterPage">去注册</span></div>
 		</div>
 	</view>
 </template>
@@ -103,11 +103,8 @@ page {
 	color: #333;
 	.login-box {
 		padding: 30rpx;
-		position: fixed;
-		top: 50%;
-		left: 50%;
 		width: 550rpx;
-		transform: translate(-50%, -50%);
+		margin: 50rpx auto;
 		background-color: #fff;
 		border-radius: 12rpx;
 	}
@@ -123,9 +120,9 @@ page {
 		width: 150rpx;
 	}
 	.submit-button {
-		height: 80rpx;
-		width: 150rpx;
-		line-height: 80rpx;
+		height: 60rpx;
+		width: 200rpx;
+		line-height: 60rpx;
 		text-align: center;
 		border-radius: 10rpx;
 		margin: 30rpx auto; 

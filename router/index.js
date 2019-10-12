@@ -50,6 +50,21 @@ const addressList = [
 	},
 ]
 
+const entertainmentList = [
+	{
+		name: 'entertainment',
+		path: 'pages/entertainment/index'
+	},
+	{
+		name: 'entertainment/joke',
+		path: 'pages/entertainment/joke/index'
+	},
+	{
+		name: 'entertainment/news',
+		path: 'pages/entertainment/news/index'
+	},
+]
+
 const routerList = [
 	{
 		name: 'home',
@@ -90,6 +105,7 @@ const routerList = [
 	...shopList,
 	...categoryList,
 	...foodList,
-	...addressList
+	...addressList,
+	...entertainmentList,
 ]
 export default routerList
