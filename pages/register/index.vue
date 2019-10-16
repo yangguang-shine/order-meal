@@ -17,8 +17,8 @@
 				<div class="title">昵称</div>
 				<input class="input-item flex-item" type="text" v-model="nickname" max-length="50" placeholder="请输入昵称">
 			</div>
-			<div class="register-button" :style="{'background-color': $mainColor}" @click="register">{{manage ? '管理员' : '用户'}}注册</div>
-			<div class="to-login-box">有{{manage ? '管理员' : '用户'}}账号，<span :style="{'color': $mainColor}" @click="toLoginPage">去登录</span></div>
+			<div class="register-button" :style="{'background-color': $mainColor}" @click="register">用户注册</div>
+			<div class="to-login-box">有用户账号，<span :style="{'color': $mainColor}" @click="toLoginPage">去登录</span></div>
 		</div>
 	</view>
 </template>
@@ -33,19 +33,13 @@ import host from '@/config/host'
 				password: '',
 				confirmPassword: '',
 				nickname: '',
-				manage: ''
 			}
-		},
-		onLoad(query) {
-			this.manage = query.manage || ''
 		},
 		methods: {
 			toLoginPage() {
 				this.$myrouter.replace({
 					name: 'login',
-					query: {
-						manage: this.manage
-					}
+					query: {}
 				})
 			},
 			async register() {
@@ -77,30 +71,15 @@ import host from '@/config/host'
 				}
 				try {
 					this.$showLoading()
-					let res = ''
-					if (this.manage) {
-						res = await this.$fetch.post('/manage/user/register', { phone: this.phone, password: this.password, nickname: this.nickname })
-					} else {
-						res = await this.$fetch.post('/user/h5/register', { phone: this.phone, password: this.password, nickname: this.nickname })
-					}
-					if (this.manage) {
-						uni.setStorageSync('manageToken', res.data.manageToken || '')
-					} else {
-						uni.setStorageSync('token', res.data.token || '')
-					}
+					const res = await this.$fetch.post('/api/register', { phone: this.phone, password: this.password, nickname: this.nickname })
+					uni.setStorageSync('token', res.data.token || '')
 					this.$hideLoading()
 					await this.$showModal({
 						content: '注册成功'
 					})
-					if (this.manage) {
-						this.$myrouter.reLaunch ({
-							name: 'manage'
-						})
-					} else {
-						this.$myrouter.reLaunch ({
-							name: 'home'
-						})
-					}
+					this.$myrouter.reLaunch ({
+						name: 'home'
+					})
 				} catch (e) {
 					console.log(e)
 					this.$hideLoading()

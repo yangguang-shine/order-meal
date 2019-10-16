@@ -6,25 +6,10 @@
 				<div v-if="orderDetail.businessType === 2" class="order-type">外卖</div>
 				<div v-else-if="orderDetail.businessType === 3" class="order-type">自提</div>
 			</div>
-			<div v-if="shopID">
-				<div class="order-current-status">
-					当前订单状态： <span :style="{'color': $mainColor}">{{orderDetail.orderTypeTitle}}</span>
-				</div>
-				<div class="order-button-box flex-row flex-j-between" v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20 || orderDetail.orderStatus === 30 ">
-					<div class="flex-row flex-a-center">
-						<div>下一级状态：</div>
-						<div v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20 || orderDetail.orderStatus === 30" class="button-item" :style="{'color': $mainColor}" @click="toChangeOrderStatus">{{orderDetail.nextStatus}}</div>
-					</div>
-					<div class="button-item" :style="{'color': $mainColor}" @click="cancellOrder">取消订单</div>
-				</div>
+			<div class="order-tip-title">感谢</div>
+			<div class="order-button-box flex-row" v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20 ">
+				<div class="button-item" :style="{'color': $mainColor}" @click="cancellOrder">取消订单</div>
 			</div>
-			<div v-else>
-				<div class="order-tip-title">感谢</div>
-				<div class="order-button-box flex-row" v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20 ">
-					<div class="button-item" :style="{'color': $mainColor}" @click="cancellOrder">取消订单</div>
-				</div>
-			</div>
-			
 		</div>
 		<div class="order-info-box">
 			<div class="shop-info-box line1">
@@ -124,12 +109,10 @@ import host from '@/config/host'
 				host,
 				orderKey: '',
 				orderDetail: {},
-				shopID: ''
 			}
 		},
 		onLoad(query) {
 			this.orderKey = query.orderKey || '';
-			this.shopID = query.shopID || '';
 			this.init()
 		},
 		onShow() {
@@ -139,7 +122,7 @@ import host from '@/config/host'
 		},
 		methods: {
 			async init() {
-				const res = await this.$fetch.get('/api/order/orderDetail', { orderKey: this.orderKey, shopID: this.shopID })
+				const res = await this.$fetch.get('/api/userOrder/orderDetail', { orderKey: this.orderKey })
 				console.log(res)
 				const orderDetail = res.data || {};
 				(orderDetail.foodList || []).forEach((foodItem) => {
@@ -173,39 +156,6 @@ import host from '@/config/host'
 				}
 				return ''
 			},
-			getOrderNextStatus(orderStatus, businessType) {
-				if (orderStatus === 10) {
-					return '接单'
-				} else if (orderStatus === 20) {
-					if (businessType === 2) {
-						return '送出'
-					} else if (businessType === 3) {
-						return '待自提'
-					}
-				} else if (orderStatus === 30) {
-					if (businessType === 2) {
-						return '送达完成'
-					} else if (businessType === 3) {
-						return '自提完成'
-					}
-					return ''
-				}
-				return ''
-			},
-			async toChangeOrderStatus() {
-				try {
-					this.$showLoading()
-					await this.$fetch.post('/api/order/changeOrderStatus', { orderStatus: this.orderDetail.orderStatus, shopID: this.shopID, orderKey: this.orderKey })
-					this.$hideLoading()
-					await this.$showModal({
-						content: '订单状态修改成功'
-					})
-					this.init()
-				} catch(e) {
-					this.$hideLoading()
-					console.log(e)
-				}
-			},
 			copyOrderKey() {
 				wx.setClipboardData({
 					data: `${this.orderDetail.orderKey}`,
@@ -221,7 +171,7 @@ import host from '@/config/host'
 			async cancellOrder() {
 				try {
 					this.$showLoading()
-					await this.$fetch.post('/api/order/cancell', { orderKey: this.orderKey, shopID: this.shopID || this.orderDetail.shopID })
+					await this.$fetch.post('/api/userOrder/cancell', { orderKey: this.orderKey, shopID: this.orderDetail.shopID })
 					this.$hideLoading()
 					await this.$showModal({
 						content: '取消订单成功'

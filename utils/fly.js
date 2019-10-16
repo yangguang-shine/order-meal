@@ -24,7 +24,7 @@ const fly = new Fly;
 //     timeout:""//超时时间
 //   }
 fly.config.timeout = 30000;
-fly.config.baseURL = host;
+fly.config.baseURL = `${host}/user`;
 
 fly.interceptors.request.use(async (request)=>{
 

@@ -92,17 +92,6 @@
 			},
         	async chooseAddress() {
 				console.log(111111)
-				// wx.authorize({
-				// 	scope: 'scope.userLocation',
-				// 	success () {
-				// 		console.log(成功)
-				// 	// 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
-				// 	},
-				// 	fail(e) {
-				// 		console.log(e)
-				// 	}
-				// })
-				// #ifndef H5
 				try {
 					await getSetting('scope.userLocation')
 				} catch (e) {

@@ -56,7 +56,7 @@ import host from '@/config/host'
 				try {
 					// if (!this.orderListUpdate[this.tabIndex]) return;
 					this.$set(this.allOrderList, this.tabIndex, [])
-					const res = await this.$fetch.get('/api/order/orderList', {
+					const res = await this.$fetch.get('/api/userOrder/orderList', {
 						status: this.tabIndex
 					})
 					const orderList = (res.data || []).map((orderItem) => ({

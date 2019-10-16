@@ -253,7 +253,7 @@ export default {
 			})
 		},
 		async init() {
-			const res = await this.$fetch.get('/api/order/menuList', { shopID: this.shopInfo.shopID })
+			const res = await this.$fetch.get('/api/userOrder/menuList', { shopID: this.shopInfo.shopID })
 			this.foodCategoryList = res.data || []
 			this.foodCategoryList.forEach((item, index) => {
 				item.scrollID = 'c' + item.categoryID
@@ -308,7 +308,7 @@ export default {
 			// 	foodList.push(...item.foodList)
 			// })
 			// console.log(foodList)
-			// const res = await this.$fetch.post('/api/order/submit', { foodList })
+			// const res = await this.$fetch.post('/api/userOrder/submit', { foodList })
 			this.$myrouter.push({
 				name: 'confirmOrder'
 			})

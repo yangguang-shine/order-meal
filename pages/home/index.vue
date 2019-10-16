@@ -28,7 +28,7 @@
 		<div v-if="nearShopList.length" class="near-shop-box">
 			<div class="near-shop-title">附近店铺推荐</div>
 			<div class="shop-list">
-				<shop v-for="(shopItem, index) in nearShopList" :key="index" :shopItem="shopItem" pageSign="menu"  @clickShopItem="toOrder"></shop>
+				<shop v-for="(shopItem, index) in nearShopList" :key="index" :shopItem="shopItem" @clickShopItem="toOrder"></shop>
 			</div>
 		</div>
 	</view>
@@ -61,7 +61,7 @@ import { mapMutations } from 'vuex'
 			}),
 			async init() {
 				try {
-					const res = await this.$fetch.get('/api/shop/list')
+					const res = await this.$fetch.get('/api/userShop/list')
 					const nearShopList = res.data || []
 					this.$showLoading()
 					nearShopList.forEach((item) => {
@@ -78,7 +78,6 @@ import { mapMutations } from 'vuex'
 				this.$myrouter.push({
 					name: 'shop/list',
 					query: {
-						pageSign: 'menu',
 						businessType
 					}
 				})

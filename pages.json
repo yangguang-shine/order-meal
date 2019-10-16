@@ -16,14 +16,6 @@
 			}
 		},
 		{
-			"path": "pages/manage/index",
-			"style": {
-				"navigationBarTitleText": "订单"	,
-				"navigationBarBackgroundColor": "#ffffff"
-				
-			}
-		},
-		{
 			"path": "pages/order/orderDetail/index",
 			"style": {
 				"navigationBarTitleText": "订单详情"	,
@@ -69,48 +61,6 @@
 			}
 		},
 		{
-			"path": "pages/manage/shop/list/index",
-			"style": {
-				"navigationBarTitleText": "店铺列表",
-				"navigationBarBackgroundColor": "#ffffff"
-			}
-		},
-		{
-			"path": "pages/manage/shop/edit/index",
-			"style": {
-				"navigationBarTitleText": "店铺编辑",
-				"navigationBarBackgroundColor": "#ffffff"
-			}
-		},
-		{
-			"path": "pages/manage/category/list/index",
-			"style": {
-				"navigationBarTitleText": "菜品分类列表",
-				"navigationBarBackgroundColor": "#ffffff"
-			}
-		},
-		{
-			"path": "pages/manage/category/edit/index",
-			"style": {
-				"navigationBarTitleText": "菜品分类编辑",
-				"navigationBarBackgroundColor": "#ffffff"
-			}
-		},
-		{
-			"path": "pages/manage/food/list/index",
-			"style": {
-				"navigationBarTitleText": "菜品列表",
-				"navigationBarBackgroundColor": "#ffffff"
-			}
-		},
-		{
-			"path": "pages/manage/food/edit/index",
-			"style": {
-				"navigationBarTitleText": "菜品编辑",
-				"navigationBarBackgroundColor": "#ffffff"
-			}
-		},
-		{
 			"path": "pages/center/address/list/index",
 			"style": {
 				"navigationBarTitleText": "地址列表",
@@ -125,9 +75,9 @@
 			}
 		},
 		{
-			"path": "pages/manage/shop/order/list/index",
+			"path": "pages/shop/list/index",
 			"style": {
-				"navigationBarTitleText": "店铺订单列表",
+				"navigationBarTitleText": "店铺列表",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		}
@@ -155,12 +105,6 @@
 				"text": "我的",
 				"selectedIconPath": "/static/img/center-active.png",
 				"iconPath": "/static/img/center.png"
-			},
-			{
-				"pagePath": "pages/manage/index",
-				"text": "管理",
-				"selectedIconPath": "/static/img/manage-active.png",
-				"iconPath": "/static/img/manage.png"
 			}
 		]
 	},

@@ -1,11 +1,8 @@
 <template>
     <div class="shop-list-container">
         <div class="shop-list">
-            <shop v-for="(shopItem, index) in shopList" :key="index" :shopItem="shopItem" :pageSign="pageSign" :managerShopList="managerShopList" @clickShopItem="toNextPage" @toDeleteShop=toDeleteShop></shop>
+            <shop v-for="(shopItem, index) in shopList" :key="index" :shopItem="shopItem" @clickShopItem="toNextPage"></shop>
         </div>
-        <div v-if="!pageSign && managerShopList" class="add-box flex-row flex-ja-center" @click="toAddShop" >
-            <image class="add-icon" src="/static/img/shop-add.svg"></image>
-        </div> 
     </div>
 </template>
 
@@ -22,16 +19,12 @@ export default {
     data() {
         return {
             shopList: [],
-            pageSign: '',
             host,
             businessType: '',
-            managerShopList: ''
         }
     },
     onLoad(query) {
         console.log(query)
-        this.pageSign =query.pageSign || ''
-        this.managerShopList = query.managerShopList || ''
         this.businessType = Number(query.businessType) || ''
     },
     onShow() {
@@ -45,13 +38,11 @@ export default {
         async init() {
             try {
                 this.$showLoading()
-                const query = {
-                    managerShopList: this.managerShopList
-                }
+                const query = {}
                 if (this.businessType) {
                     query.businessType = this.businessType
                 }
-                const res = await this.$fetch.get('/api/shop/list', { ...query })
+                const res = await this.$fetch.get('/api/userShop/list', { ...query })
                 const shopList = res.data || [];
                 shopList.forEach((item) => {
                     item.minusList = getShopMinusList(item.minus || '')
@@ -61,81 +52,20 @@ export default {
             } catch(e) {
                 console.log(e)
                 this.$hideLoading()
-                this.$showModal({
-                    content: '店铺列表获取失败'
-                })
             }
         },
         toNextPage(shopItem) {
-            if (this.pageSign === 'menu') {
-                this.saveOrderShopInfo(shopItem)
-                this.saveBusinessType(this.businessType)
- 				this.$myrouter.push({
-					name: 'menu',
-					query: {
-                        shopID: shopItem.shopID,
-                    }
-                })
-            } else if (this.pageSign === 'shop/orderList') {
-                this.$myrouter.push({
-                    name: 'shop/orderList',
-                    query: {
-                        shopID: shopItem.shopID
-                    }
-                })
-            } else {
-                this.$myrouter.push({
-                    name: 'category/list',
-                    query: {
-                        shopID: shopItem.shopID
-                    }
-                })
-            }
-
+            this.saveOrderShopInfo(shopItem)
+            this.saveBusinessType(this.businessType)
+            this.$myrouter.push({
+                name: 'menu',
+                query: {
+                    shopID: shopItem.shopID,
+                }
+            })
         },
         pickerChange(e) {
             console.log(e)
-        },
-        async toDeleteShop(shopItem) {
-            try {
-                try {
-                    await this.$showModal({
-                        content: '删除店铺将一并删除该店铺的菜品分类、菜品详情、订单列表，操作不可逆',
-                        showCancel: true,
-                        confirmText: '确认删除'
-                    })
-                } catch (e) {
-                    return
-                }
-                this.$showLoading({
-                    title: '删除中'
-                });
-                await this.$fetch.post('/api/shop/delete', { shopID: shopItem.shopID });
-                this.$hideLoading();
-                await this.$showModal({
-                    content: '删除成功'
-                })
-            } catch (e) {
-                console.log(e)
-                uni.hideLoading();
-                await this.$showModal({
-                    content: '删除失败'
-                })
-                return;
-            }
-            try {
-                this.$showLoading({
-                    title: '加载中'
-                });
-                await this.init()
-                uni.hideLoading();
-            } catch(e) {
-                console.log(e)
-                this.$showModal({
-                    content: '店铺列表获取失败'
-                })
-                uni.hideLoading();
-            } 
         },
         toEditShop(shopItem = {}) {
             this.$myrouter.push({

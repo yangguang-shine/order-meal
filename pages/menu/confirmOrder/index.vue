@@ -195,7 +195,7 @@ export default {
 				query.selfTakeTime = this.selfTakeTime
 				query.reservePhone = this.reservePhone
 			}
-			const res = await this.$fetch.post('/api/order/submit', { foodList, shopID: this.shopInfo.shopID, orderAmount: this.dueAmount, businessType: this.selectBusinessType, ...query, minusPrice: this.minusPrice })
+			const res = await this.$fetch.post('/api/userOrder/submit', { foodList, shopID: this.shopInfo.shopID, orderAmount: this.dueAmount, businessType: this.selectBusinessType, ...query, minusPrice: this.minusPrice })
 			this.clearCart()
 			this.changeAllOrderListUpdate()
 			this.$myrouter.switchTab({
