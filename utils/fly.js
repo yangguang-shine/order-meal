@@ -33,14 +33,12 @@ fly.interceptors.request.use(async (request)=>{
     // #endif
 
     const token = uni.getStorageSync('token')
-    let manageToken = uni.getStorageSync('manageToken') || Cookies.get('manageToken')
+    // let manageToken = uni.getStorageSync('manageToken') || Cookies.get('manageToken')
 
     // #ifdef H5
     if (token) {
         Cookies.set('token', `${token}`)
-        Cookies.set('manageToken', `${manageToken}`)
         request.headers.token = `${token}`;
-        request.headers.manageToken = `${manageToken}`;
     } else {
         // #ifdef MP-WEIXIN
         await toLogin()
