@@ -91,6 +91,7 @@
 				}
 			},
         	async chooseAddress() {
+				// #ifdef MP-WEIXIN 
 				console.log(111111)
 				try {
 					await getSetting('scope.userLocation')

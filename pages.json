@@ -16,6 +16,45 @@
 			}
 		},
 		{
+			"path": "pages/center/index",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/entertainment/index",
+			"style": {
+				"navigationBarTitleText": "娱乐"	,
+				"navigationBarBackgroundColor": "#ffffff"
+				
+			}
+		},
+		{
+			"path": "pages/entertainment/joke/index",
+			"style": {
+				"navigationBarTitleText": "笑话"	,
+				"navigationBarBackgroundColor": "#ffffff"
+				
+			}
+		},
+		{
+			"path": "pages/entertainment/news/index",
+			"style": {
+				"navigationBarTitleText": "新闻"	,
+				"navigationBarBackgroundColor": "#ffffff"
+				
+			}
+		},
+		{
+			"path": "pages/entertainment/cuisine/index",
+			"style": {
+				"navigationBarTitleText": "菜品大全"	,
+				"navigationBarBackgroundColor": "#ffffff"
+				
+			}
+		},
+		{
 			"path": "pages/order/orderDetail/index",
 			"style": {
 				"navigationBarTitleText": "订单详情"	,
@@ -37,13 +76,6 @@
 				"navigationBarTitleText": "注册"	,
 				"navigationBarBackgroundColor": "#ffffff"
 				
-			}
-		},
-		{
-			"path": "pages/center/index",
-			"style": {
-				"navigationBarTitleText": "我的",
-				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
@@ -105,6 +137,12 @@
 				"text": "我的",
 				"selectedIconPath": "/static/img/center-active.png",
 				"iconPath": "/static/img/center.png"
+			},
+			{
+				"pagePath": "pages/entertainment/index",
+				"text": "娱乐",
+				"selectedIconPath": "/static/img/entertainment-active.svg",
+				"iconPath": "/static/img/entertainment.svg"
 			}
 		]
 	},

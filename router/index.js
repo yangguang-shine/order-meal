@@ -19,15 +19,19 @@ const addressList = [
 const entertainmentList = [
 	{
 		name: 'entertainment',
-		path: 'pages/entertainment/index'
+		path: '/pages/entertainment/index'
 	},
 	{
 		name: 'entertainment/joke',
-		path: 'pages/entertainment/joke/index'
+		path: '/pages/entertainment/joke/index'
 	},
 	{
 		name: 'entertainment/news',
-		path: 'pages/entertainment/news/index'
+		path: '/pages/entertainment/news/index'
+	},
+	{
+		name: 'entertainment/cuisine',
+		path: '/pages/entertainment/cuisine/index'
 	},
 ]
 
