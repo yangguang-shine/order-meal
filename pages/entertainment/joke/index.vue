@@ -1,26 +1,84 @@
 <template>
-    <div class="joke-container"></div>
+    <div class="joke-container">
+        <div class="joke-item" v-for="(jokeItem, index) in jokeList" :key="index">
+            <div class="joke-content" v-for="(contentItem, contentIndex) in jokeItem.contentList">
+                {{contentItem}}
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
+const pagesize = 20
+const sort = 'desc'
 export default {
     data() {
         return {
-            jokeList: []
+            jokeList: [],
+            page: 1,
+            time: `${(+new Data())}`.slice(3)
         }
+    },
+    async onPullDownRefresh() {
+        this.page = 1
+        this.time = `${(+new Data())}`.slice(3)
+        await this.getJokeList()
+        uni.stopPullDownRefresh()
+    },
+    async onReachBottom() {
+        await this.getMoreJokeList()
     },
     onLoad() {
-        this.init()
+        this.getJokeList()
     },
     methods: {
-        async init() {
-            const res = await this.$fetch.get('/api/entertainment/jokeList', {  })
-            console.log(res)
-        }
+        async getJokeList() {
+            const res = await this.$fetch.get('/api/entertainment/jokeList', { page: this.page, pagesize, sort })
+            if (res.data.length) {
+                this.$showModal({
+                    content: '暂无笑话'
+                })
+            }
+            const jokeList = res.data || []
+            jokeList.forEach((item) => {
+                item.contentList = item.content.split('\r\n')
+            })
+            this.jokeList = jokeList
+        },
+        async getMoreJokeList() {
+            this.page = this.page + 1
+            const res = await this.$fetch.get('/api/entertainment/jokeList', { page: this.page, pagesize, sort })
+            if (res.data.length) {
+                this.$showModal({
+                    content: '暂无笑话'
+                })
+            }
+            const jokeList = res.data || []
+            jokeList.forEach((item) => {
+                item.contentList = item.content.split('\r\n')
+            })
+            this.jokeList.push(...jokeList)
+        },
+            // {
+            //     "content": "有一天晚上我俩一起吃西瓜，老大把西瓜籽很整洁的吐在了一张纸上，\r\n过了几天，我从教室回但宿舍看到老大在磕瓜子，\r\n我就问他：老大，你什么时候买的瓜子？\r\n老大说：刚晒好，说着抓了一把要递给我……",
+            //     "hashId": "bcc5fdc2fb6efc6db33fa242474f108a",
+            //     "unixtime": 1418814837,
+            //     "updatetime": "2014-12-17 19:13:57"
+            // }
     }
 }
 </script>
 
-<style>
-
+<style lang="scss">
+    .joke-container {
+        min-height: 100%;
+        background: #f5f5f5;
+        padding: 0 20rpx;
+        .joke-item {
+            padding: 30rpx 20rpx;
+        }
+        .joke-content {
+            text-indent: 2em;
+        }
+    }
 </style>

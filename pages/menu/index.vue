@@ -223,6 +223,7 @@ export default {
 		if (observer) {
 			observer.disconnect()
 		}
+		Object.assign(this.$data, this.$options.data())
 	},
 	onLoad(query) {
 		this.init()
@@ -253,6 +254,7 @@ export default {
 			})
 		},
 		async init() {
+			const { orderAgain, orderKey } = this.$root.$mp.query
 			const res = await this.$fetch.get('/api/userOrder/menuList', { shopID: this.shopInfo.shopID })
 			this.foodCategoryList = res.data || []
 			this.foodCategoryList.forEach((item, index) => {
@@ -267,10 +269,47 @@ export default {
 				this.selectCategoryTabId = this.foodCategoryList[0].scrollID
 				this.scrollCategoryID = this.foodCategoryList[0].scrollID
 			}
+			if (orderAgain) {
+				const categoryFoodList = await this.getOrderFoodList(orderKey)
+				if (categoryFoodList.length) {
+					uni.setStorageSync(`storageFoodList_${this.shopInfo.shopID}`, categoryFoodList)
+				}
+			}
 			this.getStorageCart()
+		},
+		async getOrderFoodList (orderKey) {
+			try {
+				const res = await this.$fetch.get('/api/userOrder/foodList', { orderKey, shopID: this.shopInfo.shopID })
+				return res.data.reduce((list, item) => {
+					if (!list.length) {
+						list.push({
+							categoryID: item.categoryID,
+							categoryName: item.categoryName,
+							foodList: [item]
+						})
+					} else {
+						const find = list.find(ListItem => ListItem.categoryID === item.categoryID)
+						if (find) {
+							find.foodList.push(item)
+						} else {
+							list.push({
+								categoryID: item.categoryID,
+								categoryName: item.categoryName,
+								foodList: [item]
+							})
+						}
+					}
+					return list
+				}, [])
+			} catch (e) {
+				console.log(e)
+				return []
+			}
 		},
 		getStorageCart() {
 			const storageFoodList =  uni.getStorageSync(`storageFoodList_${this.shopInfo.shopID}`)
+			console.log('storageFoodList')
+			console.log(storageFoodList)
 			if (!storageFoodList || !storageFoodList.length) return;
 			this.initCart({ foodCategoryList: this.foodCategoryList, storageFoodList })
 		},

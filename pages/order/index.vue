@@ -20,7 +20,7 @@
 					</div>
 				</div>
 				<div class="price-info flex-row flex-j-between">
-					<div></div>
+					<div class="order-again" :style="{'color': $mainColor}" @click.stop="orderAgain(orderItem)">再来一单</div>
 					<div class="price-box"><span class="price-title">总计：</span><span class="moneu-unit">¥</span><span>{{orderItem.orderAmount}}</span></div>
 				</div>
 			</div>
@@ -31,6 +31,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import host from '@/config/host'
+import getShopMinusList from '@/utils/getShopMinusList';
 
 	export default {
 		data() {
@@ -50,7 +51,8 @@ import host from '@/config/host'
 		},
 		methods: {
 			...mapMutations({
-				changeOrderListUpdate: 'changeOrderListUpdate'
+				changeOrderListUpdate: 'changeOrderListUpdate',
+				saveShopInfo:'saveShopInfo'
 			}),
 			async getOrderList() {
 				try {
@@ -108,6 +110,24 @@ import host from '@/config/host'
 					}
 				})
 			},
+			async orderAgain(orderItem) {
+				try {
+					const res = await this.$fetch.get('/api/userShop/find', { shopID: orderItem.shopID })
+					const shopInfo = res.data || {}
+					shopInfo.minusList = getShopMinusList(shopInfo.minus || '')
+					this.saveShopInfo(shopInfo)
+					this.$myrouter.push({
+						name: 'menu',
+						query: {
+							orderKey: orderItem.orderKey,
+							shopID: orderItem.shopID,
+							orderAgain: 'true'
+						}
+					})
+				} catch (e) {
+					console.log(e)
+				}
+			}
 		}
 	}
 </script>
@@ -214,6 +234,14 @@ page {
 	.moneu-unit {
 		font-size: 26rpx;
 		font-weight: bold;
+	}
+	.order-again {
+		height: 60rpx;
+		padding: 0 20rpx;
+		line-height: 60rpx;
+		text-align: center;
+		border: 2rpx solid;
+		border-radius: 10rpx;
 	}
 }
 </style>

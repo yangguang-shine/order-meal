@@ -56,7 +56,7 @@ import { mapMutations } from 'vuex'
 		},
 		methods: {
 			...mapMutations({
-				saveOrderShopInfo:'saveOrderShopInfo',
+				saveShopInfo:'saveShopInfo',
 				saveBusinessType:'saveBusinessType',
 			}),
 			async init() {
@@ -83,7 +83,7 @@ import { mapMutations } from 'vuex'
 				})
 			},
 			toOrder(shopItem) {
-				this.saveOrderShopInfo(shopItem)
+				this.saveShopInfo(shopItem)
                 this.saveBusinessType('')
  				this.$myrouter.push({
 					name: 'menu',

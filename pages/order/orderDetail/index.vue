@@ -7,8 +7,9 @@
 				<div v-else-if="orderDetail.businessType === 3" class="order-type">自提</div>
 			</div>
 			<div class="order-tip-title">感谢</div>
-			<div class="order-button-box flex-row" v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20 ">
-				<div class="button-item" :style="{'color': $mainColor}" @click="cancellOrder">取消订单</div>
+			<div class="order-button-box flex-row">
+				<div v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20 " class="button-item" :style="{'color': $mainColor}" @click="cancellOrder">取消订单</div>
+				<div class="button-item" :style="{'color': $mainColor}" @click="orderAgain()">再来一单</div>
 			</div>
 		</div>
 		<div class="order-info-box">
@@ -102,6 +103,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import host from '@/config/host'
+import getShopMinusList from '@/utils/getShopMinusList';
 
 	export default {
 		data() {
@@ -129,7 +131,6 @@ import host from '@/config/host'
 					foodItem.totalPrice = (foodItem.price * foodItem.orderCount).toFixed(2)
 				})
 				orderDetail.orderTypeTitle = this.getOrderTypeTitle(orderDetail.orderStatus, orderDetail.businessType)
-				orderDetail.nextStatus = this.getOrderNextStatus(orderDetail.orderStatus, orderDetail.businessType)
 				this.orderDetail = orderDetail
 			},
 			getOrderTypeTitle(orderStatus, businessType) {
@@ -179,6 +180,24 @@ import host from '@/config/host'
 					this.init()
 				} catch(e) {
 					this.$hideLoading()
+					console.log(e)
+				}
+			},
+			async orderAgain() {
+				try {
+					const res = await this.$fetch.get('/api/userShop/find', { shopID: this.orderDetail.shopID })
+					const shopInfo = res.data || {}
+					shopInfo.minusList = getShopMinusList(shopInfo.minus || '')
+					this.saveShopInfo(shopInfo)
+					this.$myrouter.push({
+						name: 'menu',
+						query: {
+							orderKey: this.orderDetail.orderKey,
+							shopID: this.orderDetail.shopID,
+							orderAgain: 'true'
+						}
+					})
+				} catch (e) {
 					console.log(e)
 				}
 			}

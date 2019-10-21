@@ -32,7 +32,7 @@ export default {
     },
     methods: {
         ...mapMutations({
-            saveOrderShopInfo: 'saveOrderShopInfo',
+            saveShopInfo: 'saveShopInfo',
             saveBusinessType: 'saveBusinessType'
         }),
         async init() {
@@ -55,7 +55,7 @@ export default {
             }
         },
         toNextPage(shopItem) {
-            this.saveOrderShopInfo(shopItem)
+            this.saveShopInfo(shopItem)
             this.saveBusinessType(this.businessType)
             this.$myrouter.push({
                 name: 'menu',

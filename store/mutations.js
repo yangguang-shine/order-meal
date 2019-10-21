@@ -26,20 +26,20 @@ mutations['cartCountChange'] = function(state, { categoryID = '', foodItem = {},
 }
 mutations['initCart'] = function (state, { foodCategoryList = [], storageFoodList = [] } = {}) {
     storageFoodList.forEach((storageFoodItem) => {
-        const foodCatrgoryFind = foodCategoryList.find(foodCategoryItem => foodCategoryItem.categoryID === storageFoodItem.categoryID)
-        if (foodCatrgoryFind) {
-            foodCatrgoryFind.foodList.forEach((foodItem) => {
+        const foodCategoryFind = foodCategoryList.find(foodCategoryItem => foodCategoryItem.categoryID === storageFoodItem.categoryID)
+        if (foodCategoryFind) {
+            foodCategoryFind.foodList.forEach((foodItem) => {
                 storageFoodItem.foodList.forEach((item) => {
                     if (item.foodID === foodItem.foodID) {
                         foodItem.orderCount = item.orderCount
-                        this.commit('cartCountChange', { categoryID: foodCatrgoryFind.categoryID, foodItem, fromCart: false })
+                        this.commit('cartCountChange', { categoryID: foodCategoryFind.categoryID, foodItem, fromCart: false })
                     }
                 })
             })
         }
     })
 }
-mutations['saveOrderShopInfo'] = (state, shopInfo = {}) => {
+mutations['saveShopInfo'] = (state, shopInfo = {}) => {
     let minusList = []
     const minusSplit = shopInfo.minus.split(',')
     if (minusSplit[0] === '') {
