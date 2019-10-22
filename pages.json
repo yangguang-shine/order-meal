@@ -55,6 +55,14 @@
 			}
 		},
 		{
+			"path": "pages/entertainment/question/index",
+			"style": {
+				"navigationBarTitleText": "脑筋急转弯"	,
+				"navigationBarBackgroundColor": "#ffffff"
+				
+			}
+		},
+		{
 			"path": "pages/order/orderDetail/index",
 			"style": {
 				"navigationBarTitleText": "订单详情"	,

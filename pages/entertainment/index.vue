@@ -3,6 +3,7 @@
         <div class="to-joke entertainment-item" @click="toJoke">笑话</div>
         <div class="to-news entertainment-item" @click="toNews">新闻</div>
         <div class="to-news entertainment-item" @click="toCuisine">菜品大全</div>
+        <div class="to-news entertainment-item" @click="toQuestion">智能问答</div>
     </div>
 </template>
 
@@ -29,6 +30,11 @@ export default {
         toCuisine() {
             this.$myrouter.push({
                 name: 'entertainment/cuisine'
+            })
+        },
+        toQuestion() {
+            this.$myrouter.push({
+                name: 'entertainment/question'
             })
         },
     }

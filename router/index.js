@@ -33,6 +33,10 @@ const entertainmentList = [
 		name: 'entertainment/cuisine',
 		path: '/pages/entertainment/cuisine/index'
 	},
+	{
+		name: 'entertainment/question',
+		path: '/pages/entertainment/question/index'
+	},
 ]
 
 const routerList = [

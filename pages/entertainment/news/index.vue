@@ -97,16 +97,18 @@ export default {
         await this.getNewsList()
         uni.stopPullDownRefresh()
     },
-    async onReachBottom() {
-        await this.getMoreNewsList()
-        uni.stopPullDownRefresh()
-    },
+    // async onReachBottom() {
+    //     await this.getMoreNewsList()
+    //     uni.stopPullDownRefresh()
+    // },
     methods: {
         async getMoreNewsList() {
             try {
                 this.$showLoading()
-                const res = await this.$fetch.get('/api/entertainment/newsList')
-                if (res.data.length) {
+                const res = await this.$fetch.get('/api/entertainment/newsList', {
+                    type: this.selectTabItem.type
+                })
+                if (!res.data.length) {
                     this.$showModal({
                         content: '暂无新闻'
                     })
@@ -121,7 +123,9 @@ export default {
         async getNewsList() {
             try {
                 this.$showLoading()
-                const res = await this.$fetch.get('/api/entertainment/newsList')
+                const res = await this.$fetch.get('/api/entertainment/newsList', {
+                    type: this.selectTabItem.type
+                })
                 this.newsList = res.data
                 this.$hideLoading()
             } catch (e) {
@@ -155,6 +159,7 @@ export default {
         // box-sizing: border-box;
         border-bottom: 2rpx solid #eee;
         background-color: #fff;
+        z-index: 99;
     }
     .tab-list-box {
         position: relative;

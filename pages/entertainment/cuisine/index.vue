@@ -19,13 +19,7 @@ export default {
             pageNum: 0
         }
     },
-    onLoad() {
-        this.init()
-    },
     methods: {
-        async init() {
-            // const res = await this.$fetch.get('/api/entertainment/newsList', {  })
-        },
         async getCuisineList() {
             const res = await this.$fetch.get('/api/entertainment/cuisineList', { cuisineName: this.cuisineName, pageNum: this.pageNum})
         }
