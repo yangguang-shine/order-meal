@@ -15,9 +15,18 @@
 
 ## 在线使用
 
-手机浏览器访问：[个人点餐项目](https://yangguang.natappvip.cc/h5/pages/home/index)
+手机浏览器访问：[个人点餐项目](https://yangguang.natappvip.cc/user/pages/home/index)
 
-H5版:   手机浏览器访问 https://yangguang.natappvip.cc/h5/pages/home/index
+H5版:
+    用户端：手机浏览器访问 https://yangguang.natappvip.cc/user/pages/home/index
+    管理端：手机浏览器访问 https://yangguang.natappvip.cc/manage/pages/home/index
 
-小程序版： 联系本人添加微信小程序体验权限
+小程序版： 添加微信：13429808281，获取体验权限
+
+## 相关github地址
+
+    用户端github地址：https://github.com/yangguang-shine/my-uni-app
+    管理端github地址：https://github.com/yangguang-shine/mp-manage
+    后端github地址：https://github.com/yangguang-shine/my-app
+
 
