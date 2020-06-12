@@ -8,14 +8,14 @@ export const login = () => {
                 if (res.code) {
                 //发起网络请求
                     uni.request({
-                        url: `${host}/wechat/wx/login`,
+                        url: `${host}/user/wechat/wx/login`,
                         data: {
                             code: res.code,
                             channel: vuex.state.channel
                         },
                         success(res) {
                             console.log(res)
-                            uni.setStorageSync('token', res.data.data)
+                            uni.setStorageSync('userToken', res.data.data)
                             resolve()
                         },
                         fail() {
@@ -46,7 +46,7 @@ export const checkSession = () => {
 }
 export default async () => {
     try {
-        if (!uni.getStorageSync('token')) {
+        if (!uni.getStorageSync('userToken')) {
             await login()
         }
     } catch (e) {

@@ -5,18 +5,20 @@ import fetch from '@/utils/fly.js'
 import store from '@/store'
 import NoData from '@/components/no-data.vue'
 import { showModal, showLoading, showToast, hideLoading, hideToast} from '@/utils'
+import { setStorage, getStorage } from '@/utils/tool.js'
 import '@/style/flex.css'
 import '@/style/common.css'
 Vue.component('no-data',NoData)
 Vue.config.productionTip = false
-Vue.prototype.$myrouter = router
+Vue.prototype.$router = router
 Vue.prototype.$store = store
 Vue.prototype.$fetch = fetch
 Vue.prototype.$showModal = showModal
 Vue.prototype.$showLoading = showLoading
 Vue.prototype.$showToast = showToast
 Vue.prototype.$hideLoading = hideLoading
-Vue.prototype.$hideToast = hideToast
+Vue.prototype.$setStorage = setStorage
+Vue.prototype.$getStorage = getStorage
 console.log(Vue.prototype)
 // Vue.prototype.$data.$mainColor = '#47ff56'
 // Vue.prototype.$mainColor = '#47ff56'

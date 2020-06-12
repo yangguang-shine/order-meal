@@ -1,71 +1,9 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/home/index",
+			"path": "pages/role/index",
 			"style": {
-				"navigationBarTitleText": "首页",
-				"navigationBarBackgroundColor": "#ffffff"
-			}
-		}, 
-		{
-			"path": "pages/order/index",
-			"style": {
-				"navigationBarTitleText": "订单"	,
-				"navigationBarBackgroundColor": "#ffffff"
-				
-			}
-		},
-		{
-			"path": "pages/center/index",
-			"style": {
-				"navigationBarTitleText": "我的",
-				"navigationBarBackgroundColor": "#ffffff"
-			}
-		},
-		{
-			"path": "pages/entertainment/index",
-			"style": {
-				"navigationBarTitleText": "娱乐"	,
-				"navigationBarBackgroundColor": "#ffffff"
-				
-			}
-		},
-		{
-			"path": "pages/entertainment/joke/index",
-			"style": {
-				"navigationBarTitleText": "笑话"	,
-				"navigationBarBackgroundColor": "#ffffff"
-				
-			}
-		},
-		{
-			"path": "pages/entertainment/news/index",
-			"style": {
-				"navigationBarTitleText": "新闻"	,
-				"navigationBarBackgroundColor": "#ffffff"
-				
-			}
-		},
-		{
-			"path": "pages/entertainment/cuisine/index",
-			"style": {
-				"navigationBarTitleText": "菜品大全"	,
-				"navigationBarBackgroundColor": "#ffffff"
-				
-			}
-		},
-		{
-			"path": "pages/entertainment/question/index",
-			"style": {
-				"navigationBarTitleText": "脑筋急转弯"	,
-				"navigationBarBackgroundColor": "#ffffff"
-				
-			}
-		},
-		{
-			"path": "pages/order/orderDetail/index",
-			"style": {
-				"navigationBarTitleText": "订单详情"	,
+				"navigationBarTitleText": "角色"	,
 				"navigationBarBackgroundColor": "#ffffff"
 				
 			}
@@ -87,77 +25,189 @@
 			}
 		},
 		{
-			"path": "pages/menu/index",
+			"path": "pages/user/home/index",
 			"style": {
-				"navigationBarTitleText": "点餐",
+				"navigationBarTitleText": "首页",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		}, 
+		{
+			"path": "pages/user/order/index",
+			"style": {
+				"navigationBarTitleText": "订单"	,
+				"navigationBarBackgroundColor": "#ffffff"
+				
+			}
+		},
+		{
+			"path": "pages/user/order/orderDetail/index",
+			"style": {
+				"navigationBarTitleText": "订单详情"	,
+				"navigationBarBackgroundColor": "#ffffff"
+				
+			}
+		},
+		{
+			"path": "pages/user/center/index",
+			"style": {
+				"navigationBarTitleText": "我的",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
-			"path": "pages/menu/confirmOrder/index",
-			"style": {
-				"navigationBarTitleText": "确认订单",
-				"navigationBarBackgroundColor": "#ffffff"
-			}
-		},
-		{
-			"path": "pages/center/address/list/index",
+			"path": "pages/user/center/address/list/index",
 			"style": {
 				"navigationBarTitleText": "地址列表",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
-			"path": "pages/center/address/edit/index",
+			"path": "pages/user/center/address/edit/index",
 			"style": {
 				"navigationBarTitleText": "地址编辑",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
-			"path": "pages/shop/list/index",
+			"path": "pages/user/menu/index",
+			"style": {
+				"navigationBarTitleText": "点餐",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/user/menu/confirmOrder/index",
+			"style": {
+				"navigationBarTitleText": "确认订单",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/user/shop/list/index",
 			"style": {
 				"navigationBarTitleText": "店铺列表",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
+		},
+		// {
+		// 	"path": "pages/entertainment/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "娱乐"	,
+		// 		"navigationBarBackgroundColor": "#ffffff"
+				
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/entertainment/joke/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "笑话"	,
+		// 		"navigationBarBackgroundColor": "#ffffff"
+				
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/entertainment/news/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "新闻"	,
+		// 		"navigationBarBackgroundColor": "#ffffff"
+				
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/entertainment/cuisine/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "菜品大全"	,
+		// 		"navigationBarBackgroundColor": "#ffffff"
+				
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/entertainment/question/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "脑筋急转弯"	,
+		// 		"navigationBarBackgroundColor": "#ffffff"
+				
+		// 	}
+		// },
+		{
+			"path": "pages/manage/home/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
+			"path": "pages/manage/order/index",
+			"style": {
+				"navigationBarTitleText": "订单"
+			}
+		},
+		{
+			"path": "pages/manage/orderDetail/index",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
+		},
+		{
+			"path": "pages/manage/shop/edit/index",
+			"style": {
+				"navigationBarTitleText": "店铺编辑"
+			}
+		},
+		{
+			"path": "pages/manage/category/list/index",
+			"style": {
+				"navigationBarTitleText": "分类列表"
+			}
+		},
+		{
+			"path": "pages/manage/category/edit/index",
+			"style": {
+				"navigationBarTitleText": "分类编辑"
+			}
+		},
+		{
+			"path": "pages/manage/food/list/index",
+			"style": {
+				"navigationBarTitleText": "菜品列表"
+			}
+		},
+		{
+			"path": "pages/manage/food/edit/index",
+			"style": {
+				"navigationBarTitleText": "菜品列表"
+			}
 		}
 	],
-	"tabBar": {
-		"color": "#7A7E83",
-		"selectedColor": "#3cc51f",
-		"borderStyle": "black",
-		"backgroundColor": "#ffffff",
-		"list": [
-			{
-				"pagePath": "pages/home/index",
-				"text": "首页",
-				"selectedIconPath": "/static/img/home-active.png",
-				"iconPath": "/static/img/home.png"
-			},
-			{
-				"pagePath": "pages/order/index",
-				"text": "订单",
-				"selectedIconPath": "static/img/order-active.png",
-				"iconPath": "static/img/order.png"
-			},
-			{
-				"pagePath": "pages/center/index",
-				"text": "我的",
-				"selectedIconPath": "/static/img/center-active.png",
-				"iconPath": "/static/img/center.png"
-			},
-			{
-				"pagePath": "pages/entertainment/index",
-				"text": "娱乐",
-				"selectedIconPath": "/static/img/entertainment-active.svg",
-				"iconPath": "/static/img/entertainment.svg"
-			}
-		]
-	},
+	// "tabBar": {
+	// 	"color": "#7A7E83",
+	// 	"selectedColor": "#3cc51f",
+	// 	"borderStyle": "black",
+	// 	"backgroundColor": "#ffffff",
+	// 	"list": [
+	// 		{
+	// 			"pagePath": "pages/home/index",
+	// 			"text": "首页",
+	// 			"selectedIconPath": "/static/img/home-active.png",
+	// 			"iconPath": "/static/img/home.png"
+	// 		},
+	// 		{
+	// 			"pagePath": "pages/order/index",
+	// 			"text": "订单",
+	// 			"selectedIconPath": "static/img/order-active.png",
+	// 			"iconPath": "static/img/order.png"
+	// 		},
+	// 		{
+	// 			"pagePath": "pages/center/index",
+	// 			"text": "我的",
+	// 			"selectedIconPath": "/static/img/center-active.png",
+	// 			"iconPath": "/static/img/center.png"
+	// 		}
+	// 	]
+	// },
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#ccc",
+		"navigationBarBackgroundColor": "#fff",
 		"backgroundColor": "#ccc"
 		// #ifdef H5
 		,"navigationStyle": "custom"

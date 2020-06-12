@@ -7,6 +7,7 @@ export default (minus) => {
         return {
             reach: Number(splitMinus[0]),
             reduce: Number(splitMinus[1]),
+			random: Math.random()
         }
     })
     return minusList
