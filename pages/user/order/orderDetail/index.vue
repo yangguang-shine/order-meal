@@ -125,7 +125,6 @@ import getShopMinusList from '@/utils/getShopMinusList';
 		methods: {
 			async init() {
 				const res = await this.$fetch.get('/api/userOrder/orderDetail', { orderKey: this.orderKey })
-				console.log(res)
 				const orderDetail = res.data || {};
 				(orderDetail.foodList || []).forEach((foodItem) => {
 					foodItem.totalPrice = (foodItem.price * foodItem.orderCount).toFixed(2)

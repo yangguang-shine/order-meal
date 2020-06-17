@@ -1,26 +1,26 @@
 <template>
-	<view class="role-container flex-row flex-ja-center">
+	<view class="role-container flex-col flex-ja-center">
 		<view class="role-box flex-row flex-j-around">
 			<view class="user" @click="toUserHome">
-				用户
+				用户操作
 			</view>
 			<view class="manage" @click="toManageHome">
-				管理
+				管理员操作 
 			</view>
 		</view>
-
+		<view class="reptile">
+			爬虫
+		</view>
 	</view>
 </template>
 
 <script>
 	export default {
 		onLoad() {
-			console.log(this.$router)
 		},
 		methods: {
 			toUserHome() {
 				const userToken = this.$getStorage('userToken')
-				console.log(userToken)
 				if (userToken) {
 					this.$router.reLaunchTo({
 						name: 'user/home',
@@ -61,6 +61,11 @@
 		height: 100%;
 		.role-box {
 			width: 100%;
+		}
+		.reptile {
+			width: 100%;
+			padding-top: 80rpx;
+			text-align: center;
 		}
 	}
 </style>

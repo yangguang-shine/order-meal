@@ -17,13 +17,9 @@ export const authorize = (scopeName) => {
         uni.authorize({
             scope: scopeName,
             success: (res) => {
-                console.log(111)
-                console.log(scopeName)
                 resolve(res)
             },
             fail: (res) => {
-                console.log(148564)
-                console.log(scopeName)
                 reject(res)
             }
         })

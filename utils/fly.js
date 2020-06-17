@@ -66,7 +66,7 @@ fly.interceptors.response.use(
 		console.log(err)
 		if (err.status === 404) {
 			uni.showToast({
-				title: '服务异常',
+				title: '404未找到服务',
 				icon: 'none',
 			})
 			return null
@@ -82,7 +82,6 @@ const flyRequest = (url, params, options, method) => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			const res = await fly[method](url, params);
-			console.log(res)
 			const code = res.code
 			if (code === '000') {
 				resolve(res)
@@ -96,7 +95,7 @@ const flyRequest = (url, params, options, method) => {
 						roleFlag: 'user'
 					}
 				})
-				reject()
+				reject(res)
 			} else if (code === '200') {
 				await showModal({
 					content: res.msg
@@ -107,17 +106,17 @@ const flyRequest = (url, params, options, method) => {
 						roleFlag: 'manage'
 					}
 				})
-				reject()
+				reject(res)
 			} else if (options.error) {
 				showModal({
 					content: res.msg
 				})
-				reject()
+				reject(res)
 			} else {
-				reject()
+				reject(res)
 			}
 		} catch (e) {
-			reject()
+			reject('program error')
 			console.log(e)
 		}
 	})

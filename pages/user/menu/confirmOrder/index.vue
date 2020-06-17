@@ -186,7 +186,6 @@ export default {
 			this.cartFoodList.forEach((item) => {
 				foodList.push(...item.foodList)
 			})
-			console.log(foodList)
 			const query = {}
 			if (this.selectBusinessType === 2) {
 				query.takeOutTime = this.takeOutTime

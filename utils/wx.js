@@ -2,7 +2,6 @@ import host from '@/config/host'
 import vuex from '@/store'
 export const login = () => {
     return new Promise((resolve, reject) => {
-        console.log(vuex)
         uni.login({
             success (res) {
                 if (res.code) {
@@ -11,10 +10,8 @@ export const login = () => {
                         url: `${host}/user/wechat/wx/login`,
                         data: {
                             code: res.code,
-                            channel: vuex.state.channel
                         },
                         success(res) {
-                            console.log(res)
                             uni.setStorageSync('userToken', res.data.data)
                             resolve()
                         },

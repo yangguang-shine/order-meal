@@ -86,22 +86,19 @@ import host from '@/config/host'
 			async init() {
 				try {
 					this.$showLoading()
-					const res = await this.$fetch.get('/api/food/find', { foodID: this.foodID, shopID: this.shopID })
+					const res = await this.$fetch.get('/manage/food/find', { foodID: this.foodID, shopID: this.shopID })
 					this.foodInfo = res.data || {}
 					this.$hideLoading()
 					console.log()
 				} catch(e) {
 					console.log(e)
 					this.$hideLoading()
-					this.$showModal({
-						content: '菜品信息获取失败'
-					})
 				}
 			},
 			async addFood() {
 				try {
 					this.$showLoading()
-					const res = await this.$fetch.post('/api/food/add', { ...this.foodInfo, categoryID: this.categoryID, categoryName: this.categoryName, shopID: this.shopID })
+					const res = await this.$fetch.post('/manage/food/add', { ...this.foodInfo, categoryID: this.categoryID, categoryName: this.categoryName, shopID: this.shopID })
 					this.addStatus = true
 					this.$hideLoading()
 					await this.$showModal({
@@ -111,15 +108,12 @@ import host from '@/config/host'
 				} catch(e) {
 					console.log(e)
 					this.$hideLoading()
-					this.$showModal({
-						content: '添加失败'
-					})
 				}
 			},
 			async editFood() {
 				try {
 					this.$showLoading()
-					const res = await this.$fetch.post('/api/food/edit', { ...this.foodInfo, shopID: this.shopID })
+					const res = await this.$fetch.post('/manage/food/edit', { ...this.foodInfo, shopID: this.shopID })
 					this.$hideLoading()
 					await this.$showModal({
 						content: '修改成功'
@@ -128,9 +122,6 @@ import host from '@/config/host'
 				} catch(e) {
 					console.log(e)
 					this.$hideLoading()
-					this.$showModal({
-						content: '修改失败'
-					})
 				}
 			},
 			chooseImg() {
@@ -152,7 +143,6 @@ import host from '@/config/host'
 							const reg = /.+\/(\d+\.)/
 							imgUrl = this.foodInfo.imgUrl.replace(reg, '$1')
 						}
-						console.log(this.foodID)
 						uni.uploadFile({
 							url: `${host}/manage/api/img/food/uploadImg`,
 							filePath: file.path,
@@ -163,7 +153,6 @@ import host from '@/config/host'
 								foodID: this.foodID || '',
 							},
 							success: async (res) => { //成功的回调
-								console.log(res)
 								const data = JSON.parse(res.data)
 								this.$showLoading({
 									title: '上传中'

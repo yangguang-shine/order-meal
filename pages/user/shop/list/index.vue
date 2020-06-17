@@ -24,7 +24,6 @@ export default {
         }
     },
     onLoad(query) {
-        console.log(query)
         this.businessType = Number(query.businessType) || ''
     },
     onShow() {

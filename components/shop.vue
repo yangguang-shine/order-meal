@@ -42,10 +42,10 @@ export default {
     },
     methods: {
         clickShopItem() {
-            this.$emit('clickShopItem', this.shopItem)
+            this.$emit('clickShopItem')
         },
         toDeleteShop() {
-            this.$emit('toDeleteShop', this.shopItem)
+            this.$emit('toDeleteShop')
         },
         toEditShop() {
             this.$router.navigateTo({

@@ -60,12 +60,12 @@ const manage = [
 		path: '/pages/manage/home/index'
 	},
 	{
-		name: 'manage/order',
-		path: '/pages/manage/order/index'
+		name: 'manage/order/list',
+		path: '/pages/manage/order/list/index'
 	},
 	{
-		name: 'manage/orderDetail',
-		path: '/pages/manage/orderDetail/index'
+		name: 'manage/order/detail',
+		path: '/pages/manage/order/detail/index'
 	},
 	{
 		name: 'manage/shop/edit',

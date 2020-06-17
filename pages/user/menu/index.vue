@@ -128,11 +128,7 @@ export default {
 				if (this.shopInfo.minusList.length === this.cartPriceInfo.minusIndex) {
 					return `已减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex - 1].reduce}`
 				} else {
-					console.log(this.cartPriceInfo.cartAllOriginPrice)
-					console.log(this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reach)
-					console.log(this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reach - this.cartPriceInfo.cartAllOriginPrice)
-					console.log((this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reach - this.cartPriceInfo.cartAllOriginPrice).toFixed(2))
-					// const hasReduce = `已减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex - 1].reduce}`;
+				// const hasReduce = `已减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex - 1].reduce}`;
 					// const secondMinus = `再买${this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reach - this.cartPriceInfo.cartAllOriginPrice}`
 					return `已减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex - 1].reduce}元,再买${Number((this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reach - this.cartPriceInfo.cartAllOriginPrice).toFixed(2))}元减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reduce}元`
 				}
@@ -308,8 +304,6 @@ export default {
 		},
 		getStorageCart() {
 			const storageFoodList =  uni.getStorageSync(`storageFoodList_${this.shopInfo.shopID}`)
-			console.log('storageFoodList')
-			console.log(storageFoodList)
 			if (!storageFoodList || !storageFoodList.length) return;
 			this.initCart({ foodCategoryList: this.foodCategoryList, storageFoodList })
 		},

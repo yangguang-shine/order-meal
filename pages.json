@@ -136,13 +136,13 @@
 			}
 		},
 		{
-			"path": "pages/manage/order/index",
+			"path": "pages/manage/order/list/index",
 			"style": {
 				"navigationBarTitleText": "订单"
 			}
 		},
 		{
-			"path": "pages/manage/orderDetail/index",
+			"path": "pages/manage/order/detail/index",
 			"style": {
 				"navigationBarTitleText": "订单详情"
 			}

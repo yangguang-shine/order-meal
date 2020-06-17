@@ -6,123 +6,127 @@
 			<div class="food-info flex-item flex-col flex-j-between">
 				<div>
 					<div class="line1 food-name">
-						{{foodItem.foodName}}<span class="food-unit">/{{foodItem.unit}}</span>
+						{{ foodItem.foodName }}
+						<span class="food-unit">/{{ foodItem.unit }}</span>
 					</div>
-					<div class="food-description">
-						{{foodItem.description}}
-					</div>
+					<div class="food-description">{{ foodItem.description }}</div>
 				</div>
-				<div class="food-price">
-					{{foodItem.price}}
-				</div>
+				<div class="food-price">{{ foodItem.price }}</div>
 			</div>
 			<image class="delete-food" src="/static/img/shop-delete.svg" @click.stop="deleteFood(foodItem.foodID)"></image>
 		</div>
-		<div class="food-add" :style="{color: $mainColor}" @click.stop="toAddFood">
-			添加
-		</div>
+		<div class="food-add" :style="{ color: $mainColor }" @click.stop="toAddFood">添加</div>
 	</view>
 </template>
 <script>
-import host from '@/config/host'
+import host from '@/config/host';
 
-	export default {
-		data() {
-			return {
-				foodList: [],
-				categoryID: '',
-				categoryName: '',
-				shopID: '',
-				host
+export default {
+	data() {
+		return {
+			foodList: [],
+			categoryID: '',
+			categoryName: '',
+			shopID: '',
+			host
+		};
+	},
+	onLoad(options) {
+		console.log(this);
+		this.categoryID = options.categoryID;
+		this.categoryName = options.categoryName;
+		this.shopID = options.shopID;
+	},
+	onShow() {
+		this.init();
+	},
+	methods: {
+		async init() {
+			try {
+				this.$showLoading();
+				const res = await this.$fetch.get('/manage/food/list', { categoryID: this.categoryID, shopID: this.shopID });
+				this.foodList = res.data || [];
+				this.$hideLoading();
+			} catch (e) {
+				this.$hideLoading();
+				this.$showModal({
+					content: '菜品列表获取失败'
+				});
+				console.log(e);
 			}
 		},
-		onLoad(options) {
-			console.log(this)
-			this.categoryID = options.categoryID
-			this.categoryName = options.categoryName
-			this.shopID = options.shopID
-		},
-		onShow() {
-			this.init()
-		},
-		methods: {
-			async init() {
-				try {
-					this.$showLoading()
-					const res = await this.$fetch.get('/api/food/list', { categoryID: this.categoryID, shopID: this.shopID })
-					console.log(res)
-					this.foodList = res.data || []
-					this.$hideLoading()
-				} catch(e) {
-					this.$hideLoading()
-					this.$showModal({
-						content: '菜品列表获取失败'
-					})
-					console.log(e)
+		toEdit(foodID) {
+			this.$router.navigateTo({
+				name: 'manage/food/edit',
+				query: {
+					foodID: foodID,
+					shopID: this.shopID
 				}
-			}, 
-			toEdit(foodID) {
-				this.$router.navigateTo({
-					name: 'food/edit',
-					query: {
-						foodID: foodID,
-						shopID: this.shopID
-					}
-				})
-			},
-			async deleteFood(foodID) {
-				try {
-					try {
-						await this.$showModal({
-							content: '删除该菜品信息',
-							showCancel: true,
-							confirmText: '确认删除'
-						})
-					} catch(e) {
-						console.log(e)
-						return
-					}
-					this.$showLoading()
-					const res = await this.$fetch.post('/api/food/delete', { foodID, shopID: this.shopID })
-					this.$hideLoading()
-					this.$showModal({
-						content: '删除成功'
-					})
-				} catch (e) {
-					this.$hideLoading()
-					this.$showModal({
-						content: '删除失败'
-					})
-					console.log(e)
-					return
+			});
+		},
+		async deleteFood(foodID) {
+			try {
+				await this.$showModal({
+					content: '删除该菜品信息',
+					showCancel: true,
+					confirmText: '确认删除'
+				});
+			} catch (e) {
+				console.log(e);
+				return;
+			}
+			try {
+				this.$showLoading();
+				const res = await this.$fetch.post('/manage/food/delete', { foodID, shopID: this.shopID });
+				this.$hideLoading();
+				this.$showModal({
+					content: '删除成功'
+				});
+			} catch (e) {
+				this.$hideLoading();
+				this.$showModal({
+					content: '删除失败'
+				});
+				console.log(e);
+				return;
+			}
+			try {
+				this.$showLoading()
+				await this.init()
+				this.$hideLoading();
+			} catch (e) {
+				this.$hideLoading();
+				this.$showModal({
+					content: '列表获取失败'
+				});
+				console.log(e);
+			}
+		},
+		toAddFood() {
+			this.$router.navigateTo({
+				name: 'manage/food/edit',
+				query: {
+					categoryID: this.categoryID,
+					categoryName: this.categoryName,
+					shopID: this.shopID
 				}
-				this.init()
-			},
-			toAddFood() {
-				this.$router.navigateTo({
-					name: 'food/edit',
-					query: {
-						categoryID: this.categoryID,
-						categoryName: this.categoryName,
-						shopID: this.shopID
-					}
-				})
-			},
+			});
 		}
 	}
+};
 </script>
 
 <style lang="scss" scoped>
 page {
 	height: 100%;
 }
-.food-list-container  {
+.food-list-container {
 	min-height: 100%;
 	font-size: 30rpx;
 	padding: 30rpx;
 	padding-bottom: 70rpx;
-	box-sizing: border-box;  
-	.food-item  {
+	box-sizing: border-box;
+	.food-item {
 		margin-bottom: 30rpx;
 		position: relative;
 	}

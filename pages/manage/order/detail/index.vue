@@ -140,7 +140,6 @@ import host from '@/config/host'
 		methods: {
 			async init() {
 				const res = await this.$fetch.get('/api/manageOrder/orderDetail', { orderKey: this.orderKey, shopID: this.shopID })
-				console.log(res)
 				const orderDetail = res.data || {};
 				(orderDetail.foodList || []).forEach((foodItem) => {
 					foodItem.totalPrice = (foodItem.price * foodItem.orderCount).toFixed(2)

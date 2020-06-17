@@ -19,7 +19,6 @@ Vue.prototype.$showToast = showToast
 Vue.prototype.$hideLoading = hideLoading
 Vue.prototype.$setStorage = setStorage
 Vue.prototype.$getStorage = getStorage
-console.log(Vue.prototype)
 // Vue.prototype.$data.$mainColor = '#47ff56'
 // Vue.prototype.$mainColor = '#47ff56'
 App.mpType = 'app'

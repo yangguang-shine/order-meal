@@ -65,7 +65,6 @@ import getShopMinusList from '@/utils/getShopMinusList';
 						...orderItem,
 						orderTypeTitle: this.getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType)
 					}))
-					console.log(orderList)
 					// this.changeOrderListUpdate({ index: this.tabIndex, status: false})
 					this.allOrderList[this.tabIndex].push(...orderList)
 				} catch (e) {

@@ -92,7 +92,6 @@
 			},
         	async chooseAddress() {
 				// #ifdef MP-WEIXIN 
-				console.log(111111)
 				try {
 					await getSetting('scope.userLocation')
 				} catch (e) {
@@ -100,7 +99,6 @@
 					try {
 						await authorize('scope.userLocation')
 					} catch (e) {
-						console.log(1111)
 						console.log(e)
 						return
 					}
@@ -108,7 +106,6 @@
 				// #endif
 				uni.chooseLocation({
 					success: (res) => {
-						console.log(res)
 						this.addressInfo.address1 = res.address
 					},
 				})

@@ -78,7 +78,6 @@ const flyRequest = (url, params, options, method) => {
     return new Promise(async (resolve, reject) => {
         try {
             const res = await fly[method](url, params);
-            console.log(res)
             const code = res.code
             if (code === '000') {
                 resolve(res)

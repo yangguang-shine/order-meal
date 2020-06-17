@@ -75,7 +75,6 @@
 				this.init()
 			},
 			async setDefaultAddress(addressID) {
-				console.log(addressID)
 				if (this.defaultAddress.addressID === addressID) return;
 				try {
 					await this.$showModal({
