@@ -32,7 +32,7 @@
 			}
 		}, 
 		{
-			"path": "pages/user/order/index",
+			"path": "pages/user/order/list/index",
 			"style": {
 				"navigationBarTitleText": "订单"	,
 				"navigationBarBackgroundColor": "#ffffff"
@@ -40,7 +40,7 @@
 			}
 		},
 		{
-			"path": "pages/user/order/orderDetail/index",
+			"path": "pages/user/order/detail/index",
 			"style": {
 				"navigationBarTitleText": "订单详情"	,
 				"navigationBarBackgroundColor": "#ffffff"
@@ -55,28 +55,28 @@
 			}
 		},
 		{
-			"path": "pages/user/center/address/list/index",
+			"path": "pages/user/address/list/index",
 			"style": {
 				"navigationBarTitleText": "地址列表",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
-			"path": "pages/user/center/address/edit/index",
+			"path": "pages/user/address/edit/index",
 			"style": {
 				"navigationBarTitleText": "地址编辑",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
-			"path": "pages/user/menu/index",
+			"path": "pages/user/menu/list/index",
 			"style": {
 				"navigationBarTitleText": "点餐",
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
-			"path": "pages/user/menu/confirmOrder/index",
+			"path": "pages/user/menu/confirm/index",
 			"style": {
 				"navigationBarTitleText": "确认订单",
 				"navigationBarBackgroundColor": "#ffffff"

@@ -17,23 +17,23 @@ const user = [
 		path: '/pages/user/home/index'
 	},
 	{
-		name: 'user/menu',
-		path: '/pages/user/menu/index'
+		name: 'user/menu/list',
+		path: '/pages/user/menu/list/index'
 	},
 	{
-		name: 'user/confirmOrder',
-		path: '/pages/user/menu/confirmOrder/index'
+		name: 'user/menu/confirm',
+		path: '/pages/user/menu/confirm/index'
 	},
 	{
-		name: 'user/order',
-		path: '/pages/user/order/index'
+		name: 'user/order/list',
+		path: '/pages/user/order/list/index'
 	},
 	{
-		name: 'user/orderDetail',
-		path: '/pages/user/order/orderDetail/index'
+		name: 'user/order/detail',
+		path: '/pages/user/order/detail/index'
 	},
 	{
-		name: 'user/shop',
+		name: 'user/shop/list',
 		path: '/pages/user/shop/list/index'
 	},
 ]

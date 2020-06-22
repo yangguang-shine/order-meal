@@ -47,7 +47,7 @@
 			async init() {
 				try {
 					this.$showLoading()
-					const res = await this.$fetch.get('/api/address/list')
+					const res = await this.$fetch.get('/user/address/list')
 					this.addressList = res.data || []
 					if (this.addressList.length) {
 						this.saveDefaultAddress(this.addressList[0])
@@ -62,7 +62,7 @@
 			async toDeleteAddress(addressID) {
 				try {
 					this.$showLoading()
-					await this.$fetch.post('/api/address/delete', { addressID })
+					await this.$fetch.post('/user/address/delete', { addressID })
 					this.$hideLoading()
 					await this.$showModal({
 						content: '删除成功'
@@ -87,7 +87,7 @@
 				}
 				try {
 					this.$showLoading()
-					await this.$fetch.post('/api/address/default', { addressID })
+					await this.$fetch.post('/user/address/default', { addressID })
 					await this.init()
 					if (this.fromPage) {
 						this.$router.back()
@@ -101,7 +101,7 @@
 			},
 			toEditAddress(addressID) {
 				this.$router.navigateTo({
-					name: 'address/edit',
+					name: 'user/address/edit',
 					query: {
 						addressID
 					}
@@ -109,7 +109,7 @@
 			},
 			toAddAddress() {
 				this.$router.navigateTo({
-					name: 'address/edit',
+					name: 'user/address/edit',
 				})
 			}
 		}

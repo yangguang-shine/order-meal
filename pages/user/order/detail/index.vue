@@ -123,8 +123,12 @@ import getShopMinusList from '@/utils/getShopMinusList';
 		computed: {
 		},
 		methods: {
+			...mapMutations({
+				saveShopInfo:'saveShopInfo',
+				saveBusinessType:'saveBusinessType'
+			}),
 			async init() {
-				const res = await this.$fetch.get('/api/userOrder/orderDetail', { orderKey: this.orderKey })
+				const res = await this.$fetch.get('/user/order/orderDetail', { orderKey: this.orderKey })
 				const orderDetail = res.data || {};
 				(orderDetail.foodList || []).forEach((foodItem) => {
 					foodItem.totalPrice = (foodItem.price * foodItem.orderCount).toFixed(2)
@@ -171,7 +175,7 @@ import getShopMinusList from '@/utils/getShopMinusList';
 			async cancellOrder() {
 				try {
 					this.$showLoading()
-					await this.$fetch.post('/api/userOrder/cancell', { orderKey: this.orderKey, shopID: this.orderDetail.shopID })
+					await this.$fetch.post('/user/order/cancell', { orderKey: this.orderKey, shopID: this.orderDetail.shopID })
 					this.$hideLoading()
 					await this.$showModal({
 						content: '取消订单成功'
@@ -184,15 +188,14 @@ import getShopMinusList from '@/utils/getShopMinusList';
 			},
 			async orderAgain() {
 				try {
-					const res = await this.$fetch.get('/api/userShop/find', { shopID: this.orderDetail.shopID })
+					const res = await this.$fetch.get('/user/shop/find', { shopID: this.orderDetail.shopID })
 					const shopInfo = res.data || {}
-					shopInfo.minusList = getShopMinusList(shopInfo.minus || '')
 					this.saveShopInfo(shopInfo)
+					this.saveBusinessType(this.orderDetail.businessType)
 					this.$router.navigateTo({
-						name: 'menu',
+						name: 'user/menu/list',
 						query: {
 							orderKey: this.orderDetail.orderKey,
-							shopID: this.orderDetail.shopID,
 							orderAgain: 'true'
 						}
 					})

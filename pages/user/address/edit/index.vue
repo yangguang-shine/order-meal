@@ -56,7 +56,7 @@
 			async init() {
 				try {
 					this.$showLoading()
-					const res = await this.$fetch.get('/api/address/find', { addressID: this.addressID })
+					const res = await this.$fetch.get('/user/address/find', { addressID: this.addressID })
 					this.addressInfo = res.data || {}
 					this.$hideLoading()
 				} catch (e) {
@@ -66,7 +66,7 @@
 			async addAddress() {
 				try {
 					this.$showLoading()
-					await this.$fetch.post('/api/address/add', { ...this.addressInfo })
+					await this.$fetch.post('/user/address/add', { ...this.addressInfo })
 					this.$hideLoading()
 					await this.$showModal({
 						content: '添加成功'
@@ -80,7 +80,7 @@
 			async editAddress() {
 				try {
 					this.$showLoading()
-					await this.$fetch.post('/api/address/edit', { ...this.addressInfo, addressID: this.addressID })
+					await this.$fetch.post('/user/address/edit', { ...this.addressInfo, addressID: this.addressID })
 					this.$hideLoading()
 					await this.$showModal({
 						content: '修改成功'

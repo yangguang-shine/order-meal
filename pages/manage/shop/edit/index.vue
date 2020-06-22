@@ -103,7 +103,7 @@ export default {
 					selected: false
 				},
 				{
-					title: '自提',
+					title: '堂食',
 					businessType: 3,
 					selected: false
 				}

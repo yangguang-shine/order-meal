@@ -143,7 +143,7 @@ export default {
 	}
 };
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .shop-list-container {
 	font-size: 28rpx;
 	color: #333;
@@ -229,8 +229,7 @@ export default {
 		left: 0;
 		width: 100%;
 		height: 100%;
-		// background-color: rgba(0, 0, 0, 0.6);
-		background-color: rgba($color: #000000, $alpha: 0.6);
+		background-color: rgba(0, 0, 0, 0.6);
 	}
 	.select-modal-box {
 		position: relative;

@@ -1,5 +1,5 @@
 const state = {
-    shopInfo: {},
+    shopInfo: null,
     cartFoodList: [],
     orderListUpdate: [true, true, true, true],
     defaultAddress: {},

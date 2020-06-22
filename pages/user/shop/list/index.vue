@@ -1,16 +1,17 @@
 <template>
     <div class="shop-list-container">
         <div class="shop-list">
-            <shop v-for="(shopItem, index) in shopList" :key="index" :shopItem="shopItem" @clickShopItem="toNextPage"></shop>
+            <shop v-for="(shopItem, index) in shopList" :key="index" :shopItem="shopItem" @clickShopItem="toOrder(shopItem)"></shop>
         </div>
     </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import host from '@/config/host'
 import shop from '@/components/shop'
 import getShopMinusList from '@/utils/getShopMinusList';
+import { vuexStorage } from '@/utils/tool.js';
 
 export default {
     components:{
@@ -20,28 +21,27 @@ export default {
         return {
             shopList: [],
             host,
-            businessType: '',
         }
     },
-    onLoad(query) {
-        this.businessType = Number(query.businessType) || ''
-    },
+	computed: {
+		...mapState({
+			businessType: state => vuexStorage(state, 'businessType') || ''
+		}),
+	},
     onShow() {
         this.init()
     },
     methods: {
         ...mapMutations({
             saveShopInfo: 'saveShopInfo',
-            saveBusinessType: 'saveBusinessType'
         }),
         async init() {
             try {
                 this.$showLoading()
-                const query = {}
-                if (this.businessType) {
-                    query.businessType = this.businessType
-                }
-                const res = await this.$fetch.get('/api/userShop/list', { ...query })
+                const query = {
+					businessType: this.businessType
+				}
+                const res = await this.$fetch.get('/user/shop/list', query)
                 const shopList = res.data || [];
                 shopList.forEach((item) => {
                     item.minusList = getShopMinusList(item.minus || '')
@@ -53,16 +53,15 @@ export default {
                 this.$hideLoading()
             }
         },
-        toNextPage(shopItem) {
-            this.saveShopInfo(shopItem)
-            this.saveBusinessType(this.businessType)
-            this.$router.navigateTo({
-                name: 'menu',
-                query: {
-                    shopID: shopItem.shopID,
-                }
-            })
-        },
+		toOrder(shopItem) {
+			this.saveShopInfo(shopItem)
+			this.$router.navigateTo({
+				name: 'user/menu/list',
+				query: {
+					businessType: this.businessType
+				}
+		    })
+		},
         pickerChange(e) {
             console.log(e)
         },

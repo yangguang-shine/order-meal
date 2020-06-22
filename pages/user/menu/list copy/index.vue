@@ -251,7 +251,7 @@ export default {
 		},
 		async init() {
 			const { orderAgain, orderKey } = this.$root.$mp.query
-			const res = await this.$fetch.get('/api/userOrder/menuList', { shopID: this.shopInfo.shopID })
+			const res = await this.$fetch.get('/user/order/menuList', { shopID: this.shopInfo.shopID })
 			this.foodCategoryList = res.data || []
 			this.foodCategoryList.forEach((item, index) => {
 				item.scrollID = 'c' + item.categoryID
@@ -343,7 +343,7 @@ export default {
 			// console.log(foodList)
 			// const res = await this.$fetch.post('/api/userOrder/submit', { foodList })
 			this.$router.navigateTo({
-				name: 'confirmOrder'
+				name: 'user/menu/confirm'
 			})
 		}
 	}

@@ -1,13 +1,6 @@
 <template>
 	<div class="comfirm-order-container">
-		<div v-if="!businessType" class="order-type-box">
-			<div class="order-type flex-row flex-a-center">
-				<div class="order-take" :style="{'color': selectBusinessType === 2 ? $mainColor : ''}" @click="changeOrderType(2)">外卖</div>
-				<div class="order-self" :style="{'color': selectBusinessType === 3 ? $mainColor : ''}" @click="changeOrderType(3)">自提</div>
-				<div class="orer-type-bgc" :style="{'left': selectBusinessType === 2 ? '0' : '200rpx'}"></div>
-			</div>
-		</div>
-		<div v-if="businessType === 2 || selectBusinessType === 2" class="take-out-box">
+		<div v-if="businessType === 2" class="take-out-box">
 			<div class="address-box" @click="toSelectAddress">
 				<div v-if="defaultAddress.addressID">
 					<div class="address-title line1">{{defaultAddress.address1 || ''}} {{defaultAddress.address2 || ''}}</div>
@@ -32,23 +25,6 @@
 					<image class="arrow-right" src="/static/img/right-arrow.png"></image>
 				</div>
 			</picker>
-		</div>
-		<div v-if="businessType === 3 || selectBusinessType === 3" class="self-take-box">
-			<div class="shop-address">{{shopInfo.shopName}}</div>
-			<div class="time-phone-box flex-row flex-a-center">
-				<picker mode="time" :value="selfTakeTime" start="09:00" end="23:00" @change="selfTakeTimeChange" class="self-time-picker flex-col flex-j-between">
-					<div class="self-time-box flex-col flex-j-between">
-						<div class="self-take-title">取餐时间</div>
-						<div class="self-take-time">{{selfTakeTime}}</div>
-						<image class="arrow-right" src="/static/img/right-arrow.png"></image>
-					</div>
-				</picker>
-				<div class="self-phone-box  flex-col flex-j-between">
-					<div class="self-take-title">预留电话</div>
-					<input type="number" class="reserve-phone-input" value="1235462215" placeholder="请输入手机号" maxlength="20">
-					<image class="arrow-right" src="/static/img/right-arrow.png"></image>
-				</div>
-			</div>
 		</div>
 		<div class="order-detail-info">
 			<div class="order-title-box flex-row flex-j-between">
@@ -97,20 +73,19 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import host from '@/config/host'
+import { vuexStorage } from '@/utils/tool.js';
 
 export default {
 	data() {
 		return {
 			originOrderAmount: '',
 			host,
-			selectBusinessType: 2,
 			takeOutTime: '12:00',
 			selfTakeTime: '12:00',
 			reservePhone: ''
 		}
 	},
 	onLoad() {
-		this.selectBusinessType = this.businessType || 2
 		this.init()
 		this.originOrderAmount = Number((this.cartFoodList.reduce((amount, item) => {
 				const categoryItemSum = item.foodList.reduce((all, foodItem) => {
@@ -124,11 +99,10 @@ export default {
 	},
 	computed: {
 		...mapState({
-			cartFoodList: state => state.cartFoodList,
-			shopInfo: state => state.shopInfo,
 			defaultAddress: state => state.defaultAddress,
-			shopInfo: state => state.shopInfo,
-			businessType: state => state.businessType,
+			shopInfo: state => vuexStorage(state, 'shopInfo') || {},
+			cartFoodList: state => state.cartFoodList.length ? state.cartFoodList : uni.getStorageSync(`storageFoodList_${(vuexStorage(state, 'shopInfo') || {}).shopID}`) || [],
+			businessType: state => vuexStorage(state, 'businessType') || ''
 		}),
 		dueAmount() {
 			return Number((this.originOrderAmount - this.minusPrice).toFixed(2))
@@ -159,15 +133,11 @@ export default {
 	},
 	methods: {
 		...mapMutations({
-			changeAllOrderListUpdate: 'changeAllOrderListUpdate',
 			saveDefaultAddress: 'saveDefaultAddress',
 			clearCart: 'clearCart',
 		}),
-		changeOrderType(index) {
-			this.selectBusinessType = index
-		},
 		async init() {
-			const res = await this.$fetch.get('/api/address/list', {  })
+			const res = await this.$fetch.get('/user/address/list', {  })
 			const addressList = res.data || []
 			if (addressList.length) {
 				this.saveDefaultAddress(addressList[0])
@@ -187,23 +157,19 @@ export default {
 				foodList.push(...item.foodList)
 			})
 			const query = {}
-			if (this.selectBusinessType === 2) {
+			if (this.businessType === 2) {
 				query.takeOutTime = this.takeOutTime
 				query.address = JSON.stringify(this.defaultAddress)
-			}else if (this.selectBusinessType === 3) {
-				query.selfTakeTime = this.selfTakeTime
-				query.reservePhone = this.reservePhone
 			}
-			const res = await this.$fetch.post('/api/userOrder/submit', { foodList, shopID: this.shopInfo.shopID, orderAmount: this.dueAmount, businessType: this.selectBusinessType, ...query, minusPrice: this.minusPrice })
+			const res = await this.$fetch.post('/user/order/submit', { foodList, shopID: this.shopInfo.shopID, orderAmount: this.dueAmount, businessType: this.businessType, ...query, minusPrice: this.minusPrice, originOrderAmount: this.originOrderAmount })
 			this.clearCart()
-			this.changeAllOrderListUpdate()
-			this.$router.switchTab({
-				name: 'orderList'
+			this.$router.reLaunchTo({
+				name: 'user/order/list'
 			})
 		},
 		toSelectAddress() {
 			this.$router.navigateTo({
-				name: 'address/list',
+				name: 'user/address/list',
 				query: {
 					fromPage: 'confirmOrder'
 				}
@@ -211,9 +177,6 @@ export default {
 		},
 		takeOutTimeChange(e) {
 			this.takeOutTime = e.detail.value
-		},
-		selfTakeTimeChange(e) {
-			this.selfTakeTime = e.detail.value
 		},
 		continueOrder() {
 			this.$router.back()

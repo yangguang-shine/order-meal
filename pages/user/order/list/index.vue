@@ -51,14 +51,14 @@ import getShopMinusList from '@/utils/getShopMinusList';
 		},
 		methods: {
 			...mapMutations({
-				changeOrderListUpdate: 'changeOrderListUpdate',
-				saveShopInfo:'saveShopInfo'
+				saveShopInfo:'saveShopInfo',
+				saveBusinessType:'saveBusinessType'
 			}),
 			async getOrderList() {
 				try {
 					// if (!this.orderListUpdate[this.tabIndex]) return;
 					this.$set(this.allOrderList, this.tabIndex, [])
-					const res = await this.$fetch.get('/api/userOrder/orderList', {
+					const res = await this.$fetch.get('/user/order/orderList', {
 						status: this.tabIndex
 					})
 					const orderList = (res.data || []).map((orderItem) => ({
@@ -103,7 +103,7 @@ import getShopMinusList from '@/utils/getShopMinusList';
 			},
 			toOrderDetail(orderItem) {
 				this.$router.navigateTo({
-					name: 'orderDetail',
+					name: 'user/order/detail',
 					query: {
 						orderKey: orderItem.orderKey
 					}
@@ -111,15 +111,15 @@ import getShopMinusList from '@/utils/getShopMinusList';
 			},
 			async orderAgain(orderItem) {
 				try {
-					const res = await this.$fetch.get('/api/userShop/find', { shopID: orderItem.shopID })
+					console.log(orderItem.businessType)
+					const res = await this.$fetch.get('/user/shop/find', { shopID: orderItem.shopID })
 					const shopInfo = res.data || {}
-					shopInfo.minusList = getShopMinusList(shopInfo.minus || '')
 					this.saveShopInfo(shopInfo)
+					this.saveBusinessType(orderItem.businessType)
 					this.$router.navigateTo({
-						name: 'menu',
+						name: 'user/menu/list',
 						query: {
 							orderKey: orderItem.orderKey,
-							shopID: orderItem.shopID,
 							orderAgain: 'true'
 						}
 					})
