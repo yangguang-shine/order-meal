@@ -1,4 +1,5 @@
 const state = {
+	// user
     shopInfo: null,
     cartFoodList: [],
     orderListUpdate: [true, true, true, true],
@@ -10,5 +11,7 @@ const state = {
     // #ifdef H5
     channel: 20,
     // #endif
+	// manage
+	selectShopItem: null
 }
 export default state

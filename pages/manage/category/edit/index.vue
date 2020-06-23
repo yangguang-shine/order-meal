@@ -17,15 +17,13 @@ export default {
         return {
             categoryName: '',
             categoryID: '',
-            shopID: ''
         }
     },
     onLoad(params) {
         console.log(params)
         this.categoryName = params.categoryName || `菜品分类${Math.random().toString(36).slice(2, 4)}`
         this.categoryID = params.categoryID || ''
-        this.shopID = params.shopID || ''
-		if (!this.shopID) {
+		if (!this.selectShopItem.shopID) {
 			this.$showModal({
 				content: '缺少shopID'
 			})
@@ -35,7 +33,7 @@ export default {
         async editCategory() {
             try {
                 this.$showLoading()
-                await this.$fetch.post('/manage/category/edit', { categoryName: this.categoryName, categoryID: this.categoryID, shopID: this.shopID })
+                await this.$fetch.post('/manage/category/edit', { categoryName: this.categoryName, categoryID: this.categoryID, shopID: this.selectShopItem.shopID })
                 this.$hideLoading()
                 await this.$showModal({
                     content: '修改成功'
@@ -51,7 +49,7 @@ export default {
         },
         // async deleteCategory() {
         //     try {
-        //         await this.$fetch.post('/api/category/delete', { categoryID: this.categoryID, shopID: this.shopID })
+        //         await this.$fetch.post('/api/category/delete', { categoryID: this.categoryID, shopID: this.selectShopItem.shopID })
         //         this.$router.back()
         //     } catch (e) {
         //         console.log(e)
@@ -60,7 +58,7 @@ export default {
         async addCategory() {
             try {
                 this.$showLoading()
-                await this.$fetch.post('/manage/category/add', { categoryName: this.categoryName, shopID: this.shopID })
+                await this.$fetch.post('/manage/category/add', { categoryName: this.categoryName, shopID: this.selectShopItem.shopID })
                 this.$hideLoading()
                 await this.$showModal({
                     content: '添加成功'

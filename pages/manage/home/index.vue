@@ -28,6 +28,8 @@
 <script>
 import shop from '@/components/shop';
 import getShopMinusList from '@/utils/getShopMinusList';
+import { mapState, mapMutations } from 'vuex'
+import { vuexStorage } from '@/utils/tool.js';
 
 export default {
 	components: {
@@ -37,19 +39,25 @@ export default {
 		return {
 			shopList: [],
 			showSelectModal: false,
-			selectShopItem: {},
 		};
 	},
 	onShow() {
 		this.init();
 	},
+	computed: {
+		...mapState({
+			selectShopItem: state => vuexStorage(state, 'selectShopItem') || {}
+		})
+	},
 	methods: {
+		...mapMutations({
+			saveSelectShopItem: 'saveSelectShopItem',
+		}),
 		async init() {
 			try {
 				this.$showLoading();
 				const res = await this.$fetch.get('/manage/shop/list');
-				const { data = {} } = res;
-				const shopList = data.shopList;
+				const shopList = res.data || [];
 				shopList.forEach(item => {
 					item.minusList = getShopMinusList(item.minus || '');
 				});
@@ -61,25 +69,20 @@ export default {
 			}
 		},
 		toShowSelectMoadl(shopItem) {
-			this.selectShopItem = shopItem
+			this.saveSelectShopItem(shopItem)
 			this.showSelectModal = true;
 		},
 		toShopOrderInfo() {
 			this.toCloseSelectModal()
+			this.saveSelectOrderShop
 			this.$router.navigateTo({
 				name: 'manage/order/list',
-				query: {
-					shopID: this.selectShopItem.shopID
-				}
 			});
 		},
 		toShopFoodInfo() {
 			this.toCloseSelectModal()
 			this.$router.navigateTo({
 				name: 'manage/category/list',
-				query: {
-					shopID: this.selectShopItem.shopID
-				}
 			});
 		},
 		toCloseSelectModal() {
@@ -130,7 +133,6 @@ export default {
 			this.$router.navigateTo({
 				name: 'manage/shop/edit',
 				query: {
-					shopID: shopItem.shopID,
 					canOperation: 'true'
 				}
 			});

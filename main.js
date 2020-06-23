@@ -8,6 +8,10 @@ import { showModal, showLoading, showToast, hideLoading, hideToast} from '@/util
 import { setStorage, getStorage } from '@/utils/tool.js'
 import '@/style/flex.css'
 import '@/style/common.css'
+
+	import { mapState, mapMutations } from 'vuex'
+	import { vuexStorage } from '@/utils/tool.js';
+
 Vue.component('no-data',NoData)
 Vue.config.productionTip = false
 Vue.prototype.$router = router
@@ -32,6 +36,9 @@ Vue.mixin({ // 用得比较多且需要在模板里用可以放到这里，如�
         $mainColor () {
             return $mainColor 
         },
+		...mapState({
+			selectShopItem: state => vuexStorage(state, 'selectShopItem') || {}
+		})
     }
 });
 app.$mount()

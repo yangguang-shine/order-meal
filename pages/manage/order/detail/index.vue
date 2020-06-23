@@ -6,7 +6,7 @@
 				<div v-if="orderDetail.businessType === 2" class="order-type">外卖</div>
 				<div v-else-if="orderDetail.businessType === 3" class="order-type">自提</div>
 			</div>
-			<div v-if="shopID">
+			<div v-if="this.selectShopItem.shopID">
 				<div class="order-current-status">
 					当前订单状态： <span :style="{'color': $mainColor}">{{orderDetail.orderTypeTitle}}</span>
 				</div>
@@ -115,7 +115,6 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
 import host from '@/config/host'
 
 	export default {
@@ -124,22 +123,18 @@ import host from '@/config/host'
 				host,
 				orderKey: '',
 				orderDetail: {},
-				shopID: ''
 			}
 		},
 		onLoad(query) {
 			this.orderKey = query.orderKey || '';
-			this.shopID = query.shopID || '';
 			this.init()
 		},
 		onShow() {
 
 		},
-		computed: {
-		},
 		methods: {
 			async init() {
-				const res = await this.$fetch.get('/api/manageOrder/orderDetail', { orderKey: this.orderKey, shopID: this.shopID })
+				const res = await this.$fetch.get('/manage/order/orderDetail', { orderKey: this.orderKey, shopID: this.selectShopItem.shopID })
 				const orderDetail = res.data || {};
 				(orderDetail.foodList || []).forEach((foodItem) => {
 					foodItem.totalPrice = (foodItem.price * foodItem.orderCount).toFixed(2)
@@ -194,7 +189,7 @@ import host from '@/config/host'
 			async toChangeOrderStatus() {
 				try {
 					this.$showLoading()
-					await this.$fetch.post('/api/order/changeOrderStatus', { orderStatus: this.orderDetail.orderStatus, shopID: this.shopID, orderKey: this.orderKey })
+					await this.$fetch.post('/manage/order/changeOrderStatus', { orderStatus: this.orderDetail.orderStatus, shopID: this.selectShopItem.shopID, orderKey: this.orderKey })
 					this.$hideLoading()
 					await this.$showModal({
 						content: '订单状态修改成功'
@@ -220,7 +215,7 @@ import host from '@/config/host'
 			async cancellOrder() {
 				try {
 					this.$showLoading()
-					await this.$fetch.post('/api/order/cancell', { orderKey: this.orderKey, shopID: this.shopID || this.orderDetail.shopID })
+					await this.$fetch.post('/manage/order/cancell', { orderKey: this.orderKey, shopID: this.selectShopItem.shopID })
 					this.$hideLoading()
 					await this.$showModal({
 						content: '取消订单成功'

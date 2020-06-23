@@ -103,7 +103,6 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import host from '@/config/host'
-import getShopMinusList from '@/utils/getShopMinusList';
 
 	export default {
 		data() {

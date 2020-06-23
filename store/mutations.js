@@ -5,6 +5,7 @@ import { vuexStorage } from '@/utils/tool.js';
 
 const mutations = {
 }
+// user
 mutations['cartCountChange'] = function(state, { categoryID = '', foodItem = {}, fromStorageCart = false } = {}) {
 	// 购物车数量增加减少使用的是引用改变，其他关联也相应改变
     const findCategory = state.cartFoodList.find(item => item.categoryID === categoryID)
@@ -56,14 +57,6 @@ mutations['clearCart'] = (state, shopInfo = {}) => {
     uni.removeStorageSync(`storageFoodList_${(vuexStorage(state, 'shopInfo') || {}).shopID}`)
 }
 
-mutations['changeAllOrderListUpdate'] = (state, status = [true, true, true, true]) => {
-    state.orderListUpdate = status
-}
-
-mutations['changeOrderListUpdate'] = (state,{ index, status = true } = {}) => {
-    state.orderListUpdate[index] = status
-}
-
 mutations['saveDefaultAddress'] = (state, address = {}) => {
     state.defaultAddress = address
 }
@@ -95,4 +88,14 @@ mutations['saveCartFoodList'] = (state, cartFoodList) => {
 	})
 }
 
+
+// manage
+
+mutations['saveSelectShopItem'] = (state, selectShopItem) => {
+    state.selectShopItem = selectShopItem
+	uni.setStorage({
+		key: 'selectShopItem',
+		data: selectShopItem
+	})
+}
 export default mutations

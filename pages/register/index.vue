@@ -64,7 +64,7 @@ export default {
 				}
 			});
 		},
-		userRegister() {
+		async userRegister() {
 			this.testRegisterLegal()
 			const params = {
 				phone: this.phone,
@@ -73,7 +73,7 @@ export default {
 			};
 			try {
 				this.$showLoading()
-				const res = this.$fetch.post('/user/register', params)
+				const res = await this.$fetch.post('/user/register', params)
 				const { data = {} } = res
 				this.$setStorage('userToken', data.userToken)
 				this.$router.reLaunchTo({
@@ -85,7 +85,7 @@ export default {
 				this.$hideLoading()
 			}
 		},
-		manageRegister() {
+		async manageRegister() {
 			this.testRegisterLegal()
 			const params = {
 				phone: this.phone,
@@ -94,7 +94,7 @@ export default {
 			};
 			try {
 				this.$showLoading()
-				const res = this.$fetch.post('/manage/register', params)
+				const res = await  this.$fetch.post('/manage/register', params)
 				const { data = {} } = res
 				this.$setStorage('manageToken', data.manageToken)
 				this.$router.reLaunchTo({
@@ -102,7 +102,7 @@ export default {
 				})
 				this.$hideLoading()
 			} catch (e) {
-				consoe.log(e)
+				console.log(e)
 				this.$hideLoading()
 			}
 		},

@@ -54,7 +54,6 @@ import host from '@/config/host'
 		},
 		onLoad(options) {
 			this.foodID = options.foodID
-			this.shopID = options.shopID
 			this.categoryID = options.categoryID
 			this.categoryName = options.categoryName
 			if (!this.foodID) {
@@ -68,25 +67,15 @@ import host from '@/config/host'
 		},
 		async onUnload() {
 			if (!this.foodID && this.foodInfo.imgUrl && !this.addStatus) {
-            	await this.$fetch.post('/api/img/delete', { imgUrl: this.foodInfo.imgUrl, deleteFood: true })
+            	await this.$fetch.post('/manage/uploadImg/img/delete', { imgUrl: this.foodInfo.imgUrl, deleteFood: true })
 			}
-			this.foodInfo = {
-				foodName: '',
-				price: '',
-				unit: '',
-				description: '',
-				imgUrl: '',
-			},
-			this.categoryID = ''
-			this.categoryName = ''
-			this.foodID = ''
-			this.shopID = ''
 		},
 		methods: {
 			async init() {
 				try {
 					this.$showLoading()
-					const res = await this.$fetch.get('/manage/food/find', { foodID: this.foodID, shopID: this.shopID })
+					console.log(this.selectShopItem.shopID)
+					const res = await this.$fetch.get('/manage/food/find', { foodID: this.foodID, shopID: this.selectShopItem.shopID })
 					this.foodInfo = res.data || {}
 					this.$hideLoading()
 					console.log()
@@ -98,7 +87,7 @@ import host from '@/config/host'
 			async addFood() {
 				try {
 					this.$showLoading()
-					const res = await this.$fetch.post('/manage/food/add', { ...this.foodInfo, categoryID: this.categoryID, categoryName: this.categoryName, shopID: this.shopID })
+					const res = await this.$fetch.post('/manage/food/add', { ...this.foodInfo, categoryID: this.categoryID, categoryName: this.categoryName, shopID: this.selectShopItem.shopID })
 					this.addStatus = true
 					this.$hideLoading()
 					await this.$showModal({
@@ -113,7 +102,7 @@ import host from '@/config/host'
 			async editFood() {
 				try {
 					this.$showLoading()
-					const res = await this.$fetch.post('/manage/food/edit', { ...this.foodInfo, shopID: this.shopID })
+					const res = await this.$fetch.post('/manage/food/edit', { ...this.foodInfo, shopID: this.selectShopItem.shopID })
 					this.$hideLoading()
 					await this.$showModal({
 						content: '修改成功'
@@ -137,23 +126,20 @@ import host from '@/config/host'
 								content: '选择图片要小于1M'
 							})
 							return;
-						}
-						let imgUrl = ''
-						if (this.foodInfo.imgUrl) {
-							const reg = /.+\/(\d+\.)/
-							imgUrl = this.foodInfo.imgUrl.replace(reg, '$1')
+							
 						}
 						uni.uploadFile({
-							url: `${host}/manage/api/img/food/uploadImg`,
+							url: `${host}/manage/uploadImg/img/food`,
 							filePath: file.path,
 							name: 'image',
 							formData: {
-								shopID: this.shopID,
-								imgUrl,
+								shopID: this.selectShopItem.shopID,
+								imgUrl: this.foodInfo.imgUrl,
 								foodID: this.foodID || '',
 							},
 							success: async (res) => { //成功的回调
 								const data = JSON.parse(res.data)
+								console.log(data)
 								this.$showLoading({
 									title: '上传中'
 								})

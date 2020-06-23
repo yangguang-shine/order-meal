@@ -35,7 +35,6 @@ export default {
 		console.log(this);
 		this.categoryID = options.categoryID;
 		this.categoryName = options.categoryName;
-		this.shopID = options.shopID;
 	},
 	onShow() {
 		this.init();
@@ -44,7 +43,7 @@ export default {
 		async init() {
 			try {
 				this.$showLoading();
-				const res = await this.$fetch.get('/manage/food/list', { categoryID: this.categoryID, shopID: this.shopID });
+				const res = await this.$fetch.get('/manage/food/list', { categoryID: this.categoryID, shopID: this.selectShopItem.shopID });
 				this.foodList = res.data || [];
 				this.$hideLoading();
 			} catch (e) {
@@ -60,7 +59,6 @@ export default {
 				name: 'manage/food/edit',
 				query: {
 					foodID: foodID,
-					shopID: this.shopID
 				}
 			});
 		},
@@ -77,7 +75,7 @@ export default {
 			}
 			try {
 				this.$showLoading();
-				const res = await this.$fetch.post('/manage/food/delete', { foodID, shopID: this.shopID });
+				const res = await this.$fetch.post('/manage/food/delete', { foodID, shopID: this.selectShopItem.shopID });
 				this.$hideLoading();
 				this.$showModal({
 					content: '删除成功'
@@ -108,7 +106,6 @@ export default {
 				query: {
 					categoryID: this.categoryID,
 					categoryName: this.categoryName,
-					shopID: this.shopID
 				}
 			});
 		}

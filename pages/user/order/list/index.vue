@@ -31,7 +31,6 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 import host from '@/config/host'
-import getShopMinusList from '@/utils/getShopMinusList';
 
 	export default {
 		data() {
@@ -65,7 +64,6 @@ import getShopMinusList from '@/utils/getShopMinusList';
 						...orderItem,
 						orderTypeTitle: this.getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType)
 					}))
-					// this.changeOrderListUpdate({ index: this.tabIndex, status: false})
 					this.allOrderList[this.tabIndex].push(...orderList)
 				} catch (e) {
 					console.log(e)

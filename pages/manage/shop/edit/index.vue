@@ -122,19 +122,6 @@ export default {
 			if (this.shopID) {
 				const res = await this.$fetch.get('/manage/shop/find', { shopID: this.shopID });
 				this.shopInfo = res.data || {};
-				// const minusSplit = this.shopInfo.minus.split(',')
-				// if (minusSplit[0] === '')
-				// this.minusList = []
-				// else {
-				//     this.minusList = minusSplit.map((item) => {
-				//         const splitMinus = item.split('-')
-				//         return {
-				//             reach: splitMinus[0],
-				//             reduce: splitMinus[1],
-				//             random: Math.random()
-				//         }
-				//     })
-				// }
 				this.minusList = getShopMinusList(this.shopInfo.minus || '');
 				if (this.shopInfo.businessTypes) {
 					const businessTypeList = this.shopInfo.businessTypes.split(',');
@@ -169,7 +156,7 @@ export default {
 	async onUnload() {
 		console.log(!this.shopID && this.shopInfo.imgUrl && !this.addState);
 		if (!this.shopID && this.shopInfo.imgUrl && !this.addState) {
-			await this.$fetch.post('/api/img/delete', { imgUrl: this.shopInfo.imgUrl, deleteShop: true });
+			await this.$fetch.post('/manage/uploadImg/img/delete', { imgUrl: this.shopInfo.imgUrl, deleteShop: true });
 		}
 		this.shopID = '';
 		this.addState = false;
@@ -290,6 +277,8 @@ export default {
 			uni.chooseImage({
 				count: 1,
 				success: res => {
+					console.log(111)
+					console.log(res)
 					const maxSize = 1024 * 2 ** 10;
 					const file = res.tempFiles[0];
 					const size = file.size;
@@ -300,18 +289,18 @@ export default {
 						});
 						return;
 					}
-					let imgUrl = '';
-					if (this.shopInfo.imgUrl) {
-						const reg = /.+\/(\d+\.)/;
-						imgUrl = this.shopInfo.imgUrl.replace(reg, '$1');
-					}
+					
+					console.log(res.tempFilePaths[0])
 					uni.uploadFile({
-						url: `${host}/manage/api/img/shop/uploadImg`,
-						filePath: file.path,
+						url: `${host}/manage/uploadImg/img/shop`,
+						filePath: res.tempFilePaths[0],
 						name: 'image',
+						// header: {
+						// 	'content-type': 'multipart/form-data'
+						// },
 						formData: {
 							shopID: this.shopID,
-							imgUrl
+							imgUrl: this.shopInfo.imgUrl
 						},
 						success: async res => {
 							//成功的回调

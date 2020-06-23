@@ -16,12 +16,10 @@ export default {
     data() {
         return {
             categoryList: [],
-            shopID: ''
         }
     },
     onLoad(options) {
-        this.shopID = options.shopID || ''
-		if  (!this.shopID) {
+		if  (!this.selectShopItem.shopID) {
 			this.$showModal({
 				content: '缺少shopID'
 			})
@@ -34,7 +32,7 @@ export default {
         async init() {
             try {
                 this.$showLoading()
-                const res = await this.$fetch.get('manage/category/list', { shopID: this.shopID })
+                const res = await this.$fetch.get('manage/category/list', { shopID: this.selectShopItem.shopID })
                 this.categoryList = res.data || [] 
                 this.$hideLoading()
             } catch(e) {
@@ -51,7 +49,6 @@ export default {
                 query: {
                     categoryID: categoryItem.categoryID,
                     categoryName: categoryItem.categoryName,
-                    shopID: this.shopID
                 }
             })
         },
@@ -61,7 +58,6 @@ export default {
                 query: {
                     categoryID: categoryItem.categoryID,
                     categoryName: categoryItem.categoryName,
-                    shopID: this.shopID
                 }
             })
         },
@@ -79,7 +75,7 @@ export default {
                 this.$showLoading({
                     title: '删除中'
                 })
-                const res = await this.$fetch.post('manage/category/delete', { shopID: this.shopID, categoryID })
+                const res = await this.$fetch.post('manage/category/delete', { shopID: this.selectShopItem.shopID, categoryID })
                 this.$hideLoading()
                 this.$showModal({
                     content: '删除成功'
@@ -106,9 +102,6 @@ export default {
         addCategory() {
             this.$router.navigateTo({
                 name: 'manage/category/edit',
-                query: {
-                    shopID: this.shopID
-                }
             })
         },
     }
