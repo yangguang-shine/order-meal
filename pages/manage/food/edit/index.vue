@@ -2,23 +2,23 @@
 	<view class="food-info-container">
 		<div class="edit-item flex-row flex-a-center">
             <div class="title">菜品名称：</div>
-            <input type="text" class="flex-item input-name" v-model="foodInfo.foodName">
+            <input type="text" class="flex-item input-name" placeholder="请输入" v-model="foodInfo.foodName">
         </div>
 		<div class="edit-item flex-row flex-a-center">
             <div class="title">菜品价格：</div>
-            <input type="text" class="flex-item input-name" v-model="foodInfo.price">
+            <input type="text" class="flex-item input-name" placeholder="请输入" v-model="foodInfo.price">
         </div>
 		<div class="edit-item flex-row flex-a-center">
             <div class="title">菜品单位：</div>
-            <input type="text" class="flex-item input-name" v-model="foodInfo.unit">
+            <input type="text" class="flex-item input-name" placeholder="请输入" v-model="foodInfo.unit">
         </div>
 		<div class="edit-item flex-row flex-a-center">
             <div class="title">菜品描述：</div>
-            <input type="text" class="flex-item input-name" v-model="foodInfo.description">
+            <input type="text" class="flex-item input-name" placeholder="请输入" v-model="foodInfo.description">
         </div>
 		<div class="flex-row flex-a-center">
 			<div class="title">店铺图片：</div>
-			<image class="food-img" mode="aspectFill" :src="foodInfo.imgUrl ? host + foodInfo.imgUrl :'/static/img/default-img.svg'" @click="chooseImg"></image>
+			<image class="food-img" mode="scaleToFill" :src="foodInfo.imgUrl ? host + foodInfo.imgUrl :'/static/img/default-img.svg'" @click="chooseImg"></image>
 		</div>
 		<div class="flex-row flex-ja-center">
 			<div v-if="foodID" class="food-button" @click="editFood" :style="{'background-color': $mainColor}">
@@ -28,7 +28,6 @@
 				增加			
 			</div>
 		</div>
-		
 	</view>
 </template>
 <script>
@@ -67,7 +66,7 @@ import host from '@/config/host'
 		},
 		async onUnload() {
 			if (!this.foodID && this.foodInfo.imgUrl && !this.addStatus) {
-            	await this.$fetch.post('/manage/uploadImg/img/delete', { imgUrl: this.foodInfo.imgUrl, deleteFood: true })
+            	await this.$fetch.post('/manage/uploadImg/remove', { imgUrl: this.foodInfo.imgUrl, deleteFood: true })
 			}
 		},
 		methods: {
@@ -129,7 +128,7 @@ import host from '@/config/host'
 							
 						}
 						uni.uploadFile({
-							url: `${host}/manage/uploadImg/img/food`,
+							url: `${host}/manage/uploadImg/food`,
 							filePath: file.path,
 							name: 'image',
 							formData: {
@@ -169,7 +168,8 @@ page {
     .edit-item {
         height: 50rpx;
         line-height: 50rpx;
-        padding-bottom: 20rpx; 
+        padding-bottom: 20rpx;
+		color: #666;
     }
     .input-name {
         height: 100%;
@@ -177,6 +177,7 @@ page {
     }
     .title {
         width: 180rpx;
+		color: #333;
     }
 	.food-img {
 		height: 100rpx;
@@ -189,6 +190,8 @@ page {
 		height: 80rpx;
 		width: 300rpx;
 		color: #fff;
+		border-radius: 40rpx;
+		font-size: 32rpx;
 	}
 	.delete-button {
 		background-color: #999;

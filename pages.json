@@ -177,7 +177,11 @@
 				"navigationBarTitleText": "菜品列表"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/manage/meituan/copy/index",
+            "style" : {}
+        }
+    ],
 	// "tabBar": {
 	// 	"color": "#7A7E83",
 	// 	"selectedColor": "#3cc51f",

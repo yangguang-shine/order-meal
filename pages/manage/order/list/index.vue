@@ -15,7 +15,7 @@
 		<view v-show="tabIndex === allOrderIndex" class="order-list-box" v-for="(orderList, allOrderIndex) in allOrderList" :key="allOrderIndex">
 			<div class="order-list-item" v-for="(orderItem, index) in orderList" :key="index" @click="toOrderDetail(orderItem)">
 				<div class="flex-row">
-					<image class="shop-img" :src="orderItem.imgUrl ? host + orderItem.imgUrl : '/static/img/default-img.svg'" mode="aspectFill"></image>
+					<image class="shop-img" :src="orderItem.imgUrl ? host + orderItem.imgUrl : '/static/img/default-img.svg'" mode="scaleToFill"></image>
 					<div class="flex-item flex-col flex-j-between">
 						<div class="flex-row felx-a-center">
 							<div class="shop-name line1">{{ orderItem.shopName }}</div>
@@ -151,12 +151,6 @@ export default {
 				}
 			});
 		},
-		// toSelectShopItem(shopItem) {
-		// 	this.saveSelectShopItem(shopItem);
-		// 	this.showSelectShopBox = false;
-		// 	this.allOrderList = [[], [], [], []];
-		// 	this.getOrderList();
-		// },
 		async toShowSelectShopBox() {
 			try {
 				this.$showLoading()
@@ -197,7 +191,7 @@ page {
 	font-size: 30rpx;
 	color: #333;
 	line-height: 1;
-	padding: 0 30rpx;
+	padding: 0 20rpx;
 	.tab-list-box {
 		position: fixed;
 		top: 0;

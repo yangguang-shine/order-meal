@@ -8,6 +8,7 @@ import { showModal, showLoading, showToast, hideLoading, hideToast} from '@/util
 import { setStorage, getStorage } from '@/utils/tool.js'
 import '@/style/flex.css'
 import '@/style/common.css'
+import BottomButton from '@/components/BottomButton.vue'
 
 	import { mapState, mapMutations } from 'vuex'
 	import { vuexStorage } from '@/utils/tool.js';
@@ -26,22 +27,29 @@ Vue.prototype.$getStorage = getStorage
 // Vue.prototype.$data.$mainColor = '#47ff56'
 // Vue.prototype.$mainColor = '#47ff56'
 App.mpType = 'app'
-const $mainColor = "#54e047"
+const $mainColor = "#cb9ddb"
+const $mainColor2 = "#58a3dd"
 const app = new Vue({
     ...App,
     store
 })
+Vue.component('bottom-button',BottomButton)
 Vue.mixin({ // 用得比较多且需要在模板里用可以放到这里，如果用jsx就没有这么多事
     computed: { // 不能修改
         $mainColor () {
             return $mainColor 
         },
+		$mainColor2 () {
+		    return $mainColor2 
+		},
 		...mapState({
 			selectShopItem: state => vuexStorage(state, 'selectShopItem') || {}
 		})
     }
 });
 app.$mount()
+
+
 
 
 

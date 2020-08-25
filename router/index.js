@@ -60,6 +60,10 @@ const manage = [
 		path: '/pages/manage/home/index'
 	},
 	{
+		name: 'manage/meituan/copy',
+		path: '/pages/manage/meituan/copy/index'
+	},
+	{
 		name: 'manage/order/list',
 		path: '/pages/manage/order/list/index'
 	},

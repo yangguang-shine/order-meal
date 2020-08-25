@@ -67,7 +67,7 @@ export const showLoading = ({ title = '加载中', mask = true} = {}) => {
 
 export const showToast = ({ title = '', icon = 'none', duration = 1500, mask = false } = {}) => {
     return new Promise((resolve, reject) => {
-        uni.showLoading({
+        uni.showToast({
             title,
             icon,
             duration,

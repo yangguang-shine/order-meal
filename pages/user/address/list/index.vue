@@ -62,7 +62,7 @@
 			async toDeleteAddress(addressID) {
 				try {
 					this.$showLoading()
-					await this.$fetch.post('/user/address/delete', { addressID })
+					await this.$fetch.post('/user/address/remove', { addressID })
 					this.$hideLoading()
 					await this.$showModal({
 						content: '删除成功'
@@ -87,7 +87,7 @@
 				}
 				try {
 					this.$showLoading()
-					await this.$fetch.post('/user/address/default', { addressID })
+					await this.$fetch.post('/user/address/setDefault', { addressID })
 					await this.init()
 					if (this.fromPage) {
 						this.$router.back()

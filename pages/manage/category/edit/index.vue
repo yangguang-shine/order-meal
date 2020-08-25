@@ -1,7 +1,7 @@
 <template>
     <div class="category-name-box">
         <div class="flex-row flex-a-center">
-            <div class="categpry-title">名称：</div>
+            <div class="categpry-title">分类名称：</div>
             <input class="categpry-info" type="text" v-model="categoryName">
         </div>
         <div class="flex-row flex-j-center">
@@ -49,7 +49,7 @@ export default {
         },
         // async deleteCategory() {
         //     try {
-        //         await this.$fetch.post('/api/category/delete', { categoryID: this.categoryID, shopID: this.selectShopItem.shopID })
+        //         await this.$fetch.post('/api/category/remove', { categoryID: this.categoryID, shopID: this.selectShopItem.shopID })
         //         this.$router.back()
         //     } catch (e) {
         //         console.log(e)
@@ -91,7 +91,8 @@ export default {
         color: #fff;
         line-height: 80rpx;
         text-align: center;
-        border-radius: 40rpx
+        border-radius: 40rpx;
+		font-size: 34rpx;
     }
     .button-delete {
         background-color: #999;

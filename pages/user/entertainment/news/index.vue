@@ -12,9 +12,9 @@
             <div class="news-item" v-for="(newsItem, index) in newsList" :key="index" @click="toNewsDetail(newsItem)">
                 <div class="new-title line2">{{newsItem.title}}</div>
                 <div class="item-img-list flex-row flex-j-between">
-                    <image class="item-img" :src="newsItem.thumbnail_pic_s" mode="aspectFill"></image>
-                    <image class="item-img" :src="newsItem.thumbnail_pic_s02" mode="aspectFill"></image>
-                    <image class="item-img" :src="newsItem.thumbnail_pic_s03" mode="aspectFill"></image>
+                    <image class="item-img" :src="newsItem.thumbnail_pic_s" mode="scaleToFill"></image>
+                    <image class="item-img" :src="newsItem.thumbnail_pic_s02" mode="scaleToFill"></image>
+                    <image class="item-img" :src="newsItem.thumbnail_pic_s03" mode="scaleToFill"></image>
                 </div>
                 <div class="news-info flex-row flex-j-between">
                     <div>{{newsItem.author_name}}</div>

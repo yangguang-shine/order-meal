@@ -38,7 +38,7 @@
 		</div>
 		<div class="flex-row flex-a-center">
 			<div class="title">店铺图片：</div>
-			<image class="food-img" mode="aspectFill" :src="shopInfo.imgUrl ? host + shopInfo.imgUrl : '/static/img/default-img.svg'" @click="chooseImg"></image>
+			<image class="food-img" mode="scaleToFill" :src="shopInfo.imgUrl ? host + shopInfo.imgUrl : '/static/img/default-img.svg'" @click="chooseImg"></image>
 		</div>
 		<div class="edit-item-minus flex-row">
 			<div class="title">满减营销：</div>
@@ -156,7 +156,7 @@ export default {
 	async onUnload() {
 		console.log(!this.shopID && this.shopInfo.imgUrl && !this.addState);
 		if (!this.shopID && this.shopInfo.imgUrl && !this.addState) {
-			await this.$fetch.post('/manage/uploadImg/img/delete', { imgUrl: this.shopInfo.imgUrl, deleteShop: true });
+			await this.$fetch.post('/manage/uploadImg/remove', { imgUrl: this.shopInfo.imgUrl, deleteShop: true });
 		}
 		this.shopID = '';
 		this.addState = false;
@@ -292,7 +292,7 @@ export default {
 					
 					console.log(res.tempFilePaths[0])
 					uni.uploadFile({
-						url: `${host}/manage/uploadImg/img/shop`,
+						url: `${host}/manage/uploadImg/shop`,
 						filePath: res.tempFilePaths[0],
 						name: 'image',
 						// header: {
@@ -323,6 +323,10 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+	page {
+		height: 100%;
+		background-color: $color-bg-f5;
+	}
 .shop-edit-container {
 	font-size: 32rpx;
 	padding: 30rpx;

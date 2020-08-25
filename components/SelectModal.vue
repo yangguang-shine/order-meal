@@ -46,7 +46,7 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style scoped lang="scss">
 .select-modal-container {
 	position: fixed;
 	top: 0;

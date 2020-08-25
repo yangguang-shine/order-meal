@@ -21,7 +21,14 @@ mutations['cartCountChange'] = function(state, { categoryID = '', foodItem = {},
         }) 
     }
     state.cartFoodList.forEach((item) => {
-        item.foodList = item.foodList.filter(foodItem => foodItem.orderCount > 0)
+        item.foodList = item.foodList.filter(foodItem => {
+            if (foodItem.orderCount > 0) {
+                foodItem.foodItemAmount = Number((foodItem.price * foodItem.orderCount).toFixed(2))
+                return true
+            } else {
+                return false
+            }
+        })
     })
     state.cartFoodList = state.cartFoodList.filter(item => item.foodList.length > 0)
     if (!fromStorageCart) {

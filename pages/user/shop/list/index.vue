@@ -1,7 +1,7 @@
 <template>
     <div class="shop-list-container">
         <div class="shop-list">
-            <shop v-for="(shopItem, index) in shopList" :key="index" :shopItem="shopItem" @clickShopItem="toOrder(shopItem)"></shop>
+            <shop v-for="(shopItem, index) in shopList" :key="index" :shopItem="shopItem" @clickShopItem="toOrder(shopItem)" showArrowRight="true"></shop>
         </div>
     </div>
 </template>
@@ -81,85 +81,18 @@ export default {
     }
 }
 </script>
-<style scoped lang="scss">
+<style lang="scss">
+	page {
+		height: 100%;
+		background-color: $color-bg-f5;
+
+	}
 .shop-list-container {
     font-size: 28rpx;
     color: #333;
     line-height: 1;
-    padding-bottom: 70rpx;
     .shop-list {
-        padding: 30rpx;
-    }
-    .shop-item {
-        margin-bottom: 30rpx;
-        position: relative;
-    }
-    .shop-img {
-        width: 120rpx;
-        height: 120rpx;
-        margin-right: 20rpx;
-    }
-    .shop-info-box {
-        height: 120rpx;
-        line-height: 1.3;
-    }
-    .shop-name {
-        font-size: 32rpx;
-        font-weight: bold;
-        max-width: 500rpx;
-    }
-    .shop-open-time {
-        font-size: 24rpx;
-        margin-top: 10rpx;
-        color: #999;
-    }
-    .shop-address {
-        max-width: 500rpx;
-        color: #666; 
-    }
-    .delete-icon {
-        position: absolute;
-        top: 0rpx;
-        right: 0rpx;
-        padding: 10rpx 20rpx;
-        width: 30rpx;
-        height: 30rpx;
-    }
-    .edit-icon {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        padding: 10rpx 20rpx;
-        width: 30rpx;
-        height: 30rpx;
-    }
-    .add-box {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 100rpx;
-        background-color: #fff;
-        line-height: 100rpx;
-        text-align: center;
-    }
-    .add-icon {
-        width: 50rpx;
-        height: 50rpx;
-    }
-    .edit {
-        position: absolute;
-        padding: 30rpx;
-        right: 80rpx;
-        top: 50%;
-        transform: translateY(-50%);
-    }
-    .add {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        text-align: center;
+        padding: 20rpx;
     }
 }
 </style>

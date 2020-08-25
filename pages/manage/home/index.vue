@@ -11,15 +11,14 @@
 				@toDeleteShop="toDeleteShop(shopItem)"
 			></shop>
 		</div>
-		<div class="add-box flex-row flex-ja-center" @click="toAddShop"><image class="add-icon" src="/static/img/shop-add.svg"></image></div>
+		<bottom-button title="去添加店铺" @clickButton="toAddShop"></bottom-button>
 		<view v-if="showSelectModal" class="select-modal-container flex-row flex-ja-center" @click="toCloseSelectModal">
 			<view class="select-modal-box flex-col flex-a-center" @click.stop>
-				<view class="select-title">
-					请选择
-				</view>
+				<view class="select-title">请选择</view>
 				<view class="select-item" @click="toShopFoodInfo">去店铺菜品信息列表</view>
 				<view class="select-item" @click="toShopOrderInfo">去店铺订单信息列表</view>
-				<icon class="close-icon" type="cancel" size="26" color="#eee" @click="toCloseSelectModal"/>
+				<view class="select-item" @click="toCopyMeiTuanData">批量导入美团数据</view>
+				<icon class="close-icon" type="cancel" size="26" color="#eee" @click="toCloseSelectModal" />
 			</view>
 		</view>
 	</div>
@@ -27,18 +26,20 @@
 
 <script>
 import shop from '@/components/shop';
+import BottomButton from '@/components/BottomButton.vue';
 import getShopMinusList from '@/utils/getShopMinusList';
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex';
 import { vuexStorage } from '@/utils/tool.js';
 
 export default {
 	components: {
-		shop
+		shop,
+		'bottom-button': BottomButton
 	},
 	data() {
 		return {
 			shopList: [],
-			showSelectModal: false,
+			showSelectModal: false
 		};
 	},
 	onShow() {
@@ -51,7 +52,7 @@ export default {
 	},
 	methods: {
 		...mapMutations({
-			saveSelectShopItem: 'saveSelectShopItem',
+			saveSelectShopItem: 'saveSelectShopItem'
 		}),
 		async init() {
 			try {
@@ -69,24 +70,30 @@ export default {
 			}
 		},
 		toShowSelectMoadl(shopItem) {
-			this.saveSelectShopItem(shopItem)
+			this.saveSelectShopItem(shopItem);
 			this.showSelectModal = true;
 		},
 		toShopOrderInfo() {
-			this.toCloseSelectModal()
-			this.saveSelectOrderShop
+			this.toCloseSelectModal();
+			this.saveSelectOrderShop;
 			this.$router.navigateTo({
-				name: 'manage/order/list',
+				name: 'manage/order/list'
 			});
 		},
 		toShopFoodInfo() {
-			this.toCloseSelectModal()
+			this.toCloseSelectModal();
 			this.$router.navigateTo({
-				name: 'manage/category/list',
+				name: 'manage/category/list'
+			});
+		},
+		toCopyMeiTuanData() {
+			this.toCloseSelectModal();
+			this.$router.navigateTo({
+				name: 'manage/meituan/copy'
 			});
 		},
 		toCloseSelectModal() {
-			this.showSelectModal = false
+			this.showSelectModal = false;
 		},
 		pickerChange(e) {
 			console.log(e);
@@ -105,7 +112,7 @@ export default {
 				this.$showLoading({
 					title: '删除中'
 				});
-				await this.$fetch.post('/manage/shop/delete', { shopID: shopItem.shopID });
+				await this.$fetch.post('/manage/shop/remove', { shopID: shopItem.shopID });
 				this.$hideLoading();
 				await this.$showModal({
 					content: '删除成功'
@@ -145,85 +152,17 @@ export default {
 	}
 };
 </script>
-<style scoped lang="less">
+<style lang="scss">
+	page {
+		background-color: $color-bg-f5;
+	}
+	
 .shop-list-container {
 	font-size: 28rpx;
-	color: #333;
 	line-height: 1;
-	padding-bottom: 70rpx;
+	padding-bottom: 100rpx;
 	.shop-list {
-		padding: 30rpx;
-	}
-	.shop-item {
-		margin-bottom: 30rpx;
-		position: relative;
-	}
-	.shop-img {
-		width: 120rpx;
-		height: 120rpx;
-		margin-right: 20rpx;
-	}
-	.shop-info-box {
-		height: 120rpx;
-		line-height: 1.3;
-	}
-	.shop-name {
-		font-size: 32rpx;
-		font-weight: bold;
-		max-width: 500rpx;
-	}
-	.shop-open-time {
-		font-size: 24rpx;
-		margin-top: 10rpx;
-		color: #999;
-	}
-	.shop-address {
-		max-width: 500rpx;
-		color: #666;
-	}
-	.delete-icon {
-		position: absolute;
-		top: 0rpx;
-		right: 0rpx;
-		padding: 10rpx 20rpx;
-		width: 30rpx;
-		height: 30rpx;
-	}
-	.edit-icon {
-		position: absolute;
-		bottom: 0;
-		right: 0;
-		padding: 10rpx 20rpx;
-		width: 30rpx;
-		height: 30rpx;
-	}
-	.add-box {
-		position: fixed;
-		bottom: var(--window-bottom);
-		left: 0;
-		width: 100%;
-		height: 100rpx;
-		background-color: #fff;
-		line-height: 100rpx;
-		text-align: center;
-	}
-	.add-icon {
-		width: 50rpx;
-		height: 50rpx;
-	}
-	.edit {
-		position: absolute;
-		padding: 30rpx;
-		right: 80rpx;
-		top: 50%;
-		transform: translateY(-50%);
-	}
-	.add {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		text-align: center;
+		padding: 10rpx 20rpx 0;
 	}
 	.select-modal-container {
 		position: fixed;

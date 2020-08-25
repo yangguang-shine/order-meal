@@ -1,23 +1,30 @@
 <template>
     <div class="category-list-container">
         <div v-for="(categoryItem, index) in categoryList" :key="index" class="category-item flex-row flex-j-between flex-a-center" @click="toFoodList(categoryItem)">
-            <div>{{categoryItem.categoryName}}</div>
+            <div class="category-name line1" :style="{'color': $mainColor2}">{{categoryItem.categoryName}}</div>
             <div class="flex-row flex-a-center">
+	<!-- 			<view class="to-see-detail" @click.stop="toFoodList(categoryItem)">
+					去查看
+				</view> -->
                 <image class="edit-img" src='/static/img/shop-edit.svg' @click.stop="editCategory(categoryItem)"></image>
                 <image class="delete-img" src='/static/img/shop-delete.svg' @click.stop="deleteCategory(categoryItem.categoryID)"></image>
             </div>
         </div>
-        <div class="add" @click="addCategory" :style="{'color': $mainColor}">增加</div>
+		<bottom-button title="增加分类" @clickButton="addCategory"></bottom-button>
     </div>
 </template>
 
 <script>
+	import BottomButton from '@/components/BottomButton.vue';
 export default {
     data() {
         return {
             categoryList: [],
         }
     },
+	components: {
+		'bottom-button': BottomButton
+	},
     onLoad(options) {
 		if  (!this.selectShopItem.shopID) {
 			this.$showModal({
@@ -66,7 +73,7 @@ export default {
                 try {
                     await this.$showModal({
                         content: '删除菜品分类将一并删除菜品信息',
-                        showCancell: true,
+                        showCancel: true,
                         confirmText: '确认删除'
                     })
                 } catch (e) {
@@ -75,7 +82,7 @@ export default {
                 this.$showLoading({
                     title: '删除中'
                 })
-                const res = await this.$fetch.post('manage/category/delete', { shopID: this.selectShopItem.shopID, categoryID })
+                const res = await this.$fetch.post('manage/category/remove', { shopID: this.selectShopItem.shopID, categoryID })
                 this.$hideLoading()
                 this.$showModal({
                     content: '删除成功'
@@ -107,13 +114,32 @@ export default {
     }
 }
 </script>
+<style lang="scss">
+	page {
+		background-color: $color-bg-f5;
+	}
+</style>
 <style scoped lang="scss">
+
 .category-list-container {
-    padding: 30rpx 30rpx 70rpx;
+    padding: 20rpx 20rpx 100rpx;
     font-size: 34rpx;
     .category-item {
-        padding: 30rpx;
+		height: 50rpx;
+        padding: 20rpx 30rpx 20rpx 40rpx;
+		line-height: 50rpx;
+		border-radius: 45rpx;
+		background-color: #fff;
+		margin-bottom: 26rpx;
     }
+	.category-name {
+		max-width: 400rpx;
+	}
+	.to-see-detail, .to-open {
+		font-size: 24rpx;
+		color: #7f7f7f;
+		margin-right: 20rpx;
+	}
     .delete-img, .edit-img {
         height: 30rpx;
         width: 30rpx
@@ -123,19 +149,9 @@ export default {
     }
     .edit-img {
         padding: 10rpx;
-        margin-right: 40rpx;
+        margin-right: 10rpx;
     }
-    .add {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 80rpx;
-        line-height: 80rpx;
-        text-align: center;
-        font-weight: bold;
-        background-color: #fff;
-    }
+
 }
 </style>
 

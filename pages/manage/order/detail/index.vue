@@ -33,7 +33,7 @@
 			<div class="order-list-box">
 				<div class="order-item" v-for="(foodItem, index) in orderDetail.foodList" :key="index">
 					<div class="order-item flex-row">
-						<image class="food-img" :src="foodItem.imgUrl ? host + foodItem.imgUrl :'/static/img/default-img.svg'" mode="aspectFill" ></image>
+						<image class="food-img" :src="foodItem.imgUrl ? host + foodItem.imgUrl :'/static/img/default-img.svg'" mode="scaleToFill" ></image>
 						<div class="flex-item flex-row flex-a-center">
 							<div class="food-info flex-col flex-j-between">
 								<div class="food-name">

@@ -37,13 +37,13 @@
 			</div>
 			<div class="food-category-item" v-for="(foodCategoryItem, index) in cartFoodList" :key="index">
 				<div class="food-item flex-row flex-a-center" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex">
-					<image class="food-img flex-shrink" :src="foodItem.imgUrl ? host + foodItem.imgUrl : '/static/img/default-img.svg'" mode="aspectFill" ></image>
+					<image class="food-img flex-shrink" :src="foodItem.imgUrl ? host + foodItem.imgUrl : '/static/img/default-img.svg'" mode="scaleToFill" ></image>
 					<div class="food-info flex-col flex-j-between">
 						<div class="food-name line1">{{foodItem.foodName}}</div>
 						<div class="food-price"><span class="money-unit">¥</span>{{foodItem.price}}</div>
 					</div>
 					<div class="food-count">×{{foodItem.orderCount}}</div>
-					<div class="food-count-price"><span class="money-unit">¥</span>{{foodItem.price * foodItem.orderCount}}</div>
+					<div class="food-count-price"><span class="money-unit">¥</span>{{foodItem.foodItemAmount}}</div>
 				</div>
 			</div>
 			<div class="minus-info-box flex-row flex-a-center" v-if="minusPrice">
@@ -81,7 +81,6 @@ export default {
 			originOrderAmount: '',
 			host,
 			takeOutTime: '12:00',
-			selfTakeTime: '12:00',
 			reservePhone: ''
 		}
 	},
@@ -189,6 +188,7 @@ export default {
 page {
 	background-color: #f5f5f5;
 	height: 100%;
+	line-height: 1.1;
 }
 .comfirm-order-container {
 	padding: 20rpx 20rpx 150rpx;
@@ -216,7 +216,7 @@ page {
 		transition: all 300ms;
 		border-radius: 40rpx;
 	}
-	.order-take, .order-self {
+	.order-take {
 		position: relative;
 		width: 200rpx;
 		height: 80rpx;
@@ -232,7 +232,7 @@ page {
 		line-height: 86rpx;
 		text-align: center;
 	}
-	.take-out-box, .self-take-box {
+	.take-out-box{
 		padding: 30rpx;
 		background-color: #f5f5f5;
 		border-radius: 20rpx;
@@ -280,36 +280,36 @@ page {
 		font-weight: bold;
 		padding-bottom: 30rpx;
 	}
-	.self-time-box, .self-phone-box {
-		position: relative;
-		height: 90rpx;;
-	}
-	.self-time-picker {
-		flex: 1;
-		height: 100%;
-	}
-	.self-take-title {
-		font-size: 24rpx;
-		color: #999;
-		line-height: 1
-	}
-	.reserve-phone-input {
-		padding-top: 10rpx;
-	}
-	.self-take-time {
-		padding-top: 10rpx;
-		font-weight: bold;
-		font-size: 28rpx;
-		height: 1.4rem;
-		min-height: 1.4rem;
-		line-height: 1.4rem;
-	}
-	.self-phone-box {
-		flex: 1.1;
-		padding-left: 40rpx; 
-	}
+	// .self-time-box, .self-phone-box {
+	// 	position: relative;
+	// 	height: 90rpx;;
+	// }
+	// .self-time-picker {
+	// 	flex: 1;
+	// 	height: 100%;
+	// }
+	// .self-take-title {
+	// 	font-size: 24rpx;
+	// 	color: #999;
+	// }
+	// .reserve-phone-input {
+	// 	padding-top: 10rpx;
+	// }
+	// .self-take-time {
+	// 	padding-top: 10rpx;
+	// 	font-weight: bold;
+	// 	font-size: 28rpx;
+	// 	height: 1.4rem;
+	// 	min-height: 1.4rem;
+	// 	line-height: 1.4rem;
+	// }
+	// .self-phone-box {
+	// 	flex: 1.1;
+	// 	padding-left: 40rpx; 
+	// }
 	.deliver-time {
-		font-size: 24rpx;
+		font-size: 28rpx;
+		font-weight: bold;
 	}
 	.order-detail-info {
 		padding: 30rpx;
@@ -318,6 +318,7 @@ page {
 	}
 	.food-item {
 		padding: 10rpx 0;
+		font-weight: bold;
 	}
 	.order-title-box {
 		margin-bottom: 20rpx;
@@ -330,7 +331,7 @@ page {
 	.continue-order {
 		width: 140rpx;
 		height: 44rpx;
-		line-height: 40rpx;
+		line-height: 44rpx;
 		border: 2rpx solid;
 		border-radius: 20rpx;
 	}
@@ -343,13 +344,12 @@ page {
 	.food-info {
 		flex: 10;
 		height: 90rpx;
-		line-height: 1;
 	}
 	.food-name {
 		max-width: 450rpx;
 	}
 	.font-price {
-		font-size: 24rpx;
+		font-size: 26rpx;
 		color: #666;
 	}
 	.food-count {
@@ -362,6 +362,7 @@ page {
 		flex: 3;
 		font-size: 26rpx;
 		text-align: right;
+		color: red;
 	}
 	.minus-info-box {
 		margin-top: 30rpx;

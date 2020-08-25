@@ -21,7 +21,7 @@
 		</div>
 		<div v-if="nearShopList.length" class="near-shop-box">
 			<div class="near-shop-title">附近外卖店铺推荐</div>
-			<div class="shop-list"><shop v-for="(shopItem, index) in nearShopList" :key="index" :shopItem="shopItem" @clickShopItem="toOrder(shopItem)"></shop></div>
+			<div class="shop-list"><shop v-for="(shopItem, index) in nearShopList" :key="index" :shopItem="shopItem" @clickShopItem="toOrder(shopItem)" showArrowRight="true"></shop></div>
 		</div>
 	</view>
 </template>
@@ -94,6 +94,11 @@ export default {
 </script>
 
 <style lang="scss">
+	page {
+		height: 100%;
+		background-color: $color-bg-f5;
+
+	}
 .home-container {
 	font-size: 28rpx;
 	color: #333;
@@ -112,8 +117,10 @@ export default {
 		box-sizing: border-box;
 	}
 	.business-type-box {
-		margin-top: 10rpx;
-		margin-bottom: 20rpx;
+		padding: 20rpx 0;
+		background-color: #fff;
+		margin: 20rpx;
+		border-radius: 20rpx;
 	}
 	.type-item-box {
 	}
@@ -127,12 +134,17 @@ export default {
 		height: 80rpx;
 	}
 	.near-shop-title {
-		padding-left: 30rpx;
+		padding: 10rpx 30rpx;
+		font-size: 32rpx;
 		font-weight: bold;
-		margin-bottom: 20rpx;
+		// margin-bottom: 20rpx;
 	}
-	.near-shop-box {
-		padding: 30rpx;
+	.shop-list {
+		background-color: $color-bg-f5;
+		padding: 20rpx 20rpx 0;
 	}
+	// .near-shop-box {
+	// 	// padding: 30rpx;
+	// }
 }
 </style>

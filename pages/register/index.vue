@@ -65,7 +65,7 @@ export default {
 			});
 		},
 		async userRegister() {
-			this.testRegisterLegal()
+			if (!this.testRegisterLegal()) return;
 			const params = {
 				phone: this.phone,
 				password: this.password,
@@ -73,7 +73,7 @@ export default {
 			};
 			try {
 				this.$showLoading()
-				const res = await this.$fetch.post('/user/register', params)
+				const res = await this.$fetch.post('/user/account/register', params)
 				const { data = {} } = res
 				this.$setStorage('userToken', data.userToken)
 				this.$router.reLaunchTo({
@@ -81,12 +81,12 @@ export default {
 				})
 				this.$hideLoading()
 			} catch (e) {
-				consoe.log(e)
+				console.log(e)
 				this.$hideLoading()
 			}
 		},
 		async manageRegister() {
-			this.testRegisterLegal()
+			if (!this.testRegisterLegal()) return;
 			const params = {
 				phone: this.phone,
 				password: this.password,
@@ -94,7 +94,7 @@ export default {
 			};
 			try {
 				this.$showLoading()
-				const res = await  this.$fetch.post('/manage/register', params)
+				const res = await  this.$fetch.post('/manage/account/register', params)
 				const { data = {} } = res
 				this.$setStorage('manageToken', data.manageToken)
 				this.$router.reLaunchTo({
@@ -107,17 +107,17 @@ export default {
 			}
 		},
 		testRegisterLegal() {
-			const phonereg = /^\d+$/;
-			const passwordreg = /^\w+$/;
+			const phonereg = /^\d{11}$/;
+			const passwordreg = /^[a-zA-Z0-9]{8,30}$/;
 			if (!phonereg.test(this.phone)) {
 				this.$showModal({
 					content: '请输入正确手机号'
 				});
 				return;
 			}
-			if (!passwordreg.test(this.phone)) {
+			if (!passwordreg.test(this.password)) {
 				this.$showModal({
-					content: '密码只支持字母、数字、下划线'
+					content: '密码只支持8-30位的字母或数字'
 				});
 				return;
 			}
@@ -133,6 +133,7 @@ export default {
 				});
 				return;
 			}
+			return true
 		},
 
 	}

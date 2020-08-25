@@ -7,7 +7,7 @@
 		<view v-show="tabIndex === allOrderIndex" class="order-list-box" v-for="(orderList, allOrderIndex) in allOrderList" :key="allOrderIndex">
 			<div class="order-list-item" v-for="(orderItem, index) in orderList" :key="index" @click="toOrderDetail(orderItem)">
 				<div class="flex-row">
-					<image class="shop-img" :src="orderItem.imgUrl ? host + orderItem.imgUrl : '/static/img/default-img.svg'" mode="aspectFill" ></image>
+					<image class="shop-img" :src="orderItem.imgUrl ? host + orderItem.imgUrl : '/static/img/default-img.svg'" mode="scaleToFill" ></image>
 					<div class="flex-item flex-col flex-j-between">
 						<div class="flex-row felx-a-center">
 							<div class="shop-name line1">{{orderItem.shopName}}</div>
@@ -138,7 +138,7 @@ page {
 	font-size: 30rpx;
 	color: #333;
 	line-height: 1;
-	padding: 0 30rpx;
+	padding: 0 20rpx;
 	.tab-list-box {
 		position: fixed;
 		top: 0;
@@ -165,13 +165,13 @@ page {
 		width: 100rpx;
 	}
 	.order-list-box {
-		padding-top: 130rpx;
+		padding-top: 110rpx;
 	}
 	.order-list-item {
-		padding: 40rpx 30rpx;
+		padding: 30rpx;
 		background-color: #fff;
 		border-radius: 16rpx;
-		margin-bottom: 20rpx;
+		margin-bottom: 10rpx;
 	}
 	.shop-img {
 		height: 80rpx;

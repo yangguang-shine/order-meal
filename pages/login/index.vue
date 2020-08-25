@@ -63,7 +63,7 @@ export default {
 			};
 			try {
 				this.$showLoading()
-				const res = await this.$fetch.post('/user/login', params);
+				const res = await this.$fetch.post('/user/account/login', params);
 				const { data = {} } = res
 				this.$setStorage('userToken', data.userToken)
 				this.$router.reLaunchTo({
@@ -84,7 +84,7 @@ export default {
 			};
 			try {
 				this.$showLoading()
-				const res = await this.$fetch.post('/manage/login', params);
+				const res = await this.$fetch.post('/manage/account/login', params);
 				const { data = {} } = res
 				this.$setStorage('manageToken', data.manageToken)
 				this.$router.reLaunchTo({
@@ -97,17 +97,17 @@ export default {
 			}
 		},
 		testLegal() {
-			const phonereg = /^\d+$/;
-			const passwordreg = /^\w+$/;
+			const phonereg = /^\d{11}$/;
+			const passwordreg = /^[a-zA-Z0-9]{8,30}$/;
 			if (!phonereg.test(this.phone)) {
 				this.$showModal({
 					content: '请输入正确手机号'
 				});
 				return false;
 			}
-			if (!passwordreg.test(this.phone)) {
+			if (!passwordreg.test(this.password)) {
 				this.$showModal({
-					content: '密码只支持字母、数字、下划线'
+					content: '密码只支持8-30位的字母或数字'
 				});
 				return false;
 			}
