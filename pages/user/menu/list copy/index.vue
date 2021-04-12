@@ -97,7 +97,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import host from '@/config/host'
+import {host} from '@/config/host'
 let observer = null
 export default {
 	data() {
@@ -342,7 +342,7 @@ export default {
 			// })
 			// console.log(foodList)
 			// const res = await this.$fetch.post('/api/userOrder/submit', { foodList })
-			this.$router.navigateTo({
+			this.$myrouter.navigateTo({
 				name: 'user/menu/confirm'
 			})
 		}

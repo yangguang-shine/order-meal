@@ -51,7 +51,7 @@
 <script>
 import getShopMinusList from '@/utils/getShopMinusList';
 import { mapMutations } from 'vuex';
-import host from '@/config/host';
+import {host} from '@/config/host';
 import shop from '@/components/shop';
 import SelectModal from '@/components/SelectModal.vue';
 export default {
@@ -129,7 +129,7 @@ export default {
 				await this.$showModal({
 					content: '该管理员无可用店铺，请添加'
 				});
-				this.$router.reLaunchTo({
+				this.$myrouter.reLaunchTo({
 					name: 'login',
 					query: {
 						roleFlag: 'manage'
@@ -144,7 +144,7 @@ export default {
 			this.getOrderList();
 		},
 		toOrderDetail(orderItem) {
-			this.$router.navigateTo({
+			this.$myrouter.navigateTo({
 				name: 'manage/order/detail',
 				query: {
 					orderKey: orderItem.orderKey

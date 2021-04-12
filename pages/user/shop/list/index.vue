@@ -8,7 +8,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import host from '@/config/host'
+import {host} from '@/config/host'
 import shop from '@/components/shop'
 import getShopMinusList from '@/utils/getShopMinusList';
 import { vuexStorage } from '@/utils/tool.js';
@@ -55,7 +55,7 @@ export default {
         },
 		toOrder(shopItem) {
 			this.saveShopInfo(shopItem)
-			this.$router.navigateTo({
+			this.$myrouter.navigateTo({
 				name: 'user/menu/list',
 				query: {
 					businessType: this.businessType
@@ -66,7 +66,7 @@ export default {
             console.log(e)
         },
         toEditShop(shopItem = {}) {
-            this.$router.navigateTo({
+            this.$myrouter.navigateTo({
                 name: 'shop/edit',
                 query: {
                     shopID: shopItem.shopID,
@@ -74,7 +74,7 @@ export default {
             })
         },
         toAddShop() {
-            this.$router.navigateTo({
+            this.$myrouter.navigateTo({
                 name: 'shop/edit'
             })
         },

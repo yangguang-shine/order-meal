@@ -18,22 +18,22 @@ export default {
     },
     methods: {
         toJoke() {
-            this.$router.navigateTo({
+            this.$myrouter.navigateTo({
                 name: 'entertainment/joke'
             })
         },
         toNews() {
-            this.$router.navigateTo({
+            this.$myrouter.navigateTo({
                 name: 'entertainment/news'
             })
         },
         toCuisine() {
-            this.$router.navigateTo({
+            this.$myrouter.navigateTo({
                 name: 'entertainment/cuisine'
             })
         },
         toQuestion() {
-            this.$router.navigateTo({
+            this.$myrouter.navigateTo({
                 name: 'entertainment/question'
             })
         },

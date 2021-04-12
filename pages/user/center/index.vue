@@ -18,7 +18,7 @@
 		},
 		methods: {
 			toMyAddress() {
-				this.$router.navigateTo({
+				this.$myrouter.navigateTo({
 					name: 'address/list'
 				})
 			}

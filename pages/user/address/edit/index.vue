@@ -71,7 +71,7 @@
 					await this.$showModal({
 						content: '添加成功'
 					})
-					this.$router.back(1)
+					this.$myrouter.back(1)
 				} catch (e) {
 					this.$hideLoading()
 					console.log(e)
@@ -85,7 +85,7 @@
 					await this.$showModal({
 						content: '修改成功'
 					})
-					this.$router.back(1)
+					this.$myrouter.back(1)
 				} catch (e) {
 					console.log(e)
 				}

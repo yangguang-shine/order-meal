@@ -76,19 +76,19 @@ export default {
 		toShopOrderInfo() {
 			this.toCloseSelectModal();
 			this.saveSelectOrderShop;
-			this.$router.navigateTo({
+			this.$myrouter.navigateTo({
 				name: 'manage/order/list'
 			});
 		},
 		toShopFoodInfo() {
 			this.toCloseSelectModal();
-			this.$router.navigateTo({
+			this.$myrouter.navigateTo({
 				name: 'manage/category/list'
 			});
 		},
 		toCopyMeiTuanData() {
 			this.toCloseSelectModal();
-			this.$router.navigateTo({
+			this.$myrouter.navigateTo({
 				name: 'manage/meituan/copy'
 			});
 		},
@@ -137,7 +137,7 @@ export default {
 			}
 		},
 		toEditShop(shopItem = {}) {
-			this.$router.navigateTo({
+			this.$myrouter.navigateTo({
 				name: 'manage/shop/edit',
 				query: {
 					canOperation: 'true'
@@ -145,7 +145,7 @@ export default {
 			});
 		},
 		toAddShop() {
-			this.$router.navigateTo({
+			this.$myrouter.navigateTo({
 				name: 'manage/shop/edit'
 			});
 		}

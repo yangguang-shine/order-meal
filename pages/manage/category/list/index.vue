@@ -51,7 +51,7 @@ export default {
             }
         },
         toFoodList(categoryItem) {
-            this.$router.navigateTo({
+            this.$myrouter.navigateTo({
                 name: 'manage/food/list',
                 query: {
                     categoryID: categoryItem.categoryID,
@@ -60,7 +60,7 @@ export default {
             })
         },
         editCategory(categoryItem) {
-            this.$router.navigateTo({
+            this.$myrouter.navigateTo({
                 name: 'manage/category/edit',
                 query: {
                     categoryID: categoryItem.categoryID,
@@ -107,7 +107,7 @@ export default {
             }
         },
         addCategory() {
-            this.$router.navigateTo({
+            this.$myrouter.navigateTo({
                 name: 'manage/category/edit',
             })
         },

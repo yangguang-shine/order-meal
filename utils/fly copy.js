@@ -1,5 +1,5 @@
 import router from '@/utils/router'
-import host from '@/config/host'
+import {host} from '@/config/host'
 import vuex from '@/store'
 
 // #ifdef MP-WEIXIN

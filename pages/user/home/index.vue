@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import host from '@/config/host';
+import {host} from '@/config/host';
 import getShopMinusList from '@/utils/getShopMinusList';
 import shop from '@/components/shop';
 import SelectModal from '@/components/SelectModal.vue';
@@ -72,7 +72,7 @@ export default {
 		},
 		toShopList(businessType) {
 			this.saveBusinessType(businessType)
-			this.$router.navigateTo({
+			this.$myrouter.navigateTo({
 				name: 'user/shop/list',
 				query: {
 					businessType
@@ -82,7 +82,7 @@ export default {
 		toOrder(shopItem) {
 			this.saveShopInfo(shopItem);
 			this.saveBusinessType(2)
-			this.$router.navigateTo({
+			this.$myrouter.navigateTo({
 				name: 'user/menu/list',
 				query: {
 					businessType: 2

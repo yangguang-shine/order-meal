@@ -90,7 +90,7 @@
 					await this.$fetch.post('/user/address/setDefault', { addressID })
 					await this.init()
 					if (this.fromPage) {
-						this.$router.back()
+						this.$myrouter.back()
 					}
 					this.$hideLoading()
 				} catch (e) {
@@ -100,7 +100,7 @@
 
 			},
 			toEditAddress(addressID) {
-				this.$router.navigateTo({
+				this.$myrouter.navigateTo({
 					name: 'user/address/edit',
 					query: {
 						addressID
@@ -108,7 +108,7 @@
 				})
 			},
 			toAddAddress() {
-				this.$router.navigateTo({
+				this.$myrouter.navigateTo({
 					name: 'user/address/edit',
 				})
 			}

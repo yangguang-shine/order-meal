@@ -24,12 +24,12 @@ export default {
         toUserHome() {
             const userToken = this.$getStorage('userToken');
             if (userToken) {
-                this.$router.reLaunchTo({
+                this.$myrouter.reLaunchTo({
                     name: 'user/home',
                     query: {}
                 });
             } else {
-                this.$router.navigateTo({
+                this.$myrouter.navigateTo({
                     name: 'login',
                     query: {
                         roleFlag: 'user'
@@ -41,11 +41,11 @@ export default {
         toManageHome() {
             const manageToken = this.$getStorage('manageToken');
             if (manageToken) {
-                this.$router.reLaunchTo({
+                this.$myrouter.reLaunchTo({
                     name: 'manage/home'
                 });
             } else {
-                this.$router.navigateTo({
+                this.$myrouter.navigateTo({
                     name: 'login',
                     query: {
                         roleFlag: 'manage'
@@ -72,13 +72,13 @@ export default {
         },
 
         toUserOderList() {
-            this.$router.reLaunchTo({
+            this.$myrouter.reLaunchTo({
                 name: 'user/order/list'
             });
         },
 
         toManageOderList() {
-            this.$router.reLaunchTo({
+            this.$myrouter.reLaunchTo({
                 name: 'manage/order/list'
             });
         },

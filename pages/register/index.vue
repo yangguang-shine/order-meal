@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import host from '@/config/host';
+import {host} from '@/config/host';
 export default {
 	data() {
 		return {
@@ -50,14 +50,14 @@ export default {
 				content: '无法区分角色，请选择角色',
 				confirmText: '知道了'
 			});
-			this.$router.reLaunchTo({
+			this.$myrouter.reLaunchTo({
 				name: 'role'
 			});
 		}
 	},
 	methods: {
 		toLoginPage() {
-			this.$router.reLaunchTo({
+			this.$myrouter.reLaunchTo({
 				name: 'login',
 				query: {
 					roleFlag: this.roleFlag
@@ -76,7 +76,7 @@ export default {
 				const res = await this.$fetch.post('/user/account/register', params)
 				const { data = {} } = res
 				this.$setStorage('userToken', data.userToken)
-				this.$router.reLaunchTo({
+				this.$myrouter.reLaunchTo({
 					name: 'user/home'
 				})
 				this.$hideLoading()
@@ -97,7 +97,7 @@ export default {
 				const res = await  this.$fetch.post('/manage/account/register', params)
 				const { data = {} } = res
 				this.$setStorage('manageToken', data.manageToken)
-				this.$router.reLaunchTo({
+				this.$myrouter.reLaunchTo({
 					name: 'manage/home'
 				})
 				this.$hideLoading()

@@ -1,5 +1,5 @@
 import router from '@/utils/router'
-import host from '@/config/host'
+import { requestHost} from '@/config/host'
 import { showModal, showLoading, showToast, hideLoading, hideToast} from '@/utils'
 // #ifdef MP-WEIXIN
 import toLogin from '@/utils/wx'
@@ -24,7 +24,7 @@ const fly = new Fly;
 //     timeout:""//超时时间
 //   }
 fly.config.timeout = 10000;
-fly.config.baseURL = `${host}`;
+fly.config.baseURL = `${requestHost}`;
 fly.config.withCredentials = true;
 
 fly.interceptors.request.use(async (request) => {

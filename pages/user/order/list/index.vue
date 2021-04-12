@@ -30,7 +30,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import host from '@/config/host'
+import {host} from '@/config/host'
 
 	export default {
 		data() {
@@ -100,7 +100,7 @@ import host from '@/config/host'
 				this.getOrderList()
 			},
 			toOrderDetail(orderItem) {
-				this.$router.navigateTo({
+				this.$myrouter.navigateTo({
 					name: 'user/order/detail',
 					query: {
 						orderKey: orderItem.orderKey
@@ -114,7 +114,7 @@ import host from '@/config/host'
 					const shopInfo = res.data || {}
 					this.saveShopInfo(shopInfo)
 					this.saveBusinessType(orderItem.businessType)
-					this.$router.navigateTo({
+					this.$myrouter.navigateTo({
 						name: 'user/menu/list',
 						query: {
 							orderKey: orderItem.orderKey,

@@ -31,7 +31,7 @@
 	</view>
 </template>
 <script>
-import host from '@/config/host'
+import { host } from '@/config/host'
 
 	export default {
 		data() {
@@ -92,7 +92,7 @@ import host from '@/config/host'
 					await this.$showModal({
 						content: '添加成功'
 					})
-					this.$router.back()
+					this.$myrouter.back()
 				} catch(e) {
 					console.log(e)
 					this.$hideLoading()
@@ -106,7 +106,7 @@ import host from '@/config/host'
 					await this.$showModal({
 						content: '修改成功'
 					})
-					this.$router.back()
+					this.$myrouter.back()
 				} catch(e) {
 					console.log(e)
 					this.$hideLoading()

@@ -38,7 +38,7 @@ export default {
                 await this.$showModal({
                     content: '修改成功'
                 })
-                this.$router.back()
+                this.$myrouter.back()
             } catch (e) {
                 console.log(e)
                 this.$hideLoading()
@@ -50,7 +50,7 @@ export default {
         // async deleteCategory() {
         //     try {
         //         await this.$fetch.post('/api/category/remove', { categoryID: this.categoryID, shopID: this.selectShopItem.shopID })
-        //         this.$router.back()
+        //         this.$myrouter.back()
         //     } catch (e) {
         //         console.log(e)
         //     }
@@ -63,7 +63,7 @@ export default {
                 await this.$showModal({
                     content: '添加成功'
                 })
-                this.$router.back()
+                this.$myrouter.back()
             } catch (e) {
                 console.log(e)
                 this.$hideLoading()

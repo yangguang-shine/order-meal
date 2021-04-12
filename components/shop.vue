@@ -24,7 +24,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import host from '@/config/host'
+import { host } from '@/config/host'
 
 export default {
     props: {
@@ -62,7 +62,7 @@ export default {
             this.$emit('toDeleteShop')
         },
         toEditShop() {
-            this.$router.navigateTo({
+            this.$myrouter.navigateTo({
                 name: 'manage/shop/edit',
                 query: {
                     shopID: this.shopItem.shopID,

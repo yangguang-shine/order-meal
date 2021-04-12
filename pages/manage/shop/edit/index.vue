@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import host from '@/config/host';
+import {host, requestHost} from '@/config/host';
 import getShopMinusList from '@/utils/getShopMinusList';
 export default {
 	data() {
@@ -222,7 +222,7 @@ export default {
 				await this.$showModal({
 					content: '修改成功'
 				});
-				this.$router.back();
+				this.$myrouter.back();
 			} catch (e) {
 				this.$hideLoading();
 				console.log(e);
@@ -245,7 +245,7 @@ export default {
 					content: '添加成功'
 				});
 
-				this.$router.back();
+				this.$myrouter.back();
 			} catch (e) {
 				console.log(e);
 				this.$hideLoading();
@@ -292,7 +292,7 @@ export default {
 					
 					console.log(res.tempFilePaths[0])
 					uni.uploadFile({
-						url: `${host}/manage/uploadImg/shop`,
+						url: `${requestHost}/manage/uploadImg/shop`,
 						filePath: res.tempFilePaths[0],
 						name: 'image',
 						// header: {

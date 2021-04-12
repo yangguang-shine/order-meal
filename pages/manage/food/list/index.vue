@@ -20,7 +20,7 @@
 	</view>
 </template>
 <script>
-import host from '@/config/host';
+import {host} from '@/config/host';
 import BottomButton from '@/components/BottomButton.vue';
 export default {
 	data() {
@@ -59,7 +59,7 @@ export default {
 			}
 		},
 		toEdit(foodID) {
-			this.$router.navigateTo({
+			this.$myrouter.navigateTo({
 				name: 'manage/food/edit',
 				query: {
 					foodID: foodID,
@@ -105,7 +105,7 @@ export default {
 			}
 		},
 		toAddFood() {
-			this.$router.navigateTo({
+			this.$myrouter.navigateTo({
 				name: 'manage/food/edit',
 				query: {
 					categoryID: this.categoryID,

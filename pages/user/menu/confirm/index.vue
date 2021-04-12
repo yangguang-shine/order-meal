@@ -72,7 +72,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import host from '@/config/host'
+import {host} from '@/config/host'
 import { vuexStorage } from '@/utils/tool.js';
 
 export default {
@@ -162,12 +162,12 @@ export default {
 			}
 			const res = await this.$fetch.post('/user/order/submit', { foodList, shopID: this.shopInfo.shopID, orderAmount: this.dueAmount, businessType: this.businessType, ...query, minusPrice: this.minusPrice, originOrderAmount: this.originOrderAmount })
 			this.clearCart()
-			this.$router.reLaunchTo({
+			this.$myrouter.reLaunchTo({
 				name: 'user/order/list'
 			})
 		},
 		toSelectAddress() {
-			this.$router.navigateTo({
+			this.$myrouter.navigateTo({
 				name: 'user/address/list',
 				query: {
 					fromPage: 'confirmOrder'
@@ -178,7 +178,7 @@ export default {
 			this.takeOutTime = e.detail.value
 		},
 		continueOrder() {
-			this.$router.back()
+			this.$myrouter.back()
 		},
 	}
 }

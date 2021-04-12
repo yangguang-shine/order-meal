@@ -1,4 +1,4 @@
-import host from '@/config/host'
+import {requestHost} from '@/config/host'
 import vuex from '@/store'
 export const login = () => {
     return new Promise((resolve, reject) => {
@@ -7,7 +7,7 @@ export const login = () => {
                 if (res.code) {
                 //发起网络请求
                     uni.request({
-                        url: `${host}/user/wechat/wx/login`,
+                        url: `${requestHost}/user/wechat/wx/login`,
                         data: {
                             code: res.code,
                         },

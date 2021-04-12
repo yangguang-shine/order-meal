@@ -15,7 +15,7 @@ import BottomButton from '@/components/BottomButton.vue'
 
 Vue.component('no-data',NoData)
 Vue.config.productionTip = false
-Vue.prototype.$router = router
+Vue.prototype.$myrouter = router
 Vue.prototype.$store = store
 Vue.prototype.$fetch = fetch
 Vue.prototype.$showModal = showModal

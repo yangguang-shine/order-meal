@@ -191,7 +191,7 @@ import host from '@/config/host'
 					const shopInfo = res.data || {}
 					this.saveShopInfo(shopInfo)
 					this.saveBusinessType(this.orderDetail.businessType)
-					this.$router.navigateTo({
+					this.$myrouter.navigateTo({
 						name: 'user/menu/list',
 						query: {
 							orderKey: this.orderDetail.orderKey,
