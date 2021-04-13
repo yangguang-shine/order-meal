@@ -30,3 +30,20 @@
 管理端github地址： https://github.com/yangguang-shine/mp-manage
 
 后端github地址: https://github.com/yangguang-shine/my-app
+
+
+### 问题思考
+
+#### 不使用vuex原因
+
+页面刷新后，所有存在vuex的数据全部丢失，每个依赖vuex数据的页面都要考虑页面刷新，数据丢失问题，所有项目不使用vuex，使用了localStorage
+
+#### 页面有许多可以重复使用的组件和方法
+
+初始有些页面有些重复书写的方法和组件，现在功能 还不完善，等后期整体完工后，统一进行优化
+
+#### 页面使用了跨端，兼容小程序和H5
+
+开始时依照小程序的开发模式进行开发，当小程序没有问题后，在H5上进行内容扩充
+
+

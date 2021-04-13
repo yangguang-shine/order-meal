@@ -129,12 +129,7 @@
 				
 		// 	}
 		// },
-		{
-			"path": "pages/manage/home/index",
-			"style": {
-				"navigationBarTitleText": "首页"
-			}
-		},
+
 		{
 			"path": "pages/manage/order/list/index",
 			"style": {
@@ -145,6 +140,12 @@
 			"path": "pages/manage/order/detail/index",
 			"style": {
 				"navigationBarTitleText": "订单详情"
+			}
+		},
+		{
+			"path": "pages/manage/shop/list/index",
+			"style": {
+				"navigationBarTitleText": "首页"
 			}
 		},
 		{

@@ -42,6 +42,11 @@ export default {
                 const res = await this.$fetch.get('manage/category/list', { shopID: this.selectShopItem.shopID })
                 this.categoryList = res.data || [] 
                 this.$hideLoading()
+                if (this.categoryList.length === 0) {
+                    this.$showToast({
+                        title: '暂无菜品分类列表'
+                    })
+                }
             } catch(e) {
                 console.log(e)
                 this.$hideLoading()

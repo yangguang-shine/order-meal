@@ -153,14 +153,14 @@ export default {
 			});
 		}
 	},
-	async onUnload() {
-		console.log(!this.shopID && this.shopInfo.imgUrl && !this.addState);
-		if (!this.shopID && this.shopInfo.imgUrl && !this.addState) {
-			await this.$fetch.post('/manage/uploadImg/remove', { imgUrl: this.shopInfo.imgUrl, deleteShop: true });
-		}
-		this.shopID = '';
-		this.addState = false;
-	},
+	// async onUnload() {
+	// 	console.log(!this.shopID && this.shopInfo.imgUrl && !this.addState);
+	// 	if (!this.shopID && this.shopInfo.imgUrl && !this.addState) {
+	// 		await this.$fetch.post('/manage/uploadImg/remove', { imgUrl: this.shopInfo.imgUrl, deleteShop: true });
+	// 	}
+	// 	this.shopID = '';
+	// 	this.addState = false;
+	// },
 	methods: {
 		startPickerChange(e) {
 			const value = e.detail.value || [];

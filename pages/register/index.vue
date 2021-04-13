@@ -98,7 +98,7 @@ export default {
 				const { data = {} } = res
 				this.$setStorage('manageToken', data.manageToken)
 				this.$myrouter.reLaunchTo({
-					name: 'manage/home'
+					name: 'manage/shop/list'
 				})
 				this.$hideLoading()
 			} catch (e) {

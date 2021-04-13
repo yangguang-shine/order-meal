@@ -122,10 +122,6 @@ import host from '@/config/host'
 		computed: {
 		},
 		methods: {
-			...mapMutations({
-				saveShopInfo:'saveShopInfo',
-				saveBusinessType:'saveBusinessType'
-			}),
 			async init() {
 				const res = await this.$fetch.get('/user/order/orderDetail', { orderKey: this.orderKey })
 				const orderDetail = res.data || {};
@@ -201,7 +197,19 @@ import host from '@/config/host'
 				} catch (e) {
 					console.log(e)
 				}
-			}
+			},
+			        saveBusinessType(businessType) {
+            uni.setStorage({
+                key: 'businessType',
+                data: businessType
+            })
+        },
+        saveShopInfo(shopItem) {
+            uni.setStorage({
+                key: 'shopInfo',
+                data: shopItem
+            })
+        },
 		}
 	}
 </script>

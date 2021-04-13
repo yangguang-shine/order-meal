@@ -1,7 +1,7 @@
 <template>
     <div class="shop-list-container">
         <div class="shop-list">
-            <shop v-for="(shopItem, index) in shopList" :key="index" :shopItem="shopItem" @clickShopItem="toOrder(shopItem)" showArrowRight="true"></shop>
+            <shop v-for="(shopItem, index) in shopList" :key="index" :shopItem="shopItem" @clickShopItem="toOrder(shopItem)" showArrowRight></shop>
         </div>
     </div>
 </template>

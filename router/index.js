@@ -55,10 +55,7 @@ const manage = [
 		name: 'manage/food/edit',
 		path: '/pages/manage/food/edit/index'
 	},
-	{
-		name: 'manage/home',
-		path: '/pages/manage/home/index'
-	},
+
 	{
 		name: 'manage/meituan/copy',
 		path: '/pages/manage/meituan/copy/index'
@@ -70,6 +67,10 @@ const manage = [
 	{
 		name: 'manage/order/detail',
 		path: '/pages/manage/order/detail/index'
+	},
+	{
+		name: 'manage/shop/list',
+		path: '/pages/manage/shop/list/index'
 	},
 	{
 		name: 'manage/shop/edit',

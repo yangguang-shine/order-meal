@@ -31,7 +31,7 @@
 	</view>
 </template>
 <script>
-import { host } from '@/config/host'
+import { host, requestHost } from '@/config/host'
 
 	export default {
 		data() {
@@ -64,11 +64,11 @@ import { host } from '@/config/host'
 				this.foodInfo.foodName = `${this.foodInfo.foodName}${Math.random().toString(36).slice(2, 4)}`
 			}
 		},
-		async onUnload() {
-			if (!this.foodID && this.foodInfo.imgUrl && !this.addStatus) {
-            	await this.$fetch.post('/manage/uploadImg/remove', { imgUrl: this.foodInfo.imgUrl, deleteFood: true })
-			}
-		},
+		// async onUnload() {
+		// 	if (!this.foodID && this.foodInfo.imgUrl && !this.addStatus) {
+        //     	await this.$fetch.post('/manage/uploadImg/remove', { imgUrl: this.foodInfo.imgUrl, deleteFood: true })
+		// 	}
+		// },
 		methods: {
 			async init() {
 				try {
@@ -128,7 +128,7 @@ import { host } from '@/config/host'
 							
 						}
 						uni.uploadFile({
-							url: `${host}/manage/uploadImg/food`,
+							url: `${requestHost}/manage/uploadImg/food`,
 							filePath: file.path,
 							name: 'image',
 							formData: {

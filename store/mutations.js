@@ -68,24 +68,24 @@ mutations['saveDefaultAddress'] = (state, address = {}) => {
     state.defaultAddress = address
 }
 
-mutations['saveShopInfo'] = (state, shopInfo = {}) => {
-    const minusList = getShopMinusList(shopInfo.minus)
-    shopInfo.minusList = minusList
-    state.cartFoodList = []
-    state.shopInfo = shopInfo
-	uni.setStorage({
-		key: 'shopInfo',
-		data: shopInfo
-	})
-}
+// mutations['saveShopInfo'] = (state, shopInfo = {}) => {
+//     const minusList = getShopMinusList(shopInfo.minus)
+//     shopInfo.minusList = minusList
+//     state.cartFoodList = []
+//     state.shopInfo = shopInfo
+// 	uni.setStorage({
+// 		key: 'shopInfo',
+// 		data: shopInfo
+// 	})
+// }
 
-mutations['saveBusinessType'] = (state, businessType) => {
-    state.businessType = Number(businessType)
-	uni.setStorage({
-		key: 'businessType',
-		data: businessType
-	})
-}
+// mutations['saveBusinessType'] = (state, businessType) => {
+//     state.businessType = Number(businessType)
+// 	uni.setStorage({
+// 		key: 'businessType',
+// 		data: businessType
+// 	})
+// }
 
 mutations['saveCartFoodList'] = (state, cartFoodList) => {
     state.cartFoodList = cartFoodList

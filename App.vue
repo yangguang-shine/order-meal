@@ -1,11 +1,4 @@
 <script>
-// #ifdef H5
-// import Cookies from 'js-cookie'
-// #endif
-// #ifdef MP-WEIXIN
-// import toLogin from '@/utils/wx'
-// #endif
-
 	export default {
 		onLaunch() {
 			// #ifdef MP-WEIXIN

@@ -42,7 +42,7 @@ export default {
             const manageToken = this.$getStorage('manageToken');
             if (manageToken) {
                 this.$myrouter.reLaunchTo({
-                    name: 'manage/home'
+                    name: 'manage/shop/list'
                 });
             } else {
                 this.$myrouter.navigateTo({
