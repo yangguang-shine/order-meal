@@ -21,29 +21,22 @@
 	</view>
 </template>
 <script>
-	import { mapState, mapMutations } from 'vuex'
 	export default {
 		data() {
 			return {
 				addressList: [],
-				fromPage: ''
+				fromPage: '',
+				defaultAddress: {}
 			}
 		},
 		onLoad(query) {
 			this.fromPage = query.fromPage || ''
 		},
 		onShow() {
+			this.defaultAddress = uni.getStorageSync('defaultAddress')
 			this.init()
 		},
-		computed: {
-			...mapState({
-				defaultAddress: state => state.defaultAddress
-			})
-		},
 		methods: {
-			...mapMutations({
-				saveDefaultAddress: 'saveDefaultAddress'
-			}),
 			async init() {
 				try {
 					this.$showLoading()
@@ -59,18 +52,22 @@
 				}
 
 			},
+			saveDefaultAddress(addressItem) {
+				this.defaultAddress = addressItem
+				uni.setStorageSync('defaultAddress', addressItem)
+			},
 			async toDeleteAddress(addressID) {
 				try {
 					this.$showLoading()
 					await this.$fetch.post('/user/address/remove', { addressID })
-					this.$hideLoading()
 					await this.$showModal({
 						content: '删除成功'
 					})
 				} catch (e) {
-					this.$hideLoading()
 					console.log(e)
 					return
+				} finally {
+					this.$hideLoading()
 				}
 				this.init()
 			},
@@ -92,10 +89,10 @@
 					if (this.fromPage) {
 						this.$myrouter.back()
 					}
-					this.$hideLoading()
 				} catch (e) {
-					this.$hideLoading()
 					console.log(e)
+				} finally {
+					this.$hideLoading()
 				}
 
 			},

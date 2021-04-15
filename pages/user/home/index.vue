@@ -61,10 +61,10 @@ export default {
                 nearShopList.forEach(item => {
                     item.minusList = getShopMinusList(item.minus || '');
                 });
-                this.$hideLoading();
                 this.nearShopList = nearShopList;
             } catch (e) {
                 console.log(e);
+            } finally {
                 this.$hideLoading();
             }
         },
@@ -89,16 +89,13 @@ export default {
             });
         },
         saveBusinessType(businessType) {
-            uni.setStorage({
-                key: 'businessType',
-                data: businessType
-            })
+            uni.setStorageSync('businessType', businessType)
         },
         saveShopInfo(shopItem) {
-            uni.setStorage({
-                key: 'shopInfo',
-                data: shopItem
-            })
+            if (!shopItem.minusList) {
+                shopItem.minusList = getShopMinusList(shopItem.minus || '')
+            }
+            uni.setStorageSync('shopInfo',shopItem)
         },
     }
 };

@@ -7,11 +7,9 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
 import {host} from '@/config/host'
 import shop from '@/components/shop'
 import getShopMinusList from '@/utils/getShopMinusList';
-import { vuexStorage } from '@/utils/tool.js';
 
 export default {
     components:{
@@ -21,20 +19,14 @@ export default {
         return {
             shopList: [],
             host,
+            businessType: ''
         }
     },
-	computed: {
-		...mapState({
-			businessType: state => vuexStorage(state, 'businessType') || ''
-		}),
-	},
     onShow() {
+        this.businessType = uni.getStorageSync('businessType')
         this.init()
     },
     methods: {
-        ...mapMutations({
-            saveShopInfo: 'saveShopInfo',
-        }),
         async init() {
             try {
                 this.$showLoading()
@@ -47,9 +39,9 @@ export default {
                     item.minusList = getShopMinusList(item.minus || '')
                 })
                 this.shopList = shopList
-                this.$hideLoading()
             } catch(e) {
                 console.log(e)
+            } finally {
                 this.$hideLoading()
             }
         },
@@ -77,6 +69,15 @@ export default {
             this.$myrouter.navigateTo({
                 name: 'shop/edit'
             })
+        },
+        saveBusinessType(businessType) {
+            uni.setStorageSync('businessType', businessType)
+        },
+        saveShopInfo(shopItem) {
+            if (!shopItem.minusList) {
+                shopItem.minusList = getShopMinusList(shopItem.minus || '')
+            }
+            uni.setStorageSync('shopInfo',shopItem)
         },
     }
 }

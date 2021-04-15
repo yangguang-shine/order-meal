@@ -293,11 +293,11 @@ export default {
                 }
                 this.foodCategoryList = foodCategoryList;
                 this.getStorageCart();
-                this.$hideLoading();
             } catch (e) {
                 console.log(e);
+            } finally {
                 this.$hideLoading();
-            }
+			}
         },
         initCart({ foodCategoryList = [], storageFoodList = [] } = {}) {
             storageFoodList.forEach(storageFoodItem => {
@@ -340,10 +340,7 @@ export default {
                 });
             });
             this.cartFoodList = this.cartFoodList.filter(item => item.foodList.length > 0);
-            uni.setStorage({
-                key: `storageFoodList_${this.shopInfo.shopID}`,
-                data: this.cartFoodList
-            });
+            uni.setStorageSync(`storageFoodList_${this.shopInfo.shopID}`,this.cartFoodList);
         },
         clearCart() {
             this.cartFoodList.forEach(categoryTtem => {

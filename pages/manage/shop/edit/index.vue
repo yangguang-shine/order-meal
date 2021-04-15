@@ -314,6 +314,9 @@ export default {
 							this.$showModal({
 								content: '上传成功'
 							});
+						},
+						fail(err) {
+							console.log(err)
 						}
 					});
 				}

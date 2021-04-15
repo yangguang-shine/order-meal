@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
 import { host } from '@/config/host'
+import getShopMinusList from '@/utils/getShopMinusList';
 
 export default {
     data() {
@@ -41,17 +41,15 @@ export default {
         }
     },
     onShow() {
+        console.log(this.$router)
         this.getOrderList()
     },
     computed: {
-        ...mapState({
-            orderListUpdate: state => state.orderListUpdate
-        })
     },
     methods: {
         async getOrderList() {
             try {
-                // if (!this.orderListUpdate[this.tabIndex]) return;
+                this.$showLoading()
                 this.$set(this.allOrderList, this.tabIndex, [])
                 const res = await this.$fetch.get('/user/order/orderList', {
                     status: this.tabIndex
@@ -63,6 +61,8 @@ export default {
                 this.allOrderList[this.tabIndex].push(...orderList)
             } catch (e) {
                 console.log(e)
+            } finally {
+                this.$hideLoading()
             }
         },
         getOrderTypeTitle(orderStatus, businessType) {
@@ -105,6 +105,7 @@ export default {
         },
         async orderAgain(orderItem) {
             try {
+                this.$showLoading()
                 console.log(orderItem.businessType)
                 const res = await this.$fetch.get('/user/shop/find', { shopID: orderItem.shopID })
                 const shopInfo = res.data || {}
@@ -119,19 +120,18 @@ export default {
                 })
             } catch (e) {
                 console.log(e)
+            } finally {
+                this.$hideLoading()
             }
         },
         saveBusinessType(businessType) {
-            uni.setStorage({
-                key: 'businessType',
-                data: businessType
-            })
+            uni.setStorageSync('businessType', businessType)
         },
         saveShopInfo(shopItem) {
-            uni.setStorage({
-                key: 'shopInfo',
-                data: shopItem
-            })
+            if (!shopItem.minusList) {
+                shopItem.minusList = getShopMinusList(shopItem.minus || '')
+            }
+            uni.setStorageSync('shopInfo',shopItem)
         },
     }
 }

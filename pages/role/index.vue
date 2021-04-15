@@ -7,7 +7,7 @@
         <view class="reptile">爬虫</view>
         <view class="role-box flex-row flex-j-around">
             <view class="user" @click="toUserOderList">用户订单列表</view>
-            <view class="manage" @click="toManageOderList">管理员订单列表</view>
+            <view class="manage" @click="toManageHome">管理员订单列表</view>
         </view>
         <view class="role-box flex-row flex-j-around">
             <view class="user" @click="toClearUserCookie">注销用户登录</view>
@@ -24,7 +24,7 @@ export default {
         toUserHome() {
             const userToken = this.$getStorage('userToken');
             if (userToken) {
-                this.$myrouter.reLaunchTo({
+                this.$myrouter.navigateTo({
                     name: 'user/home',
                     query: {}
                 });
@@ -41,7 +41,7 @@ export default {
         toManageHome() {
             const manageToken = this.$getStorage('manageToken');
             if (manageToken) {
-                this.$myrouter.reLaunchTo({
+                this.$myrouter.navigateTo({
                     name: 'manage/shop/list'
                 });
             } else {
@@ -72,9 +72,12 @@ export default {
         },
 
         toUserOderList() {
-            this.$myrouter.reLaunchTo({
-                name: 'user/order/list'
-            });
+            // this.$myrouter.navigateTo({
+            //     name: 'user/order/list'
+            // });
+			this.$myrouter.navigateTo({
+			    name: 'user/order/list'
+			});
         },
 
         toManageOderList() {
