@@ -1,103 +1,121 @@
 <template>
-    <div class="menu-container flex-col">
-        <!-- <div class="menu-header"></div> -->
-        <div class="order-main flex-item flex-row" :style="{ 'padding-bottom': minusPromotionsTitle ? '50rpx' : '' }">
+    <view class="menu-container flex-col" >
+        <!-- <view class="menu-header"></view> -->
+        <view class="order-main flex-item flex-row" :style="{ 'padding-bottom': minusPromotionsTitle.show ? '50rpx' : '' }">
             <scroll-view scroll-y class="category-aside-box">
-                <div class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :style="{
-						'background-color': selectCategoryTabId === asideCategoryItem.scrollTabID ? '#fff' : '',
-						color: selectCategoryTabId === asideCategoryItem.scrollTabID ? $mainColor : ''
-					}" @click="changeSelectCategoryTab(asideCategoryItem.scrollTabID)">
+                <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{'aside-categroy-item-active': selectCategoryTabId === asideCategoryItem.scrollTabID}" @click="changeSelectCategoryTab(asideCategoryItem.scrollTabID)">
                     {{ asideCategoryItem.categoryName }}
-                    <div v-if="asideCategoryItem.orderCount" class="category-order-count" :style="{ background: $mainColor }">{{ asideCategoryItem.orderCount }}</div>
-                </div>
-            </scroll-view>
-            <scroll-view scroll-y scroll-with-animation :scroll-into-view="scrollIntoCategoryID" class="food-main-box flex-item">
-                <div class="food-category-list-item" :data-food-category-item="JSON.stringify(foodCategoryItem)" v-for="(foodCategoryItem, index) in foodCategoryList" :key="index">
-                    <div :id="foodCategoryItem.scrollTabID" class="food-category-name">{{ foodCategoryItem.categoryName }}</div>
-                    <div class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex">
-                        <image class="food-img  flex-shrink" :src="host + foodItem.imgUrl" mode="scaleToFill"></image>
-                        <div class="food-info-box flex-item flex-col flex-j-between">
-                            <div class="food-name-description">
-                                <div class="food-name">{{ foodItem.foodName }}</div>
-                                <div class="food-description">{{ foodItem.description }}</div>
-                            </div>
-                            <div class="food-price-button flex-row flex-j-between flex-a-center">
-                                <div class="food-price">¥{{ foodItem.price }}</div>
-                                <div v-if="foodItem.orderCount < 1" class="food-count-add" :style="{ 'background-color': $mainColor }" @click="addCount(foodCategoryItem.categoryID, foodItem)"></div>
-                                <div v-else class="flex-row flex-a-center">
-                                    <div class="food-count-minus" :style="{ color: $mainColor }" @click="minusCount(foodCategoryItem.categoryID, foodItem)">
-                                        <div class="reduce-icon-css" :style="{ 'background-color': $mainColor }"></div>
-                                    </div>
-                                    <div class="food-order-count">{{ foodItem.orderCount }}</div>
-                                    <div class="food-count-add" :style="{ 'background-color': $mainColor }" @click="addCount(foodCategoryItem.categoryID, foodItem)"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </scroll-view>
-        </div>
-        <div v-if="minusPromotionsTitle" class="promotion-title center">{{ minusPromotionsTitle }}</div>
-        <div class="footer-cart flex-row flex-j-between flex-a-center">
-            <div class="cart-img-box">
-                <image class="cart-img" @click="changeShowCartDetail" src="/static/img/cart-icon.png" mode="scaleToFill"></image>
-                <div v-if="allCartFoodCount" class="cart-all-count" :style="{ background: $mainColor }">{{ allCartFoodCount }}</div>
-            </div>
-            <div class="flex-item cart-all-amount">
-                <span v-if="cartFoodList.length" class="cart-all-discount-price">{{ cartPriceInfo.cartAlldiscountPrice }}</span>
-                <span v-if="cartPriceInfo.discountPrice" class="cart-all-origin-price">{{ cartPriceInfo.cartAllOriginPrice }}</span>
-            </div>
-            <div class="com-button confirm-order" :style="{ 'background-color': cartFoodListMainColor }" @click="toComfirmOrder">去下单</div>
-        </div>
-        <div v-if="showCartDetail" class="cart-detail-mask" @click.stop="showCartDetail = false">
-            <div class="cart-detail-box" :style="{ 'padding-bottom': minusPromotionsTitle ? '60rpx' : '' }" @touchmove.stop>
-                <div class="cart-select-box flex-row flex-j-between flex-a-center" @click.stop>
-                    <div class="select-goods-title">已选商品</div>
-                    <image class="delete-all-icon" src="/static/img/shop-delete.svg" @click="cartClearCart"></image>
-                </div>
-                <scroll-view scroll-y class="cart-detail-list-box" @click.stop>
-                    <div class="food-category-item" v-for="(foodCategoryItem, index) in cartFoodList" :key="index">
-                        <div class="cart-food-item flex-row" v-for="(cartFoodItem, cartFoodIndex) in foodCategoryItem.foodList" :key="cartFoodIndex">
-                            <image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="cartFoodItem.imgUrl ? host + cartFoodItem.imgUrl : '/static/img/default-img.svg'" mode="scaleToFill"></image>
-                            <div v-if="cartFoodItem.orderCount" class="cart-food-info-box flex-item flex-col flex-j-between">
-                                <div class="cart-food-name-description">
-                                    <div class="cart-food-name">{{ cartFoodItem.foodName }}</div>
-                                    <div class="cart-food-description">{{ cartFoodItem.description }}</div>
-                                </div>
-                                <div class="cart-food-price-button flex-row flex-j-between flex-a-center">
-                                    <div class="cart-food-price">¥{{ cartFoodItem.price }}</div>
-                                    <div class="flex-row flex-a-center">
-                                        <view class="food-item-amount">总价: {{ cartFoodItem.foodItemAmount }}</view>
-                                        <div v-if="cartFoodItem.orderCount < 1" class="food-count-add" :style="{ 'background-color': $mainColor }" @click="addCount(foodCategoryItem.categoryID, cartFoodItem)"></div>
-                                        <div v-else class="flex-row flex-a-center">
-                                            <div class="food-count-minus" :style="{ color: $mainColor }" @click="minusCount(foodCategoryItem.categoryID, cartFoodItem)">
-                                                <div class="reduce-icon-css" :style="{ 'background-color': $mainColor }"></div>
-                                            </div>
-                                            <div class="food-order-count">{{ cartFoodItem.orderCount }}</div>
-                                            <div class="food-count-add" :style="{ 'background-color': $mainColor }" @click="addCount(foodCategoryItem.categoryID, cartFoodItem)"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </scroll-view>
-                <view class="cart-amount-box flex-row flex-a-center flex-j-between">
-                    <view class="cart-origin-price">总计: {{ cartPriceInfo.cartAllOriginPrice }}</view>
-                    <view v-if="cartPriceInfo.discountPrice" class="">已满减: {{ cartPriceInfo.discountPrice }}</view>
-                    <view class="cart-food-all-amount-title">应付: {{ cartPriceInfo.cartAlldiscountPrice }}</view>
-                    <!-- 	<view class="cart-food-all-amount">
-						{{ cartPriceInfo.cartAllOriginPrice }} {{ cartPriceInfo.cartAlldiscountPrice }}
-					</view> -->
+                    <view v-if="asideCategoryItem.orderCount" class="category-order-count" :style="{ background: $mainColor }">{{ asideCategoryItem.orderCount }}</view>
                 </view>
-            </div>
-        </div>
-    </div>
+            </scroll-view>
+            <scroll-view scroll-y scroll-with-animation :scroll-into-view="scrollIntoCategoryID" class="food-main-box flex-item" id="food-main-box" @scroll="scrollHandle">
+                <view class="food-category-list-item" :data-food-category-item="JSON.stringify(foodCategoryItem)" v-for="(foodCategoryItem, index) in foodCategoryList" :key="index" :id="foodCategoryItem.scrollTabID + 'id'">
+                    <view :id="foodCategoryItem.scrollTabID" class="food-category-name">{{ foodCategoryItem.categoryName }}</view>
+                    <view class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex">
+                        <image class="food-img  flex-shrink" :src="host + foodItem.imgUrl" mode="scaleToFill"></image>
+                        <view class="food-info-box flex-item flex-col flex-j-between">
+                            <view class="food-name-description">
+                                <view class="food-name">{{ foodItem.foodName }}</view>
+                                <view class="food-description">{{ foodItem.description }}</view>
+                            </view>
+                            <view class="food-price-button flex-row flex-j-between flex-a-center">
+                                <view class="food-price">¥{{ foodItem.price }}</view>
+                                <view v-if="foodItem.orderCount < 1" class="food-count-add" :style="{ 'background-color': $mainColor }" @click="addCount(foodCategoryItem.categoryID, foodItem)"></view>
+                                <view v-else class="flex-row flex-a-center">
+                                    <view class="food-count-minus" :style="{ color: $mainColor }" @click="minusCount(foodCategoryItem.categoryID, foodItem)">
+                                        <view class="reduce-icon-css" :style="{ 'background-color': $mainColor }"></view>
+                                    </view>
+                                    <view class="food-order-count">{{ foodItem.orderCount }}</view>
+                                    <view class="food-count-add" :style="{ 'background-color': $mainColor }" @click="addCount(foodCategoryItem.categoryID, foodItem)"></view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </scroll-view>
+        </view>
+        <view v-if="minusPromotionsTitle.show" class="promotion-title center">
+            <text v-for="(contentItem, index) in minusPromotionsTitle.contentList" :key="index" :class="{'content-red': index % 2 !== 0}">{{contentItem}}</text>
+        </view>
+        <view class="footer-cart flex-row flex-j-between flex-a-center">
+            <view class="cart-img-box">
+                <image class="cart-img" @click="changeShowCartDetail" src="/static/img/cart-icon.png" mode="scaleToFill"></image>
+                <view v-if="allCartFoodCount" class="cart-all-count" :style="{ background: $mainColor }">{{ allCartFoodCount }}</view>
+            </view>
+            <view class="flex-item cart-all-amount">
+                <text class="amount-unit">¥</text><text class="discounted-price">{{ cartPriceInfo.cartAlldiscountPrice }}</text>
+                <text v-if="cartPriceInfo.discountPrice" class="origin-price">¥{{ cartPriceInfo.cartAllOriginPrice }}</text>
+            </view>
+            <view class="com-button confirm-order" :style="{ 'background-color': cartFoodListMainColor }" @click="toComfirmOrder">去下单</view>
+        </view>
+        <view v-if="showCartDetail" class="cart-detail-mask" @click.stop="showCartDetail = false">
+            <view class="cart-detail-box" :style="{ 'padding-bottom': minusPromotionsTitle.show ? '60rpx' : '' }" @touchmove.stop>
+                <view class="cart-select-box flex-row flex-j-between flex-a-center" @click.stop>
+                    <view class="select-goods-title">已选商品</view>
+                    <view class="flex-row flex-a-center" @click="cartClearCart">
+                        <image class="delete-all-icon" src="/static/img/shop-delete.svg"></image>
+                        <text class="clear-cart-title">清空</text>
+                    </view>
+                </view>
+                <scroll-view scroll-y class="cart-detail-list-box" @click.stop>
+                    <view class="food-category-item" v-for="(foodCategoryItem, index) in cartFoodList" :key="index">
+                        <view class="cart-food-item flex-row" v-for="(cartFoodItem, cartFoodIndex) in foodCategoryItem.foodList" :key="cartFoodIndex">
+                            <image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="cartFoodItem.imgUrl ? host + cartFoodItem.imgUrl : '/static/img/default-img.svg'" mode="scaleToFill"></image>
+                            <view v-if="cartFoodItem.orderCount" class="cart-food-info-box flex-item flex-col flex-j-between">
+                                <view class="cart-food-name-description">
+                                    <view class="cart-food-name">{{ cartFoodItem.foodName }}</view>
+                                    <view class="cart-food-description">{{ cartFoodItem.description }}</view>
+                                </view>
+                                <view class="cart-food-price-button flex-row flex-j-between flex-a-center">
+                                    <view class="cart-food-price">¥{{ cartFoodItem.foodItemAmount }}</view>
+                                    <view class="flex-row flex-a-center">
+                                        <!-- <view class="food-item-amount">总价: {{ cartFoodItem.foodItemAmount }}</view> -->
+                                        <view v-if="cartFoodItem.orderCount < 1" class="food-count-add" :style="{ 'background-color': $mainColor }" @click="addCount(foodCategoryItem.categoryID, cartFoodItem)"></view>
+                                        <view v-else class="flex-row flex-a-center">
+                                            <view class="food-count-minus" :style="{ color: $mainColor }" @click="minusCount(foodCategoryItem.categoryID, cartFoodItem)">
+                                                <view class="reduce-icon-css" :style="{ 'background-color': $mainColor }"></view>
+                                            </view>
+                                            <view class="food-order-count">{{ cartFoodItem.orderCount }}</view>
+                                            <view class="food-count-add" :style="{ 'background-color': $mainColor }" @click="addCount(foodCategoryItem.categoryID, cartFoodItem)"></view>
+                                        </view>
+                                    </view>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </scroll-view>
+            </view>
+        </view>
+    </view>
 </template>
 
 <script>
 import { host } from '@/config/host';
 let observer = null;
+
+const debounce = (() => {
+    let timer = null
+    return (fn, delay) => {
+        if (timer) {
+            clearTimeout(timer)
+        }
+        timer = setTimeout(() => {
+            fn()
+        }, delay);
+    }
+})();
+
+const throttle = (() => {
+    let timer = null;
+    return (fn, delay) => {
+        if (!timer) {
+            timer = setTimeout(() => {
+                fn()
+                timer = null;
+            }, delay);
+        }
+    }
+})();
 export default {
     data() {
         return {
@@ -110,7 +128,7 @@ export default {
             showCartDetail: false,
             foodCategoryList: [],
             cartFoodList: [],
-            host
+            host,
         };
     },
     computed: {
@@ -118,21 +136,60 @@ export default {
             return this.cartFoodList.length ? this.$mainColor : '';
         },
         minusPromotionsTitle() {
-            if (!(this.shopInfo.minusList || []).length) return '';
-            if (this.cartPriceInfo.noReachFirst) {
-                return `再买${Number((this.shopInfo.minusList[0].reach - this.cartPriceInfo.cartAllOriginPrice).toFixed(2))}元减${this.shopInfo.minusList[0].reduce}元`;
+            if ((this.shopInfo.minusList || []).length === 0 || this.cartFoodList.length === 0) {
+                return {
+                    show: false,
+                    contentList: []
+                };
             }
-            if (!this.cartPriceInfo.minusIndex) {
-                return '';
-            } else {
-                if (this.shopInfo.minusList.length === this.cartPriceInfo.minusIndex) {
-                    return `已减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex - 1].reduce}`;
-                } else {
-                    return `已减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex - 1].reduce}元,再买${Number(
-                        (this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reach - this.cartPriceInfo.cartAllOriginPrice).toFixed(2)
-                    )}元减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reduce}元`;
+            if (this.cartPriceInfo.noReachFirst) {
+                console.log(2)
+                return {
+                    show: true,
+                    contentList: [
+                        '再买',
+                        `${Number((this.shopInfo.minusList[0].reach - this.cartPriceInfo.cartAllOriginPrice).toFixed(2))}元`,
+                        ',可减',
+                        `${this.shopInfo.minusList[0].reduce}元`
+                    ]
                 }
             }
+
+            if (!this.cartPriceInfo.minusIndex) {
+                console.log(5)
+                return {
+                    show: false,
+                    contentList: []
+                };
+            }
+
+            if (this.shopInfo.minusList.length === this.cartPriceInfo.minusIndex) {
+                console.log(3)
+                return {
+                    show: true,
+                    contentList: [
+                        '已减',
+                        `${this.shopInfo.minusList[this.cartPriceInfo.minusIndex - 1].reduce}`]
+                }
+            } else {
+                console.log(4)
+                return {
+                    show: true,
+                    contentList: [
+                        '已减',
+                        `${this.shopInfo.minusList[this.cartPriceInfo.minusIndex - 1].reduce}元`,
+                        `,再买`,
+                        `${Number((this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reach - this.cartPriceInfo.cartAllOriginPrice).toFixed(2))}元`,
+                        `可减`,
+                        `${this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reduce}`
+
+                    ]
+                }
+                // return `已减${Number(
+                // 	(this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reach - this.cartPriceInfo.cartAllOriginPrice).toFixed(2)
+                // )}元减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reduce}元`;
+            }
+
         },
         cartPriceInfo() {
             const cartAllOriginPrice = this.cartFoodList
@@ -215,12 +272,6 @@ export default {
             return asideCategoryList;
         }
     },
-    onReady() {
-        console.log(`123`);
-        setTimeout(() => {
-            this.creatObserve();
-        }, 2000);
-    },
     onUnload() {
         if (observer) {
             observer.disconnect();
@@ -235,6 +286,30 @@ export default {
         this.init();
     },
     methods: {
+        scrollHandle(e) {
+            debounce(() => {
+                this.handleScroll(e)
+            }, 20)
+        },
+        async handleScroll(e) {
+            this.asideCategoryList;
+            for(let i = 0; i < this.asideCategoryList.length; i++) {
+                const categoryItem = this.asideCategoryList[i];
+                const res = await this.selectQuery(`#${categoryItem.scrollTabID}id`)
+                if (0 <= res.top || res.bottom > 0) {
+                    this.selectCategoryTabId = categoryItem.scrollTabID;
+                    break;
+                }
+            }
+        },
+        selectQuery(id) {
+            return new Promise((resolve, reject) => {
+                uni.createSelectorQuery().select(id).boundingClientRect(res => {
+                    resolve(res)
+                }).exec()
+            })
+        },
+
         async cartClearCart() {
             await this.$showModal({
                 content: '确认清空购物车吗？',
@@ -273,12 +348,7 @@ export default {
                 const res = await this.$fetch.get('/user/order/menuList', { shopID: this.shopInfo.shopID });
                 const foodCategoryList = res.data || [];
                 foodCategoryList.forEach((item, index) => {
-                    item.scrollTabID = 'c' + item.categoryID;
-                    if (index >= foodCategoryList.length - 1) {
-                        item.nextScrollTabID = 'c' + item.categoryID;
-                    } else {
-                        item.nextScrollTabID = 'c' + foodCategoryList[index + 1].categoryID;
-                    }
+                    item.scrollTabID = 'id' + item.categoryID;
                 });
                 if (foodCategoryList.length) {
                     this.selectCategoryTabId = foodCategoryList[0].scrollTabID;
@@ -293,11 +363,12 @@ export default {
                 }
                 this.foodCategoryList = foodCategoryList;
                 this.getStorageCart();
+                // this.$nextTick()
             } catch (e) {
                 console.log(e);
             } finally {
                 this.$hideLoading();
-			}
+            }
         },
         initCart({ foodCategoryList = [], storageFoodList = [] } = {}) {
             storageFoodList.forEach(storageFoodItem => {
@@ -340,7 +411,7 @@ export default {
                 });
             });
             this.cartFoodList = this.cartFoodList.filter(item => item.foodList.length > 0);
-            uni.setStorageSync(`storageFoodList_${this.shopInfo.shopID}`,this.cartFoodList);
+            uni.setStorageSync(`storageFoodList_${this.shopInfo.shopID}`, this.cartFoodList);
         },
         clearCart() {
             this.cartFoodList.forEach(categoryTtem => {
@@ -439,7 +510,7 @@ page {
     width: 100%;
     height: 100vh;
     box-sizing: border-box;
-    padding-bottom: 100rpx;
+    padding-bottom: 140rpx;
     color: #333;
     .order-main {
         height: 100%;
@@ -456,8 +527,11 @@ page {
         box-sizing: border-box;
     }
     .food-order-count {
-        width: 60rpx;
+        width: 80rpx;
         text-align: center;
+        font-size: 32rpx;
+        line-height: 36rpx;
+        color: #333;
     }
     .reduce-icon-css {
         position: absolute;
@@ -503,37 +577,54 @@ page {
         position: relative;
     }
     .menu-header {
-        background-color: red;
+        background-color: $color-red;
         height: 300rpx;
     }
     .category-aside-box {
         width: 160rpx;
         height: 100%;
-        background-color: #f8f8f8;
+        background-color: #f5f5f5;
         flex-shrink: 0;
         box-sizing: border-box;
         padding-bottom: 40rpx;
+
+        ::-webkit-scrollbar {
+            display: none;
+            width: 0 !important;
+            height: 0 !important;
+            -webkit-appearance: none;
+            background: transparent;
+        }
         .aside-category-item {
             position: relative;
             padding: 20rpx;
             // height: 80rpx;
             font-size: 26rpx;
-            line-height: 32rpx;
-            text-align: center;
+            line-height: 36rpx;
+            text-align: left;
             box-sizing: border-box;
+            color: #666;
             // border-left: 10rpx solid transparent;
         }
+        .aside-categroy-item-active {
+            color: #333;
+            font-weight: bold;
+            background-color: #fff;
+        }
         .category-order-count {
+            font-weight: normal;
             position: absolute;
-            top: 3rpx;
-            right: 3rpx;
-            min-width: 30rpx;
-            height: 30rpx;
-            line-height: 30rpx;
+            padding: 0 5rpx;
+            top: 4rpx;
+            right: 4rpx;
+            min-width: 26rpx;
+            height: 26rpx;
+            line-height: 26rpx;
             border-radius: 15rpx;
-            font-size: 22rpx;
+            font-size: 20rpx;
             color: #fff;
             text-align: center;
+            box-sizing: border-box;
         }
     }
     .food-main-box {
@@ -541,21 +632,32 @@ page {
         height: 100%;
         flex-shrink: 0;
         box-sizing: border-box;
-        .food-category-list-item {
-            padding: 0 20rpx 20rpx;
+        ::-webkit-scrollbar {
+            display: none;
+            width: 0 !important;
+            height: 0 !important;
+            -webkit-appearance: none;
+            background: transparent;
         }
+        .food-category-list-item {
+            padding: 0 30rpx 0 20rpx;
+        }
+
         .food-category-name {
-            font-size: 26rpx;
+            font-size: 24rpx;
+            line-height: 30rpx;
             color: #666;
             padding: 10rpx 0;
+            color: #333;
             // margin: 0 0 20rpx;
         }
         .food-item {
-            padding: 10rpx 0;
+            padding: 20rpx 0;
         }
         .food-img {
-            height: 170rpx;
-            width: 170rpx;
+            padding: 6rpx 0;
+            height: 150rpx;
+            width: 150rpx;
         }
         .food-info-box {
             padding-left: 20rpx;
@@ -563,56 +665,72 @@ page {
         .food-name {
             font-weight: bold;
             font-size: 32rpx;
+            line-height: 44rpx;
+            color: #333;
         }
         .food-description {
             font-size: 22rpx;
-            color: #999;
+            line-height: 30rpx;
+            color: #666;
             margin-top: 10rpx;
         }
         .food-price {
+            line-height: 42rpx;
+            color: $color-red;
+            font-size: 36rpx;
             font-weight: bold;
-            font-size: 30rpx;
-            color: red;
         }
     }
     .promotion-title {
         position: fixed;
         left: 0;
-        bottom: 100rpx;
+        bottom: 140rpx;
         width: 100%;
         height: 50rpx;
-        background-color: rgb(247, 255, 142);
+        background-color: #fff1d0;
         z-index: 3;
         line-height: 50rpx;
-        font-size: 24rpx;
+        font-size: 22rpx;
+        color: #333;
+        .content-red {
+            color: #e23232;
+        }
     }
     .footer-cart {
         position: fixed;
-        bottom: 0;
+        bottom: 40rpx;
         left: 0;
         width: 100%;
         height: 100rpx;
-        background-color: #434346;
-        border-radius: 50rpx;
+        background-color: #3b3b3c;
+        // border-radius: 50rpx;
         color: #fff;
         z-index: 8;
+        // padding-bottom: 30rpx;
 
         .cart-all-amount {
-            padding-left: 200rpx;
+            padding-left: 160rpx;
         }
-        .cart-all-discount-price {
-            font-size: 36rpx;
+        .amount-unit {
+            font-size: 32rpx;
+            line-height: 36rpx;
+            padding-right: 6rpx;
         }
-        .cart-all-origin-price {
-            margin-left: 20rpx;
-            font-size: 26rpx;
-            color: #888;
+        .discounted-price {
+            font-size: 44rpx;
+            line-height: 50rpx;
+        }
+        .origin-price {
+            margin-left: 10rpx;
+            font-size: 24rpx;
+            line-height: 28rpx;
+            color: #999;
             text-decoration: line-through;
         }
         .cart-img-box {
             position: fixed;
-            bottom: 20rpx;
-            left: 40rpx;
+            bottom: 50rpx;
+            left: 20rpx;
             height: 140rpx;
             width: 140rpx;
             z-index: 10;
@@ -626,10 +744,10 @@ page {
             position: absolute;
             right: -20rpx;
             top: 10rpx;
-            height: 40rpx;
-            width: 40rpx;
+            height: 36rpx;
+            width: 36rpx;
             font-size: 22rpx;
-            line-height: 40rpx;
+            line-height: 36rpx;
             border-radius: 50%;
             text-align: center;
         }
@@ -644,12 +762,13 @@ page {
         position: fixed;
         top: 0;
         left: 0;
-        bottom: 100rpx;
+        bottom: 140rpx;
         width: 100%;
         background-color: rgba(0, 0, 0, 0.5);
         font-size: 28rpx;
         -webkit-overflow-scrolling: touch;
         z-index: 2;
+
         .cart-detail-box {
             position: absolute;
             bottom: 0;
@@ -657,28 +776,41 @@ page {
             width: 100%;
             max-height: 800rpx;
             box-sizing: border-box;
-            padding: 0 30rpx 40rpx;
+            padding: 0 0 10rpx;
             background-color: #fff;
             overflow-y: auto;
+            border-radius: 30rpx 30rpx 0 0;
         }
         .cart-select-box {
-            font-size: 28rpx;
+            padding: 10rpx 30rpx;
+            font-size: 24rpx;
             color: #999;
         }
+
         .delete-all-icon {
-            padding: 20rpx;
-            height: 36rpx;
-            width: 36rpx;
+            padding: 10rpx;
+            height: 30rpx;
+            width: 30rpx;
         }
+
         .cart-detail-list-box {
             max-height: 600rpx;
+            padding-bottom: 10rpx;
+            ::-webkit-scrollbar {
+                display: none;
+                width: 0 !important;
+                height: 0 !important;
+                -webkit-appearance: none;
+                background: transparent;
+            }
         }
         .cart-food-item {
-            padding: 10rpx 0;
+            padding: 10rpx 30rpx;
         }
         .cart-food-img {
-            height: 130rpx;
-            width: 130rpx;
+            padding: 4rpx 0 8rpx 0;
+            height: 120rpx;
+            width: 120rpx;
         }
         .cart-food-price-button {
             font-size: 26rpx;
@@ -686,32 +818,53 @@ page {
         .cart-food-name {
             font-weight: bold;
             max-width: 400rpx;
-            font-size: 26rpx;
+            font-size: 28rpx;
+            line-height: 38rpx;
         }
         .cart-food-description {
-            margin-top: 10rpx;
+            // margin-top: 10rpx;
             font-size: 22rpx;
             color: #999;
         }
         .cart-food-price {
+            font-size: 30rpx;
+            line-height: 34rpx;
             font-weight: bold;
-            color: red;
+            color: $color-red;
         }
         .food-item-amount {
             min-width: 164rpx;
             margin-right: 20rpx;
-            color: red;
+            color: $color-red;
             font-weight: bold;
         }
         .cart-food-info-box {
             padding-left: 20rpx;
         }
-        .cart-amount-box {
-            padding: 16rpx;
-            font-size: 28rpx;
-            font-weight: bold;
-            color: red;
-        }
+        // .cart-amount-box {
+        //     padding: 16rpx;
+        //     font-size: 28rpx;
+        //     font-weight: bold;
+        //     color: $color-red;
+        // }
     }
 }
+
+// /deep/.uni-scroll-view::-webkit-scrollbar {
+// display: none;
+// width: 0 !important;
+// height: 0 !important;
+// -webkit-appearance: none;
+// background: transparent;
+// }
+
+// scroll-view::-webkit-scrollbar {
+
+//     width: 0;
+
+//     height: 0;
+
+//     background-color: transparent;
+
+// }
 </style>

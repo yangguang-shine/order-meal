@@ -23,7 +23,7 @@ const fly = new Fly;
 //     parseJson:true,
 //     timeout:""//超时时间
 //   }
-fly.config.timeout = 10000;
+fly.config.timeout = 30000;
 fly.config.baseURL = `${requestHost}`;
 fly.config.withCredentials = true;
 

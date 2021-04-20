@@ -93,10 +93,13 @@ export default {
 .role-container {
     height: 100%;
     .role-box {
+        box-sizing: border-box;
         width: 100%;
 		padding: 40rpx;
     }
     .reptile {
+        box-sizing: border-box;
+
         width: 100%;
         padding: 40rpx;
         text-align: center;

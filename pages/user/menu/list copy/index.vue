@@ -345,7 +345,7 @@ export default {
 			this.$myrouter.navigateTo({
 				name: 'user/menu/confirm'
 			})
-		}
+		},
 	}
 }
 </script>
