@@ -12,6 +12,21 @@ export const getSetting = (scopeName) => {
     })
 }
 
+export const getSystemRpx = () => {
+    return new Promise((resolve, reject) => {
+        uni.getSystemInfo({
+            success(res) {
+                console.log(111)
+                resolve(res)
+            },
+            fail(e) {
+                console.log(222)
+                reject(e)
+            }
+        });
+    })
+}
+
 export const authorize = (scopeName) => {
     return new Promise((resolve, reject) => {
         uni.authorize({
@@ -26,7 +41,7 @@ export const authorize = (scopeName) => {
     })
 }
 
-export const showModal = ({ title = '提示', content = '', showCancel = false, cancelText = '取消', confirmText = '确定'}) => {
+export const showModal = ({ title = '提示', content = '', showCancel = false, cancelText = '取消', confirmText = '确定' }) => {
     return new Promise((resolve, reject) => {
         uni.showModal({
             title,
@@ -37,7 +52,7 @@ export const showModal = ({ title = '提示', content = '', showCancel = false, 
             success: (res) => {
                 if (res.confirm) {
                     resolve(res);
-                } else if(res.cancel) {
+                } else if (res.cancel) {
                     reject(res);
                 } else {
                     reject(res)
@@ -50,7 +65,7 @@ export const showModal = ({ title = '提示', content = '', showCancel = false, 
     })
 }
 
-export const showLoading = ({ title = '加载中', mask = true} = {}) => {
+export const showLoading = ({ title = '加载中', mask = true } = {}) => {
     return new Promise((resolve, reject) => {
         uni.showLoading({
             title,
@@ -105,5 +120,14 @@ export const hideToast = ({ title = '', icon = 'none', duration = 1500, mask = f
                 reject()
             }
         })
+    })
+}
+
+
+export const delaySync = (time) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve()
+        }, time);
     })
 }
