@@ -18,7 +18,7 @@ export default {
 
 <style lang="scss">
 .promotion-title {
-	position: fixed;
+	position: absolute;
 	left: 0;
 	bottom: 140rpx;
 	width: 100%;

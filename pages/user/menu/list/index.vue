@@ -1,12 +1,15 @@
 <template>
     <view class="menu-container flex-col">
 		<top-bar :selectTopBarItem="selectTopBarItem" @changeTopBar="changeTopBar"></top-bar>
-        <view class="menu-order flex-item flex-row" :style="{ 'padding-bottom': minusPromotionsTitleObject.show ? '50rpx' : '' }">
+        <view v-if="selectTopBarItem === '点餐'" class="menu-order-box flex-item flex-row" :style="{ 'padding-bottom': minusPromotionsTitleObject.show ? '190rpx' : '' }">
             <category-aside-bar  :asideCategoryList="asideCategoryList" :selectCategoryTabId="selectCategoryTabId" @changeSelectCategoryTab="changeSelectCategoryTab"></category-aside-bar>
             <food-category-list :foodCategoryList="foodCategoryList" :scrollIntoCategoryID="scrollIntoCategoryID" @foodScrollHandle="foodScrollHandle" @addCount="addCount" @minusCount="minusCount"></food-category-list>
             <minus-promotions-title :minusPromotionsTitleObject="minusPromotionsTitleObject"></minus-promotions-title>
             <footer-cart :cartPriceInfo="cartPriceInfo" :allCartFoodCount="allCartFoodCount" @toogleCartDetail="toogleCartDetail(true)" @toComfirmOrder="toComfirmOrder"></footer-cart>
 			<food-cart-detail ref='foodCardDetail' v-if="showCartDetail" :minusPromotionsTitleObject="minusPromotionsTitleObject" :cartFoodList="cartFoodList" @toogleCartDetail="toogleCartDetail"  @cartClearCart="cartClearCart" @addCount="addCount" @minusCount="minusCount"></food-cart-detail>
+        </view>
+        <view v-if="selectTopBarItem === '商家'" class="shop-info-box">
+            <shop-info></shop-info>
         </view>
     </view>
 </template>
@@ -20,6 +23,7 @@ import minusPromotionsTitle from './components/minusPromotionsTitle.vue';
 import footerCart from './components/footerCart.vue';
 import foodCartDetail from './components/foodCartDetail.vue';
 import topBar from './components/topBar.vue';
+import shopInfo from './components/shopInfo.vue';
 import { delaySync } from '@/utils/index.js'
 let observer = null;
 const topBarHeightRpx = 80; //
@@ -54,7 +58,8 @@ export default {
         minusPromotionsTitle,
         footerCart,
         foodCartDetail,
-        topBar
+        topBar,
+        shopInfo
     },
     data() {
         return {
@@ -84,7 +89,6 @@ export default {
                 };
             }
             if (this.cartPriceInfo.noReachFirst) {
-                console.log(2);
                 return {
                     show: true,
                     contentList: ['再买', `${Number((this.shopInfo.minusList[0].reach - this.cartPriceInfo.cartAllOriginPrice).toFixed(2))}元`, ',可减', `${this.shopInfo.minusList[0].reduce}元`]
@@ -92,7 +96,6 @@ export default {
             }
 
             if (!this.cartPriceInfo.minusIndex) {
-                console.log(5);
                 return {
                     show: false,
                     contentList: []
@@ -100,13 +103,11 @@ export default {
             }
 
             if (this.shopInfo.minusList.length === this.cartPriceInfo.minusIndex) {
-                console.log(3);
                 return {
                     show: true,
                     contentList: ['已减', `${this.shopInfo.minusList[this.cartPriceInfo.minusIndex - 1].reduce}`]
                 };
             } else {
-                console.log(4);
                 return {
                     show: true,
                     contentList: [
@@ -220,8 +221,6 @@ export default {
             await initPromise;
             const systemInfo = await getSystemRpxPromise;
             this.topBarHeightPX = (systemInfo.windowWidth / 750) * 2 * 40;
-            console.log(systemInfo);
-            console.log(this.topBarHeightPX);
         } catch (e) {
             console.log(e);
         } finally {
@@ -234,18 +233,19 @@ export default {
             this.selectTopBarItem = title;
         },
         foodScrollHandle(e) {
+            console.log(1)
             debounce(() => {
                 this.handleScroll(e);
             }, 30);
         },
         async handleScroll(e) {
+            console.log(2)
+
             this.asideCategoryList;
             for (let i = 0; i < this.asideCategoryList.length; i++) {
                 const categoryItem = this.asideCategoryList[i];
                 const res = await this.selectQuery(`#${categoryItem.scrollTabID}id`);
-                console.log(categoryItem);
                 if (this.topBarHeightPX <= res.top || res.bottom > this.topBarHeightPX) {
-                    console.log(res);
                     this.selectCategoryTabId = categoryItem.scrollTabID;
                     break;
                 }
@@ -410,14 +410,11 @@ export default {
             });
         },
         async toogleCartDetail(fromCardImg = false) {
-            console.log(121)
             if (!this.cartFoodList.length) {
                 this.showCartDetail = false;
                 return;
             }
-            console.log(fromCardImg)
             if (this.showCartDetail && fromCardImg) {
-                console.log(this.$refs.foodCardDetail)
                 this.$refs.foodCardDetail.showAnimate = false
                 await delaySync(200)
             }
@@ -469,7 +466,7 @@ page {
     color: #333;
     position: relative;
 	}
-    .menu-order {
+    .menu-order-box {
         position: absolute;
         top: 0;
         left: 0;

@@ -93,7 +93,7 @@ export default {
 
 
 .cart-detail-mask {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     bottom: 140rpx;

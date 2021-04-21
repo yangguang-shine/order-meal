@@ -1,5 +1,5 @@
 <template>
-	<view class="footer-cart-conttainer">
+	<view class="footer-cart-container">
 		<view class="footer-cart flex-row flex-j-between flex-a-center">
 			<view class="cart-img-box">
 				<image class="cart-img" @click="toogleCartDetail" src="/static/img/cart-icon.png" mode="scaleToFill"></image>
@@ -39,8 +39,8 @@ export default {
 </script>
 
 <style lang="scss">
-.footer-cart-conttainer {
-	position: fixed;
+.footer-cart-container {
+	position: absolute;
 	bottom: 0;
 	left: 0;
 	width: 100%;
@@ -76,7 +76,7 @@ export default {
 		text-decoration: line-through;
 	}
 	.cart-img-box {
-		position: fixed;
+		position: absolute;
 		bottom: 50rpx;
 		left: 20rpx;
 		height: 140rpx;
