@@ -40,7 +40,6 @@
 		background-color: #f5f5f5;
 		flex-shrink: 0;
 		box-sizing: border-box;
-		padding-top: 80rpx;
 		padding-bottom: 40rpx;
 		::-webkit-scrollbar {
 			display: none;

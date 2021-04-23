@@ -1,6 +1,6 @@
 <template>
-    <view class="cart-detail-mask" @click.stop="toogleCartDetail" :class="showAnimate ? 'show-animate-status' : 'hide-animate-status'">
-        <view class="cart-detail-box" :style="{ 'padding-bottom': minusPromotionsTitleObject.show ? '60rpx' : '' }" :class="showAnimate ? 'cart-detail-box-show' : 'cart-detail-box-hide'" @touchmove.stop>
+    <view class="cart-detail-mask" @click.stop="closeCartDetail" :class="showComponents ? 'show-animate-status' : 'hide-animate-status'">
+        <view class="cart-detail-box" :style="{ 'padding-bottom': minusPromotionsObject.show ? '50rpx' : '' }" :class="showComponents ? 'cart-detail-box-show' : 'cart-detail-box-hide'" @touchmove.stop>
             <view class="cart-select-box flex-row flex-j-between flex-a-center" @click.stop>
                 <view class="select-goods-title">已选商品</view>
                 <view class="flex-row flex-a-center" @click="cartClearCart">
@@ -19,17 +19,7 @@
                             </view>
                             <view class="cart-food-price-button flex-row flex-j-between flex-a-center">
                                 <view class="cart-food-price">¥{{ cartFoodItem.foodItemAmount }}</view>
-                                <view class="flex-row flex-a-center">
-                                    <!-- <view class="food-item-amount">总价: {{ cartFoodItem.foodItemAmount }}</view> -->
-                                    <view v-if="cartFoodItem.orderCount < 1" class="food-count-add" :style="{ 'background-color': $mainColor }" @click="addCount(foodCategoryItem.categoryID, cartFoodItem)"></view>
-                                    <view v-else class="flex-row flex-a-center">
-                                        <view class="food-count-minus" :style="{ color: $mainColor }" @click="minusCount(foodCategoryItem.categoryID, cartFoodItem)">
-                                            <view class="reduce-icon-css" :style="{ 'background-color': $mainColor }"></view>
-                                        </view>
-                                        <view class="food-order-count">{{ cartFoodItem.orderCount }}</view>
-                                        <view class="food-count-add" :style="{ 'background-color': $mainColor }" @click="addCount(foodCategoryItem.categoryID, cartFoodItem)"></view>
-                                    </view>
-                                </view>
+                                <food-add-minus :foodItem="cartFoodItem" @addCount="addCount" @minusCount="minusCount"></food-add-minus>
                             </view>
                         </view>
                     </view>
@@ -42,11 +32,16 @@
 <script>
 
 import { host } from '@/config/host';
-import { delaySync } from '@/utils/index.js'
+import { delaySync } from '@/utils/index.js';
+import foodAddMinus from './item/foodAddMinus'
+
 
 export default {
+    components: {
+        foodAddMinus,
+    },
     props: {
-        minusPromotionsTitleObject: {
+        minusPromotionsObject: {
             type: Object,
             default: () => { }
         },
@@ -58,18 +53,20 @@ export default {
     data() {
         return {
             host,
-            showAnimate: false
+            showComponents: false
         }
     },
     mounted() {
-        this.showAnimate = true;
+        setTimeout(() => {
+            this.showComponents = true;
+        }, 0);
     },
     methods: {
-        addCount(categoryID, foodItem) {
-            this.$emit('addCount', categoryID, foodItem);
+        addCount(foodItem) {
+            this.$emit('addCount', foodItem);
         },
-        minusCount(categoryID, foodItem) {
-            this.$emit('minusCount', categoryID, foodItem);
+        minusCount(foodItem) {
+            this.$emit('minusCount', foodItem);
         },
 
         toShowCartDetail() {
@@ -78,10 +75,10 @@ export default {
         cartClearCart() {
             this.$emit('cartClearCart');
         },
-        async toogleCartDetail() {
-			this.showAnimate = false
-			await delaySync(200)
-			this.$emit('toogleCartDetail');
+        async closeCartDetail() {
+            this.showComponents = false
+            await delaySync(200)
+            this.$emit('closeCartDetail');
         },
 
     }
@@ -89,11 +86,9 @@ export default {
 </script>
 
 <style lang="scss">
-@import "./addMinusStyle.scss";
-
 
 .cart-detail-mask {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     bottom: 140rpx;
@@ -102,7 +97,7 @@ export default {
     font-size: 28rpx;
     -webkit-overflow-scrolling: touch;
     z-index: 400;
-	transition: all ease-in-out .2s;
+    transition: all ease-in-out 0.2s;
 
     .cart-detail-box {
         position: absolute;
@@ -115,15 +110,15 @@ export default {
         background-color: #fff;
         overflow-y: auto;
         border-radius: 30rpx 30rpx 0 0;
-		transition: all ease-in-out .2s;
+        transition: all ease-in-out 0.2s;
     }
-	
-	.cart-detail-box-show {
-		bottom: 0;
-	}
-	.cart-detail-box-hide {
-		bottom: -800rpx;
-	}
+
+    .cart-detail-box-show {
+        bottom: 0;
+    }
+    .cart-detail-box-hide {
+        bottom: -800rpx;
+    }
     .cart-select-box {
         padding: 20rpx 30rpx;
         font-size: 24rpx;
@@ -175,26 +170,15 @@ export default {
         font-weight: bold;
         color: $color-red;
     }
-    .food-item-amount {
-        min-width: 164rpx;
-        margin-right: 20rpx;
-        color: $color-red;
-        font-weight: bold;
-    }
+
     .cart-food-info-box {
         padding-left: 20rpx;
     }
-    // .cart-amount-box {
-    //     padding: 16rpx;
-    //     font-size: 28rpx;
-    //     font-weight: bold;
-    //     color: $color-red;
-    // }
 }
-	.show-animate-status {
-		background-color: rgba(0, 0, 0, 0.5);
-	}
-	.hide-animate-status {
-		background-color: rgba(0, 0, 0, 0);
-	}
+.show-animate-status {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.hide-animate-status {
+    background-color: rgba(0, 0, 0, 0);
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<view class="footer-cart-container">
+	<view class="footer-cart-container" :style="{'position': showShopInfo ? 'absolute' : 'fixed'}">
 		<view class="footer-cart flex-row flex-j-between flex-a-center">
 			<view class="cart-img-box">
 				<image class="cart-img" @click="toogleCartDetail" src="/static/img/cart-icon.png" mode="scaleToFill"></image>
@@ -10,7 +10,8 @@
 				<text class="discounted-price">{{ cartPriceInfo.cartAlldiscountPrice }}</text>
 				<text v-if="cartPriceInfo.discountPrice" class="origin-price">¥{{ cartPriceInfo.cartAllOriginPrice }}</text>
 			</view>
-			<view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAlldiscountPrice > 0 ? $mainColor : '' }" @click="toComfirmOrder">去下单</view>
+			<view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAlldiscountPrice > 0 ? $mainColor : '' }" @click="toComfirmOrder"></view>
+			<!-- <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAlldiscountPrice > 0 ? $mainColor : '' }" @click="toComfirmOrder">去下单</view> -->
 		</view>
 	</view>
 </template>
@@ -25,6 +26,10 @@ export default {
 		allCartFoodCount: {
 			type: Number,
 			default: 0
+		},
+		showShopInfo: {
+			type: Boolean,
+			default: 'false'
 		}
 	},
 	methods: {
@@ -39,6 +44,7 @@ export default {
 </script>
 
 <style lang="scss">
+
 .footer-cart-container {
 	position: absolute;
 	bottom: 0;
@@ -48,6 +54,7 @@ export default {
 	background-color: #fff;
 	color: #fff;
 	z-index: 500;
+
 	.footer-cart {
 		width: 100%;
 		height: 100rpx;
@@ -65,8 +72,8 @@ export default {
 		padding-right: 6rpx;
 	}
 	.discounted-price {
-		font-size: 44rpx;
-		line-height: 50rpx;
+		font-size: 48rpx;
+		line-height: 56rpx;
 	}
 	.origin-price {
 		margin-left: 10rpx;
@@ -92,10 +99,10 @@ export default {
 		position: absolute;
 		right: -20rpx;
 		top: 10rpx;
-		height: 36rpx;
-		width: 36rpx;
+		height: 32rpx;
+		width: 32rpx;
 		font-size: 22rpx;
-		line-height: 36rpx;
+		line-height: 32rpx;
 		border-radius: 50%;
 		text-align: center;
 	}
@@ -105,4 +112,5 @@ export default {
 		background-color: #666;
 	}
 }
+
 </style>

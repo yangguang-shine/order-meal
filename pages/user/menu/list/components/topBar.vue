@@ -1,8 +1,10 @@
 <template>
-    <view class="top-bar-box flex-row ">
-        <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': selectTopBarItem === '点餐' }" @click="changeTopBar('点餐')">点餐</view>
-        <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': selectTopBarItem === '商家' }" @click="changeTopBar('商家')">商家</view>
-        <div class="select-top-bar-bottom" :style="{ background: $mainColor, left: selectTopBarItem === '点餐' ? '25%' : '75%' }"></div>
+    <view class="com-top-bar-container">
+        <view class="top-bar-list flex-row ">
+            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': selectTopBarItem === '点餐' }" @click="changeTopBar('点餐')">点餐</view>
+            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': selectTopBarItem === '商家' }" @click="changeTopBar('商家')">商家</view>
+            <div class="select-top-bar-bottom" :style="{ background: $mainColor, left: selectTopBarItem === '点餐' ? '25%' : '75%' }"></div>
+        </view>
     </view>
 </template>
 
@@ -22,17 +24,25 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.top-bar-box {
-    position: absolute;
-    top: 0;
-    left: 0;
+<style lang="scss" scoped>
+.com-top-bar-container {
+    // position: relative;
     width: 100%;
     height: 80rpx;
-    background-color: #ffffff;
-    box-sizing: border-box;
-    border-bottom: 1rpx solid #e4e4e4;
-    z-index: 300;
+    // background-color: #ffffff;
+    // z-index: 200;
+    .top-bar-list {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 80rpx;
+        box-sizing: border-box;
+        border-bottom: 1rpx solid #e4e4e4;
+        background-color: #ffffff;
+    z-index: 200;
+
+    }
     .top-bar-item {
         font-size: 32rpx;
     }

@@ -8,7 +8,7 @@
 			:id="foodCategoryItem.scrollTabID + 'id'"
 		>
 			<view :id="foodCategoryItem.scrollTabID" class="food-category-name">{{ foodCategoryItem.categoryName }}</view>
-			<view class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex">
+			<view class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex" @click="showFoodDetail(foodItem)">
 				<image class="food-img  flex-shrink" :src="host + foodItem.imgUrl" mode="scaleToFill"></image>
 				<view class="food-info-box flex-item flex-col flex-j-between">
 					<view class="food-name-description">
@@ -17,19 +17,7 @@
 					</view>
 					<view class="food-price-button flex-row flex-j-between flex-a-center">
 						<view class="food-price">¥{{ foodItem.price }}</view>
-						<view
-							v-if="foodItem.orderCount < 1"
-							class="food-count-add"
-							:style="{ 'background-color': $mainColor }"
-							@click="addCount(foodCategoryItem.categoryID, foodItem)"
-						></view>
-						<view v-else class="flex-row flex-a-center">
-							<view class="food-count-minus" :style="{ color: $mainColor }" @click="minusCount(foodCategoryItem.categoryID, foodItem)">
-								<view class="reduce-icon-css" :style="{ 'background-color': $mainColor }"></view>
-							</view>
-							<view class="food-order-count">{{ foodItem.orderCount }}</view>
-							<view class="food-count-add" :style="{ 'background-color': $mainColor }" @click="addCount(foodCategoryItem.categoryID, foodItem)"></view>
-						</view>
+						<food-add-minus :foodItem="foodItem" @addCount="addCount" @minusCount="minusCount"></food-add-minus>
 					</view>
 				</view>
 			</view>
@@ -39,8 +27,13 @@
 
 <script>
 import { host } from '@/config/host';
+import foodAddMinus from './item/foodAddMinus'
+
 
 export default {
+	components: {
+	    foodAddMinus,
+	},
 	props: {
 		foodCategoryList: {
 			type: Array,
@@ -60,19 +53,21 @@ export default {
 		foodScrollHandle() {
 			this.$emit('foodScrollHandle');
 		},
-		addCount(categoryID, foodItem) {
-			this.$emit('addCount', categoryID, foodItem);
+		addCount(foodItem) {
+			this.$emit('addCount', foodItem);
 		},
-		minusCount(categoryID, foodItem) {
-			this.$emit('minusCount', categoryID, foodItem);
+		minusCount(foodItem) {
+			this.$emit('minusCount', foodItem);
 		},
+		showFoodDetail(foodItem) {
+			this.$emit('showFoodDetail', foodItem);
+		}
 	}
 };
 </script>
 
 <style lang="scss" >
 	
-	@import './addMinusStyle.scss';
 .food-main-box {
 	// background-color: blue;
 	height: 100%;

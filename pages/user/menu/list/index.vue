@@ -1,16 +1,20 @@
 <template>
-    <view class="menu-container flex-col">
-		<top-bar :selectTopBarItem="selectTopBarItem" @changeTopBar="changeTopBar"></top-bar>
-        <view v-if="selectTopBarItem === '点餐'" class="menu-order-box flex-item flex-row" :style="{ 'padding-bottom': minusPromotionsTitleObject.show ? '190rpx' : '' }">
-            <category-aside-bar  :asideCategoryList="asideCategoryList" :selectCategoryTabId="selectCategoryTabId" @changeSelectCategoryTab="changeSelectCategoryTab"></category-aside-bar>
-            <food-category-list :foodCategoryList="foodCategoryList" :scrollIntoCategoryID="scrollIntoCategoryID" @foodScrollHandle="foodScrollHandle" @addCount="addCount" @minusCount="minusCount"></food-category-list>
-            <minus-promotions-title :minusPromotionsTitleObject="minusPromotionsTitleObject"></minus-promotions-title>
-            <footer-cart :cartPriceInfo="cartPriceInfo" :allCartFoodCount="allCartFoodCount" @toogleCartDetail="toogleCartDetail(true)" @toComfirmOrder="toComfirmOrder"></footer-cart>
-			<food-cart-detail ref='foodCardDetail' v-if="showCartDetail" :minusPromotionsTitleObject="minusPromotionsTitleObject" :cartFoodList="cartFoodList" @toogleCartDetail="toogleCartDetail"  @cartClearCart="cartClearCart" @addCount="addCount" @minusCount="minusCount"></food-cart-detail>
+    <view class="menu-container">
+        <top-bar :selectTopBarItem="selectTopBarItem" @changeTopBar="changeTopBar"></top-bar>
+        <view class="menu-order-box flex-col" :class="selectTopBarItem === '点餐' ? 'show-menu-order-box' : 'hide-menu-order-box'">
+            <view class="menu-list-box flex-item flex-row ">
+                <category-aside-bar :asideCategoryList="asideCategoryList" :selectCategoryTabId="selectCategoryTabId" @changeSelectCategoryTab="changeSelectCategoryTab"></category-aside-bar>
+                <food-category-list :foodCategoryList="foodCategoryList" :scrollIntoCategoryID="scrollIntoCategoryID" @foodScrollHandle="foodScrollHandle" @addCount="addCount" @minusCount="minusCount" @showFoodDetail="showFoodDetail"></food-category-list>
+            </view>
+
+            <cart-detail ref='foodCardDetail' v-if="showCartDetail" :minusPromotionsObject="minusPromotionsObject" :cartFoodList="cartFoodList" @closeCartDetail="closeCartDetail" @cartClearCart="cartClearCart" @addCount="addCount" @minusCount="minusCount"></cart-detail>
+            <minus-promotions :showShopInfo="showShopInfo" v-if="minusPromotionsObject.show" :minusPromotionsObject="minusPromotionsObject"></minus-promotions>
+            <minus-promotions-block v-if="minusPromotionsObject.show"></minus-promotions-block>
+            <footer-cart :showShopInfo="showShopInfo" :cartPriceInfo="cartPriceInfo" :allCartFoodCount="allCartFoodCount" @toogleCartDetail="toogleCartDetail()" @toComfirmOrder="toComfirmOrder"></footer-cart>
+            <footer-cart-block></footer-cart-block>
+            <food-detail v-if="showFoodDetailFalg" :foodItem="selectFoodItem" ref="foodDetail" @closeFoodDetail="closeFoodDetail"></food-detail>
         </view>
-        <view v-if="selectTopBarItem === '商家'" class="shop-info-box">
-            <shop-info></shop-info>
-        </view>
+        <shop-info v-if="showShopInfo" ref="shopInfo" :selectTopBarItem="selectTopBarItem"></shop-info>
     </view>
 </template>
 
@@ -19,9 +23,13 @@ import { host } from '@/config/host';
 import { getSystemRpx } from '@/utils/index';
 import categoryAsideBar from './components/categoryAsideBar.vue';
 import foodCategoryList from './components/foodCategoryList.vue';
-import minusPromotionsTitle from './components/minusPromotionsTitle.vue';
+import minusPromotions from './components/minusPromotions.vue';
+import minusPromotionsBlock from './components/minusPromotionsBlock.vue';
 import footerCart from './components/footerCart.vue';
-import foodCartDetail from './components/foodCartDetail.vue';
+import footerCartBlock from './components/footerCartBlock.vue';
+import cartDetail from './components/cartDetail.vue';
+import foodDetail from './components/foodDetail.vue';
+
 import topBar from './components/topBar.vue';
 import shopInfo from './components/shopInfo.vue';
 import { delaySync } from '@/utils/index.js'
@@ -55,11 +63,14 @@ export default {
     components: {
         categoryAsideBar,
         foodCategoryList,
-        minusPromotionsTitle,
+        minusPromotions,
         footerCart,
-        foodCartDetail,
+        cartDetail,
         topBar,
-        shopInfo
+        shopInfo,
+        minusPromotionsBlock,
+        footerCartBlock,
+        foodDetail
     },
     data() {
         return {
@@ -74,14 +85,18 @@ export default {
             cartFoodList: [],
             selectTopBarItem: '点餐',
             host,
-            topBarHeightPX: 40
+            topBarHeightPX: 40,
+            pageScrollTo: '点餐',
+            showShopInfo: false,
+            showFoodDetailFalg: false,
+            selectFoodItem: {}
         };
     },
     computed: {
         // cartFoodListMainColor() {
         // 	return this.cartFoodList.length ? this.$mainColor : '';
         // },
-        minusPromotionsTitleObject() {
+        minusPromotionsObject() {
             if ((this.shopInfo.minusList || []).length === 0 || this.cartFoodList.length === 0) {
                 return {
                     show: false,
@@ -119,9 +134,6 @@ export default {
                         `${this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reduce}`
                     ]
                 };
-                // return `已减${Number(
-                // 	(this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reach - this.cartPriceInfo.cartAllOriginPrice).toFixed(2)
-                // )}元减${this.shopInfo.minusList[this.cartPriceInfo.minusIndex].reduce}元`;
             }
         },
         cartPriceInfo() {
@@ -162,9 +174,9 @@ export default {
             }
             const cartAlldiscountPrice = (cartAllOriginPrice - discountPrice).toFixed(2);
             return {
-                cartAllOriginPrice,
-                cartAlldiscountPrice,
-                discountPrice,
+                cartAllOriginPrice: +cartAllOriginPrice,
+                cartAlldiscountPrice: +cartAlldiscountPrice,
+                discountPrice: +discountPrice,
                 minusIndex,
                 noReachFirst
             };
@@ -228,34 +240,49 @@ export default {
         }
     },
     methods: {
-        changeTopBar(title) {
+        showFoodDetail(foodItem) {
+            this.selectFoodItem = foodItem
+            this.showFoodDetailFalg = true
+        },
+        async closeFoodDetail() {
+            this.showFoodDetailFalg = false
+        },
+        async changeTopBar(title) {
             if (this.selectTopBarItem === title) return;
             this.selectTopBarItem = title;
+            if (this.selectTopBarItem === '点餐') {
+                this.$refs.shopInfo.showComponents = false
+                // 多100 是为了购物车absolute转化成fixed能流畅 200 生硬
+                await delaySync(300)
+                this.showShopInfo = false
+            } else if (this.selectTopBarItem === '商家') {
+                this.showShopInfo = true
+            }
         },
+
         foodScrollHandle(e) {
-            console.log(1)
             debounce(() => {
                 this.handleScroll(e);
             }, 30);
         },
         async handleScroll(e) {
-            console.log(2)
-
             this.asideCategoryList;
             for (let i = 0; i < this.asideCategoryList.length; i++) {
                 const categoryItem = this.asideCategoryList[i];
                 const res = await this.selectQuery(`#${categoryItem.scrollTabID}id`);
                 if (this.topBarHeightPX <= res.top || res.bottom > this.topBarHeightPX) {
                     this.selectCategoryTabId = categoryItem.scrollTabID;
+                    this.scrollIntoCategoryID = null;
+
                     break;
                 }
             }
         },
         selectQuery(id) {
             return new Promise((resolve, reject) => {
-                uni.createSelectorQuery().select(id) .boundingClientRect(res => {
-                        resolve(res);
-                    }).exec();
+                uni.createSelectorQuery().select(id).boundingClientRect(res => {
+                    resolve(res);
+                }).exec();
             });
         },
 
@@ -265,7 +292,7 @@ export default {
                 showCancel: true
             });
             this.clearCart();
-            this.toogleCartDetail()
+            this.closeCartDetail()
         },
         creatObserve() {
             // #ifdef MP-WEIXIN
@@ -279,7 +306,7 @@ export default {
             });
             // #endif
 
-            observer.relativeTo('.food-main-box').observe('.food-category-list-item', res => {
+            observer.relativeTo('.food-category-list').observe('.food-category-list-item', res => {
                 const foodCategoryItem = JSON.parse(res.dataset.foodCategoryItem);
                 if (res.intersectionRatio === 0 && res.boundingClientRect.bottom <= res.relativeRect.top) {
                     this.selectCategoryTabId = foodCategoryItem.nextScrollTabID;
@@ -301,7 +328,7 @@ export default {
             });
             if (foodCategoryList.length) {
                 this.selectCategoryTabId = foodCategoryList[0].scrollTabID;
-                this.scrollIntoCategoryID = foodCategoryList[0].scrollTabID;
+                this.scrollIntoCategoryID = null;
             }
             // 重来一单，orderAgain 和 orderKey 缺一不可
             if (orderAgain && orderKey) {
@@ -321,19 +348,16 @@ export default {
                         storageFoodItem.foodList.forEach(item => {
                             if (item.foodID === foodItem.foodID) {
                                 foodItem.orderCount = item.orderCount;
-                                this.cartCountChange({
-                                    categoryID: foodCategoryFind.categoryID,
-                                    foodItem
-                                });
+                                this.cartCountChange(foodItem);
                             }
                         });
                     });
                 }
             });
         },
-        cartCountChange({ categoryID = '', foodItem = {} } = {}) {
+        cartCountChange(foodItem = {}) {
             // 购物车数量增加减少使用的是引用改变，其他关联也相应改变
-            const findCategory = this.cartFoodList.find(item => item.categoryID === categoryID);
+            const findCategory = this.cartFoodList.find(item => item.categoryID === foodItem.categoryID);
             if (findCategory) {
                 const findFood = findCategory.foodList.find(item => item.foodID === foodItem.foodID);
                 if (!findFood) {
@@ -341,7 +365,7 @@ export default {
                 }
             } else {
                 this.cartFoodList.push({
-                    categoryID,
+                    categoryID: foodItem.categoryID,
                     foodList: [foodItem]
                 });
             }
@@ -409,40 +433,38 @@ export default {
                 storageFoodList
             });
         },
-        async toogleCartDetail(fromCardImg = false) {
+        async toogleCartDetail() {
             if (!this.cartFoodList.length) {
                 this.showCartDetail = false;
                 return;
             }
-            if (this.showCartDetail && fromCardImg) {
-                this.$refs.foodCardDetail.showAnimate = false
-                await delaySync(200)
-            }
-            this.showCartDetail = !this.showCartDetail;
+            if (this.showCartDetail) {
+                await this.$refs.foodCardDetail.closeCartDetail()
+				this.showCartDetail = false
+            } else {
+				this.showCartDetail = true
+			}
+        },
+        closeCartDetail() {
+            this.showCartDetail = false
         },
         changeSelectCategoryTab(scrollTabID) {
             this.selectCategoryTabId = scrollTabID;
             this.scrollIntoCategoryID = scrollTabID;
         },
-        addCount(categoryID, foodItem) {
+        addCount(foodItem) {
             if (!this.addCountState) return;
             this.addCountState = false;
             foodItem.orderCount += 1;
-            this.cartCountChange({
-                categoryID,
-                foodItem
-            });
+            this.cartCountChange(foodItem);
             this.addCountState = true;
             if (!this.cartFoodList.length) this.showCartDetail = false;
         },
-        minusCount(categoryID, foodItem) {
+        minusCount(foodItem) {
             if (!this.minusCountState) return;
             this.minusCountState = false;
             foodItem.orderCount -= 1;
-            this.cartCountChange({
-                categoryID,
-                foodItem
-            });
+            this.cartCountChange(foodItem);
             this.minusCountState = true;
             if (!this.cartFoodList.length) this.showCartDetail = false;
         },
@@ -457,23 +479,42 @@ export default {
 
 <style lang="scss">
 page {
-    height: 100%;
+    height: 100vh;
 }
 .menu-container {
     font-size: 28rpx;
-    width: 100%;
+    width: 750rpx;
     height: 100vh;
     color: #333;
     position: relative;
-	}
+    .menu-list-box {
+        height: 0rpx;
+    }
     .menu-order-box {
         position: absolute;
         top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
+        padding-top: 80rpx;
         box-sizing: border-box;
-        padding-bottom: 140rpx;
+        transition: all ease-in-out 0.3s;
     }
-   
+    .show-menu-order-box {
+        left: 0;
+    }
+    .hide-menu-order-box {
+        left: -750rpx;
+    }
+    //    .shop-info-box  {
+    //         position: absolute;
+    //         top: 0;
+    //         width: 100%;
+    //         height: 100%;
+    //         padding-top: 80rpx;
+    //         box-sizing: border-box;
+    //         transition: all ease-in-out .3s;
+    // }
+
+    // flex：1 和 height共存 ，取最大值
+}
 </style>
