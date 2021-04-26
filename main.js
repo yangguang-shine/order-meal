@@ -3,6 +3,7 @@ import App from '@/App'
 import router from '@/utils/router.js'
 import fetch from '@/utils/fly.js'
 import store from '@/store'
+import { delaySync } from '@/utils/index.js';
 import NoData from '@/components/no-data.vue'
 import {
 	showModal,
@@ -28,9 +29,9 @@ import {
 } from '@/utils/tool.js';
 
 import VConsole from 'vconsole'
-		new VConsole();
-		
-		
+new VConsole();
+
+
 Vue.component('no-data', NoData)
 Vue.config.productionTip = false
 Vue.prototype.$myrouter = router
@@ -42,11 +43,17 @@ Vue.prototype.$showToast = showToast
 Vue.prototype.$hideLoading = hideLoading
 Vue.prototype.$setStorage = setStorage
 Vue.prototype.$getStorage = getStorage
+Vue.prototype.$delaySync = delaySync
+
+delaySync
 
 // Vue.prototype.$data.$mainColor = '#47ff56'
 // Vue.prototype.$mainColor = '#47ff56'
 App.mpType = 'app'
-const $mainColor = "#cb9ddb"
+// const $mainColor = "#3190e8"
+const $mainColor = "#00e067"
+
+
 const $mainColor2 = "#58a3dd"
 const app = new Vue({
 	...App,

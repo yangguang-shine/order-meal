@@ -1,79 +1,29 @@
 <template>
     <div class="comfirm-order-container">
-        <div v-if="businessType === 2" class="take-out-box">
-            <div class="address-box" @click="toSelectAddress">
-                <div v-if="defaultAddress.addressID">
-                    <div class="address-title line1">{{defaultAddress.address1 || ''}} {{defaultAddress.address2 || ''}}</div>
-                    <div class="address-user-info flex-row flex-a-center">
-                        <div class="user-name">{{defaultAddress.name || ''}}</div>
-                        <div>{{defaultAddress.mobile || ''}}</div>
-                    </div>
-                </div>
-                <div v-else class="no-address">
-                    请选择外卖地址
-                </div>
-                <image class="arrow-right" src="/static/img/right-arrow.png"></image>
-            </div>
-            <picker mode="time" :value="takeOutTime" start="09:00" end="23:00" @change="takeOutTimeChange">
-                <div class="delivery-box flex-row flex-a-center">
-                    <div class="delivery-title">
-                        送达时间:
-                    </div>
-                    <div class="deliver-time" :style="{'color': $mainColor}">
-                        {{takeOutTime}}
-                    </div>
-                    <image class="arrow-right" src="/static/img/right-arrow.png"></image>
-                </div>
-            </picker>
-        </div>
-        <div class="order-detail-info">
-            <div class="order-title-box flex-row flex-j-between">
-                <div class="order-info">
-                    订单信息
-                </div>
-                <div class="continue-order center" :style="{'color': $mainColor}" @click="continueOrder">
-                    继续点单
-                </div>
-            </div>
-            <div class="food-category-item" v-for="(foodCategoryItem, index) in cartFoodList" :key="index">
-                <div class="food-item flex-row flex-a-center" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex">
-                    <image class="food-img flex-shrink" :src="foodItem.imgUrl ? host + foodItem.imgUrl : '/static/img/default-img.svg'" mode="scaleToFill"></image>
-                    <div class="food-info flex-col flex-j-between">
-                        <div class="food-name line1">{{foodItem.foodName}}</div>
-                        <div class="food-price"><span class="money-unit">¥</span>{{foodItem.price}}</div>
-                    </div>
-                    <div class="food-count">×{{foodItem.orderCount}}</div>
-                    <div class="food-count-price"><span class="money-unit">¥</span>{{foodItem.foodItemAmount}}</div>
-                </div>
-            </div>
-            <div class="minus-info-box flex-row flex-a-center" v-if="minusPrice">
-                <image class="minus-icon" src="/static/img/orderMinus.svg"></image>
-                <div class="flex-item flex-row flex-j-between flex-a-center" :style="{color: $mainColor}">
-                    <div class="minus-title">
-                        满减优惠
-                    </div>
-                    <div class="minus-price">-¥{{minusPrice}}</div>
-                </div>
-            </div>
-            <div class="total-info-info flex-row flex-j-between">
-                <div>
-                </div>
-                <div class="flex-row flex-a-center">
-                    <div v-if="minusPrice">已优惠</div>
-                    <div class="order-minus-price" v-if="minusPrice" :style="{color: $mainColor}"><span class="money-unit">¥</span>{{minusPrice}}</div>
-                    <div class="order-due-amount-title">总计</div>
-                    <div class="order-due-amount"><span class="money-unit">¥</span>{{dueAmount}}</div>
-                </div>
-            </div>
-        </div>
-        <div class="submit-order com-button" @click="submitOrder" :style="{'background-color': $mainColor}">提交</div>
-    </div>
+        <address-deliver :defaultAddress="defaultAddress"></address-deliver>
+        <order-info :shopInfo="shopInfo" :cartFoodList="cartFoodList" :originOrderAmount="originOrderAmount" :minusPrice="minusPrice" :payPrice="payPrice"></order-info>
+        <other-info :noteText="noteText" @showNoteInput="showNoteInput"></other-info>
+        <footer-button></footer-button>
+        <note-input :noteText="noteText" v-if="noteInputFlag" @hideNoteInput="hideNoteInput" @confirmNoteInput="confirmNoteInput"></note-input>
+	</div>
 </template>
 
 <script>
-import { host } from '@/config/host'
+import AddressDeliver from './components/AddressDeliver.vue';
+import OrderInfo from './components/OrderInfo.vue';
+import OtherInfo from './components/OtherInfo.vue';
+import FooterButton from './components/FooterButton.vue';
+import NoteInput from './components/NoteInput.vue';
+import { host } from '@/config/host';
 
 export default {
+    components: {
+        AddressDeliver,
+        OrderInfo,
+        OtherInfo,
+        FooterButton,
+        NoteInput
+    },
     data() {
         return {
             originOrderAmount: '',
@@ -84,8 +34,10 @@ export default {
             shopInfo: {
                 minusList: []
             },
-            cartFoodList: {},
+            cartFoodList: [],
             businessType: {},
+            noteText: '',
+            noteInputFlag: true
         }
     },
     onShow() {
@@ -106,7 +58,7 @@ export default {
     },
     computed: {
 
-        dueAmount() {
+        payPrice() {
             return Number((this.originOrderAmount - this.minusPrice).toFixed(2))
         },
         minusPrice() {
@@ -128,7 +80,7 @@ export default {
                     }
                 })
                 if (findMinusItem) {
-                    return findMinusItem.reduce
+                    return +findMinusItem.reduce
                 } else return 0
             }
         }
@@ -142,12 +94,24 @@ export default {
                 if (addressList.length) {
                     this.defaultAddress = addressList[0]
                 }
+                console.log(this.defaultAddress)
             } catch (e) {
                 console.log(e)
             } finally {
                 this.$hideLoading()
-			}
+            }
 
+        },
+        showNoteInput() {
+            this.noteInputFlag = true
+        },
+        hideNoteInput() {
+            this.noteInputFlag = false
+        },
+        confirmNoteInput(noteText) {
+            this.noteText = noteText
+            console.log(this.noteText)
+            this.noteInputFlag = false
         },
         async submitOrder() {
 
@@ -163,7 +127,7 @@ export default {
                     query.takeOutTime = this.takeOutTime
                     query.address = JSON.stringify(this.defaultAddress)
                 }
-                const res = await this.$fetch.post('/user/order/submit', { foodList, shopID: this.shopInfo.shopID, orderAmount: this.dueAmount, businessType: this.businessType, ...query, minusPrice: this.minusPrice, originOrderAmount: this.originOrderAmount })
+                const res = await this.$fetch.post('/user/order/submit', { foodList, shopID: this.shopInfo.shopID, orderAmount: this.payPrice, businessType: this.businessType, ...query, minusPrice: this.minusPrice, originOrderAmount: this.originOrderAmount })
                 this.clearCart()
                 this.$myrouter.reLaunchTo({
                     name: 'user/order/list'
@@ -198,215 +162,236 @@ export default {
 </script>
 
 <style lang="scss">
-page {
-    background-color: #f5f5f5;
-    height: 100%;
-    line-height: 1.1;
-}
 .comfirm-order-container {
-    padding: 20rpx 20rpx 150rpx;
+    min-height: 100vh;
+    width: 100%;
+    background-color: #f4f4f4;
+    padding: 20rpx 20rpx 50rpx;
+    box-sizing: border-box;
     font-size: 28rpx;
     color: #333;
-    .order-type-box {
-        padding: 30rpx;
-        background-color: #fff;
-        border-radius: 20rpx;
-        margin-bottom: 20rpx;
-    }
-    .order-type {
-        position: relative;
-        width: 400rpx;
-        border-radius: 40rpx;
-        background-color: #888;
-    }
-    .orer-type-bgc {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 200rpx;
-        height: 80rpx;
-        background-color: #eee;
-        transition: all 300ms;
-        border-radius: 40rpx;
-    }
-    .order-take {
-        position: relative;
-        width: 200rpx;
-        height: 80rpx;
-        border-radius: 40rpx;
-        line-height: 80rpx;
-        text-align: center;
-        transition: all 300ms;
-        z-index: 1;
-    }
-    .no-address {
-        color: #999;
-        height: 86rpx;
-        line-height: 86rpx;
-        text-align: center;
-    }
-    .take-out-box {
-        padding: 30rpx;
-        background-color: #f5f5f5;
-        border-radius: 20rpx;
-        background-color: #fff;
-        margin-bottom: 20rpx;
-    }
-    .address-box {
-        position: relative;
-        margin-bottom: 34rpx;
-    }
-    .address-title {
-        font-size: 30rpx;
-        font-weight: bold;
-        max-width: 500rpx;
-        margin-bottom: 18rpx;
-    }
-    .address-user-info {
-        font-size: 24rpx;
-        color: #999;
-    }
-    .user-name {
-        margin-right: 10rpx;
-    }
-    .arrow-right {
-        position: absolute;
-        top: 50%;
-        right: 10rpx;
-        width: 18rpx;
-        height: 27rpx;
-        transform: translateY(-50%);
-        // background-color: red;
-    }
-    .delivery-box {
-        position: relative;
-        // padding-top: 20rpx;
-    }
-    .delivery-title {
-        font-weight: bold;
-        margin-right: 24rpx;
-    }
-    .time-phone-box {
-        height: 90rpx;
-    }
-    .shop-address {
-        font-weight: bold;
-        padding-bottom: 30rpx;
-    }
-    // .self-time-box, .self-phone-box {
-    // 	position: relative;
-    // 	height: 90rpx;;
+    // .top-box {
+    //     background-color: #fff;
+    //     padding: 0 20rpx;
+
+    //     .address-detail-box {
+    //         padding: 30rpx 0;
+    //         border-bottom: 1rpx solid #d7d7d7;
+    //     }
+    //     .address-detail {
+    //         width: 600rpx;
+    //     }
+    //     .address-info {
+    //         font-size: 30rpx;
+    //         font-weight: bold;
+    //         line-height: 42rpx;
+    //         color: #333;
+    //     }
+    //     .user-info {
+    //         margin-top: 3rpx;
+    //         font-size: 28rpx;
+    //         line-height: 40rpx;
+    //         color: #777;
+    //     }
+    //     .address-icon,
+    //     .deliver-icon {
+    //         width: 40rpx;
+    //         height: 40rpx;
+    //         padding-right: 20rpx;
+    //     }
+    //     .deliver-box {
+    //         padding: 30rpx 0;
+    //         font-size: 30rpx;
+    //         line-height: 42rpx;
+    //     }
+
+    //     .send-time {
+    //         font-weight: bold;
+    //         color: #333;
+    //         padding-right: 10rpx;
+    //     }
     // }
-    // .self-time-picker {
-    // 	flex: 1;
-    // 	height: 100%;
+    // .center-box {
+    //     margin-top: 20rpx;
+    //     background-color: #fff;
+
+    //     .shop-info {
+    //         height: 100rpx;
+    //         padding: 0 20rpx;
+    //         color: #666;
+    //     }
+    //     .shop-img {
+    //         width: 40rpx;
+    //         height: 40rpx;
+    //         padding-right: 20rpx;
+    //     }
+
+    //     .food-list {
+    //         padding-bottom: 20rpx;
+    //         padding: 20rpx;
+    //     }
+    //     .food-item {
+    //         padding: 20rpx;
+    //         margin-bottom: 10rpx;
+    //         background-color: #f8f8f8;
+    //     }
+
+    //     .food-img {
+    //         height: 110rpx;
+    //         width: 110rpx;
+    //         // border-radius: 8rpx;
+    //         margin-right: 20rpx;
+    //         background-color: red;
+    //     }
+    //     .food-info {
+    //         flex: 10;
+    //         font-size: 28rpx;
+    //         height: 110rpx;
+
+    //         // height: 90rpx;
+    //     }
+    //     .food-name {
+    //         max-width: 320rpx;
+    //         font-size: 28rpx;
+    //         line-height: 40rpx;
+    //         color: #333;
+    //     }
+    //     .food-price {
+    //         font-size: 24rpx;
+    //         color: #999;
+    //     }
+    //     .food-count {
+    //         flex: 2;
+    //         font-size: 28rpx;
+    //         line-height: 34rpx;
+    //         text-align: center;
+    //         color: #666;
+    //     }
+    //     .food-count-price {
+    //         flex: 3;
+    //         font-size: 28rpx;
+    //         text-align: right;
+    //         color: #333;
+    //     }
+    //     .dash-split {
+    //         position: relative;
+    //         width: 100%;
+    //         height: 0;
+    //         border-bottom: 3rpx dashed #eee;
+    //         margin-bottom: 10rpx;
+    //     }
+    //     .left-circle,
+    //     .right-circle {
+    //         position: absolute;
+    //         top: -12rpx;
+    //         width: 24rpx;
+    //         height: 24rpx;
+    //         background-color: #f4f4f4;
+    //         border-radius: 12rpx;
+    //     }
+    //     .left-circle {
+    //         left: -12rpx;
+    //     }
+    //     .right-circle {
+    //         right: -12rpx;
+    //     }
+    //     .minus-info {
+    //         padding: 20rpx 20rpx 30rpx;
+    //     }
+    //     .minus-icon {
+    //         width: 30rpx;
+    //         height: 30rpx;
+    //         margin-right: 10rpx;
+    //         color: #fff;
+    //         text-align: center;
+    //         font-size: 20rpx;
+    //         line-height: 30rpx;
+    //         background-color: #fb4e44;
+    //     }
+    //     .minus-title {
+    //         font-size: 28rpx;
+    //         line-height: 40rpx;
+    //         color: #333;
+    //     }
+    //     .minus-price {
+    //         font-size: 28rpx;
+    //         font-weight: bold;
+    //         color: #fb4e44;
+    //     }
+    //     .all-price-box {
+    //         padding: 0 20rpx 10rpx;
+    //         height: 80rpx;
+    //     }
+    //     .all-price-info {
+    //         color: #999;
+    //         font-size: 24rpx;
+    //         line-height: 40rpx;
+    //     }
+    //     .origin-price,
+    //     .discount-price {
+    //         padding-right: 30rpx;
+    //     }
+    //     .pay-price {
+    //         font-weight: bold;
+    //         font-size: 28rpx;
+    //         color: #333;
+    //     }
+
+    //     .pay-price-color {
+    //         color: #fb4e44;
+    //     }
     // }
-    // .self-take-title {
-    // 	font-size: 24rpx;
-    // 	color: #999;
+    // .other-info-box {
+    //     padding: 0 20rpx;
+    //     background-color: #fff;
+    //     font-size: 28rpx;
+    //     margin-top: 20rpx;
+    //     .other-info-item {
+    //         position: relative;
+    //         height: 88rpx;
+    //         border-bottom: 1rpx solid #e4e4e4;
+    //         padding-right: 34rpx;
+    //     }
+    //     .other-info-invoice {
+    //         padding-right: 0;
+    //     }
+    //     .arrow-right-icon {
+    //         position: absolute;
+    //         top: 50%;
+    //         right: 6rpx;
+    //         width: 12rpx;
+    //         height: 22rpx;
+    //         transform: translateY(-50%)
+    //     }
+    //     .other-info-item:last-child {
+    //         border-bottom: none;
+    //     }
+    //     .note-tip {
+    //         color: #999;
+    //     }
+    //     .note-text {
+    //     }
+    //     .invoice-info {
+    //         color: #ccc;
+    //     }
     // }
-    // .reserve-phone-input {
-    // 	padding-top: 10rpx;
+
+    // .footer-block {
+    //     width: 100%;
+    //     height: 140rpx;
+    //     margin-top: 20rpx;
+    //     background-color: #fff;
+    //     .footer-box {
+    //         position: fixed;
+    //         bottom: 0;
+    //         left: 0;
+    //         width: 100%;
+    //         height: 140rpx;
+    //         background-color: #3c3c3c;
+    //         box-sizing: border-box;
+    //         padding-right: 250rpx;
+
+    //     }
     // }
-    // .self-take-time {
-    // 	padding-top: 10rpx;
-    // 	font-weight: bold;
-    // 	font-size: 28rpx;
-    // 	height: 1.4rem;
-    // 	min-height: 1.4rem;
-    // 	line-height: 1.4rem;
-    // }
-    // .self-phone-box {
-    // 	flex: 1.1;
-    // 	padding-left: 40rpx;
-    // }
-    .deliver-time {
-        font-size: 28rpx;
-        font-weight: bold;
-    }
-    .order-detail-info {
-        padding: 30rpx;
-        background-color: #fff;
-        border-radius: 20rpx;
-    }
-    .food-item {
-        padding: 10rpx 0;
-        font-weight: bold;
-    }
-    .order-title-box {
-        margin-bottom: 20rpx;
-    }
-    .order-info {
-        font-weight: bold;
-        height: 44rpx;
-        line-height: 44rpx;
-    }
-    .continue-order {
-        width: 140rpx;
-        height: 44rpx;
-        line-height: 44rpx;
-        border: 2rpx solid;
-        border-radius: 20rpx;
-    }
-    .food-img {
-        height: 90rpx;
-        width: 90rpx;
-        border-radius: 8rpx;
-        margin-right: 12rpx;
-    }
-    .food-info {
-        flex: 10;
-        height: 90rpx;
-    }
-    .food-name {
-        max-width: 450rpx;
-    }
-    .font-price {
-        font-size: 26rpx;
-        color: #666;
-    }
-    .food-count {
-        flex: 2;
-        font-size: 26rpx;
-        text-align: center;
-        color: #666;
-    }
-    .food-count-price {
-        flex: 3;
-        font-size: 26rpx;
-        text-align: right;
-        color: red;
-    }
-    .minus-info-box {
-        margin-top: 30rpx;
-    }
-    .minus-icon {
-        width: 32rpx;
-        height: 32rpx;
-        margin-right: 20rpx;
-    }
-    .order-minus-price {
-        margin-left: 8rpx;
-    }
-    .total-info-info {
-        margin-top: 30rpx;
-    }
-    .money-unit {
-        font-size: 24rpx;
-    }
-    .order-due-amount-title {
-        margin-left: 10rpx;
-    }
-    .order-due-amount {
-        margin-left: 8rpx;
-        font-weight: bold;
-        font-size: 32rpx;
-    }
-    .submit-order {
-        position: fixed;
-        bottom: 10rpx;
-        left: 0;
-        width: 100%;
-    }
 }
 </style>

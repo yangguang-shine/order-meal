@@ -1,5 +1,5 @@
 <template>
-    <view class="cart-detail-mask" @click.stop="closeCartDetail" :class="showComponents ? 'show-animate-status' : 'hide-animate-status'">
+    <view class="cart-detail-mask" @click.stop="closeCartDetail" :class="{'cart-detail-mask-show': showComponents}"  @touchmove.stop>
         <view class="cart-detail-box" :style="{ 'padding-bottom': minusPromotionsObject.show ? '50rpx' : '' }" :class="showComponents ? 'cart-detail-box-show' : 'cart-detail-box-hide'" @touchmove.stop>
             <view class="cart-select-box flex-row flex-j-between flex-a-center" @click.stop>
                 <view class="select-goods-title">已选商品</view>
@@ -8,9 +8,9 @@
                     <text class="clear-cart-title">清空</text>
                 </view>
             </view>
-            <scroll-view scroll-y class="cart-detail-list-box" @click.stop>
-                <view class="food-category-item" v-for="(foodCategoryItem, index) in cartFoodList" :key="index">
-                    <view class="cart-food-item flex-row" v-for="(cartFoodItem, cartFoodIndex) in foodCategoryItem.foodList" :key="cartFoodIndex">
+            <view scroll-y class="cart-detail-list-box" @click.stop>
+                <view class="food-category-item" v-for="(foodCategoryItem) in cartFoodList" :key="foodCategoryItem.categoryID">
+                    <view class="cart-food-item flex-row" v-for="(cartFoodItem) in foodCategoryItem.foodList" :key="cartFoodItem.foodID">
                         <image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="cartFoodItem.imgUrl ? host + cartFoodItem.imgUrl : '/static/img/default-img.svg'" mode="scaleToFill"></image>
                         <view v-if="cartFoodItem.orderCount" class="cart-food-info-box flex-item flex-col flex-j-between">
                             <view class="cart-food-name-description">
@@ -24,7 +24,7 @@
                         </view>
                     </view>
                 </view>
-            </scroll-view>
+            </view>
         </view>
     </view>
 </template>
@@ -56,10 +56,9 @@ export default {
             showComponents: false
         }
     },
-    mounted() {
-        setTimeout(() => {
-            this.showComponents = true;
-        }, 0);
+    async mounted() {
+        await this.$delaySync(0)
+        this.showComponents = true;
     },
     methods: {
         addCount(foodItem) {
@@ -77,7 +76,7 @@ export default {
         },
         async closeCartDetail() {
             this.showComponents = false
-            await delaySync(200)
+            await delaySync(300)
             this.$emit('closeCartDetail');
         },
 
@@ -86,7 +85,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .cart-detail-mask {
     position: fixed;
     top: 0;
@@ -97,11 +95,10 @@ export default {
     font-size: 28rpx;
     -webkit-overflow-scrolling: touch;
     z-index: 400;
-    transition: all ease-in-out 0.2s;
-
+    transition: all ease-in-out 0.3s;
     .cart-detail-box {
         position: absolute;
-        bottom: -800rpx;
+        bottom: 0;
         left: 0;
         width: 100%;
         max-height: 800rpx;
@@ -110,15 +107,17 @@ export default {
         background-color: #fff;
         overflow-y: auto;
         border-radius: 30rpx 30rpx 0 0;
-        transition: all ease-in-out 0.2s;
+        transition: all ease-in-out .3s;
+        transform: translateY(100%)
     }
 
     .cart-detail-box-show {
-        bottom: 0;
+        transform: translateY(0%)
+
     }
-    .cart-detail-box-hide {
-        bottom: -800rpx;
-    }
+    // .cart-detail-box-hide {
+    //     bottom: -800rpx;
+    // }
     .cart-select-box {
         padding: 20rpx 30rpx;
         font-size: 24rpx;
@@ -134,13 +133,14 @@ export default {
     .cart-detail-list-box {
         max-height: 620rpx;
         padding-bottom: 20rpx;
-        ::-webkit-scrollbar {
-            display: none;
-            width: 0 !important;
-            height: 0 !important;
-            -webkit-appearance: none;
-            background: transparent;
-        }
+        overflow-y: auto;
+    }
+    .cart-detail-list-box::-webkit-scrollbar {
+        display: none;
+        width: 0 !important;
+        height: 0 !important;
+        -webkit-appearance: none;
+        background: transparent;
     }
     .cart-food-item {
         padding: 10rpx 30rpx;
@@ -175,10 +175,8 @@ export default {
         padding-left: 20rpx;
     }
 }
-.show-animate-status {
+.cart-detail-mask-show {
     background-color: rgba(0, 0, 0, 0.5);
 }
-.hide-animate-status {
-    background-color: rgba(0, 0, 0, 0);
-}
+
 </style>

@@ -2,7 +2,6 @@
 	<scroll-view scroll-y scroll-with-animation :scroll-into-view="scrollIntoCategoryID" class="food-main-box flex-item" id="food-main-box" @scroll="foodScrollHandle">
 		<view
 			class="food-category-list-item"
-			:data-food-category-item="JSON.stringify(foodCategoryItem)"
 			v-for="(foodCategoryItem, index) in foodCategoryList"
 			:key="index"
 			:id="foodCategoryItem.scrollTabID + 'id'"
@@ -73,7 +72,7 @@ export default {
 	height: 100%;
 	flex-shrink: 0;
 	box-sizing: border-box;
-	padding-top: 80rpx;
+	// padding-top: 80rpx;
 	::-webkit-scrollbar {
 		display: none;
 		width: 0 !important;

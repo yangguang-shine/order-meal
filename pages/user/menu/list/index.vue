@@ -12,7 +12,7 @@
             <minus-promotions-block v-if="minusPromotionsObject.show"></minus-promotions-block>
             <footer-cart :showShopInfo="showShopInfo" :cartPriceInfo="cartPriceInfo" :allCartFoodCount="allCartFoodCount" @toogleCartDetail="toogleCartDetail()" @toComfirmOrder="toComfirmOrder"></footer-cart>
             <footer-cart-block></footer-cart-block>
-            <food-detail v-if="showFoodDetailFalg" :foodItem="selectFoodItem" ref="foodDetail" @closeFoodDetail="closeFoodDetail"></food-detail>
+            <food-detail v-if="showFoodDetailFalg" :foodItem="selectFoodItem" @closeFoodDetail="closeFoodDetail" @addCount="addCount" @minusCount="minusCount"></food-detail>
         </view>
         <shop-info v-if="showShopInfo" ref="shopInfo" :selectTopBarItem="selectTopBarItem"></shop-info>
     </view>
@@ -93,9 +93,6 @@ export default {
         };
     },
     computed: {
-        // cartFoodListMainColor() {
-        // 	return this.cartFoodList.length ? this.$mainColor : '';
-        // },
         minusPromotionsObject() {
             if ((this.shopInfo.minusList || []).length === 0 || this.cartFoodList.length === 0) {
                 return {
@@ -218,10 +215,7 @@ export default {
         }
     },
     onUnload() {
-        // if (observer) {
-        // 	observer.disconnect();
-        // }
-        // Object.assign(this.$data, this.$options.data());
+     
     },
     async onLoad(query) {
         try {
@@ -293,29 +287,6 @@ export default {
             });
             this.clearCart();
             this.closeCartDetail()
-        },
-        creatObserve() {
-            // #ifdef MP-WEIXIN
-            observer = this.createIntersectionObserver({
-                observeAll: true
-            });
-            // #endif
-            // #ifdef H5
-            observer = uni.createIntersectionObserver(this, {
-                observeAll: true
-            });
-            // #endif
-
-            observer.relativeTo('.food-category-list').observe('.food-category-list-item', res => {
-                const foodCategoryItem = JSON.parse(res.dataset.foodCategoryItem);
-                if (res.intersectionRatio === 0 && res.boundingClientRect.bottom <= res.relativeRect.top) {
-                    this.selectCategoryTabId = foodCategoryItem.nextScrollTabID;
-                    this.scrollIntoCategoryID = null;
-                } else if (0 < res.intersectionRatio && res.intersectionRatio <= 1 && res.boundingClientRect.top <= res.relativeRect.top) {
-                    this.selectCategoryTabId = foodCategoryItem.scrollTabID;
-                    this.scrollIntoCategoryID = null;
-                }
-            });
         },
         async init() {
             const { orderAgain, orderKey } = this.$root.$mp.query;

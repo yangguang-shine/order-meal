@@ -53,7 +53,7 @@ export default {
         position: absolute;
         left: 25%;
         transform: translate(-50%, 0);
-        transition: all ease-in-out 0.2s;
+        transition: all ease-in-out 0.3s;
         bottom: 0;
         width: 40rpx;
         height: 4rpx;

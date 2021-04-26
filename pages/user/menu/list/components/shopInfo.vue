@@ -13,7 +13,7 @@ export default {
 	mounted() {
 		setTimeout(() => {
 			this.showComponents = true
-		}, 0);
+		}, 50);
 	},
 	methods: {
 
@@ -36,7 +36,7 @@ export default {
 .show-shop-info-container {
 	left: 0;
 }
-.hide-shop-info-container {
-	left: 750rpx;
-}
+// .hide-shop-info-container {
+// 	left: 750rpx;
+// }
 </style>
