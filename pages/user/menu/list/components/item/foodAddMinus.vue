@@ -1,6 +1,6 @@
 <template>
 	<view class="food-add-minus-container flex-row flex-ja-center">
-		<view class="food-count-minus"  :class="showAddAnimate ? 'food-count-minus-show' : ''" :style="{ color: $mainColor }" @click.stop="minusCount()">
+		<view class="food-count-minus"   :class="showAddAnimate ? 'food-count-minus-show' : ''" :style="{ color: $mainColor, 'transition': addAnimationFlag ? 'all ease-in-out .3s' : ''}" @click.stop="minusCount()">
             <div class="add-click-area"></div>
 			<view class="reduce-icon-css" :style="{ 'background-color': $mainColor }"></view>
 		</view>
@@ -28,6 +28,7 @@ export default {
 	data() {
 		return {
 			showAddAnimate: false,
+			addAnimationFlag: false
 		}
 	},
 	async mounted() {
@@ -37,6 +38,10 @@ export default {
 		} else {
 			this.showAddAnimate = false
 		}
+		
+		// 组件展示时禁止动画
+		await delaySync(0)
+		this.addAnimationFlag = true
 	},
     methods: {
         async addCount() {
@@ -118,7 +123,7 @@ export default {
 		line-height: 40rpx;
 		background-color: #fff;
 		box-sizing: border-box;
-		transition: all ease-in-out .3s;
+		// transition: all ease-in-out .3s;
 	}
 	.food-count-minus-show {
 		right: 100rpx;

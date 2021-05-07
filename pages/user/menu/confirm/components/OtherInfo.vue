@@ -6,7 +6,7 @@
             </div>
             <div class="other-info-item flex-row flex-a-center flex-j-between" @click="showNoteInput">
                 <div class="left-title">备注</div>
-                <div v-if="noteText" class="right-title note-text">{{noteText}}</div>
+                <div v-if="noteText" class="right-title note-text line1">{{noteText}}</div>
                 <div v-else class="right-title note-tip">特殊请备注</div>
 				<image class="arrow-right-icon" src="/static/img/user-confirm/arrow-right.png" mode=""></image>
             </div>
@@ -63,6 +63,7 @@ export default {
             color: #999;
         }
         .note-text {
+            max-width: 400rpx;
         }
         .invoice-info {
             color: #ccc;

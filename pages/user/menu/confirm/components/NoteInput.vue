@@ -1,5 +1,5 @@
 <template>
-    <div class="note-input-container" :class="{'note-input-container-show': showComponents }" @click.stop="hideNoteInput" @touchmove.stop>
+    <div class="note-input-container" :class="{'note-input-container-show': showComponents }" @click.stop="hideNoteInput" @touchmove.stop.prevent>
         <div class="note-input-box" :class="{'note-input-box-show': showComponents}" @click.stop>
             <div class="cancel-confirm flex-row flex-a-center flex-j-between">
                 <div class="cancel-button" @click="hideNoteInput">取消</div>
@@ -53,6 +53,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.scroll {
+    height: 400rpx;
+    overflow-y: auto
+}
 .note-input-container {
     position: fixed;
     top: 0;

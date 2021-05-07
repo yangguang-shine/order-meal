@@ -37,7 +37,7 @@ export default {
             cartFoodList: [],
             businessType: {},
             noteText: '',
-            noteInputFlag: true
+            noteInputFlag: false
         }
     },
     onShow() {
@@ -57,7 +57,6 @@ export default {
 
     },
     computed: {
-
         payPrice() {
             return Number((this.originOrderAmount - this.minusPrice).toFixed(2))
         },
@@ -162,6 +161,10 @@ export default {
 </script>
 
 <style lang="scss">
+page {
+        height: 100%;
+    width: 100%;
+}
 .comfirm-order-container {
     min-height: 100vh;
     width: 100%;
@@ -170,6 +173,7 @@ export default {
     box-sizing: border-box;
     font-size: 28rpx;
     color: #333;
+    // overflow: hidden;
     // .top-box {
     //     background-color: #fff;
     //     padding: 0 20rpx;

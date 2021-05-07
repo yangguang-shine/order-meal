@@ -1,6 +1,7 @@
 <template>
-    <view class="cart-detail-mask" @click.stop="closeCartDetail" :class="{'cart-detail-mask-show': showComponents}"  @touchmove.stop>
-        <view class="cart-detail-box" :style="{ 'padding-bottom': minusPromotionsObject.show ? '50rpx' : '' }" :class="showComponents ? 'cart-detail-box-show' : 'cart-detail-box-hide'" @touchmove.stop>
+    <view class="cart-detail-mask" @click.stop="closeCartDetail" :class="{'cart-detail-mask-show': showComponents}"  @touchmove.stop.prevent>
+    <!-- <view class="cart-detail-mask" @click.stop="closeCartDetail" :class="{'cart-detail-mask-show': showComponents}"  @touchmove.stop.prevent="moveStop"> -->
+        <view class="cart-detail-box" :style="{ 'padding-bottom': minusPromotionsObject.show ? '50rpx' : '' }" :class="showComponents ? 'cart-detail-box-show' : 'cart-detail-box-hide'" >
             <view class="cart-select-box flex-row flex-j-between flex-a-center" @click.stop>
                 <view class="select-goods-title">已选商品</view>
                 <view class="flex-row flex-a-center" @click="cartClearCart">
@@ -8,7 +9,7 @@
                     <text class="clear-cart-title">清空</text>
                 </view>
             </view>
-            <view scroll-y class="cart-detail-list-box" @click.stop>
+            <scroll-view scroll-y class="cart-detail-list-box" @click.stop>
                 <view class="food-category-item" v-for="(foodCategoryItem) in cartFoodList" :key="foodCategoryItem.categoryID">
                     <view class="cart-food-item flex-row" v-for="(cartFoodItem) in foodCategoryItem.foodList" :key="cartFoodItem.foodID">
                         <image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="cartFoodItem.imgUrl ? host + cartFoodItem.imgUrl : '/static/img/default-img.svg'" mode="scaleToFill"></image>
@@ -19,12 +20,12 @@
                             </view>
                             <view class="cart-food-price-button flex-row flex-j-between flex-a-center">
                                 <view class="cart-food-price">¥{{ cartFoodItem.foodItemAmount }}</view>
-                                <food-add-minus :foodItem="cartFoodItem" @addCount="addCount" @minusCount="minusCount"></food-add-minus>
+                                <food-add-minus :foodItem="cartFoodItem" @addCount="addCount" @minusCount="minusCount" hideAnimateFlag></food-add-minus>
                             </view>
                         </view>
                     </view>
                 </view>
-            </view>
+            </scroll-view>
         </view>
     </view>
 </template>
@@ -61,6 +62,7 @@ export default {
         this.showComponents = true;
     },
     methods: {
+        moveStop() {},
         addCount(foodItem) {
             this.$emit('addCount', foodItem);
         },
@@ -134,6 +136,13 @@ export default {
         max-height: 620rpx;
         padding-bottom: 20rpx;
         overflow-y: auto;
+        ::-webkit-scrollbar {
+        display: none;
+        width: 0 !important;
+        height: 0 !important;
+        -webkit-appearance: none;
+        background: transparent;
+    }
     }
     .cart-detail-list-box::-webkit-scrollbar {
         display: none;

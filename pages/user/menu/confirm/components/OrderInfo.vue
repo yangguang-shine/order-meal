@@ -6,18 +6,20 @@
             <div class="continue-order">继续点单</div>
         </div>
         <div class="food-list">
-            <div class="food-category-item" v-for="(foodCategoryItem) in cartFoodList" :key="foodCategoryItem.categoryID">
-                <div class="food-item flex-row flex-a-center" v-for="(foodItem) in foodCategoryItem.foodList" :key="foodItem.foodID">
-                    <image class="food-img flex-shrink" :src="foodItem.imgUrl ? host + foodItem.imgUrl : '/static/img/default-img.svg'"></image>
-                    <div class="food-info flex-col flex-j-between">
-                        <div class="food-name line1">嘻嘻嘻嘻</div>
-                        <div class="food-price"><span class="money-unit">¥</span>{{foodItem.price}}</div>
-                    </div>
-                    <div class="food-count">×{{foodItem.orderCount}}</div>
-                    <div class="food-count-price"><span class="money-unit">¥</span>{{foodItem.foodItemAmount}}</div>
+            <div v-show="index < 3 || displayMore" class="food-item flex-row flex-a-center" v-for="(foodItem, index) in foodList" :key="foodItem.foodID">
+                <image class="food-img flex-shrink" :src="foodItem.imgUrl ? host + foodItem.imgUrl : '/static/img/default-img.svg'"></image>
+                <div class="food-info flex-col flex-j-between">
+                    <div class="food-name line1">嘻嘻嘻嘻</div>
+                    <div class="food-price"><span class="money-unit">¥</span>{{foodItem.price}}</div>
                 </div>
+                <div class="food-count">×{{foodItem.orderCount}}</div>
+                <div class="food-count-price"><span class="money-unit">¥</span>{{foodItem.foodItemAmount}}</div>
             </div>
         </div>
+        <div v-if="foodList.length > 3" class="display-more flex-row flex-ja-center">
+            <div>展开</div>
+            <div>更多</div>
+            </div>
         <div class="dash-split">
             <div class="left-circle"></div>
             <div class="right-circle"></div>
@@ -72,9 +74,26 @@ export default {
             default: () => []
         },
     },
+    computed: {
+        foodList() {
+            console.log(this.cartFoodList)
+            const foodList = this.cartFoodList.reduce((list, item) => {
+                list = list.concat(item.foodList)
+                console.log(111)
+                console.log(list)
+                console.log(item.foodList)
+                return list
+            }, [])
+            console.log(foodList);
+            return foodList
+
+        }
+    }
+    ,
     data() {
         return {
-            host
+            host,
+            displayMore: false
         }
     }
 }
@@ -140,6 +159,11 @@ export default {
         font-size: 28rpx;
         text-align: right;
         color: #333;
+    }
+    .display-more {
+        margin: 0 auto 30rpx;
+        width: 150rpx;
+        height: 50rpx;
     }
     .dash-split {
         position: relative;
