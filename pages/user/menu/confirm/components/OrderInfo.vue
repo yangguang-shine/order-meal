@@ -6,7 +6,7 @@
             <div class="continue-order">继续点单</div>
         </div>
         <div class="food-list">
-            <div v-show="index < 3 || displayMore" class="food-item flex-row flex-a-center" v-for="(foodItem, index) in foodList" :key="foodItem.foodID">
+            <div v-show="index < 3 || displayMoreFlag" class="food-item flex-row flex-a-center" v-for="(foodItem, index) in foodList" :key="foodItem.foodID">
                 <image class="food-img flex-shrink" :src="foodItem.imgUrl ? host + foodItem.imgUrl : '/static/img/default-img.svg'"></image>
                 <div class="food-info flex-col flex-j-between">
                     <div class="food-name line1">嘻嘻嘻嘻</div>
@@ -16,9 +16,15 @@
                 <div class="food-count-price"><span class="money-unit">¥</span>{{foodItem.foodItemAmount}}</div>
             </div>
         </div>
-        <div v-if="foodList.length > 3" class="display-more flex-row flex-ja-center">
-            <div>展开</div>
-            <div>更多</div>
+        <div v-if="foodList.length > 3" class="display-more flex-row flex-ja-center" @click="toggleDisplay">
+            <div v-if="displayMoreFlag" class=" flex-row flex-ja-center" >
+				<div class="display-more-title">点击收起</div>
+				<image class="show-more-arrow" src="/static/img/user-confirm/show-more-order.png" mode=""></image>
+			</div>
+            <div v-else class=" flex-row flex-ja-center">
+				<div class="display-more-title">展开更多</div>
+				<image class="hide-more-arrow" src="/static/img/user-confirm/show-more-order.png" mode=""></image>
+			</div>
             </div>
         <div class="dash-split">
             <div class="left-circle"></div>
@@ -88,14 +94,18 @@ export default {
             return foodList
 
         }
-    }
-    ,
+    },
     data() {
         return {
             host,
-            displayMore: false
+            displayMoreFlag: false
         }
-    }
+    },
+	methods: {
+		toggleDisplay() {
+			this.displayMoreFlag = !this.displayMoreFlag
+		}
+	} 
 }
 </script>
 
@@ -164,7 +174,25 @@ export default {
         margin: 0 auto 30rpx;
         width: 150rpx;
         height: 50rpx;
+		box-sizing: border-box;
+		border: 1rpx solid #ccc;
+		font-size: 24rpx;
+		color: #666;
+		border-radius: 6rpx;
     }
+	.display-more-title {
+		padding-right: 10rpx;
+	}
+	.show-more-arrow {
+		width: 8rpx;
+		height: 14rpx;
+		transform: rotate(-90deg);
+	}
+	.hide-more-arrow {
+		width: 8rpx;
+		height: 14rpx;
+		transform: rotate(90deg);
+	}
     .dash-split {
         position: relative;
         width: 100%;

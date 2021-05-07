@@ -74,7 +74,7 @@ export default {
         left: 0;
         width: 100%;
         box-sizing: border-box;
-        padding: 0 32rpx 100rpx;
+        padding: 0 32rpx 300rpx;
         background-color: #fff;
         transition: all ease-in-out 0.3s;
         transform: translateY(100%);

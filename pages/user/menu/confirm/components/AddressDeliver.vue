@@ -1,14 +1,14 @@
 <template>
     <div class="address-deliver-container">
-        <div class="address-detail-box flex-row flex-a-center">
-            <image class="address-icon"></image>
+        <div class="address-detail-box flex-row flex-a-center" @click="toAddressList">
+            <image class="address-icon" src="/static/img/user-confirm/address-icon.png"></image>
             <div class="address-detail flex-item">
                 <div class="address-info line1">{{defaultAddress.address1}} {{defaultAddress.address2}}</div>
                 <div class="user-info">{{defaultAddress.name}} {{defaultAddress.mobile}}</div>
             </div>
         </div>
         <div class="deliver-box flex-row flex-a-center">
-            <image class="deliver-icon"></image>
+            <image class="deliver-icon" src="/static/img/user-confirm/deliver-time-icon.png"></image>
             <div class="deliver-info flex-row">
                 <div class="send-time">立即送出</div>
                 <div class="deliver-time">大约3：10</div>
@@ -24,7 +24,18 @@ export default {
             type: Object,
             default: () => {}
         }
-    }
+    },
+	methods: {
+		toAddressList() {
+			console.log(121231)
+			this.$myrouter.navigateTo({
+			    name: 'user/address/list',
+				query: {
+					fromPage: 'userMenuConfirm'
+				}
+			});
+		}
+	}
 
 }
 </script>
@@ -60,7 +71,7 @@ export default {
         padding-right: 20rpx;
     }
     .deliver-box {
-        padding: 30rpx 0;
+        padding: 30rpx 0 50rpx;
         font-size: 30rpx;
         line-height: 42rpx;
     }
