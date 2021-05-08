@@ -82,15 +82,10 @@ export default {
     },
     computed: {
         foodList() {
-            console.log(this.cartFoodList)
             const foodList = this.cartFoodList.reduce((list, item) => {
                 list = list.concat(item.foodList)
-                console.log(111)
-                console.log(list)
-                console.log(item.foodList)
                 return list
             }, [])
-            console.log(foodList);
             return foodList
 
         }

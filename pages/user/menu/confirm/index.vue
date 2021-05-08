@@ -1,6 +1,6 @@
 <template>
     <div class="comfirm-order-container">
-        <address-deliver :defaultAddress="defaultAddress"></address-deliver>
+        <address-deliver :defaultAddress="defaultAddress" :takeOutTime="takeOutTime" @takeOutTimeChange="takeOutTimeChange"></address-deliver>
         <order-info :shopInfo="shopInfo" :cartFoodList="cartFoodList" :originOrderAmount="originOrderAmount" :minusPrice="minusPrice" :payPrice="payPrice"></order-info>
         <other-info :noteText="noteText" @showNoteInput="showNoteInput"></other-info>
         <footer-button></footer-button>
@@ -40,6 +40,9 @@ export default {
             noteInputFlag: false
         }
     },
+	mounted() {
+		this.getTakeOutTime()
+	},
     onShow() {
         this.shopInfo = uni.getStorageSync('shopInfo')
         this.businessType = uni.getStorageSync('businessType')
@@ -93,14 +96,21 @@ export default {
                 if (addressList.length) {
                     this.defaultAddress = addressList[0]
                 }
-                console.log(this.defaultAddress)
             } catch (e) {
                 console.log(e)
             } finally {
                 this.$hideLoading()
             }
-
         },
+		getTakeOutTime() {
+			const current = +new Date()
+			const deliverStamp = current + 1000 * 60 * 60
+			console.log(deliverStamp);
+			const deliverTime = new Date(deliverStamp)
+			const hours = `${deliverTime.getHours()}`.length === 1 ? `0${deliverTime.getHours()}` : `${deliverTime.getHours()}`
+			const minute = `${deliverTime.getMinutes()}`.length === 1 ? `0${deliverTime.getMinutes()}` : `${deliverTime.getMinutes()}`
+			this.takeOutTime = `${hours}:${minute}`
+		},
         showNoteInput() {
             this.noteInputFlag = true
         },
@@ -109,11 +119,9 @@ export default {
         },
         confirmNoteInput(noteText) {
             this.noteText = noteText
-            console.log(this.noteText)
             this.noteInputFlag = false
         },
         async submitOrder() {
-
             try {
                 this.$showLoading()
                 if (!this.cartFoodList.length) return;

@@ -9,10 +9,12 @@
         </div>
         <div class="deliver-box flex-row flex-a-center">
             <image class="deliver-icon" src="/static/img/user-confirm/deliver-time-icon.png"></image>
-            <div class="deliver-info flex-row">
-                <div class="send-time">立即送出</div>
-                <div class="deliver-time">大约3：10</div>
-            </div>
+			<picker  mode="time" :value="takeOutTime" start="00:00" end="23:59" @change="takeOutTimeChange">
+				<div class="deliver-info flex-row">
+					<div class="send-time">立即送出</div>
+					<div class="deliver-time">大约 {{takeOutTime}} 送达</div>
+				</div>
+			</picker>
         </div>
     </div>
 </template>
@@ -23,17 +25,23 @@ export default {
         defaultAddress: {
             type: Object,
             default: () => {}
-        }
+        },
+		takeOutTime: {
+			type: String,
+			default: '00:00'
+		}
     },
 	methods: {
 		toAddressList() {
-			console.log(121231)
 			this.$myrouter.navigateTo({
 			    name: 'user/address/list',
 				query: {
 					fromPage: 'userMenuConfirm'
 				}
 			});
+		},
+		takeOutTimeChange(e) {
+			this.$emit('takeOutTimeChange', e)
 		}
 	}
 
@@ -71,7 +79,7 @@ export default {
         padding-right: 20rpx;
     }
     .deliver-box {
-        padding: 30rpx 0 50rpx;
+        padding: 30rpx 0 40rpx;
         font-size: 30rpx;
         line-height: 42rpx;
     }
