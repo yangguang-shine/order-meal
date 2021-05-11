@@ -1,5 +1,5 @@
 <template>
-    <view class="promotion-title center" :style="{'position': showShopInfo ? 'absolute' : 'fixed'}">
+    <view class="promotion-title center flex-row flex-ja-center" :style="{'position': showShopInfo ? 'absolute' : 'fixed'}">
         <text v-for="(contentItem, index) in minusPromotionsObject.contentList" :key="index" :class="{ 'content-red': index % 2 !== 0 }">{{ contentItem }}</text>
     </view>
 </template>
@@ -36,9 +36,9 @@ export default {
         color: #e23232;
     }
 }
-.promotion-title::before {
-    content: "";
-    width: 100%;
-    height: 50rpx;
-}
+// .promotion-title::before {
+//     content: "";
+//     width: 100%;
+//     height: 50rpx;
+// }
 </style>

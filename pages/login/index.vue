@@ -143,6 +143,7 @@ page {
 		width: 150rpx;
 	}
 	.submit-button {
+		color: #fff;
 		height: 60rpx;
 		width: 200rpx;
 		line-height: 60rpx;

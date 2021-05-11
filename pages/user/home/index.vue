@@ -1,74 +1,129 @@
 <template>
     <view class="home-container">
-        <!-- 		<swiper class="swiper-box" autoplay="true" easing-function="easeInOutCubic" circular="true">
-			<swiper-item class="swiper-item" v-for="(img, index) in imgList" :key="index" @click="toShopList">
-				<image class="swiper-item-img" :src="img" mode="widthFix"></image>
-			</swiper-item>
-		</swiper> -->
-        <div class="business-type-box flex-row">
-            <div class="type-item-box flex-item flex-col flex-ja-center">
-                <div class="type-item flex-col flex-ja-center" @click="toShopList(2)" :style="{ background: $mainColor }">
-                    <image class="type-img" src="/static/img/take-out.png"></image>
-                </div>
-                <div>外卖</div>
-            </div>
-            <div class="type-item-box flex-item flex-col flex-ja-center">
-                <div class="type-item flex-col flex-ja-center" @click="toShopList(3)" :style="{ background: $mainColor }">
-                    <image class="type-img" src="/static/img/reserve.png"></image>
-                </div>
-                <div>堂食</div>
-            </div>
-        </div>
-        <div v-if="nearShopList.length" class="near-shop-box">
-            <div class="near-shop-title">附近外卖店铺推荐</div>
-            <div class="shop-list">
-                <shop v-for="(shopItem, index) in nearShopList" :key="index" :shopItem="shopItem" @clickShopItem="toOrder(shopItem)" showArrowRight></shop>
-            </div>
-        </div>
+		<top-address-search :defaultAddress="defaultAddress" :topAddressWidthFlag="topAddressWidthFlag" @setTopAddressSearchHeight="setTopAddressSearchHeight"></top-address-search>
+		<tools-list></tools-list>
+		<recommand-shop-list :recommandShopList="recommandShopList" :tabListFixed="tabListFixed" :selectTabItemIndex="selectTabItemIndex" :topAddressSearchHeight="topAddressSearchHeight" @setTabListTopHeight="setTabListTopHeight" @changeTabItem="changeTabItem" @toOrder="toOrder"></recommand-shop-list>
+
     </view>
 </template>
 
 <script>
-import { host } from '@/config/host';
+// import { host } from '@/config/host';
 import getShopMinusList from '@/utils/getShopMinusList';
-import shop from '@/components/shop';
-import SelectModal from '@/components/SelectModal.vue';
+// import SelectModal from '@/components/SelectModal.vue';
 import { mapMutations } from 'vuex';
+import TopAddressSearch from './components/TopAddressSearch.vue'
+import ToolsList from './components/ToolsList.vue'
+import RecommandShopList from './components/RecommandShopList.vue'
+
+const debounce = (() => {
+    let timer = null;
+    return (fn, delay) => {
+        if (timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+            fn();
+        }, delay);
+    };
+})();
 
 export default {
     components: {
-        shop,
-        'select-modal': SelectModal
+        // 'select-modal': SelectModal,
+		TopAddressSearch,
+		ToolsList,
+		RecommandShopList
     },
     data() {
         return {
             nearShopList: [],
-            showSelectBusinessTypeModal: false,
-            selectShop: {},
-            imgList: [`${host}/images/static/1.png`, `${host}/images/static/2.png`, `${host}/images/static/3.png`]
-            // imgList: [`${host}/images/static/1.jpg`, `${host}/images/static/2.jpg`, `${host}/images/static/3.jpg`, `${host}/images/static/4.jpg`, `${host}/images/static/5.jpg` ],
+			defaultAddress: {},
+			topAddressWidthFlag: false,
+			recommandShopList: [],
+			tabListFixed: false,
+			selectTabItemIndex: 0,
+			tabListTop: null,
+			tabListHeight: null,
+			topAddressSearchHeight: 0
         };
     },
-    onLoad() {
-        this.init();
-    },
+	onShow() {
+		uni.pageScrollTo({
+			scrollTop: 0,
+			duration: 0
+		})
+		this.init();
+	},
+	onPageScroll(e) {
+		console.log(e);
+		console.log(e.scrollTop > this.topAddressSearchHeight);
+		if (this.tabListTop === null) return;
+		if (e.scrollTop > this.topAddressSearchHeight) {
+			this.topAddressWidthFlag = true
+		} else {
+			this.topAddressWidthFlag = false
+		}
+		if (e.scrollTop >= this.tabListTop - this.topAddressSearchHeight) {
+			this.tabListFixed = true
+		} else {
+			this.tabListFixed = false
+		}
+	},
     methods: {
         async init() {
             try {
-                const res = await this.$fetch.get('/user/shop/list', { businessType: 2 });
-                const nearShopList = res.data || [];
-                this.$showLoading();
-                nearShopList.forEach(item => {
-                    item.minusList = getShopMinusList(item.minus || '');
-                });
-                this.nearShopList = nearShopList;
+				this.$showLoading();
+				await this.getDefaultAddress()
+				await this.getShopList()
             } catch (e) {
                 console.log(e);
             } finally {
                 this.$hideLoading();
             }
         },
-        toShopList(businessType) {
+		async getDefaultAddress() {
+			    this.$showLoading()
+			    const res = await this.$fetch.get('/user/address/list', {})
+			    const addressList = res.data || []
+			    if (addressList.length) {
+			        this.defaultAddress = addressList[0]
+			    } else {
+					this.defaultAddress = {}
+				}
+				console.log(this.defaultAddress);
+		},
+		async getShopList() {
+			const res = await this.$fetch.get('/user/shop/list', { businessType: 2 });
+			const recommandShopList = res.data || [];
+			this.$showLoading();
+			recommandShopList.forEach(item => {
+			    item.minusList = getShopMinusList(item.minus || '');
+			});
+			this.recommandShopList = recommandShopList;
+		},
+        setTabListTopHeight(top, height) {
+			this.tabListTop = top
+			this.tabListHeight = height
+			console.log('setTabListTopHeight');
+			console.log(this.tabListTop);
+			console.log(this.tabListHeight);
+		},
+		setTopAddressSearchHeight(height) {
+			this.topAddressSearchHeight = height
+			console.log('this.topAddressSearchHeight');
+			console.log(this.topAddressSearchHeight);
+		},
+		changeTabItem(index) {
+			this.selectTabItemIndex = index;
+			uni.pageScrollTo({
+			    scrollTop: this.tabListTop - this.topAddressSearchHeight,
+			    duration: 100
+			});
+	
+		},
+		
+		toShopList(businessType) {
             this.saveBusinessType(businessType)
             this.$myrouter.navigateTo({
                 name: 'user/shop/list',
@@ -103,12 +158,15 @@ export default {
 
 <style lang="scss">
 page {
-    height: 100%;
+    // minheight: 100%;
+    // background-color: #fff;
     background-color: $color-bg-f5;
+
 }
 .home-container {
     font-size: 28rpx;
     color: #333;
+	min-height: 100vh;
     .swiper-box {
         height: 280rpx;
         width: 100%;

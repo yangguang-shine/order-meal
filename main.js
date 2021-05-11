@@ -51,7 +51,8 @@ delaySync
 // Vue.prototype.$mainColor = '#47ff56'
 App.mpType = 'app'
 // const $mainColor = "#3190e8"
-const $mainColor = "#00e067"
+// const $mainColor = "#00e067"
+const $mainColor = "#0096ff"
 
 
 const $mainColor2 = "#58a3dd"
