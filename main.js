@@ -5,6 +5,7 @@ import fetch from '@/utils/fly.js'
 import store from '@/store'
 import { delaySync } from '@/utils/index.js';
 import NoData from '@/components/no-data.vue'
+import Loading from '@/components/Loading.vue'
 import {
 	showModal,
 	showLoading,
@@ -33,6 +34,7 @@ new VConsole();
 
 
 Vue.component('no-data', NoData)
+Vue.component('loading', Loading)
 Vue.config.productionTip = false
 Vue.prototype.$myrouter = router
 Vue.prototype.$store = store

@@ -3,7 +3,7 @@
 		<view class="recommand-shop-title flex-row flex-ja-center">推荐商家</view>
 		<view class="tab-list-block">
 			<view id="tab-list-fixed-id" class="tab-list flex-row flex-a-center" :class="{ 'tab-list-fixed': tabListFixed }" :style="{ top: tabListFixed ? topAddressSearchHeight + 'px' : '' }">
-				<view v-for="(tabItem, index) in tabList" :key="index" class="tab-item flex-item flex-row flex-j-center" :class="selectTabItemIndex === index ? 'select-tab-item' : ''" @click="changeTabItem(index)">{{ tabItem }}</view>
+				<view v-for="(tabItem, index) in tabList" :key="index" class="tab-item flex-item flex-row flex-ja-center" :class="selectTabItem.type === tabItem.type ? 'select-tab-item' : ''" @click="changeTabItem(tabItem)">{{ tabItem.title }}</view>
 			</view>
 		</view>
 		<div v-if="recommandShopList.length" class="shop-list">
@@ -30,9 +30,9 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		selectTabItemIndex: {
-			type: Number,
-			default: 0
+		selectTabItem: {
+			type: Object,
+			default: () => {}
 		},
 		topAddressSearchHeight: {
 			type: Number,
@@ -41,7 +41,20 @@ export default {
 	},
 	data() {
 		return {
-			tabList: ['综合排序', '销量最高', '距离最近']
+			tabList: [
+				{
+					title: '综合排序',
+					type: 'comprehensive'
+				},
+				{
+					title: '销量最高',
+					type: 'sale'
+				},
+				{
+					title: '距离最近',
+					type: 'distance'
+				}
+			]
 		};
 	},
 	mounted() {
@@ -57,9 +70,9 @@ export default {
 		}, 100);
 	},
 	methods: {
-		changeTabItem(index) {
-			if (index === this.selectTabItemIndex) return;
-			this.$emit('changeTabItem', index);
+		changeTabItem(tabItem) {
+			if (tabItem.type === this.selectTabItem.type) return;
+			this.$emit('changeTabItem', tabItem);
 		},
 		toOrder(shopItem) {
 			this.$emit('toOrder', shopItem)
@@ -70,6 +83,11 @@ export default {
 
 <style lang="scss" scoped>
 .recommand-shop-list-container {
+	margin: 20rpx 20rpx 0;
+	padding-bottom: 20rpx;
+	background-color: #fff;
+	border-top-left-radius: 12rpx;
+	border-top-right-radius: 12rpx;
 	.recommand-shop-title {
 		padding-top: 20rpx;
 		position: relative;
@@ -94,10 +112,14 @@ export default {
 		margin-left: 26rpx;
 	}
 	.tab-list-block {
+		position: relative;
 		width: 100%;
 		height: 80rpx;
 		.tab-list {
-			width: 100%;
+			position: absolute;
+			top: 0;
+			left: -20rpx;
+			width: 750rpx;
 			height: 80rpx;
 			box-sizing: border-box;
 			// border-top: 1rpx solid #e4e4e4;
@@ -112,6 +134,7 @@ export default {
 		}
 		.tab-item {
 			color: #666;
+			height: 100%;
 		}
 		.select-tab-item {
 			font-weight: bold;
@@ -119,9 +142,18 @@ export default {
 		}
 	}
 	.shop-list {
-		margin-top: 30rpx;
-		height: 2000rpx;
+		// margin-top: 30rpx;
+		// height: 2000rpx;
 		padding: 0 20rpx;
+		.com-shop-container {
+			border-bottom: 1rpx solid #eee;
+			padding: 30rpx 0;
+
+		}
+		.com-shop-container:last-child {
+			border-bottom: none;
+		}
 	}
+
 }
 </style>

@@ -1,26 +1,26 @@
 <template>
 	<view class="address-edit-container">
 		<div class="item flex-row flex-a-center">
-			<div class="title center">姓名</div>
+			<div class="title text-center">姓名</div>
 			<input class="flex-item" type="text" v-model="addressInfo.name">
 		</div>
 		<div class="item flex-row flex-a-center">
-			<div class="title center"></div>
+			<div class="title text-center"></div>
 			<div class="flex-row flex-a-center">
 				<div class="sex-item" :style="{'color': addressInfo.sex === 1 ? $mainColor : ''}" @click="changeSex(1)">男</div>
 				<div class="sex-item" :style="{'color': addressInfo.sex === 2 ? $mainColor : ''}" @click="changeSex(2)">女</div>
 			</div>
 		</div>
 		<div class="item flex-row flex-a-center">
-			<div class="title center">手机号</div>
+			<div class="title text-center">手机号</div>
 			<input class="flex-item" type="text" v-model="addressInfo.mobile">
 		</div>
 		<div class="item flex-row flex-a-center">
-			<div class="title center">地址</div>
+			<div class="title text-center">地址</div>
 			<div class="flex-item" @click="chooseAddress" :style="{color: addressInfo.address1 ? '' : '#999'}">{{addressInfo.address1 || '请选择地址'}}</div>
 		</div>
 		<div class="item flex-row flex-a-center">
-			<div class="title center">门牌号</div>
+			<div class="title text-center">门牌号</div>
 			<input type="text" v-model="addressInfo.address2">
 		</div>
 		<div class="flex-row flex-j-center">
@@ -41,7 +41,9 @@
 					sex: 1,
 					mobile: '',
 					address1: '',
-					address2: ''
+					address2: '',
+					latitude: '',
+					longitude: ''
 				},
 				addressID: ''
 			}
@@ -106,7 +108,12 @@
 				// #endif
 				uni.chooseLocation({
 					success: (res) => {
+						console.log('res');
+						console.log(res);
 						this.addressInfo.address1 = res.address
+						this.addressInfo.latitude = res.latitude
+						this.addressInfo.longitude = res.longitude
+						console.log(this.addressInfo);
 					},
 				})
 			},

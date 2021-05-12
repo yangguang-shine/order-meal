@@ -79,10 +79,10 @@ export default {
     font-size: 28rpx;
     color: #333;
     line-height: 1.1;
-	padding: 20rpx;
+	padding: 20rpx 0;
 	background-color: #fff;
-	margin-bottom: 10rpx;
-	border-radius: 20rpx;
+	// margin-bottom: 10rpx;
+	// border-radius: 12rpx;
     .shop-item {
         position: relative;
     }
@@ -130,7 +130,7 @@ export default {
         // padding: 2rpx 6rpx;
         position: relative;
 		// border-right: 1px solid rgb(255, 198, 193);
-		padding: 0 7rpx 0 6rpx;
+		padding: 0 9rpx 0 8rpx;
 		font-size: 20rpx;
     }
     .minus-item::after {
@@ -140,11 +140,11 @@ export default {
         top: 50%;
         transform: translateY(-50%);
         width: 1rpx;
-        height: 12rpx;
+        height: 18rpx;
         background-color: rgb(255, 198, 193);
     }
     .minus-item:last-child {
-		padding: 0 6rpx;
+		padding: 0 8rpx;
     }
     .minus-item:last-child::after{
         width: 0;
@@ -172,7 +172,7 @@ export default {
 	.arrow-right-icon {
 		position: absolute;
 		top: 50%;
-		right: 0rpx;
+		right: 20rpx;
 		transform: translateY(-50%);
 		width: 12rpx;
 		height: 22rpx;

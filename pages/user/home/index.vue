@@ -1,9 +1,9 @@
 <template>
     <view class="home-container">
-		<top-address-search :defaultAddress="defaultAddress" :topAddressWidthFlag="topAddressWidthFlag" @setTopAddressSearchHeight="setTopAddressSearchHeight"></top-address-search>
+		<top-address-search :defaultAddress="defaultAddress" :topAddressWidthFlag="topAddressWidthFlag" @setTopAddressSearchHeight="setTopAddressSearchHeight" @toSelectAddress="toSelectAddress"></top-address-search>
 		<tools-list></tools-list>
-		<recommand-shop-list :recommandShopList="recommandShopList" :tabListFixed="tabListFixed" :selectTabItemIndex="selectTabItemIndex" :topAddressSearchHeight="topAddressSearchHeight" @setTabListTopHeight="setTabListTopHeight" @changeTabItem="changeTabItem" @toOrder="toOrder"></recommand-shop-list>
-
+		<recommand-shop-list :recommandShopList="recommandShopList" :tabListFixed="tabListFixed" :selectTabItem="selectTabItem" :topAddressSearchHeight="topAddressSearchHeight" @setTabListTopHeight="setTabListTopHeight" @changeTabItem="changeTabItem" @toOrder="toOrder"></recommand-shop-list>
+		<loading v-if="showLoadingFlag"></loading>
     </view>
 </template>
 
@@ -15,7 +15,6 @@ import { mapMutations } from 'vuex';
 import TopAddressSearch from './components/TopAddressSearch.vue'
 import ToolsList from './components/ToolsList.vue'
 import RecommandShopList from './components/RecommandShopList.vue'
-
 const debounce = (() => {
     let timer = null;
     return (fn, delay) => {
@@ -42,10 +41,15 @@ export default {
 			topAddressWidthFlag: false,
 			recommandShopList: [],
 			tabListFixed: false,
-			selectTabItemIndex: 0,
+			selectTabItem: {
+				title: '综合排序',
+				type: 'comprehensive'
+			},
 			tabListTop: null,
 			tabListHeight: null,
-			topAddressSearchHeight: 0
+			topAddressSearchHeight: 0,
+			showLoadingFlag: true,
+			pageErrorFlag: false
         };
     },
 	onShow() {
@@ -73,34 +77,55 @@ export default {
     methods: {
         async init() {
             try {
-				this.$showLoading();
+				this.showLoadingFlag = true
 				await this.getDefaultAddress()
 				await this.getShopList()
             } catch (e) {
                 console.log(e);
+				this.pageErrorFlag = true
             } finally {
-                this.$hideLoading();
+				this.showLoadingFlag = false
             }
         },
 		async getDefaultAddress() {
-			    this.$showLoading()
 			    const res = await this.$fetch.get('/user/address/list', {})
 			    const addressList = res.data || []
 			    if (addressList.length) {
 			        this.defaultAddress = addressList[0]
 			    } else {
+					await this.$showModal({
+						content: '为提供更好服务，请先选择地址',
+						confirmText: '去选择地址'
+					})
+					this.toSelectAddress()
 					this.defaultAddress = {}
 				}
 				console.log(this.defaultAddress);
 		},
+		toSelectAddress() {
+			this.$myrouter.navigateTo({
+			    name: 'user/address/list',
+				query: {
+					fromPage: 'userHome'
+				}
+			});
+		},
 		async getShopList() {
-			const res = await this.$fetch.get('/user/shop/list', { businessType: 2 });
+			if(!this.defaultAddress.latitude || !this.defaultAddress.longitude) return;
+			const params = {
+				businessType: 2,
+				type: this.selectTabItem.type,
+				latitude: this.defaultAddress.latitude,
+				longitude: this.defaultAddress.longitude
+			}
+			const res = await this.$fetch.get('/user/shop/list', params);
 			const recommandShopList = res.data || [];
-			this.$showLoading();
 			recommandShopList.forEach(item => {
 			    item.minusList = getShopMinusList(item.minus || '');
 			});
-			this.recommandShopList = recommandShopList;
+			const remandShopList1 = recommandShopList.concat(recommandShopList);
+			const tmandShopList2 = remandShopList1.concat(remandShopList1);
+			this.recommandShopList = tmandShopList2.concat(tmandShopList2)
 		},
         setTabListTopHeight(top, height) {
 			this.tabListTop = top
@@ -114,13 +139,21 @@ export default {
 			console.log('this.topAddressSearchHeight');
 			console.log(this.topAddressSearchHeight);
 		},
-		changeTabItem(index) {
-			this.selectTabItemIndex = index;
-			uni.pageScrollTo({
-			    scrollTop: this.tabListTop - this.topAddressSearchHeight,
-			    duration: 100
-			});
-	
+		async changeTabItem(tabItem) {
+			try {
+				this.$showLoading()
+				await this.getShopList()
+				this.selectTabItem = tabItem;
+				uni.pageScrollTo({
+				    scrollTop: this.tabListTop - this.topAddressSearchHeight,
+				    duration: 100
+				});
+			} catch(e) {
+				console.log(e)
+			} finally {
+				this.$hideLoading()
+			}
+   
 		},
 		
 		toShopList(businessType) {

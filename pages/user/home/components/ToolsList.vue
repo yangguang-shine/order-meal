@@ -68,7 +68,7 @@ export default {
 		width: 710rpx;
 		margin: 20rpx auto 0;
 		background-color: #fff;
-		border-radius: 20rpx;
+		border-radius: 12rpx;
 		padding-bottom: 40rpx;
 		.tool-item {
 			padding-top: 40rpx;

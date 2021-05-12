@@ -108,6 +108,7 @@ export default {
 .order-info-container {
     margin-top: 20rpx;
     background-color: #fff;
+	border-radius: 12rpx;
     .shop-info {
         height: 100rpx;
         padding: 0 20rpx;

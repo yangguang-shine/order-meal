@@ -36,7 +36,8 @@ export default {
 	},
 	methods: {
 		toSelectAddress() {
-			console.log('toSelectAddress');
+			// console.log('toSelectAddress');
+			this.$emit('toSelectAddress')
 		},
 		toSearchShop() {
 			console.log('toSearchShop');

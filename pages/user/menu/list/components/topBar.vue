@@ -1,8 +1,8 @@
 <template>
     <view class="com-top-bar-container">
         <view class="top-bar-list flex-row ">
-            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': selectTopBarItem === '点餐' }" @click="changeTopBar('点餐')">点餐</view>
-            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': selectTopBarItem === '商家' }" @click="changeTopBar('商家')">商家</view>
+            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': selectTopBarItem === '点餐' }" @click="changeTopBar('点餐')" :style="{'color': selectTopBarItem === '点餐' ? $mainColor : ''}">点餐</view>
+            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': selectTopBarItem === '商家' }" :style="{'color': selectTopBarItem === '商家' ? $mainColor : ''}" @click="changeTopBar('商家')">商家</view>
             <div class="select-top-bar-bottom" :style="{ background: $mainColor, left: selectTopBarItem === '点餐' ? '25%' : '75%' }"></div>
         </view>
     </view>
@@ -40,6 +40,7 @@ export default {
         box-sizing: border-box;
         border-bottom: 1rpx solid #e4e4e4;
         background-color: #ffffff;
+        
     z-index: 200;
 
     }
