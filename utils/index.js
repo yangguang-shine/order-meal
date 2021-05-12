@@ -131,3 +131,19 @@ export const delaySync = (time) => {
         }, time);
     })
 }
+
+
+const formatTime = (unit) => {
+	const timeStr = `${unit}`
+	return timeStr.length === 1 ? `0${timeStr}` : timeStr
+}
+
+export const timeStampTranslate = (timeStame) => {
+	const orderDate = new Date(+timeStame);
+	const year = orderDate.getFullYear()
+	const month = orderDate.getMonth() + 1
+	const date = orderDate.getDate()
+	const hour = orderDate.getHours()
+	const minute = orderDate.getMinutes()
+	return `${year}-${formatTime(month)}-${formatTime(date)} ${formatTime(hour)}:${formatTime(minute)}`
+}

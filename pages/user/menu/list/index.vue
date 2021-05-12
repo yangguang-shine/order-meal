@@ -15,6 +15,7 @@
             <food-detail v-if="showFoodDetailFalg" :foodItem="selectFoodItem" @closeFoodDetail="closeFoodDetail" @addCount="addCount" @minusCount="minusCount"></food-detail>
         </view>
         <shop-info v-if="showShopInfo" ref="shopInfo" :selectTopBarItem="selectTopBarItem"></shop-info>
+		<loading v-if="showLoadingFlag"></loading>
     </view>
 </template>
 
@@ -89,6 +90,7 @@ export default {
             pageScrollTo: '点餐',
             showShopInfo: false,
             showFoodDetailFalg: false,
+			showLoadingFlag: true,
             selectFoodItem: {}
         };
     },
@@ -217,21 +219,21 @@ export default {
     onUnload() {
      
     },
-    async onLoad(query) {
-        try {
-            this.$showLoading();
-            this.shopInfo = uni.getStorageSync('shopInfo');
-            this.businessType = uni.getStorageSync('businessType');
-            const initPromise = this.init();
-            const getSystemRpxPromise = getSystemRpx();
-            await initPromise;
-            const systemInfo = await getSystemRpxPromise;
-            this.topBarHeightPX = (systemInfo.windowWidth / 750) * 2 * 40;
-        } catch (e) {
-            console.log(e);
-        } finally {
-            this.$hideLoading();
-        }
+    async onShow(query) {
+		try {
+			this.showLoadingFlag = true
+			this.shopInfo = uni.getStorageSync('shopInfo');
+			this.businessType = uni.getStorageSync('businessType');
+			const initPromise = this.init();
+			const getSystemRpxPromise = getSystemRpx();
+			await initPromise;
+			const systemInfo = await getSystemRpxPromise;
+			this.topBarHeightPX = (systemInfo.windowWidth / 750) * 2 * 40;
+		} catch(e) {
+			console.log(e)
+		} finally {
+			this.showLoadingFlag = false
+		}
     },
     methods: {
         showFoodDetail(foodItem) {

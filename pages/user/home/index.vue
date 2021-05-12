@@ -45,8 +45,8 @@ export default {
 				title: '综合排序',
 				type: 'comprehensive'
 			},
-			tabListTop: null,
-			tabListHeight: null,
+			tabListTop: 0,
+			tabListHeight: 0,
 			topAddressSearchHeight: 0,
 			showLoadingFlag: true,
 			pageErrorFlag: false
@@ -62,7 +62,7 @@ export default {
 	onPageScroll(e) {
 		console.log(e);
 		console.log(e.scrollTop > this.topAddressSearchHeight);
-		if (this.tabListTop === null) return;
+		if (this.tabListTop === 0) return;
 		if (e.scrollTop > this.topAddressSearchHeight) {
 			this.topAddressWidthFlag = true
 		} else {

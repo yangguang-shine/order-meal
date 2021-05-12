@@ -1,20 +1,14 @@
 <template>
     <div class="order-info-container">
-        <div class="shop-info flex-row flex-a-center">
-            <image class="shop-img"></image>
-            <div class="shop-name">{{shopInfo.shopName}}</div>
-            <div class="continue-order">继续点单</div>
+        <div class="shop-info flex-row flex-a-center flex-j-between">
+			<div class="flex-row flex-a-center">
+				<image class="shop-img"></image>
+				<div class="shop-name">{{shopInfo.shopName}}</div>
+			</div>
+            <div @click="continueOrder" class="continue-order flex-row flex-ja-center" :style="{'color': $mainColor}">继续点单</div>
         </div>
         <div class="food-list">
-            <div v-show="index < 3 || displayMoreFlag" class="food-item flex-row flex-a-center" v-for="(foodItem, index) in foodList" :key="foodItem.foodID">
-                <image class="food-img flex-shrink" :src="foodItem.imgUrl ? host + foodItem.imgUrl : '/static/img/default-img.svg'"></image>
-                <div class="food-info flex-col flex-j-between">
-                    <div class="food-name line1">嘻嘻嘻嘻</div>
-                    <div class="food-price"><span class="money-unit">¥</span>{{foodItem.price}}</div>
-                </div>
-                <div class="food-count">×{{foodItem.orderCount}}</div>
-                <div class="food-count-price"><span class="money-unit">¥</span>{{foodItem.foodItemAmount}}</div>
-            </div>
+			<order-food-item v-show="index < 3 || displayMoreFlag" v-for="(orderFoodItem, index) in foodList" :orderFoodItem="orderFoodItem" :key="index"></order-food-item>
         </div>
         <div v-if="foodList.length > 3" class="display-more flex-row flex-ja-center" @click="toggleDisplay">
             <div v-if="displayMoreFlag" class=" flex-row flex-ja-center" >
@@ -54,8 +48,11 @@
 
 <script>
 import { host } from '@/config/host';
-
+import OrderFoodItem from '@/components/OrderFoodItem.vue'
 export default {
+	components: {
+		OrderFoodItem,
+	},
     props: {
         shopInfo: {
             type: Object,
@@ -99,6 +96,9 @@ export default {
 	methods: {
 		toggleDisplay() {
 			this.displayMoreFlag = !this.displayMoreFlag
+		},
+		continueOrder() {
+			this.$emit('continueOrder')
 		}
 	} 
 }
@@ -112,59 +112,28 @@ export default {
     .shop-info {
         height: 100rpx;
         padding: 0 20rpx;
-        color: #666;
     }
     .shop-img {
         width: 40rpx;
         height: 40rpx;
         padding-right: 20rpx;
     }
-
+	.shop-name {
+		color: #333;
+		font-weight: bold;
+		font-size: 34rpx;
+	}
+	.continue-order {
+		// color: #666;
+		font-size: 28rpx;
+		margin-right: 20rpx;
+		width: 150rpx;
+		height: 50rpx;
+		border-radius: 8rpx;
+		border: 1rpx solid;
+	}
     .food-list {
         padding: 0 20rpx 20rpx;
-    }
-    .food-item {
-        padding: 20rpx;
-        margin-bottom: 10rpx;
-        background-color: #f8f8f8;
-    }
-
-    .food-img {
-        height: 110rpx;
-        width: 110rpx;
-        // border-radius: 8rpx;
-        margin-right: 20rpx;
-        background-color: red;
-    }
-    .food-info {
-        flex: 10;
-        font-size: 28rpx;
-        height: 110rpx;
-
-        // height: 90rpx;
-    }
-    .food-name {
-        max-width: 320rpx;
-        font-size: 28rpx;
-        line-height: 40rpx;
-        color: #333;
-    }
-    .food-price {
-        font-size: 24rpx;
-        color: #999;
-    }
-    .food-count {
-        flex: 2;
-        font-size: 28rpx;
-        line-height: 34rpx;
-        text-align: center;
-        color: #666;
-    }
-    .food-count-price {
-        flex: 3;
-        font-size: 28rpx;
-        text-align: right;
-        color: #333;
     }
     .display-more {
         margin: 0 auto 30rpx;

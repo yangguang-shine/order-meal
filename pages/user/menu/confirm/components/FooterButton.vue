@@ -4,7 +4,7 @@
             <div class="footer-box">
                 <div class="footer-discount-price"></div>
                 <div class="footer-pay-price"></div>
-                <div class="submit-order-button flex-row flex-ja-center" :style="{'background': $mainColor}">提交订单</div>
+                <div class="submit-order-button flex-row flex-ja-center" :style="{'background': $mainColor}" @click="submitOrder">提交订单</div>
             </div>
         </div>
         <div class="footer-block"></div>
@@ -13,7 +13,11 @@
 
 <script>
 export default {
-
+	methods: {
+		submitOrder() {
+			this.$emit('submitOrder')
+		}
+	}
 }
 </script>
 

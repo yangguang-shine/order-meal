@@ -9,19 +9,39 @@
                 <div class="flex-row">
                     <image class="shop-img" :src="orderItem.imgUrl ? host + orderItem.imgUrl : '/static/img/default-img.svg'" mode="scaleToFill"></image>
                     <div class="flex-item flex-col flex-j-between">
-                        <div class="flex-row felx-a-center">
-                            <div class="shop-name line1">{{orderItem.shopName}}</div>
-                            <div class="arrow-left">
-                                <div class="arrow-first"></div>
-                                <div class="arrow-second"></div>
-                            </div>
+                        <div class="flex-row flex-a-center flex-j-between">
+                            <!-- <div class="shop-name line1">{{orderItem.shopName}}</div> -->
+                            <view class="flex-row flex-a-center">
+                            	<div class="shop-name line1">洁柔</div>
+                            	<image class="arrow-left" src="/static/img/shop/arrow-right.png" mode=""></image>
+                            </view>
+							<div class="order-time">{{orderItem.orderTimeDetail}}</div>
                         </div>
-                        <div class="order-time">{{orderItem.orderTime}}</div>
+						<view class="flex-row flex-a-center flex-j-between">
+							<view class="minus-box flex-row">
+								<minus-list :minusList="orderItem.minusList"></minus-list>
+							</view>
+							<view class="order-status-box">
+								<text class="order-status-title">状态：</text>
+								<text class="order-status-info"  :style="{'color': $mainColor}">{{orderItem.orderTypeTitle}}</text>
+							</view>
+						</view>
                     </div>
                 </div>
-                <div class="price-info flex-row flex-j-between">
-                    <div class="order-again" :style="{'color': $mainColor}" @click.stop="orderAgain(orderItem)">再来一单</div>
-                    <div class="price-box"><span class="price-title">总计：</span><span class="moneu-unit">¥</span><span>{{orderItem.orderAmount}}</span></div>
+                <div class="price-info flex-row flex-j-between flex-a-center">
+                    <div class="order-again flex-row flex-ja-center" :style="{'color': $mainColor}" @click.stop="orderAgain(orderItem)">再来一单</div>
+                    <div class="price-box flex-row flex-a-end">
+						<view class="minus-info">
+							<text>已优惠：</text>
+							<span class="minus-money-unit">¥</span>
+							<span>{{orderItem.minusPrice}}</span>
+						</view>
+						<view class="pay-info">
+							<span class="pay-price-title">支付：</span>
+							<span class="pay-money-unit">¥</span>
+							<span>{{orderItem.orderAmount}}</span>
+						</view>
+					</div>
                 </div>
             </div>
         </view>
@@ -31,8 +51,13 @@
 <script>
 import { host } from '@/config/host'
 import getShopMinusList from '@/utils/getShopMinusList';
+import { timeStampTranslate } from '@/utils/index.js'
+import MinusList from '@/components/MinusList.vue'
 
 export default {
+	components: {
+		MinusList
+	},
     data() {
         return {
             tabIndex: 0,
@@ -40,30 +65,34 @@ export default {
             host
         }
     },
-    onShow() {
-        console.log(this.$router)
-        this.getOrderList()
+    async onShow() {
+		try {
+			this.$showLoading()
+			console.log(this.$router)
+			await this.getOrderList(this.tabIndex)
+		} catch (e) {
+			console.log(e)
+		} finally {
+			this.$hideLoading()
+		}
+		
+  
     },
     computed: {
     },
     methods: {
-        async getOrderList() {
-            try {
-                this.$showLoading()
-                this.$set(this.allOrderList, this.tabIndex, [])
-                const res = await this.$fetch.get('/user/order/orderList', {
-                    status: this.tabIndex
-                })
-                const orderList = (res.data || []).map((orderItem) => ({
-                    ...orderItem,
-                    orderTypeTitle: this.getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType)
-                }))
-                this.allOrderList[this.tabIndex].push(...orderList)
-            } catch (e) {
-                console.log(e)
-            } finally {
-                this.$hideLoading()
-            }
+        async getOrderList(index) {
+			const res = await this.$fetch.get('/user/order/orderList', {
+				status: index
+			})
+			const orderList = (res.data || []).map((orderItem) => ({
+				...orderItem,
+				minusList: getShopMinusList(orderItem.minus || ''),
+				orderTimeDetail: timeStampTranslate(orderItem.orderTime),
+				orderTypeTitle: this.getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType)
+            }))
+			this.$set(this.allOrderList, index, [])
+			this.allOrderList[index].push(...orderList)
         },
         getOrderTypeTitle(orderStatus, businessType) {
             if (orderStatus === 10) {
@@ -89,11 +118,18 @@ export default {
             }
             return ''
         },
-        changeTabIndex(index) {
-            if (index === this.tabIndex) return;
-            this.tabIndex = index;
-            // if (this.allOrderList[this.tabIndex].length) return;
-            this.getOrderList()
+        async changeTabIndex(index) {
+			if (index === this.tabIndex) return;
+			try {
+				this.$showLoading()
+				await this.getOrderList(index)
+				this.tabIndex = index;
+			} catch(e) {
+				console.log(e)
+			} finally {
+				this.$hideLoading()
+			}
+
         },
         toOrderDetail(orderItem) {
             this.$myrouter.navigateTo({
@@ -143,7 +179,7 @@ page {
     background-color: #f5f5f5;
 }
 .order-list-container {
-    font-size: 30rpx;
+    font-size: 28rpx;
     color: #333;
     line-height: 1;
     padding: 0 20rpx;
@@ -173,17 +209,18 @@ page {
         width: 100rpx;
     }
     .order-list-box {
-        padding-top: 110rpx;
+        padding-top: 120rpx;
+		padding-bottom: 40rpx;
     }
     .order-list-item {
         padding: 30rpx;
         background-color: #fff;
         border-radius: 16rpx;
-        margin-bottom: 10rpx;
+        margin-bottom: 20rpx;
     }
     .shop-img {
-        height: 80rpx;
-        width: 80rpx;
+        height: 120rpx;
+        width: 120rpx;
         margin-right: 20rpx;
         border-radius: 8rpx;
     }
@@ -191,15 +228,9 @@ page {
         font-size: 34rpx;
     }
     .arrow-left {
-        height: 34rpx;
-        width: 34rpx;
-        // height: 20rpx;
-        // width: 20rpx;
-        // border: 6rpx solid transparent;
-        // border-top: 6rpx solid #333;
-        // border-right: 6rpx solid #333;
-        // transform: rotate(45deg)
-        position: relative;
+		padding-left: 20rpx;
+		width: 12rpx;
+		height: 22rpx;
     }
     .arrow-first {
         position: absolute;
@@ -222,13 +253,24 @@ page {
         background-color: #333;
     }
     .order-time {
-        font-size: 24rpx;
+        font-size: 26rpx;
         color: #999;
     }
+	.order-status-title {
+		color: #999;
+	}
+	.order-status-info {
+		color: #666;
+	}
     .price-info {
-        margin-top: 30rpx;
+        margin-top: 20rpx;
     }
-    .price-box {
+	.minus-info {
+		margin-right: 30rpx;
+		font-size: 28rpx;
+		color: #999;
+	}
+    .pay-info {
         font-size: 34rpx;
         font-weight: bold;
     }
@@ -236,17 +278,15 @@ page {
         color: #666;
         font-weight: normal;
     }
-    .moneu-unit {
+    .money-unit {
         font-size: 26rpx;
         font-weight: bold;
     }
     .order-again {
-        height: 60rpx;
-        padding: 0 20rpx;
-        line-height: 60rpx;
-        text-align: center;
-        border: 2rpx solid;
-        border-radius: 10rpx;
+        height: 50rpx;
+		width: 150rpx;
+        border: 1rpx solid;
+        border-radius: 8rpx;
     }
 }
 </style>

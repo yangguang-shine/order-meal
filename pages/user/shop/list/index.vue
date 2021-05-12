@@ -8,12 +8,12 @@
 
 <script>
 import {host} from '@/config/host'
-import shop from '@/components/shop'
+import Shop from '@/components/Shop'
 import getShopMinusList from '@/utils/getShopMinusList';
 
 export default {
     components:{
-        shop
+        Shop
     },
     data() {
         return {

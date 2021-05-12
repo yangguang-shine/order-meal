@@ -7,11 +7,12 @@
                 <div class="shop-open-time">营业时间：{{shopItem.startTime}}--{{shopItem.endTime}}</div>
                 <div class="shop-address line1">店铺地址：{{shopItem.address}}</div>
                 <div class="flex-row">
-                    <view class="shop-minus-list flex-row">
+					<minus-list :minusList="shopItem.minusList"></minus-list>
+<!--                    <view class="shop-minus-list flex-row">
                         <view class="minus-item flex-shrink" v-for="(minusItem, index) in shopItem.minusList" :key="index">
                             {{minusItem.reach}}减{{minusItem.reduce}}
                         </view>
-                    </view>
+                    </view> -->
                 </div>
  
             </div>
@@ -25,8 +26,13 @@
 <script>
 import { mapMutations } from 'vuex'
 import { host } from '@/config/host'
+import MinusList from '@/components/MinusList.vue'
 
 export default {
+	components: {
+		MinusList
+	},
+	
     props: {
         shopItem: {
             type: Object,

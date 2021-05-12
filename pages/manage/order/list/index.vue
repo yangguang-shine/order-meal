@@ -52,7 +52,7 @@
 import getShopMinusList from '@/utils/getShopMinusList';
 import { mapMutations } from 'vuex';
 import {host} from '@/config/host';
-import shop from '@/components/shop';
+import Shop from '@/components/Shop';
 import SelectModal from '@/components/SelectModal.vue';
 export default {
 	data() {
@@ -66,7 +66,7 @@ export default {
 		};
 	},
 	components: {
-		shop,
+		Shop,
 		'select-modal': SelectModal
 	},
 	async onShow() {

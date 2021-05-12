@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import shop from '@/components/shop';
+import Shop from '@/components/Shop';
 import BottomButton from '@/components/BottomButton.vue';
 import getShopMinusList from '@/utils/getShopMinusList';
 import { mapState, mapMutations } from 'vuex';
@@ -33,7 +33,7 @@ import { vuexStorage } from '@/utils/tool.js';
 
 export default {
 	components: {
-		shop,
+		Shop,
 		'bottom-button': BottomButton
 	},
 	data() {

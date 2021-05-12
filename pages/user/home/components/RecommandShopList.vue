@@ -15,11 +15,11 @@
 
 <script>
 	
-import shop from '@/components/shop';
+import Shop from '@/components/Shop';
 	
 export default {
 	components:{
-		shop
+		Shop
 	},
 	props: {
 		recommandShopList: {
