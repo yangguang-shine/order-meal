@@ -3,7 +3,7 @@
 		<order-detail-header :orderDetail="orderDetail" @cancellOrder="cancellOrder" @orderAgain="orderAgain"></order-detail-header>
 		<order-food-info :orderDetail="orderDetail"></order-food-info>
 		<order-ext-info :orderDetail="orderDetail"></order-ext-info>
-		<loading v-if="showLoadingFlag"></loading>
+		<common-loading v-if="showLoadingFlag"></common-loading>
 	</div>
 </template>
 

@@ -1,6 +1,10 @@
 <template>
 	<div class="order-ext-info-container">
 		<div class="order-ext-title">订单信息</div>
+		<div v-if="orderDetail.noteText" class="info-item flex-row flex-a-center flex-j-between">
+			<div class="left-title">订单备注</div>
+			<div class="right-title">{{orderDetail.noteText}}</div>
+		</div>
 		<div class="info-item flex-row flex-a-center flex-j-between">
 			<div class="left-title">支付方式</div>
 			<div class="right-title">在线支付</div>

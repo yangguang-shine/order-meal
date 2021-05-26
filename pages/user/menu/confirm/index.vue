@@ -5,7 +5,7 @@
 		<other-info :noteText="noteText" @showNoteInput="showNoteInput"></other-info>
 		<footer-button @submitOrder="submitOrder"></footer-button>
 		<note-input :noteText="noteText" v-if="noteInputFlag" @hideNoteInput="hideNoteInput" @confirmNoteInput="confirmNoteInput"></note-input>
-		<loading v-if="showLoadingFlag"></loading>
+		<common-loading v-if="showLoadingFlag"></common-loading>
 	</div>
 </template>
 
@@ -42,7 +42,7 @@ export default {
 			showLoadingFlag: true
 		};
 	},
-	async onLoad() {
+	async onShow() {
 		try {
 			this.showLoadingFlag = true
 			this.getTakeOutTime();
@@ -148,7 +148,8 @@ export default {
 					businessType: this.businessType,
 					...query,
 					minusPrice: this.minusPrice,
-					originOrderAmount: this.originOrderAmount
+					originOrderAmount: this.originOrderAmount,
+					noteText: this.noteText
 				});
 				this.clearCart();
 				this.$myrouter.reLaunchTo({
@@ -183,10 +184,10 @@ export default {
 </script>
 
 <style lang="scss">
-page {
-	height: 100%;
-	width: 100%;
-}
+// page {
+// 	height: 100%;
+// 	width: 100%;
+// }
 .comfirm-order-container {
 	min-height: 100vh;
 	width: 100%;

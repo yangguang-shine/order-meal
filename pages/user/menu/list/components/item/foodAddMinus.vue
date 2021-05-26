@@ -55,7 +55,7 @@ export default {
 	watch: {
 		foodItem: {
 			 handler(newVal,oldVal){
-				 console.log('watch orderCoun')
+				//  console.log('watch orderCoun')
 				 if (newVal.orderCount === 1) {
 					this.showAddAnimate = true;
 				 } else if (newVal.orderCount === 0) {

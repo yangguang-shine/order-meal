@@ -6,8 +6,8 @@
                 <div class="confirm-button" @click="confirmNoteInput">完成</div>
             </div>
             <div class="textarea-box">
-                <textarea class="textarea" v-model="noteInput" id="" placeholder="特殊请输入备注" maxlength="10"></textarea>
-                <div class="letter-limit">{{noteInputLength}}/10</div>
+                <textarea class="textarea" v-model="noteInput" id="" placeholder="特殊请输入备注" :maxlength="maxlength"></textarea>
+                <div class="letter-limit">{{noteInputLength}}/{{maxlength}}</div>
             </div>
         </div>
     </div>
@@ -24,7 +24,8 @@ export default {
     data() {
         return {
             showComponents: false,
-            noteInput: ''
+            noteInput: '',
+			maxlength: 20
         }
     },
     computed: {

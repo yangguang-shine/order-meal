@@ -22,7 +22,7 @@ export default {
     // color: #eb5940;
     color: #fb4e44;
     // rgb(255, 74, 38)
-    border: 1rpx solid rgb(255, 198, 193);
+    border: 1rpx solid #fb4e44;
     padding: 6rpx 0;
     border-radius: 8rpx;
 
@@ -39,7 +39,7 @@ export default {
         transform: translateY(-50%);
         width: 1rpx;
         height: 18rpx;
-        background-color: rgb(255, 198, 193);
+        background-color: #fb4e44;
     }
     .minus-item:last-child {
         padding: 0 8rpx;

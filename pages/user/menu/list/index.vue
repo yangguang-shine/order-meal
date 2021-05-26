@@ -14,8 +14,8 @@
             <footer-cart-block></footer-cart-block>
             <food-detail v-if="showFoodDetailFalg" :foodItem="selectFoodItem" @closeFoodDetail="closeFoodDetail" @addCount="addCount" @minusCount="minusCount"></food-detail>
         </view>
-        <shop-info v-if="showShopInfo" ref="shopInfo" :selectTopBarItem="selectTopBarItem"></shop-info>
-		<loading v-if="showLoadingFlag"></loading>
+        <shop-info v-if="showShopInfo" ref="shopInfo" :shopInfo="shopInfo"></shop-info>
+		<common-loading v-if="showLoadingFlag"></common-loading>
     </view>
 </template>
 
@@ -291,6 +291,9 @@ export default {
             this.closeCartDetail()
         },
         async init() {
+			console.log('this.cartFoodList');
+			console.log(JSON.stringify((this.cartFoodList)));
+			console.log(this.cartFoodList);
             const { orderAgain, orderKey } = this.$root.$mp.query;
             const res = await this.$fetch.get('/user/order/menuList', {
                 shopID: this.shopInfo.shopID
@@ -314,6 +317,7 @@ export default {
             this.getStorageCart();
         },
         initCart({ foodCategoryList = [], storageFoodList = [] } = {}) {
+			this.cartFoodList = []
             storageFoodList.forEach(storageFoodItem => {
                 const foodCategoryFind = foodCategoryList.find(foodCategoryItem => foodCategoryItem.categoryID === storageFoodItem.categoryID);
                 if (foodCategoryFind) {

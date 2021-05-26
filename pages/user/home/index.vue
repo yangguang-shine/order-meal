@@ -3,7 +3,7 @@
 		<top-address-search :defaultAddress="defaultAddress" :topAddressWidthFlag="topAddressWidthFlag" @setTopAddressSearchHeight="setTopAddressSearchHeight" @toSelectAddress="toSelectAddress"></top-address-search>
 		<tools-list></tools-list>
 		<recommand-shop-list :recommandShopList="recommandShopList" :tabListFixed="tabListFixed" :selectTabItem="selectTabItem" :topAddressSearchHeight="topAddressSearchHeight" @setTabListTopHeight="setTabListTopHeight" @changeTabItem="changeTabItem" @toOrder="toOrder"></recommand-shop-list>
-		<loading v-if="showLoadingFlag"></loading>
+		<common-loading v-if="showLoadingFlag"></common-loading>
     </view>
 </template>
 
@@ -146,7 +146,7 @@ export default {
 				this.selectTabItem = tabItem;
 				uni.pageScrollTo({
 				    scrollTop: this.tabListTop - this.topAddressSearchHeight,
-				    duration: 100
+				    duration: 200
 				});
 			} catch(e) {
 				console.log(e)
