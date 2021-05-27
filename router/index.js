@@ -76,6 +76,14 @@ const manage = [
 		name: 'manage/shop/edit',
 		path: '/pages/manage/shop/edit/index'
 	},
+	{
+		name: 'animate/list',
+		path: '/pages/animate/list/index'
+	},
+	{
+		name: 'animate/item',
+		path: '/pages/animate/item/index'
+	},
 ]
 
 const role = [

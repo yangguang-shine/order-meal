@@ -181,7 +181,18 @@
 	    ,{
             "path" : "pages/manage/meituan/copy/index",
             "style" : {}
-        }
+        },
+		{
+			"path" : "pages/animate/list/index",
+			"style": {
+				"navigationBarTitleText": "动画列表"
+			}
+		}
+		,{
+		    "path" : "pages/animate/item/index",
+		    "style" : {}
+		}
+		
     ],
 	// "tabBar": {
 	// 	"color": "#7A7E83",

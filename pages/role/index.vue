@@ -4,7 +4,7 @@
             <view class="user" @click="toUserHome">用户操作</view>
             <view class="manage" @click="toManageHome">管理员操作</view>
         </view>
-        <view class="reptile">爬虫</view>
+        <view class="reptile" @click="toAnimate">动画</view>
         <view class="role-box flex-row flex-j-around">
             <view class="user" @click="toUserOderList">用户订单列表</view>
             <view class="manage" @click="toManageHome">管理员订单列表</view>
@@ -53,7 +53,11 @@ export default {
                 });
             }
         },
-
+		toAnimate() {
+			this.$myrouter.navigateTo({
+			    name: 'animate/list',
+			});
+		},
         toClearUserCookie() {
             this.$setStorage('userToken', null)
             this.$showToast({
@@ -62,6 +66,7 @@ export default {
 
             })
         },
+
 
         toClearManageCookie() {
             this.$setStorage('manageToken', null)
