@@ -30,7 +30,7 @@
 		components: {
 			'three-d-animate': ThreeDAnimate,
 			'tai-ji': TaiJi,
-			'heart-love': HeartLove
+			'heart-love': HeartLove,
 		}
 	}
 </script>

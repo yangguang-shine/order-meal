@@ -16,7 +16,7 @@
 			</div>
 		</div>
 		<div class="address-add" :style="{'background': $mainColor}" @click="toAddAddress">
-			增加地址
+			新增收获地址
 		</div>
 	</view>
 </template>

@@ -4,7 +4,6 @@
 			<view v-for="(animateItem, index) in animateList" class="animate-item flex-row flex-a-center flex-j-between" @click="toAnimateDetail(animateItem)">
 				<view class="animate-name">{{animateItem.name}}</view>
 				<image class="arrow-right" src="/static/img/animate-img/arrow-right.png" mode=""></image>
-				<!-- <view class="arrow-right"></view> -->
 			</view>
 		</view>
 	</view>

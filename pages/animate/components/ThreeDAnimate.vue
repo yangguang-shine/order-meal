@@ -50,7 +50,7 @@ export default {};
 		height: 100%;
 	}
 	.list1 {
-		top: 100rpx;
+		top: 200rpx;
 		margin-left: -200rpx;
 		// margin-top: -200rpx;
 		width: 400rpx;
@@ -76,32 +76,32 @@ export default {};
 
 		.item1 {
 			background-color: skyblue;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: translateZ(200rpx);
 		}
 		.item2 {
 			background-color: green;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateY(90deg) translateZ(200rpx);
 		}
 		.item3 {
 			background-color: YellowGreen ;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateY(180deg) translateZ(200rpx);
 		}
 		.item4 {
 			background-color: pink;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateY(270deg) translateZ(200rpx);
 		}
 		.item5 {
 			background-color: yellow;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateX(90deg) translateZ(200rpx);
 		}
 		.item6 {
 			background-color: orange;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateX(270deg) translateZ(200rpx);
 		}
 	}
@@ -109,7 +109,7 @@ export default {};
 	.list2 {
 		margin-left: -100rpx;
 		// margin-top: -100rpx;
-		top: 200rpx;
+		top: 300rpx;
 		width: 200rpx;
 		height: 200rpx;
 		animation: rotate1 10s linear infinite;
@@ -132,32 +132,32 @@ export default {};
 		}
 		.item1 {
 			background-color: skyblue;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: translateZ(100rpx);
 		}
 		.item2 {
 			background-color: green;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateY(90deg) translateZ(100rpx);
 		}
 		.item3 {
 			background-color: YellowGreen ;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateY(180deg) translateZ(100rpx);
 		}
 		.item4 {
 			background-color: pink;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateY(270deg) translateZ(100rpx);
 		}
 		.item5 {
 			background-color: yellow;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateX(90deg) translateZ(100rpx);
 		}
 		.item6 {
 			background-color: orange;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateX(270deg) translateZ(100rpx);
 		}
 	}
@@ -165,7 +165,7 @@ export default {};
 	.list3 {
 		margin-left: -150rpx;
 		// margin-top: -100rpx;
-		top: 700rpx;
+		top: 800rpx;
 		width: 300rpx;
 		height: 300rpx;
 		animation: rotate2 10s linear infinite;
@@ -179,32 +179,32 @@ export default {};
 		}
 		.item1 {
 			background-color: skyblue;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateY(60deg) translateZ(260rpx)
 		}
 		.item2 {
 			background-color: green;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateY(120deg) translateZ(260rpx)
 		}
 		.item3 {
 			background-color: YellowGreen ;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateY(180deg) translateZ(260rpx)
 		}
 		.item4 {
 			background-color: pink;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateY(240deg) translateZ(260rpx)
 		}
 		.item5 {
 			background-color: yellow;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateY(300deg) translateZ(260rpx)
 		}
 		.item6 {
 			background-color: orange;
-			opacity: 0.5;
+			opacity: 0.8;
 			transform: rotateY(360deg) translateZ(260rpx)
 		}
 	}
