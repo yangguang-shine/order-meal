@@ -33,7 +33,7 @@ export default {
                 const query = {
 					businessType: this.businessType
 				}
-                const res = await this.$fetch.get('/user/shop/list', query)
+                const res = await this.$fetch.post('/user/shop/list', query)
                 const shopList = res.data || [];
                 shopList.forEach((item) => {
                     item.minusList = getShopMinusList(item.minus || '')
@@ -91,7 +91,7 @@ export default {
 .shop-list-container {
     font-size: 28rpx;
     color: #333;
-    line-height: 1;
+    
     .shop-list {
         padding: 20rpx;
     }

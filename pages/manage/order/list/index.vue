@@ -86,7 +86,7 @@ export default {
 		}),
 		async getOrderList() {
 			this.$set(this.allOrderList, this.tabIndex, []);
-			const res = await this.$fetch.get('/manage/order/orderList', {
+			const res = await this.$fetch.post('/manage/order/orderList', {
 				status: this.tabIndex,
 				shopID: this.selectShopItem.shopID
 			});
@@ -121,7 +121,7 @@ export default {
 			return '';
 		},
 		async getShopList() {
-			const res = await this.$fetch.get('/manage/shop/list');
+			const res = await this.$fetch.post('/manage/shop/list');
 			const shopList = res.data || [];
 			this.shopList = shopList;
 			this.selectItemKey = 'shopName'
@@ -132,7 +132,7 @@ export default {
 				this.$myrouter.reLaunchTo({
 					name: 'login',
 					query: {
-						roleFlag: 'manage'
+						roleName: 'manage'
 					}
 				});
 			}
@@ -190,7 +190,7 @@ page {
 .order-list-container {
 	font-size: 30rpx;
 	color: #333;
-	line-height: 1;
+	
 	padding: 0 20rpx;
 	.tab-list-box {
 		position: fixed;

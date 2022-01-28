@@ -32,7 +32,7 @@ export default {
                 this.$myrouter.navigateTo({
                     name: 'login',
                     query: {
-                        roleFlag: 'user'
+                        roleName: 'user'
                     }
                 });
             }
@@ -48,7 +48,7 @@ export default {
                 this.$myrouter.navigateTo({
                     name: 'login',
                     query: {
-                        roleFlag: 'manage'
+                        roleName: 'manage'
                     }
                 });
             }
@@ -63,7 +63,6 @@ export default {
             this.$showToast({
                 title: '用户登录态注销成功',
                 icon: 'none'
-
             })
         },
 

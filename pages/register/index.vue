@@ -17,13 +17,13 @@
 				<div class="title">昵称</div>
 				<input class="input-item flex-item" type="text" v-model="nickname" max-length="50" placeholder="请输入昵称" />
 			</div>
-			<div v-if="roleFlag === 'user'" class="register-button" :style="{ 'background-color': $mainColor }" @click="userRegister">用户注册</div>
-			<div v-else-if="roleFlag === 'manage'" class="register-button" :style="{ 'background-color': $mainColor }" @click="manageRegister">管理员注册</div>
-			<div v-if="roleFlag === 'user'" class="to-login-box">
+			<div v-if="roleName === 'user'" class="register-button" :style="{ 'background-color': $mainColor }" @click="userRegister">用户注册</div>
+			<div v-else-if="roleName === 'manage'" class="register-button" :style="{ 'background-color': $mainColor }" @click="manageRegister">管理员注册</div>
+			<div v-if="roleName === 'user'" class="to-login-box">
 				有用户账号，
 				<span :style="{ color: $mainColor }" @click="toLoginPage">去登录</span>
 			</div>
-			<div v-else-if="roleFlag === 'manage'" class="to-login-box">
+			<div v-else-if="roleName === 'manage'" class="to-login-box">
 				有管理员账号，
 				<span :style="{ color: $mainColor }" @click="toLoginPage">去登录</span>
 			</div>
@@ -40,12 +40,12 @@ export default {
 			password: '',
 			confirmPassword: '',
 			nickname: '',
-			roleFlag: 'user'
+			roleName: 'user'
 		};
 	},
 	async onLoad(options) {
-		this.roleFlag = options.roleFlag;
-		if (this.roleFlag !== 'user' && this.roleFlag !== 'manage') {
+		this.roleName = options.roleName;
+		if (this.roleName !== 'user' && this.roleName !== 'manage') {
 			await this.$showModal({
 				content: '无法区分角色，请选择角色',
 				confirmText: '知道了'
@@ -60,7 +60,7 @@ export default {
 			this.$myrouter.reLaunchTo({
 				name: 'login',
 				query: {
-					roleFlag: this.roleFlag
+					roleName: this.roleName
 				}
 			});
 		},

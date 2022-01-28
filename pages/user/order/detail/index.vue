@@ -1,6 +1,6 @@
 <template>
 	<div class="order-detail-container">
-		<order-detail-header :orderDetail="orderDetail" @cancellOrder="cancellOrder" @orderAgain="orderAgain"></order-detail-header>
+		<order-detail-header :orderDetail="orderDetail" @cancelOrder="cancelOrder" @orderAgain="orderAgain"></order-detail-header>
 		<order-food-info :orderDetail="orderDetail"></order-food-info>
 		<order-ext-info :orderDetail="orderDetail"></order-ext-info>
 		<common-loading v-if="showLoadingFlag"></common-loading>
@@ -44,7 +44,7 @@ export default {
 	methods: {
 		async init() {
 			try {
-				const res = await this.$fetch.get('/user/order/orderDetail', { orderKey: this.orderKey });
+				const res = await this.$fetch.post('/user/order/orderDetail', { orderKey: this.orderKey });
 				const orderDetail = res.data || {};
 				(orderDetail.foodList || []).forEach(foodItem => {
 					foodItem.foodItemAmount = (foodItem.price * foodItem.orderCount).toFixed(2);
@@ -93,10 +93,10 @@ export default {
 				}
 			});
 		},
-		async cancellOrder() {
+		async cancelOrder() {
 			try {
 				this.$showLoading();
-				await this.$fetch.post('/user/order/cancell', { orderKey: this.orderKey, shopID: this.orderDetail.shopID });
+				await this.$fetch.post('/user/order/cancel', { orderKey: this.orderKey, shopID: this.orderDetail.shopID });
 				this.$showModal({
 					content: '取消订单成功'
 				});
@@ -109,7 +109,7 @@ export default {
 		},
 		async orderAgain() {
 			try {
-				const res = await this.$fetch.get('/user/shop/find', { shopID: this.orderDetail.shopID });
+				const res = await this.$fetch.post('/user/shop/find', { shopID: this.orderDetail.shopID });
 				const shopInfo = res.data || {};
 				this.saveShopInfo(shopInfo);
 				this.saveBusinessType(this.orderDetail.businessType);

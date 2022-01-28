@@ -80,7 +80,7 @@ export default {
 	computed: {},
 	methods: {
 		async getOrderList(index) {
-			const res = await this.$fetch.get('/user/order/orderList', {
+			const res = await this.$fetch.post('/user/order/orderList', {
 				status: index
 			});
 			const orderList = (res.data || []).map(orderItem => ({
@@ -145,7 +145,7 @@ export default {
 			try {
 				this.$showLoading();
 				console.log(orderItem.businessType);
-				const res = await this.$fetch.get('/user/shop/find', { shopID: orderItem.shopID });
+				const res = await this.$fetch.post('/user/shop/find', { shopID: orderItem.shopID });
 				const shopInfo = res.data || {};
 				this.saveShopInfo(shopInfo);
 				this.saveBusinessType(orderItem.businessType);
@@ -183,7 +183,7 @@ page {
 .order-list-container {
 	font-size: 28rpx;
 	color: #333;
-	line-height: 1;
+	
 	padding: 0 20rpx;
 	.tab-list-box {
 		position: fixed;

@@ -40,7 +40,7 @@ export default {
                     return
                 }
                 this.$showLoading()
-                const res = await this.$fetch.get('/api/entertainment/getAnswer', { question: this.question })
+                const res = await this.$fetch.post('/api/entertainment/getAnswer', { question: this.question })
                 this.$hideLoading()
                 const answer = res.data || {}
                 if (!answer.content) {

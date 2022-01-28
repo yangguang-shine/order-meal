@@ -92,7 +92,7 @@ const flyRequest = (url, params, options, method) => {
 				router.reLaunchTo({
 					name: 'login',
 					query: {
-						roleFlag: 'user'
+						roleName: 'user'
 					}
 				})
 				reject(res)
@@ -103,7 +103,7 @@ const flyRequest = (url, params, options, method) => {
 				router.reLaunchTo({
 					name: 'login',
 					query: {
-						roleFlag: 'manage'
+						roleName: 'manage'
 					}
 				})
 				reject(res)

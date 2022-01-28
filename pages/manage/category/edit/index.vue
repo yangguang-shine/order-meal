@@ -79,7 +79,7 @@ export default {
 .category-name-box {
     padding: 30rpx;
     font-size: 30;
-    line-height: 1;
+    
     .categpry-title, .categpry-info  {
         height: 50rpx;
         line-height: 50rpx;

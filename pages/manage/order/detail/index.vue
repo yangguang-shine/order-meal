@@ -15,13 +15,13 @@
 						<div>下一级状态：</div>
 						<div v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20 || orderDetail.orderStatus === 30" class="button-item" :style="{'color': $mainColor}" @click="toChangeOrderStatus">{{orderDetail.nextStatus}}</div>
 					</div>
-					<div class="button-item" :style="{'color': $mainColor}" @click="cancellOrder">取消订单</div>
+					<div class="button-item" :style="{'color': $mainColor}" @click="cancelOrder">取消订单</div>
 				</div>
 			</div>
 			<div v-else>
 				<div class="order-tip-title">感谢</div>
 				<div class="order-button-box flex-row" v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20 ">
-					<div class="button-item" :style="{'color': $mainColor}" @click="cancellOrder">取消订单</div>
+					<div class="button-item" :style="{'color': $mainColor}" @click="cancelOrder">取消订单</div>
 				</div>
 			</div>
 			
@@ -134,7 +134,7 @@ import {host} from '@/config/host'
 		},
 		methods: {
 			async init() {
-				const res = await this.$fetch.get('/manage/order/orderDetail', { orderKey: this.orderKey, shopID: this.selectShopItem.shopID })
+				const res = await this.$fetch.post('/manage/order/orderDetail', { orderKey: this.orderKey, shopID: this.selectShopItem.shopID })
 				const orderDetail = res.data || {};
 				(orderDetail.foodList || []).forEach((foodItem) => {
 					foodItem.totalPrice = (foodItem.price * foodItem.orderCount).toFixed(2)
@@ -212,10 +212,10 @@ import {host} from '@/config/host'
 					}
 				})
 			},
-			async cancellOrder() {
+			async cancelOrder() {
 				try {
 					this.$showLoading()
-					await this.$fetch.post('/manage/order/cancell', { orderKey: this.orderKey, shopID: this.selectShopItem.shopID })
+					await this.$fetch.post('/manage/order/cancel', { orderKey: this.orderKey, shopID: this.selectShopItem.shopID })
 					this.$hideLoading()
 					await this.$showModal({
 						content: '取消订单成功'

@@ -100,7 +100,7 @@ export default {
 	methods: {
 		async init() {
 			try {
-				const res = await this.$fetch.get('/user/address/list', {});
+				const res = await this.$fetch.post('/user/address/list', {});
 				const addressList = res.data || [];
 				if (addressList.length) {
 					this.defaultAddress = addressList[0];

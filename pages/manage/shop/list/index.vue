@@ -57,7 +57,7 @@ export default {
 		async init() {
 			try {
 				this.$showLoading();
-				const res = await this.$fetch.get('/manage/shop/list');
+				const res = await this.$fetch.post('/manage/shop/list');
 				const shopList = res.data || [];
 				shopList.forEach(item => {
 					item.minusList = getShopMinusList(item.minus || '');
@@ -164,7 +164,7 @@ export default {
 	
 .shop-list-container {
 	font-size: 28rpx;
-	line-height: 1;
+	
 	padding-bottom: 100rpx;
 	.shop-list {
 		padding: 10rpx 20rpx 0;

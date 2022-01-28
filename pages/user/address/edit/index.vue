@@ -58,7 +58,7 @@
 			async init() {
 				try {
 					this.$showLoading()
-					const res = await this.$fetch.get('/user/address/find', { addressID: this.addressID })
+					const res = await this.$fetch.post('/user/address/find', { addressID: this.addressID })
 					this.addressInfo = res.data || {}
 					this.$hideLoading()
 				} catch (e) {

@@ -124,7 +124,7 @@ export const hideToast = ({ title = '', icon = 'none', duration = 1500, mask = f
 }
 
 
-export const delaySync = (time) => {
+export const delaySync = (time = 1000) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve()
@@ -147,3 +147,19 @@ export const timeStampTranslate = (timeStame) => {
 	const minute = orderDate.getMinutes()
 	return `${year}-${formatTime(month)}-${formatTime(date)} ${formatTime(hour)}:${formatTime(minute)}`
 }
+
+
+/**
+ * 换算金额，接口返回的数值单位为（分）
+ * @param {*} num
+ */
+export function formatAmountNum(num) {
+    num = parseFloat(num) || 0;
+    num = (num / 100).toFixed(2);
+    num = num.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return num;
+}
+
+function format(number) {
+    return number && number.replace(/(?!^)(?=(\d{3})+\.)/g, ",");
+  }

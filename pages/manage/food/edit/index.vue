@@ -74,7 +74,7 @@ import { host, requestHost } from '@/config/host'
 				try {
 					this.$showLoading()
 					console.log(this.selectShopItem.shopID)
-					const res = await this.$fetch.get('/manage/food/find', { foodID: this.foodID, shopID: this.selectShopItem.shopID })
+					const res = await this.$fetch.post('/manage/food/find', { foodID: this.foodID, shopID: this.selectShopItem.shopID })
 					this.foodInfo = res.data || {}
 					this.$hideLoading()
 					console.log()
@@ -164,7 +164,7 @@ page {
 	min-height: 100%;
 	font-size: 32rpx;
     padding: 30rpx;
-    line-height: 1;
+    
     .edit-item {
         height: 50rpx;
         line-height: 50rpx;
@@ -173,7 +173,7 @@ page {
     }
     .input-name {
         height: 100%;
-        line-height: 1;
+        
     }
     .title {
         width: 180rpx;

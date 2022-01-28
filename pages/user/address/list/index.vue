@@ -40,7 +40,7 @@
 			async init() {
 				try {
 					this.$showLoading()
-					const res = await this.$fetch.get('/user/address/list')
+					const res = await this.$fetch.post('/user/address/list')
 					this.addressList = res.data || []
 					if (this.addressList.length) {
 						this.saveDefaultAddress(this.addressList[0])
@@ -57,6 +57,16 @@
 				uni.setStorageSync('defaultAddress', addressItem)
 			},
 			async toDeleteAddress(addressID) {
+				try {
+					await this.$showModal({
+						content: '确认删除改地址吗？',
+						showCancel: true,
+					})
+				} catch(e) {
+					console.log(e)
+					return
+				}
+				
 				try {
 					this.$showLoading()
 					await this.$fetch.post('/user/address/remove', { addressID })
@@ -182,7 +192,7 @@ page {
 		transform: rotate(45deg);
 		color: #fff;
 		font-size: 18rpx;
-		line-height: 1;
+		
 	}
 }
 </style>

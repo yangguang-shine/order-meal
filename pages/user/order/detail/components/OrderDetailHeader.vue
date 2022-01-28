@@ -9,7 +9,7 @@
 		</div>
 		<div class="order-tip-title">感谢您的支持</div>
 		<div class="order-button-box flex-row flex-a-center flex-j-between">
-			<div v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20" class="button-item flex-row flex-ja-center" :style="{ color: $mainColor }" @click="cancellOrder">取消订单</div>
+			<div v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20" class="button-item flex-row flex-ja-center" :style="{ color: $mainColor }" @click="cancelOrder">取消订单</div>
 			<div v-else></div>
 			<div class="button-item flex-row flex-ja-center" :style="{ color: $mainColor }" @click="orderAgain()">再来一单</div>
 		</div>
@@ -30,13 +30,13 @@ export default {
 		};
 	},
 	methods: {
-		async cancellOrder() {
+		async cancelOrder() {
 			try {
 				await this.$showModal({
 					content: '确认取消订单',
 					showCancel: true,
 				})
-				this.$emit('cancellOrder')
+				this.$emit('cancelOrder')
 			} catch(e) {
 				console.log(e)
 			}

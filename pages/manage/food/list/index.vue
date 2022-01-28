@@ -47,7 +47,7 @@ export default {
         async init() {
             try {
                 this.$showLoading();
-                const res = await this.$fetch.get('/manage/food/list', { categoryID: this.categoryID, shopID: this.selectShopItem.shopID });
+                const res = await this.$fetch.post('/manage/food/list', { categoryID: this.categoryID, shopID: this.selectShopItem.shopID });
                 this.foodList = res.data || [];
 				this.$hideLoading();
 				console.log(111)

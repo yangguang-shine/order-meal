@@ -26,7 +26,7 @@ export default {
 		'bottom-button': BottomButton
 	},
     onLoad(options) {
-		if  (!this.selectShopItem.shopID) {
+		if  (!this.selectShopItem.shopID) {
 			this.$showModal({
 				content: '缺少shopID'
 			})
@@ -39,7 +39,7 @@ export default {
         async init() {
             try {
                 this.$showLoading()
-                const res = await this.$fetch.get('manage/category/list', { shopID: this.selectShopItem.shopID })
+                const res = await this.$fetch.post('manage/category/list', { shopID: this.selectShopItem.shopID })
                 this.categoryList = res.data || [] 
                 this.$hideLoading()
                 if (this.categoryList.length === 0) {

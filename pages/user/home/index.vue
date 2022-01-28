@@ -88,7 +88,7 @@ export default {
             }
         },
 		async getDefaultAddress() {
-			    const res = await this.$fetch.get('/user/address/list', {})
+			    const res = await this.$fetch.post('/user/address/list', {})
 			    const addressList = res.data || []
 			    if (addressList.length) {
 			        this.defaultAddress = addressList[0]
@@ -118,7 +118,7 @@ export default {
 				latitude: this.defaultAddress.latitude,
 				longitude: this.defaultAddress.longitude
 			}
-			const res = await this.$fetch.get('/user/shop/list', params);
+			const res = await this.$fetch.post('/user/shop/list', params);
 			const recommandShopList = res.data || [];
 			recommandShopList.forEach(item => {
 			    item.minusList = getShopMinusList(item.minus || '');

@@ -9,13 +9,13 @@
 				<div class="title">密码</div>
 				<input class="input-item flex-item" type="text" v-model="password" max-length="50" placeholder="请输入密码" />
 			</div>
-			<div v-if="roleFlag === 'user'" class="submit-button" :style="{ 'background-color': $mainColor }" @click="userLogin">用户登录</div>
-			<div v-else-if="roleFlag === 'manage'" class="submit-button" :style="{ 'background-color': $mainColor }" @click="manageLogin">管理员登录</div>
-			<div v-if="roleFlag === 'user'" class="to-login-box">
+			<div v-if="roleName === 'user'" class="submit-button" :style="{ 'background-color': $mainColor }" @click="userLogin">用户登录</div>
+			<div v-else-if="roleName === 'manage'" class="submit-button" :style="{ 'background-color': $mainColor }" @click="manageLogin">管理员登录</div>
+			<div v-if="roleName === 'user'" class="to-login-box">
 				没有用户账号，
 				<span :style="{ color: $mainColor }" @click="toRegisterPage">去注册</span>
 			</div>
-			<div v-else-if="roleFlag === 'manage'" class="to-login-box">
+			<div v-else-if="roleName === 'manage'" class="to-login-box">
 				没有管理员账号，
 				<span :style="{ color: $mainColor }" @click="toRegisterPage">去注册</span>
 			</div>
@@ -29,12 +29,12 @@ export default {
 		return {
 			phone: '',
 			password: '',
-			roleFlag: 'user'
+			roleName: 'user'
 		};
 	},
 	async onLoad(options) {
-		this.roleFlag = options.roleFlag;
-		if (this.roleFlag !== 'user' && this.roleFlag !== 'manage') {
+		this.roleName = options.roleName;
+		if (this.roleName !== 'user' && this.roleName !== 'manage') {
 			await this.$showModal({
 				content: '无法区分角色，请选择角色',
 				confirmText: '知道了'
@@ -49,13 +49,12 @@ export default {
 			this.$myrouter.reLaunchTo({
 				name: 'register',
 				query: {
-					roleFlag: this.roleFlag
+					roleName: this.roleName
 				}
 			});
 		},
 		async userLogin() {
-			const testLegalFlag = this.testLegal()
-			if (!testLegalFlag) return
+			if (!this.checkLegal()) return
 			const params = {
 				phone: this.phone,
 				password: this.password
@@ -75,8 +74,7 @@ export default {
 			}
 		},
 		async manageLogin() {
-			const testLegalFlag = this.testLegal()
-			if (!testLegalFlag) return
+			if (!this.checkLegal()) return
 			const params = {
 				phone: this.phone,
 				password: this.password
@@ -95,7 +93,7 @@ export default {
 				this.$hideLoading()
 			}
 		},
-		testLegal() {
+		checkLegal() {
 			const phonereg = /^\d{11}$/;
 			const passwordreg = /^[a-zA-Z0-9]{8,30}$/;
 			if (!phonereg.test(this.phone)) {

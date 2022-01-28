@@ -23,15 +23,8 @@
 		<div class="flex-row">
 			<div class="title">业务类型：</div>
 			<div class="business-type-list">
-				<div
-					v-for="(businessTypeItem, index) in businessTypeList"
-					:key="index"
-					class=" flex-row flex-a-center business-type-item center"
-					@click="changeSelected(businessTypeItem)"
-				>
-					<div class="icon-box flex-row flex-ja-center" :style="{ color: businessTypeItem.selected ? $mainColor : '' }">
-						<icon class="icon-img" v-if="businessTypeItem.selected" type="success_no_circle" :color="$mainColor" size="20"></icon>
-					</div>
+				<div v-for="(businessTypeItem, index) in businessTypeList" :key="index" class=" flex-row flex-a-center business-type-item center" @click="changeSelected(businessTypeItem)">
+					<div class="icon-box flex-row flex-ja-center" :style="{ color: businessTypeItem.selected ? $mainColor : '' }"><icon class="icon-img" v-if="businessTypeItem.selected" type="success_no_circle" :color="$mainColor" size="20"></icon></div>
 					<div class="business-type-title">{{ businessTypeItem.title }}</div>
 				</div>
 			</div>
@@ -48,25 +41,9 @@
 					<div class="flex-row flex-a-center">
 						<div class="minus-item-title">第{{ index + 1 }}档:</div>
 						<div class="minus-reach-title">满</div>
-						<input
-							type="number"
-							class="center input-minus"
-							v-model="minusItem.reach"
-							:style="{ color: $mainColor }"
-							selection-start="-1"
-							selection-end="-1"
-							cursor="-1"
-						/>
+						<input type="number" class="center input-minus" v-model="minusItem.reach" :style="{ color: $mainColor }" selection-start="-1" selection-end="-1" cursor="-1" />
 						<div class="minus-reduce-title">减</div>
-						<input
-							type="number"
-							class="center input-minus"
-							v-model="minusItem.reduce"
-							:style="{ color: $mainColor }"
-							selection-start="-1"
-							selection-end="-1"
-							cursor="-1"
-						/>
+						<input type="number" class="center input-minus" v-model="minusItem.reduce" :style="{ color: $mainColor }" selection-start="-1" selection-end="-1" cursor="-1" />
 					</div>
 					<image class="delete-icon" src="/static/img/shop-delete.svg" @click.stop="deleteMinusItem(index)"></image>
 				</div>
@@ -81,7 +58,7 @@
 </template>
 
 <script>
-import {host, requestHost} from '@/config/host';
+import { host, requestHost } from '@/config/host';
 import getShopMinusList from '@/utils/getShopMinusList';
 export default {
 	data() {
@@ -94,7 +71,11 @@ export default {
 				endTime: '18:00',
 				minus: '',
 				addState: false,
-				businessTypes: ''
+				businessTypes: '',
+				description: '哈哈',
+				latitude: 100,
+				longitude: 100,
+				location: '嘻嘻'
 			},
 			businessTypeList: [
 				{
@@ -120,7 +101,7 @@ export default {
 		try {
 			this.$showLoading();
 			if (this.shopID) {
-				const res = await this.$fetch.get('/manage/shop/find', { shopID: this.shopID });
+				const res = await this.$fetch.post('/manage/shop/find', { shopID: this.shopID });
 				this.shopInfo = res.data || {};
 				this.minusList = getShopMinusList(this.shopInfo.minus || '');
 				if (this.shopInfo.businessTypes) {
@@ -141,7 +122,11 @@ export default {
 					endTime: '18:00',
 					minus: '',
 					addState: false,
-					businessTypes: ''
+					businessTypes: '',
+					description: '哈哈',
+					latitude: 100,
+					longitude: 100,
+					location: '嘻嘻'
 				};
 			}
 			this.$hideLoading();
@@ -277,8 +262,8 @@ export default {
 			uni.chooseImage({
 				count: 1,
 				success: res => {
-					console.log(111)
-					console.log(res)
+					console.log(111);
+					console.log(res);
 					const maxSize = 1024 * 2 ** 10;
 					const file = res.tempFiles[0];
 					const size = file.size;
@@ -289,8 +274,8 @@ export default {
 						});
 						return;
 					}
-					
-					console.log(res.tempFilePaths[0])
+
+					console.log(res.tempFilePaths[0]);
 					uni.uploadFile({
 						url: `${requestHost}/manage/uploadImg/shop`,
 						filePath: res.tempFilePaths[0],
@@ -316,7 +301,7 @@ export default {
 							});
 						},
 						fail(err) {
-							console.log(err)
+							console.log(err);
 						}
 					});
 				}
@@ -326,14 +311,14 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-	page {
-		height: 100%;
-		background-color: $color-bg-f5;
-	}
+page {
+	height: 100%;
+	background-color: $color-bg-f5;
+}
 .shop-edit-container {
 	font-size: 32rpx;
 	padding: 30rpx;
-	line-height: 1;
+	
 	input {
 		outline: none;
 		border: none;
@@ -350,7 +335,7 @@ export default {
 	}
 	.input-name {
 		height: 100%;
-		line-height: 1;
+		
 	}
 	.title {
 		width: 180rpx;
