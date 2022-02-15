@@ -3,10 +3,9 @@
         <top-bar :selectTopBarItem="selectTopBarItem" @changeTopBar="changeTopBar"></top-bar>
         <view class="menu-order-box flex-col" :class="selectTopBarItem === '点餐' ? 'show-menu-order-box' : 'hide-menu-order-box'">
             <view class="menu-list-box flex-item flex-row ">
-                <category-aside-bar :asideCategoryList="asideCategoryList" :selectCategoryTabId="selectCategoryTabId" @changeSelectCategoryTab="changeSelectCategoryTab"></category-aside-bar>
+                <categoryAsideBar :asideCategoryList="asideCategoryList" :selectCategoryTabId="selectCategoryTabId" @changeSelectCategoryTab="changeSelectCategoryTab"></categoryAsideBar>
                 <food-category-list :foodCategoryList="foodCategoryList" :scrollIntoCategoryID="scrollIntoCategoryID" @foodScrollHandle="foodScrollHandle" @addCount="addCount" @minusCount="minusCount" @showFoodDetail="showFoodDetail"></food-category-list>
             </view>
-
             <cart-detail ref='foodCardDetail' v-if="showCartDetail" :minusPromotionsObject="minusPromotionsObject" :cartFoodList="cartFoodList" @closeCartDetail="closeCartDetail" @cartClearCart="cartClearCart" @addCount="addCount" @minusCount="minusCount"></cart-detail>
             <minus-promotions :showShopInfo="showShopInfo" v-if="minusPromotionsObject.show" :minusPromotionsObject="minusPromotionsObject"></minus-promotions>
             <minus-promotions-block v-if="minusPromotionsObject.show"></minus-promotions-block>
@@ -15,7 +14,7 @@
             <food-detail v-if="showFoodDetailFalg" :foodItem="selectFoodItem" @closeFoodDetail="closeFoodDetail" @addCount="addCount" @minusCount="minusCount"></food-detail>
         </view>
         <shop-info v-if="showShopInfo" ref="shopInfo" :shopInfo="shopInfo"></shop-info>
-		<common-loading v-if="showLoadingFlag"></common-loading>
+		<!-- <common-loading v-if="showLoadingFlag"></common-loading> -->
     </view>
 </template>
 
@@ -221,7 +220,7 @@ export default {
     },
     async onShow(query) {
 		try {
-			this.showLoadingFlag = true
+            this.$showLoading()
 			this.shopInfo = uni.getStorageSync('shopInfo');
 			this.businessType = uni.getStorageSync('businessType');
 			const initPromise = this.init();
@@ -232,7 +231,8 @@ export default {
 		} catch(e) {
 			console.log(e)
 		} finally {
-			this.showLoadingFlag = false
+            this.$hideLoading()
+            
 		}
     },
     methods: {
@@ -266,6 +266,8 @@ export default {
             for (let i = 0; i < this.asideCategoryList.length; i++) {
                 const categoryItem = this.asideCategoryList[i];
                 const res = await this.selectQuery(`#${categoryItem.scrollTabID}id`);
+                console.log(`#${categoryItem.scrollTabID}id`)
+                console.log(res)
                 if (this.topBarHeightPX <= res.top || res.bottom > this.topBarHeightPX) {
                     this.selectCategoryTabId = categoryItem.scrollTabID;
                     this.scrollIntoCategoryID = null;

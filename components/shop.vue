@@ -1,7 +1,7 @@
 <template>
     <div class="com-shop-container">
         <div class="shop-item flex-row" @click="clickShopItem">
-            <image :src="shopItem.imgUrl ? host + shopItem.imgUrl : '/static/img/default-img.svg'" class="shop-img" mode="scaleToFill"></image>
+            <image :src="shopItem.fullImgUrl" class="shop-img" mode="scaleToFill"></image>
             <div class="shop-info-box flex-item flex-col flex-j-between">
                 <div class="shop-name line1">{{shopItem.shopName}}</div>
                 <div class="shop-open-time">营业时间：{{shopItem.startTime}}--{{shopItem.endTime}}</div>

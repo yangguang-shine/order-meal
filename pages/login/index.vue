@@ -54,7 +54,7 @@ export default {
 			});
 		},
 		async userLogin() {
-			if (!this.checkLegal()) return
+			if (!this.checkLegal()) return;
 			const params = {
 				phone: this.phone,
 				password: this.password
@@ -67,9 +67,9 @@ export default {
 				this.$myrouter.reLaunchTo({
 					name: 'user/home'
 				})
-				this.$hideLoading()
 			} catch(e) {
 				console.log(e)
+			} finally {
 				this.$hideLoading()
 			}
 		},
@@ -87,9 +87,9 @@ export default {
 				this.$myrouter.reLaunchTo({
 					name: 'manage/shop/list'
 				})
-				this.$hideLoading()
 			} catch(e) {
 				console.log(e)
+			} finally {
 				this.$hideLoading()
 			}
 		},

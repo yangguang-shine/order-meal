@@ -2,7 +2,7 @@
 	<view class="recommand-shop-list-container">
 		<view class="recommand-shop-title flex-row flex-ja-center">推荐商家</view>
 		<view class="tab-list-block">
-			<view id="tab-list-fixed-id" class="tab-list flex-row flex-a-center" :class="{ 'tab-list-fixed': tabListFixed }" :style="{ top: tabListFixed ? topAddressSearchHeight + 'px' : '' }">
+			<view id="tab-list-fixed-id" class="tab-list flex-row flex-a-center" :class="{ 'tab-list-fixed': tabListFixedFlag }" :style="{ top: tabListFixedFlag ? topAddressSearchHeight + 'px' : '' }">
 				<view v-for="(tabItem, index) in tabList" :key="index" class="tab-item flex-item flex-row flex-ja-center" :class="selectTabItem.type === tabItem.type ? 'select-tab-item' : ''" @click="changeTabItem(tabItem)">{{ tabItem.title }}</view>
 			</view>
 		</view>
@@ -26,7 +26,7 @@ export default {
 			type: Array,
 			default: () => []
 		},
-		tabListFixed: {
+		tabListFixedFlag: {
 			type: Boolean,
 			default: false
 		},

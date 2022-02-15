@@ -2,7 +2,7 @@
     <view class="food-list-container flex-col">
         <!-- <image class="logo" src="/static/logo.png"></image> -->
         <div v-for="(foodItem, index) in foodList" :key="index" class="food-item flex-row " @click="toEdit(foodItem.foodID)">
-            <image class="food-img" mode="scaleToFill" :src="foodItem.imgUrl ? host + foodItem.imgUrl : '/static/img/default-img.svg'"></image>
+            <image class="food-img" mode="scaleToFill" :src="foodItem.fullImgUrl"></image>
             <div class="food-info flex-item flex-col flex-j-between">
                 <div class="food-name-info flex-row flex-a-end">
                     <view class="line1 food-name">
@@ -20,7 +20,7 @@
     </view>
 </template>
 <script>
-import { host } from '@/config/host';
+import { host, foodImgPrePath } from '@/config/host';
 import BottomButton from '@/components/BottomButton.vue';
 export default {
     data() {
@@ -48,7 +48,11 @@ export default {
             try {
                 this.$showLoading();
                 const res = await this.$fetch.post('/manage/food/list', { categoryID: this.categoryID, shopID: this.selectShopItem.shopID });
-                this.foodList = res.data || [];
+                const foodList = (res.data || []);
+                foodList.forEach((item) => {
+					item.fullImgUrl = `${foodImgPrePath}/${item.imgUrl}`
+                });
+                this.foodList = foodList
 				this.$hideLoading();
 				console.log(111)
                 if (this.foodList.length === 0) {

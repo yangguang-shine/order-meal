@@ -40,7 +40,7 @@ export default {
 			password: '',
 			confirmPassword: '',
 			nickname: '',
-			roleName: 'user'
+			roleName: ''
 		};
 	},
 	async onLoad(options) {
@@ -65,7 +65,7 @@ export default {
 			});
 		},
 		async userRegister() {
-			if (!this.testRegisterLegal()) return;
+			if (!this.checkRegisterLegal()) return;
 			const params = {
 				phone: this.phone,
 				password: this.password,
@@ -86,7 +86,7 @@ export default {
 			}
 		},
 		async manageRegister() {
-			if (!this.testRegisterLegal()) return;
+			if (!this.checkRegisterLegal()) return;
 			const params = {
 				phone: this.phone,
 				password: this.password,
@@ -106,7 +106,7 @@ export default {
 				this.$hideLoading()
 			}
 		},
-		testRegisterLegal() {
+		checkRegisterLegal() {
 			const phonereg = /^\d{11}$/;
 			const passwordreg = /^[a-zA-Z0-9]{8,30}$/;
 			if (!phonereg.test(this.phone)) {

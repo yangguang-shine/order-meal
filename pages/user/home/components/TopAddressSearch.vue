@@ -12,31 +12,33 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
 	props: {
-		defaultAddress: {
-			type: Object,
-			default: () => {}
-		},
 		topAddressWidthFlag: {
 			type: Boolean,
 			default: false
 		}
 	},
+	computed: {
+		...mapState('user', [
+			'defaultAddress',
+		])
+	},
 	mounted() {
-		setTimeout(() => {
-			console.log(423141);
-			const query = uni.createSelectorQuery().in(this);
-			query.select('#top-address-search-container-id').boundingClientRect(res => {
-				console.log('111');
-				console.log(res);
-				this.$emit('setTopAddressSearchHeight', res.height)
-			}).exec();
-		}, 100)
+		// setTimeout(() => {
+		// 	console.log(423141);
+		// 	const query = uni.createSelectorQuery().in(this);
+		// 	query.select('#top-address-search-container-id').boundingClientRect(res => {
+		// 		console.log('111');
+		// 		console.log(res);
+		// 		this.$emit('setTopAddressSearchHeight', res.height)
+		// 	}).exec();
+		// }, 100)
 	},
 	methods: {
 		toSelectAddress() {
-			// console.log('toSelectAddress');
 			this.$emit('toSelectAddress')
 		},
 		toSearchShop() {

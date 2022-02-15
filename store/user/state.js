@@ -1,8 +1,8 @@
 const state = {
-	// user
+    // user
+    
     shopInfo: null,
     cartFoodList: [],
-    orderListUpdate: [true, true, true, true],
     defaultAddress: {},
     businessType: '',
     // #ifdef MP-WEIXIN

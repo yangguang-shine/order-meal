@@ -30,7 +30,7 @@ import BottomButton from '@/components/BottomButton.vue';
 import getShopMinusList from '@/utils/getShopMinusList';
 import { mapState, mapMutations } from 'vuex';
 import { vuexStorage } from '@/utils/tool.js';
-
+import { host, requestHost, shopImgPrePath } from '@/config/host';
 export default {
 	components: {
 		Shop,
@@ -61,6 +61,7 @@ export default {
 				const shopList = res.data || [];
 				shopList.forEach(item => {
 					item.minusList = getShopMinusList(item.minus || '');
+					item.fullImgUrl = `${shopImgPrePath}/${item.imgUrl}`
 				});
 				this.shopList = shopList;
 				this.$hideLoading();

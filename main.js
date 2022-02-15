@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import App from '@/App'
 import router from '@/utils/router.js'
 import fetch from '@/utils/fly.js'
@@ -20,6 +19,7 @@ import {
 import '@/style/flex.css'
 import '@/style/common.css'
 import BottomButton from '@/components/BottomButton.vue'
+import getShopMinusList from '@/utils/getShopMinusList';
 
 import {
 	mapState,
@@ -33,50 +33,47 @@ import VConsole from 'vconsole'
 new VConsole();
 
 
-Vue.component('common-error', CommonError)
-Vue.component('common-loading', CommonLoading)
-Vue.config.productionTip = false
-Vue.prototype.$myrouter = router
-Vue.prototype.$store = store
-Vue.prototype.$fetch = fetch
-Vue.prototype.$showModal = showModal
-Vue.prototype.$showLoading = showLoading
-Vue.prototype.$showToast = showToast
-Vue.prototype.$hideLoading = hideLoading
-Vue.prototype.$setStorage = setStorage
-Vue.prototype.$getStorage = getStorage
-Vue.prototype.$delaySync = delaySync
-
-delaySync
 
 // Vue.prototype.$data.$mainColor = '#47ff56'
 // Vue.prototype.$mainColor = '#47ff56'
-App.mpType = 'app'
 // const $mainColor = "#3190e8"
 // const $mainColor = "#00e067"
-const $mainColor = "#0096ff"
+import { createSSRApp } from 'vue'
+export function createApp() {
+	const app = createSSRApp(App)
+	app.config.globalProperties.$myrouter = router
+	app.config.globalProperties.$store = store
+	app.config.globalProperties.$fetch = fetch
+	app.config.globalProperties.$showModal = showModal
+	app.config.globalProperties.$showLoading = showLoading
+	app.config.globalProperties.$showToast = showToast
+	app.config.globalProperties.$hideLoading = hideLoading
+	app.config.globalProperties.$setStorage = setStorage
+	app.config.globalProperties.$getStorage = getStorage
+	app.config.globalProperties.$delaySync = delaySync
+	app.config.globalProperties.$getShopMinusList = getShopMinusList
+	app.component('common-error', CommonError)
+	app.component('common-loading', CommonLoading)
+	app.component('bottom-button', BottomButton)
+	const $mainColor = "#0096ff"
+	const $mainColor2 = "#58a3dd"
 
-
-const $mainColor2 = "#58a3dd"
-const app = new Vue({
-	...App,
-	store
-})
-
-
-
-Vue.component('bottom-button', BottomButton)
-Vue.mixin({ // 用得比较多且需要在模板里用可以放到这里，如果用jsx就没有这么多事
-	computed: { // 不能修改
-		$mainColor() {
-			return $mainColor
-		},
-		$mainColor2() {
-			return $mainColor2
-		},
-		...mapState({
-			selectShopItem: state => vuexStorage(state, 'selectShopItem') || {}
-		})
+	app.mixin({ // 用得比较多且需要在模板里用可以放到这里，如果用jsx就没有这么多事
+		computed: { // 不能修改
+			$mainColor() {
+				return $mainColor
+			},
+			$mainColor2() {
+				return $mainColor2
+			},
+			...mapState({
+				selectShopItem: state => vuexStorage(state, 'selectShopItem') || {}
+			})
+		}
+	});
+	app.use(store)
+	return {
+		app
 	}
-});
-app.$mount()
+}
+

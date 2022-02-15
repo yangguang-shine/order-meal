@@ -1,19 +1,19 @@
 <script>
-	export default {
-		onLaunch() {
-			// #ifdef MP-WEIXIN
-			// toLogin()
-			// #endif
-		},
-		onShow() {
-			console.log('App Show')
-		},
-		onHide() {
-			console.log('App Hide')
-		},
-	}
+export default {
+    onLaunch() {
+        // #ifdef MP-WEIXIN
+        // toLogin()
+        // #endif
+    },
+    onShow() {
+        console.log('App Show')
+    },
+    onHide() {
+        console.log('App Hide')
+    },
+}
 </script>
 
 <style>
-	/*每个页面公共css */
+/*每个页面公共css */
 </style>
