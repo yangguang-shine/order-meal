@@ -40,9 +40,8 @@ export default {
                     return
                 }
                 this.$showLoading()
-                const res = await this.$fetch.post('/api/entertainment/getAnswer', { question: this.question })
+                const answer = await this.$fetch('/api/entertainment/getAnswer', { question: this.question })
                 this.$hideLoading()
-                const answer = res.data || {}
                 if (!answer.content) {
                     this.$showModal({
                         content: '未找到答案'

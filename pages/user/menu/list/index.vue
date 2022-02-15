@@ -297,10 +297,9 @@ export default {
 			console.log(JSON.stringify((this.cartFoodList)));
 			console.log(this.cartFoodList);
             const { orderAgain, orderKey } = this.$root.$mp.query;
-            const res = await this.$fetch.post('/user/order/menuList', {
+            const foodCategoryList = await this.$fetch('/user/order/menuList', {
                 shopID: this.shopInfo.shopID
             });
-            const foodCategoryList = res.data || [];
             foodCategoryList.forEach((item, index) => {
                 item.scrollTabID = 'id' + item.categoryID;
             });
@@ -373,11 +372,11 @@ export default {
         },
         async getOrderFoodList(orderKey) {
             try {
-                const res = await this.$fetch.post('/user/order/foodList', {
+                const data = await this.$fetch('/user/order/foodList', {
                     orderKey,
                     shopID: this.shopInfo.shopID
                 });
-                const orderCategoryFoodList = res.data.reduce((list, item) => {
+                const orderCategoryFoodList = data.reduce((list, item) => {
                     if (!list.length) {
                         list.push({
                             categoryID: item.categoryID,

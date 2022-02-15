@@ -105,15 +105,15 @@ export default {
         async getMoreNewsList() {
             try {
                 this.$showLoading()
-                const res = await this.$fetch.post('/api/entertainment/newsList', {
+                const data = await this.$fetch('/api/entertainment/newsList', {
                     type: this.selectTabItem.type
                 })
-                if (!res.data.length) {
+                if (!data.length) {
                     this.$showModal({
                         content: '暂无新闻'
                     })
                 }
-                this.newsList.push(...res.data)
+                this.newsList.push(...data)
                 this.$hideLoading()
             } catch (e) {
                 this.$hideLoading()
@@ -123,10 +123,10 @@ export default {
         async getNewsList() {
             try {
                 this.$showLoading()
-                const res = await this.$fetch.post('/api/entertainment/newsList', {
+                const newsList = await this.$fetch('/api/entertainment/newsList', {
                     type: this.selectTabItem.type
                 })
-                this.newsList = res.data
+                this.newsList = newsList
                 this.$hideLoading()
             } catch (e) {
                 this.$hideLoading()

@@ -2,6 +2,55 @@ import router from '@/utils/router'
 import { requestHost } from '../config/host'
 import { showModal, showLoading, showToast, hideLoading, hideToast } from '@/utils'
 
+async function handleResponseData({ resolve, reject, responseData, options }) {
+	console.log('responseData')
+	console.log(responseData)
+	const code = responseData.code
+	const data = responseData.data || {}
+	const msg = responseData.msg
+	const handleCodeInfo = {
+		'000': async () => {
+			resolve(data)
+		},
+		'100': async () => {
+			await showModal({
+				content: msg
+			})
+			router.reLaunchTo({
+				name: 'login',
+				query: {
+					roleName: 'user'
+				}
+			})
+			reject(responseData)
+		},
+		'200': async () => {
+			await showModal({
+				content: msg
+			})
+			router.reLaunchTo({
+				name: 'login',
+				query: {
+					roleName: 'manage'
+				}
+			})
+			reject(responseData)
+		},
+		default: async () => {
+			await showModal({
+				content: msg
+			})
+			reject(responseData)
+		}
+	}
+	if (handleCodeInfo[code]) {
+		await handleCodeInfo[code]()
+	} else if (options.error) {
+		await handleCodeInfo.default()
+	} else {
+		reject(response)
+	}
+}
 const fetch = (url, data = {}, options = { error: true }) => {
 	return new Promise(async (resolve, reject) => {
 		try {
@@ -21,50 +70,18 @@ const fetch = (url, data = {}, options = { error: true }) => {
 			})
 			console.log('response')
 			console.log(response)
-			const code = response.code
-			if (code === '000') {
-				resolve(response)
-			} else if (code === '100') {
-				await showModal({
-					content: response.msg
+			const responseData = response.data
+			const statusCode = response.statusCode
+			if (200 <= +statusCode || +statusCode <= 300) {
+				await handleResponseData({
+					resolve, reject, responseData, options
 				})
-				router.reLaunchTo({
-					name: 'login',
-					query: {
-						roleName: 'user'
-					}
-				})
-				reject(response)
-			} else if (code === '200') {
-				await showModal({
-					content: response.msg
-				})
-				router.reLaunchTo({
-					name: 'login',
-					query: {
-						roleName: 'manage'
-					}
-				})
-				reject(response)
-			} else if (options.error) {
-				showModal({
-					content: response.msg
-				})
-				reject(response)
 			} else {
 				reject(response)
 			}
+
 		} catch (e) {
 			console.log(e)
-			console.log('请求失败')
-			console.log(err)
-			if (err.status === 404) {
-				uni.showToast({
-					title: '404未找到服务',
-					icon: 'none',
-				})
-				return null
-			}
 			uni.showToast({
 				title: '网络错误，请稍候再试',
 				icon: 'none',
@@ -72,6 +89,6 @@ const fetch = (url, data = {}, options = { error: true }) => {
 			reject(e)
 		}
 	})
-}  
+}
 
 export default fetch

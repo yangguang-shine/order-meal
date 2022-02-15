@@ -86,11 +86,11 @@ export default {
 		}),
 		async getOrderList() {
 			this.$set(this.allOrderList, this.tabIndex, []);
-			const res = await this.$fetch.post('/manage/order/orderList', {
+			const data = await this.$fetch('/manage/order/orderList', {
 				status: this.tabIndex,
 				shopID: this.selectShopItem.shopID
 			});
-			const orderList = (res.data || []).map(orderItem => ({
+			const orderList = (data || []).map(orderItem => ({
 				...orderItem,
 				orderTypeTitle: this.getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType)
 			}));
@@ -121,8 +121,7 @@ export default {
 			return '';
 		},
 		async getShopList() {
-			const res = await this.$fetch.post('/manage/shop/list');
-			const shopList = res.data || [];
+			const shopList = await this.$fetch('/manage/shop/list');
 			this.shopList = shopList;
 			this.selectItemKey = 'shopName'
 			if (!this.shopList.length) {

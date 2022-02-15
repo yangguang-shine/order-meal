@@ -100,8 +100,7 @@ export default {
 	methods: {
 		async init() {
 			try {
-				const res = await this.$fetch.post('/user/address/list', {});
-				const addressList = res.data || [];
+				const addressList = await this.$fetch('/user/address/list', {});
 				if (addressList.length) {
 					this.defaultAddress = addressList[0];
 				}
@@ -141,7 +140,7 @@ export default {
 					query.takeOutTime = this.takeOutTime;
 					query.address = JSON.stringify(this.defaultAddress);
 				}
-				const res = await this.$fetch.post('/user/order/submit', {
+				await this.$fetch('/user/order/submit', {
 					foodList,
 					shopID: this.shopInfo.shopID,
 					orderAmount: this.payPrice,

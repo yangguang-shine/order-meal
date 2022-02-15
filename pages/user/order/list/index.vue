@@ -80,10 +80,10 @@ export default {
 	computed: {},
 	methods: {
 		async getOrderList(index) {
-			const res = await this.$fetch.post('/user/order/orderList', {
+			const data = await this.$fetch('/user/order/orderList', {
 				status: index
 			});
-			const orderList = (res.data || []).map(orderItem => ({
+			const orderList = (data || []).map(orderItem => ({
 				...orderItem,
 				minusList: getShopMinusList(orderItem.minus || ''),
 				orderTimeDetail: timeStampTranslate(orderItem.orderTime),
@@ -145,8 +145,7 @@ export default {
 			try {
 				this.$showLoading();
 				console.log(orderItem.businessType);
-				const res = await this.$fetch.post('/user/shop/find', { shopID: orderItem.shopID });
-				const shopInfo = res.data || {};
+				const shopInfo = await this.$fetch('/user/shop/find', { shopID: orderItem.shopID });
 				this.saveShopInfo(shopInfo);
 				this.saveBusinessType(orderItem.businessType);
 				this.$myrouter.navigateTo({

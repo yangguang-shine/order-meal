@@ -47,8 +47,7 @@ export default {
         async init() {
             try {
                 this.$showLoading();
-                const res = await this.$fetch.post('/manage/food/list', { categoryID: this.categoryID, shopID: this.selectShopItem.shopID });
-                const foodList = (res.data || []);
+                const foodList = await this.$fetch('/manage/food/list', { categoryID: this.categoryID, shopID: this.selectShopItem.shopID });
                 foodList.forEach((item) => {
 					item.fullImgUrl = `${foodImgPrePath}/${item.imgUrl}`
                 });
@@ -89,7 +88,7 @@ export default {
             }
             try {
                 this.$showLoading();
-                const res = await this.$fetch.post('/manage/food/remove', { foodID, shopID: this.selectShopItem.shopID });
+                await this.$fetch('/manage/food/remove', { foodID, shopID: this.selectShopItem.shopID });
                 this.$hideLoading();
                 this.$showModal({
                     content: '删除成功'

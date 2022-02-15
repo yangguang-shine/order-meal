@@ -29,8 +29,8 @@ import {
 	vuexStorage
 } from '@/utils/tool.js';
 
-import VConsole from 'vconsole'
-new VConsole();
+// import VConsole from 'vconsole'
+// new VConsole();
 
 
 

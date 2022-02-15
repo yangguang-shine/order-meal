@@ -33,8 +33,7 @@ export default {
                 const query = {
 					businessType: this.businessType
 				}
-                const res = await this.$fetch.post('/user/shop/list', query)
-                const shopList = res.data || [];
+                const shopList = await this.$fetch('/user/shop/list', query)
                 shopList.forEach((item) => {
                     item.minusList = getShopMinusList(item.minus || '')
                 })

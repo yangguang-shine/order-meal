@@ -33,18 +33,17 @@ export default {
     },
     methods: {
         async getJokeList() {
-            const res = await this.$fetch.post('/api/entertainment/jokeList', { 
+            const jokeList = await this.$fetch('/api/entertainment/jokeList', { 
                 sort,
                 page: this.page, 
                 pagesize, sort, 
                 time: this.time 
             })
-            if (!res.data.length) {
+            if (!jokeList.length) {
                 this.$showModal({
                     content: '暂无笑话'
                 })
             }
-            const jokeList = res.data || []
             // jokeList.forEach((item) => {
             //     item.contentList = item.content.split('\r\n')
             // })
@@ -52,18 +51,17 @@ export default {
         },
         async getMoreJokeList() {
             this.page = this.page + 1
-            const res = await this.$fetch.post('/api/entertainment/jokeList', { 
+            const jokeList = await this.$fetch('/api/entertainment/jokeList', { 
                 sort,
                 page: this.page, 
                 pagesize, sort, 
                 time: this.time 
              })
-            if (!res.data.length) {
+            if (!jokeList.length) {
                 this.$showModal({
                     content: '暂无笑话'
                 })
             }
-            const jokeList = res.data || []
             // jokeList.forEach((item) => {
             //     item.contentList = item.content.split('\r\n')
             // })

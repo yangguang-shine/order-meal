@@ -5,7 +5,7 @@ const actions = {
 }
 actions['getAddressList'] = async ({commit}, params = {}) => {
     console.log(params)
-    const res = await fetch.post('/user/address/list', {})
-    return res.data || []
+    const addressList = await fetch('/user/address/list', {})
+    return addressList || []
 }
 export default actions

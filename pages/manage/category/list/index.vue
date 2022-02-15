@@ -39,8 +39,8 @@ export default {
         async init() {
             try {
                 this.$showLoading()
-                const res = await this.$fetch.post('manage/category/list', { shopID: this.selectShopItem.shopID })
-                this.categoryList = res.data || [] 
+                const categoryList = await this.$fetch('manage/category/list', { shopID: this.selectShopItem.shopID })
+                this.categoryList = categoryList || [] 
                 this.$hideLoading()
                 if (this.categoryList.length === 0) {
                     this.$showToast({
@@ -87,7 +87,7 @@ export default {
                 this.$showLoading({
                     title: '删除中'
                 })
-                const res = await this.$fetch.post('manage/category/remove', { shopID: this.selectShopItem.shopID, categoryID })
+                await this.$fetch('manage/category/remove', { shopID: this.selectShopItem.shopID, categoryID })
                 this.$hideLoading()
                 this.$showModal({
                     content: '删除成功'
