@@ -93,7 +93,7 @@ export default {
                         content: '缺少shopID'
                     })
                 }
-                await this.$fetch('/manage/shop/bulkImportFood', {
+                await this.$fetch('manage/shop/bulkImportFood', {
                     shopID: this.selectShopItem.shopID,
                     categoryList: this.categoryList
                 })
@@ -107,7 +107,7 @@ export default {
             }
         },
         async textImg() {
-            await this.$fetch('/manage/shop/img', {
+            await this.$fetch('manage/shop/img', {
             })
         }
     }

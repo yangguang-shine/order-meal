@@ -33,7 +33,7 @@ export default {
     },
     methods: {
         async getJokeList() {
-            const jokeList = await this.$fetch('/api/entertainment/jokeList', { 
+            const jokeList = await this.$fetch('api/entertainment/jokeList', { 
                 sort,
                 page: this.page, 
                 pagesize, sort, 
@@ -51,7 +51,7 @@ export default {
         },
         async getMoreJokeList() {
             this.page = this.page + 1
-            const jokeList = await this.$fetch('/api/entertainment/jokeList', { 
+            const jokeList = await this.$fetch('api/entertainment/jokeList', { 
                 sort,
                 page: this.page, 
                 pagesize, sort, 

@@ -134,7 +134,7 @@ import {host} from '@/config/host'
 		},
 		methods: {
 			async init() {
-				const orderDetail = await this.$fetch('/manage/order/orderDetail', { orderKey: this.orderKey, shopID: this.selectShopItem.shopID })
+				const orderDetail = await this.$fetch('manage/order/orderDetail', { orderKey: this.orderKey, shopID: this.selectShopItem.shopID })
 				(orderDetail.foodList || []).forEach((foodItem) => {
 					foodItem.totalPrice = (foodItem.price * foodItem.orderCount).toFixed(2)
 				})
@@ -188,7 +188,7 @@ import {host} from '@/config/host'
 			async toChangeOrderStatus() {
 				try {
 					this.$showLoading()
-					await this.$fetch('/manage/order/changeOrderStatus', { orderStatus: this.orderDetail.orderStatus, shopID: this.selectShopItem.shopID, orderKey: this.orderKey })
+					await this.$fetch('manage/order/changeOrderStatus', { orderStatus: this.orderDetail.orderStatus, shopID: this.selectShopItem.shopID, orderKey: this.orderKey })
 					this.$hideLoading()
 					await this.$showModal({
 						content: '订单状态修改成功'
@@ -214,7 +214,7 @@ import {host} from '@/config/host'
 			async cancelOrder() {
 				try {
 					this.$showLoading()
-					await this.$fetch('/manage/order/cancel', { orderKey: this.orderKey, shopID: this.selectShopItem.shopID })
+					await this.$fetch('manage/order/cancel', { orderKey: this.orderKey, shopID: this.selectShopItem.shopID })
 					this.$hideLoading()
 					await this.$showModal({
 						content: '取消订单成功'

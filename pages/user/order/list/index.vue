@@ -80,7 +80,7 @@ export default {
 	computed: {},
 	methods: {
 		async getOrderList(index) {
-			const data = await this.$fetch('/user/order/orderList', {
+			const data = await this.$fetch('user/order/orderList', {
 				status: index
 			});
 			const orderList = (data || []).map(orderItem => ({
@@ -145,7 +145,7 @@ export default {
 			try {
 				this.$showLoading();
 				console.log(orderItem.businessType);
-				const shopInfo = await this.$fetch('/user/shop/find', { shopID: orderItem.shopID });
+				const shopInfo = await this.$fetch('user/shop/find', { shopID: orderItem.shopID });
 				this.saveShopInfo(shopInfo);
 				this.saveBusinessType(orderItem.businessType);
 				this.$myrouter.navigateTo({

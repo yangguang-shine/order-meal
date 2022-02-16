@@ -105,7 +105,7 @@ export default {
         async getMoreNewsList() {
             try {
                 this.$showLoading()
-                const data = await this.$fetch('/api/entertainment/newsList', {
+                const data = await this.$fetch('api/entertainment/newsList', {
                     type: this.selectTabItem.type
                 })
                 if (!data.length) {
@@ -123,7 +123,7 @@ export default {
         async getNewsList() {
             try {
                 this.$showLoading()
-                const newsList = await this.$fetch('/api/entertainment/newsList', {
+                const newsList = await this.$fetch('api/entertainment/newsList', {
                     type: this.selectTabItem.type
                 })
                 this.newsList = newsList

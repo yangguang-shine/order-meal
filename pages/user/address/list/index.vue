@@ -40,7 +40,7 @@
 			async init() {
 				try {
 					this.$showLoading()
-					const addressList = await this.$fetch('/user/address/list')
+					const addressList = await this.$fetch('user/address/list')
 					this.addressList = addressList
 					if (this.addressList.length) {
 						this.saveDefaultAddress(this.addressList[0])
@@ -69,7 +69,7 @@
 				
 				try {
 					this.$showLoading()
-					await this.$fetch('/user/address/remove', { addressID })
+					await this.$fetch('user/address/remove', { addressID })
 					await this.$showModal({
 						content: '删除成功'
 					})
@@ -94,7 +94,7 @@
 				}
 				try {
 					this.$showLoading()
-					await this.$fetch('/user/address/setDefault', { addressID })
+					await this.$fetch('user/address/setDefault', { addressID })
 					await this.init()
 					if (this.fromPage) {
 						this.$myrouter.back()

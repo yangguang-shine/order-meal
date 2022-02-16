@@ -8,11 +8,13 @@ async function handleResponseData({ resolve, reject, responseData, options }) {
 	const code = responseData.code
 	const data = responseData.data || {}
 	const msg = responseData.msg
+
 	const handleCodeInfo = {
 		'000': async () => {
 			resolve(data)
 		},
 		'100': async () => {
+			hideLoading()
 			await showModal({
 				content: msg
 			})
@@ -25,6 +27,7 @@ async function handleResponseData({ resolve, reject, responseData, options }) {
 			reject(responseData)
 		},
 		'200': async () => {
+			hideLoading()
 			await showModal({
 				content: msg
 			})
@@ -37,6 +40,7 @@ async function handleResponseData({ resolve, reject, responseData, options }) {
 			reject(responseData)
 		},
 		default: async () => {
+			hideLoading()
 			await showModal({
 				content: msg
 			})
@@ -61,7 +65,7 @@ const fetch = (url, data = {}, options = { error: true }) => {
 			headers['cookie'] = `userToken=${userToken};manageToken=${manageToken}`;
 			// #endif
 			const response = await uni.request({
-				url: url.startsWith('http') ? url : `${requestHost}${url}`,
+				url: url.startsWith('http') ? url : `${requestHost}/${url}`,
 				data,
 				header,
 				method: 'POST',

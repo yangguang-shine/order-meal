@@ -1,4 +1,4 @@
-import fetch from '@/utils/fly.js'
+import fetch from '@/utils/fetch.js'
 
 const actions = {
 

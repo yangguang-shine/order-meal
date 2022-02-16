@@ -123,7 +123,7 @@ export default {
                 latitude: this.defaultAddress.latitude,
                 longitude: this.defaultAddress.longitude
             }
-            const recommandShopList = await this.$fetch('/user/shop/list', params);
+            const recommandShopList = await this.$fetch('user/shop/list', params);
             recommandShopList.forEach(item => {
                 item.minusList = this.$getShopMinusList(item.minus || '');
             });

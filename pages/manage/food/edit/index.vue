@@ -67,7 +67,7 @@ export default {
   },
   // async onUnload() {
   // 	if (!this.foodID && this.foodInfo.imgUrl && !this.addStatus) {
-  //     	await this.$fetch('/manage/uploadImg/remove', { imgUrl: this.foodInfo.imgUrl, deleteFood: true })
+  //     	await this.$fetch('manage/uploadImg/remove', { imgUrl: this.foodInfo.imgUrl, deleteFood: true })
   // 	}
   // },
   methods: {
@@ -75,7 +75,7 @@ export default {
       try {
         this.$showLoading()
         console.log(this.selectShopItem.shopID)
-        const foodInfo = await this.$fetch('/manage/food/find', { foodID: this.foodID, shopID: this.selectShopItem.shopID })
+        const foodInfo = await this.$fetch('manage/food/find', { foodID: this.foodID, shopID: this.selectShopItem.shopID })
         foodInfo.fullImgUrl = `${foodImgPrePath}/${foodInfo.imgUrl}`
         this.foodInfo = foodInfo
         this.$hideLoading()
@@ -88,7 +88,7 @@ export default {
     async addFood() {
       try {
         this.$showLoading()
-        await this.$fetch('/manage/food/add', { ...this.foodInfo, categoryID: this.categoryID, categoryName: this.categoryName, shopID: this.selectShopItem.shopID })
+        await this.$fetch('manage/food/add', { ...this.foodInfo, categoryID: this.categoryID, categoryName: this.categoryName, shopID: this.selectShopItem.shopID })
         this.addStatus = true
         this.$hideLoading()
         await this.$showModal({
@@ -103,7 +103,7 @@ export default {
     async editFood() {
       try {
         this.$showLoading()
-        await this.$fetch('/manage/food/edit', { ...this.foodInfo, shopID: this.selectShopItem.shopID })
+        await this.$fetch('manage/food/edit', { ...this.foodInfo, shopID: this.selectShopItem.shopID })
         this.$hideLoading()
         await this.$showModal({
           content: '修改成功'

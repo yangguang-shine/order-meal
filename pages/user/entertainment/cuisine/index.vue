@@ -21,7 +21,7 @@ export default {
     },
     methods: {
         async getCuisineList() {
-            await this.$fetch('/api/entertainment/cuisineList', { cuisineName: this.cuisineName, pageNum: this.pageNum})
+            await this.$fetch('api/entertainment/cuisineList', { cuisineName: this.cuisineName, pageNum: this.pageNum})
         }
     },
     onReachBottom() {

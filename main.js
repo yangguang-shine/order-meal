@@ -1,6 +1,6 @@
 import App from '@/App'
 import router from '@/utils/router.js'
-import fetch from '@/utils/fly.js'
+import fetch from '@/utils/fetch.js'
 import store from '@/store'
 import { delaySync } from '@/utils/index.js';
 import CommonError from '@/components/CommonError.vue'
@@ -29,15 +29,6 @@ import {
 	vuexStorage
 } from '@/utils/tool.js';
 
-// import VConsole from 'vconsole'
-// new VConsole();
-
-
-
-// Vue.prototype.$data.$mainColor = '#47ff56'
-// Vue.prototype.$mainColor = '#47ff56'
-// const $mainColor = "#3190e8"
-// const $mainColor = "#00e067"
 import { createSSRApp } from 'vue'
 export function createApp() {
 	const app = createSSRApp(App)

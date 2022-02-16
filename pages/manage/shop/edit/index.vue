@@ -103,7 +103,7 @@ export default {
     try {
       this.$showLoading();
       if (this.shopID) {
-        const shopInfo = await this.$fetch('/manage/shop/find', { shopID: this.shopID });
+        const shopInfo = await this.$fetch('manage/shop/find', { shopID: this.shopID });
         shopInfo.fullImgUrl = `${shopImgPrePath}/${shopInfo.imgUrl}`
         this.shopInfo = shopInfo
         this.minusList = getShopMinusList(this.shopInfo.minus || '');
@@ -144,7 +144,7 @@ export default {
   // async onUnload() {
   // 	console.log(!this.shopID && this.shopInfo.imgUrl && !this.addState);
   // 	if (!this.shopID && this.shopInfo.imgUrl && !this.addState) {
-  // 		await this.$fetch('/manage/uploadImg/remove', { imgUrl: this.shopInfo.imgUrl, deleteShop: true });
+  // 		await this.$fetch('manage/uploadImg/remove', { imgUrl: this.shopInfo.imgUrl, deleteShop: true });
   // 	}
   // 	this.shopID = '';
   // 	this.addState = false;
@@ -205,7 +205,7 @@ export default {
         this.$showLoading({
           title: '修改中'
         });
-        await this.$fetch('/manage/shop/edit', { ...this.shopInfo, shopID: this.shopID });
+        await this.$fetch('manage/shop/edit', { ...this.shopInfo, shopID: this.shopID });
         this.$hideLoading();
         await this.$showModal({
           content: '修改成功'
@@ -226,7 +226,7 @@ export default {
           title: '添加中'
         });
         console.log(this.shopInfo);
-        await this.$fetch('/manage/shop/add', { ...this.shopInfo });
+        await this.$fetch('manage/shop/add', { ...this.shopInfo });
         this.addState = true;
         this.$hideLoading();
         await this.$showModal({

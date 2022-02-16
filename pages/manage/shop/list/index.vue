@@ -57,7 +57,7 @@ export default {
 		async init() {
 			try {
 				this.$showLoading();
-				const shopList = await this.$fetch('/manage/shop/list');
+				const shopList = await this.$fetch('manage/shop/list');
 				shopList.forEach(item => {
 					item.minusList = getShopMinusList(item.minus || '');
 					item.fullImgUrl = `${shopImgPrePath}/${item.imgUrl}`
@@ -117,7 +117,7 @@ export default {
 				this.$showLoading({
 					title: '删除中'
 				});
-				await this.$fetch('/manage/shop/remove', { shopID: shopItem.shopID });
+				await this.$fetch('manage/shop/remove', { shopID: shopItem.shopID });
 				this.$hideLoading();
 				await this.$showModal({
 					content: '删除成功'

@@ -44,7 +44,7 @@ export default {
 	methods: {
 		async init() {
 			try {
-				const orderDetail = await this.$fetch('/user/order/orderDetail', { orderKey: this.orderKey });
+				const orderDetail = await this.$fetch('user/order/orderDetail', { orderKey: this.orderKey });
 				(orderDetail.foodList || []).forEach(foodItem => {
 					foodItem.foodItemAmount = (foodItem.price * foodItem.orderCount).toFixed(2);
 				});
@@ -95,7 +95,7 @@ export default {
 		async cancelOrder() {
 			try {
 				this.$showLoading();
-				await this.$fetch('/user/order/cancel', { orderKey: this.orderKey, shopID: this.orderDetail.shopID });
+				await this.$fetch('user/order/cancel', { orderKey: this.orderKey, shopID: this.orderDetail.shopID });
 				this.$showModal({
 					content: '取消订单成功'
 				});
@@ -108,7 +108,7 @@ export default {
 		},
 		async orderAgain() {
 			try {
-				const shopInfo = await this.$fetch('/user/shop/find', { shopID: this.orderDetail.shopID });
+				const shopInfo = await this.$fetch('user/shop/find', { shopID: this.orderDetail.shopID });
 				this.saveShopInfo(shopInfo);
 				this.saveBusinessType(this.orderDetail.businessType);
 				this.$myrouter.navigateTo({

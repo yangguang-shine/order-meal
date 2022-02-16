@@ -73,7 +73,7 @@ export default {
 			};
 			try {
 				this.$showLoading()
-				const data = await this.$fetch('/user/account/register', params)
+				const data = await this.$fetch('user/account/register', params)
 				this.$setStorage('userToken', data.userToken)
 				this.$myrouter.reLaunchTo({
 					name: 'user/home'
@@ -93,7 +93,7 @@ export default {
 			};
 			try {
 				this.$showLoading()
-				const data = await  this.$fetch('/manage/account/register', params)
+				const data = await  this.$fetch('manage/account/register', params)
 				this.$setStorage('manageToken', data.manageToken)
 				this.$myrouter.reLaunchTo({
 					name: 'manage/shop/list'

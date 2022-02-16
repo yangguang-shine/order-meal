@@ -40,7 +40,7 @@ export default {
                     return
                 }
                 this.$showLoading()
-                const answer = await this.$fetch('/api/entertainment/getAnswer', { question: this.question })
+                const answer = await this.$fetch('api/entertainment/getAnswer', { question: this.question })
                 this.$hideLoading()
                 if (!answer.content) {
                     this.$showModal({

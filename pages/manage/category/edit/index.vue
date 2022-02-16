@@ -33,7 +33,7 @@ export default {
         async editCategory() {
             try {
                 this.$showLoading()
-                await this.$fetch('/manage/category/edit', { categoryName: this.categoryName, categoryID: this.categoryID, shopID: this.selectShopItem.shopID })
+                await this.$fetch('manage/category/edit', { categoryName: this.categoryName, categoryID: this.categoryID, shopID: this.selectShopItem.shopID })
                 this.$hideLoading()
                 await this.$showModal({
                     content: '修改成功'
@@ -49,7 +49,7 @@ export default {
         },
         // async deleteCategory() {
         //     try {
-        //         await this.$fetch('/api/category/remove', { categoryID: this.categoryID, shopID: this.selectShopItem.shopID })
+        //         await this.$fetch('api/category/remove', { categoryID: this.categoryID, shopID: this.selectShopItem.shopID })
         //         this.$myrouter.back()
         //     } catch (e) {
         //         console.log(e)
@@ -58,7 +58,7 @@ export default {
         async addCategory() {
             try {
                 this.$showLoading()
-                await this.$fetch('/manage/category/add', { categoryName: this.categoryName, shopID: this.selectShopItem.shopID })
+                await this.$fetch('manage/category/add', { categoryName: this.categoryName, shopID: this.selectShopItem.shopID })
                 this.$hideLoading()
                 await this.$showModal({
                     content: '添加成功'

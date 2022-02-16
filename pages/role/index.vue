@@ -17,80 +17,93 @@
     </view>
 </template>
 
-<script>
-export default {
-    onLoad() { },
+<script lang="ts">
+import { defineComponent } from "vue";
+export default defineComponent({
+    onLoad() {},
     methods: {
-        toUserHome() {
-            const userToken = this.$getStorage('userToken');
+        toUserHome(): void {
+            const userToken: string = this.$getStorage("userToken");
             if (userToken) {
                 this.$myrouter.navigateTo({
-                    name: 'user/home',
+                    name: "user/home",
                     query: {}
                 });
             } else {
                 this.$myrouter.navigateTo({
-                    name: 'login',
+                    name: "login",
                     query: {
-                        roleName: 'user'
+                        roleName: "user"
                     }
                 });
             }
         },
 
-        toManageHome() {
-            const manageToken = this.$getStorage('manageToken');
+        toManageHome(): void {
+            const manageToken: string = this.$getStorage("manageToken");
             if (manageToken) {
                 this.$myrouter.navigateTo({
-                    name: 'manage/shop/list'
+                    name: "manage/shop/list"
                 });
             } else {
                 this.$myrouter.navigateTo({
-                    name: 'login',
+                    name: "login",
                     query: {
-                        roleName: 'manage'
+                        roleName: "manage"
                     }
                 });
             }
         },
-		toAnimate() {
-			this.$myrouter.navigateTo({
-			    name: 'animate/list',
-			});
-		},
-        toClearUserCookie() {
-            this.$setStorage('userToken', null)
+        toAnimate(): void {
+            this.$myrouter.navigateTo({
+                name: "animate/list"
+            });
+        },
+        async toClearUserCookie(): Promise<void> {
+            this.$setStorage("userToken", null);
+            try {
+                await this.$showModal({
+                    content: "确认清除登录状态吗",
+                    showCancel: true,
+                    confirmText: "确认清除"
+                });
+                this.$showLoading()
+                await this.$fetch('user/account/logout')
+            } catch (error) {
+                return
+            } finally {
+                this.$hideLoading()
+            }
             this.$showToast({
-                title: '用户登录态注销成功',
-                icon: 'none'
-            })
+                title: "用户登录态注销成功",
+                icon: "none"
+            });
         },
 
-
-        toClearManageCookie() {
-            this.$setStorage('manageToken', null)
+        toClearManageCookie(): void {
+            this.$setStorage("manageToken", null);
             this.$showToast({
-                title: '管理员登录态注销成功',
-                icon: 'none'
-            })
+                title: "管理员登录态注销成功",
+                icon: "none"
+            });
         },
 
-        toUserOderList() {
+        toUserOderList(): void {
             // this.$myrouter.navigateTo({
             //     name: 'user/order/list'
             // });
-			this.$myrouter.navigateTo({
-			    name: 'user/order/list'
-			});
-        },
-
-        toManageOderList() {
-            this.$myrouter.reLaunchTo({
-                name: 'manage/order/list'
+            this.$myrouter.navigateTo({
+                name: "user/order/list"
             });
         },
+
+        toManageOderList(): void {
+            this.$myrouter.reLaunchTo({
+                name: "manage/order/list"
+            });
+        }
     }
-};
+});
 </script>
 
 <style lang="scss" scoped>
@@ -99,7 +112,7 @@ export default {
     .role-box {
         box-sizing: border-box;
         width: 100%;
-		padding: 40rpx;
+        padding: 40rpx;
     }
     .reptile {
         box-sizing: border-box;
