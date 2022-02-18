@@ -1,8 +1,8 @@
-import App from '@/App'
-import router from '@/utils/router.js'
-import fetch from '@/utils/fetch.js'
-import store from '@/store'
-import { delaySync } from '@/utils/index.js';
+import App from './App'
+import router from './utils/router'
+import fetch from './utils/fetch'
+import store from './store'
+import { delaySync } from '@/utils/index';
 import CommonError from '@/components/CommonError.vue'
 import CommonLoading from '@/components/CommonLoading.vue'
 import {
@@ -15,19 +15,11 @@ import {
 import {
 	setStorage,
 	getStorage
-} from '@/utils/tool.js'
+} from '@/utils/tool'
 import '@/style/flex.css'
 import '@/style/common.css'
 import BottomButton from '@/components/BottomButton.vue'
 import getShopMinusList from '@/utils/getShopMinusList';
-
-import {
-	mapState,
-	mapMutations
-} from 'vuex'
-import {
-	vuexStorage
-} from '@/utils/tool.js';
 
 import { createSSRApp } from 'vue'
 export function createApp() {
@@ -57,9 +49,9 @@ export function createApp() {
 			$mainColor2() {
 				return $mainColor2
 			},
-			...mapState({
-				selectShopItem: state => vuexStorage(state, 'selectShopItem') || {}
-			})
+			// ...mapState({
+			// 	selectShopItem: state => vuexStorage(state, 'selectShopItem') || {}
+			// })
 		}
 	});
 	app.use(store)

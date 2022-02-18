@@ -70,6 +70,8 @@ export default {
 		background-color: #fff;
 		border-radius: 12rpx;
 		padding-bottom: 40rpx;
+		font-size: 28rpx;
+		line-height: 1.2;
 		.tool-item {
 			padding-top: 40rpx;
 			width: 177rpx;

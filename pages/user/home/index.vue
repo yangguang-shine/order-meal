@@ -1,164 +1,208 @@
 <template>
     <view class="home-container">
-        <top-address-search  :topAddressWidthFlag="topAddressWidthFlag"  @toSelectAddress="toSelectAddress"></top-address-search>
-        <tools-list></tools-list>
-        <recommand-shop-list :recommandShopList="recommandShopList" :tabListFixedFlag="tabListFixedFlag" :selectTabItem="selectTabItem" :topAddressSearchHeight="topAddressSearchHeight" @setTabListTopHeight="setTabListTopHeight" @changeTabItem="changeTabItem" @toOrder="toOrder"></recommand-shop-list>
+        <TopAddressSearch></TopAddressSearch>
+        <ToolsList></ToolsList>
+        <RecommandInfo></RecommandInfo>
+        <ToolsList></ToolsList>
+        <ToolsList></ToolsList>
+
+        <ToolsList></ToolsList>
+        <ToolsList></ToolsList>
+        <ToolsList></ToolsList>
+
+        <ToolsList></ToolsList>
+
+
+
+
+
         <!-- <common-loading v-if="showLoadingFlag"></common-loading> -->
     </view>
 </template>
 
-<script>
+<script lang="ts">
 // import { host } from '@/config/host';
-import getShopMinusList from '@/utils/getShopMinusList';
+import getShopMinusList from "../../../utils/getShopMinusList";
 // import SelectModal from '@/components/SelectModal.vue';
-import { mapState, mapMutations, mapActions } from 'vuex';
-import TopAddressSearch from './components/TopAddressSearch.vue'
-import ToolsList from './components/ToolsList.vue'
-import RecommandShopList from './components/RecommandShopList.vue'
-const topAddressSearchHeight = uni.upx2px(100)
-const tabListTop = uni.upx2px(318*2)
-console.log('tabListTop')
-console.log(tabListTop)
-const debounce = (() => {
-    let timer = null;
-    return (fn, delay) => {
-        if (timer) {
-            clearTimeout(timer);
-        }
-        timer = setTimeout(() => {
-            fn();
-        }, delay);
-    };
-})();
+import { mapState, mapMutations, mapActions } from "../../../utils/mapVuex";
+import TopAddressSearch from "./components/TopAddressSearch.vue";
+import ToolsList from "./components/ToolsList.vue";
+import RecommandInfo from "./components/RecommandInfo.vue";
+import { topAddressSearchHeight, tabListTop } from "./homeConfig";
+import { defineComponent, getCurrentInstance, onShow } from "vue";
+interface Istate {
+    topAddressWidthFlag: boolean;
+    tabListFixedFlag: boolean;
+    addressList: any[];
+}
+interface IMutations {
+    setTopAddressWidthFlag: any;
+    setTabListFixedFlag: any;
+    setDefaultAddress: any;
+    toSelectAddress: any;
+}
+interface IActions {
+    getAddressList: () => any;
+    getRecommandShopList: () => any;
+}
 
-export default {
+export default defineComponent({
     components: {
         // 'select-modal': SelectModal,
         TopAddressSearch,
         ToolsList,
-        RecommandShopList
+        RecommandInfo
     },
-    computed: {
-        ...mapState('user', ['defaultAddress'])
-    },
-    data() {
+    setup() {
+        const internalInstance = getCurrentInstance()
+        const { $showLoading, $hideLoading, $showModal } = internalInstance.proxy
+        const {
+            setTopAddressWidthFlag,
+            setTabListFixedFlag,
+            setDefaultAddress,
+            setRecommandShopList,
+            toSelectAddress
+        } = mapMutations("user", [
+            "setTopAddressWidthFlag",
+            "setTabListFixedFlag",
+            "setDefaultAddress",
+            "setRecommandShopList",
+            "toSelectAddress"
+        ]);
+
+        const { getAddressList, getRecommandShopList } = mapActions("user", [
+            "getAddressList",
+            "getRecommandShopList"
+        ]);
+        const {
+            topAddressWidthFlag,
+            tabListFixedFlag,
+            addressList
+        } = mapState("user", [
+            "topAddressWidthFlag",
+            "tabListFixedFlag",
+            "addressList"
+        ]);
+        // console.log(JSON.stringify(addressList.value))
+     
+
+        async function getDefaultAddress() {
+            await getAddressList();
+            if (addressList.value.length) {
+                setDefaultAddress(addressList.value[0]);
+            } else {
+                await $showModal({
+                    content: "为提供更好服务，请先选择地址",
+                    confirmText: "去选择地址"
+                });
+                toSelectAddress();
+            }
+        }
+        async function init() {
+            try {
+                $showLoading();
+                await getDefaultAddress();
+                await getRecommandShopList();
+            } catch (e) {
+                console.log(e);
+            } finally {
+                $hideLoading();
+            }
+        };
         return {
-            nearShopList: [],
-            topAddressWidthFlag: false,
-            recommandShopList: [],
-            tabListFixedFlag: false,
-            selectTabItem: {
-                title: '综合排序',
-                type: 'comprehensive'
-            },
-            tabListTop: 0,
-            tabListHeight: 0,
-            topAddressSearchHeight,
-            showLoadingFlag: true,
-            pageErrorFlag: false
+            init,
+            setTopAddressWidthFlag,
+            setTabListFixedFlag,
+            topAddressWidthFlag,
+            tabListFixedFlag
         };
     },
     onShow() {
+        console.log(this);
         uni.pageScrollTo({
             scrollTop: 0,
             duration: 0
-        })
+        });
         this.init();
     },
     onPageScroll(e) {
-        console.log(e);
-        console.log(e.scrollTop > this.topAddressSearchHeight);
-        if (this.tabListTop === 0) return;
-        if (e.scrollTop > this.topAddressSearchHeight) {
-            this.topAddressWidthFlag = true
+        if (e.scrollTop > topAddressSearchHeight) {
+            this.setTopAddressWidthFlag(true);
         } else {
-            this.topAddressWidthFlag = false
+            this.setTopAddressWidthFlag(false);
         }
-        if (e.scrollTop >= this.tabListTop - this.topAddressSearchHeight) {
-            this.tabListFixedFlag = true
+        if (e.scrollTop >= tabListTop - topAddressSearchHeight) {
+            this.setTabListFixedFlag(true);
         } else {
-            this.tabListFixedFlag = false
+            this.setTabListFixedFlag(false);
         }
     },
     methods: {
-        ...mapActions('user', ['getAddressList']),
-        ...mapMutations('user', ['setDefaultAddress']),
-        async init() {
-            try {
-                this.$showLoading()
-                await this.getDefaultAddress()
-                await this.getShopList()
-            } catch (e) {
-                console.log(e);
-                this.pageErrorFlag = true
-            } finally {
-                this.$hideLoading()
-            }
-        },
-        async getDefaultAddress() {
-            const addressList = await this.getAddressList()
-            if (addressList.length) {
-                this.setDefaultAddress(addressList[0])
-            } else {
-                await this.$showModal({
-                    content: '为提供更好服务，请先选择地址',
-                    confirmText: '去选择地址'
-                })
-                this.toSelectAddress()
-            }
-        },
-        toSelectAddress() {
-            this.$myrouter.navigateTo({
-                name: 'user/address/list',
-                query: {
-                    fromPage: 'userHome'
-                }
-            });
-        },
-        async getShopList() {
-            if (!this.defaultAddress.latitude || !this.defaultAddress.longitude) return;
-            const params = {
-                businessType: 2,
-                type: this.selectTabItem.type,
-                latitude: this.defaultAddress.latitude,
-                longitude: this.defaultAddress.longitude
-            }
-            const recommandShopList = await this.$fetch('user/shop/list', params);
-            recommandShopList.forEach(item => {
-                item.minusList = this.$getShopMinusList(item.minus || '');
-            });
-            const remandShopList1 = recommandShopList.concat(recommandShopList);
-            const tmandShopList2 = remandShopList1.concat(remandShopList1);
-            this.recommandShopList = tmandShopList2.concat(tmandShopList2)
-        },
-        setTabListTopHeight(top, height) {
-            this.tabListTop = top
-            this.tabListHeight = height
-            console.log('setTabListTopHeight');
-            console.log(this.tabListTop);
-            console.log(this.tabListHeight);
-        },
+        // async init(): Promise<void> {
+        //     try {
+        //         this.$showLoading();
+        //         await this.getDefaultAddress();
+        //         await this.getRecommandShopList();
+        //     } catch (e) {
+        //         console.log(e);
+        //     } finally {
+        //         this.$hideLoading();
+        //     }
+        // },
+        // async getDefaultAddress() {
+        //     await this.getAddressList();
+        //     console.log(this);
+        //     if (this.addressList.length) {
+        //         console.log(this.addressList[0]);
+        //         this.setDefaultAddress(this.addressList[0]);
+        //     } else {
+        //         await this.$showModal({
+        //             content: "为提供更好服务，请先选择地址",
+        //             confirmText: "去选择地址"
+        //         });
+        //         this.toSelectAddress();
+        //     }
+        // },
+        // async getShopList() {
+        //     if (!this.defaultAddress.latitude || !this.defaultAddress.longitude)
+        //         return;
+        //     const params = {
+        //         businessType: 2,
+        //         // type: this.selectTabItem.type,
+        //         latitude: this.defaultAddress.latitude,
+        //         longitude: this.defaultAddress.longitude
+        //     };
+        //     const recommandShopList = await this.$fetch(
+        //         "user/shop/list",
+        //         params
+        //     );
+        //     recommandShopList.forEach(item => {
+        //         item.minusList = this.$getShopMinusList(item.minus || "");
+        //     });
+        //     const remandShopList1 = recommandShopList.concat(recommandShopList);
+        //     const tmandShopList2 = remandShopList1.concat(remandShopList1);
+        //     this.recommandShopList = tmandShopList2.concat(tmandShopList2);
+        // },
         async changeTabItem(tabItem) {
             try {
-                this.$showLoading()
-                await this.getShopList()
+                this.$showLoading();
+                await this.getShopList();
                 this.selectTabItem = tabItem;
                 uni.pageScrollTo({
-                    scrollTop: this.tabListTop - this.topAddressSearchHeight,
+                    scrollTop: tabListTop - topAddressSearchHeight,
                     duration: 200
                 });
             } catch (e) {
-                console.log(e)
+                console.log(e);
             } finally {
-                this.$hideLoading()
+                this.$hideLoading();
             }
-
         },
 
         toShopList(businessType) {
-            this.saveBusinessType(businessType)
+            this.saveBusinessType(businessType);
             this.$myrouter.navigateTo({
-                name: 'user/shop/list',
+                name: "user/shop/list",
                 query: {
                     businessType
                 }
@@ -167,25 +211,25 @@ export default {
 
         toOrder(shopItem) {
             this.saveShopInfo(shopItem);
-            this.saveBusinessType(2)
+            this.saveBusinessType(2);
             this.$myrouter.navigateTo({
-                name: 'user/menu/list',
+                name: "user/menu/list",
                 query: {
                     businessType: 2
                 }
             });
         },
         saveBusinessType(businessType) {
-            uni.setStorageSync('businessType', businessType)
+            uni.setStorageSync("businessType", businessType);
         },
         saveShopInfo(shopItem) {
             if (!shopItem.minusList) {
-                shopItem.minusList = getShopMinusList(shopItem.minus || '')
+                shopItem.minusList = getShopMinusList(shopItem.minus || "");
             }
-            uni.setStorageSync('shopInfo', shopItem)
-        },
+            uni.setStorageSync("shopInfo", shopItem);
+        }
     }
-};
+});
 </script>
 
 <style lang="scss">
@@ -195,6 +239,7 @@ page {
     background-color: $color-bg-f5;
 }
 .home-container {
+    line-height: 1.2;
     font-size: 28rpx;
     color: #333;
     min-height: 100vh;

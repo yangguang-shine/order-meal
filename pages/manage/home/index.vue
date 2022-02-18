@@ -29,7 +29,7 @@ import Shop from '@/components/Shop';
 import BottomButton from '@/components/BottomButton.vue';
 import getShopMinusList from '@/utils/getShopMinusList';
 import { mapState, mapMutations } from 'vuex';
-import { vuexStorage } from '@/utils/tool.js';
+import { vuexStorage } from '@/utils/tool';
 
 export default {
 	components: {

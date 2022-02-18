@@ -1,6 +1,6 @@
 
 import getShopMinusList from '@/utils/getShopMinusList';
-import { vuexStorage } from '@/utils/tool.js';
+import { vuexStorage } from '@/utils/tool';
 
 
 const mutations = {

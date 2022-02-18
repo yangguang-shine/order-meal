@@ -3,8 +3,6 @@ import { requestHost } from '../config/host'
 import { showModal, showLoading, showToast, hideLoading, hideToast } from '@/utils'
 
 async function handleResponseData({ resolve, reject, responseData, options }) {
-	console.log('responseData')
-	console.log(responseData)
 	const code = responseData.code
 	const data = responseData.data || {}
 	const msg = responseData.msg
@@ -58,11 +56,11 @@ async function handleResponseData({ resolve, reject, responseData, options }) {
 const fetch = (url, data = {}, options = { error: true }) => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			const header = {}
+			const header: any = {}
 			// #ifdef MP-WEIXIN
 			const userToken = uni.getStorageSync('userToken')
 			const manageToken = uni.getStorageSync('manageToken')
-			headers['cookie'] = `userToken=${userToken};manageToken=${manageToken}`;
+			header['cookie'] = `userToken=${userToken};manageToken=${manageToken}`;
 			// #endif
 			const response = await uni.request({
 				url: url.startsWith('http') ? url : `${requestHost}/${url}`,
@@ -72,8 +70,6 @@ const fetch = (url, data = {}, options = { error: true }) => {
 				timeout: 30000,
 				withCredentials: true
 			})
-			console.log('response')
-			console.log(response)
 			const responseData = response.data
 			const statusCode = response.statusCode
 			if (200 <= +statusCode || +statusCode <= 300) {

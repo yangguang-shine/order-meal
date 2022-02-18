@@ -73,3 +73,7 @@
 1. 方便组件的管理，建议由子组件自己控制
 2. 其他组件控制该组件显示或隐藏动画时，添加refs进行组件控制
 3. 组件挂载的动画，在组件mounted是添加一个异步阻塞方法，确保属性的变化能引起动画产生，如项目使用的 await delaySync(0)，如不添加异步方式阻塞，挂载时可能无动画显示，（当然也有不添加异步方法也有动画的，如组件内有 scroll-view 组件时，就有动画）
+
+### 升级后的vue3和vuex使用踩坑
+
+1. mapState，mapMutations，mapActions等在setup中使用时，因无this，mapState不能使用，mapMutations，mapActions在setup中直接调用因无this一样不行，但在setup外却能使用，因为存在这个问题，自己封装了简单的mapState，mapMutations，mapActions，在utils/mapVuex中，当然仅限于基础使用，
