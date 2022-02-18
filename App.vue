@@ -1,5 +1,7 @@
 <script lang="ts">
-export default {
+import { defineComponent, computed, getCurrentInstance, ref } from "vue";
+
+export default defineComponent({
     onLaunch() {
         // #ifdef MP-WEIXIN
         // toLogin()
@@ -11,7 +13,7 @@ export default {
     onHide() {
         console.log('App Hide')
     },
-}
+})
 </script>
 
 <style>

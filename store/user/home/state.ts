@@ -19,10 +19,10 @@ const tabList: ITabItem[] = [
 ]
 interface IState {
     tabList: ITabItem[],
-    selectTabItem: ITabItem,
+    selectedTabItem: ITabItem,
 }
 const state: IState = {
     tabList,
-    selectTabItem: tabList[0],
+    selectedTabItem: tabList[0],
 }
 export default state

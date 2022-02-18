@@ -6,14 +6,13 @@
                 <view class="address-info flex-item line1">{{defaultAddress.address1 || '请选择地址'}}</view>
                 <image src="/static/img/user-home/home-address-arrow-icon.png" class="arrow-right-icon flex-shrink" mode=""></image>
             </view>
-            <view class="input-search line1 flex-item flex-row flex-a-center" @click.stop="toSearchShop">请输入商家名称{{topAddressWidthFlag}}</view>
+            <view class="input-search line1 flex-item flex-row flex-a-center" @click.stop="toSearchShop">请输入商家名称</view>
         </view>
     </view>
 </template>
 
 <script lang="ts">
 import { defineComponent, computed } from "vue";
-import { useStore } from "vuex";
 import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
 
 export default defineComponent({
@@ -22,25 +21,6 @@ export default defineComponent({
             "topAddressWidthFlag",
             "defaultAddress"
         ]);
-        console.log(">>>>>>>");
-        console.log(mapState("user", ["topAddressWidthFlag", 'defaultAddress']));
-        console.log({
-            topAddressWidthFlag: computed(() => {
-                return store.state.user.topAddressWidthFlag;
-            }),
-            defaultAddress: computed(() => {
-                return store.state.user.topAddressWidthFlag;
-            })
-        });
-        const store = useStore();
-        // const { topAddressWidthFlag, defaultAddress } = {
-        //     topAddressWidthFlag: computed(() => {
-        //         return store.state.user.topAddressWidthFlag;
-		// 	}),
-		// 	    defaultAddress: computed(() => {
-        //         return store.state.user.topAddressWidthFlag;
-        //     })
-        // };
         const { toSelectAddress } = mapMutations("user", ["toSelectAddress"]);
         const toSearchShop = () => {
             console.log("toSearchShop");
@@ -52,11 +32,6 @@ export default defineComponent({
             toSearchShop
         };
     },
-    onPageScroll(e) {
-        // console.log('-----------------')
-        // console.log(this)
-        // console.log(useStore())
-    }
 });
 </script>
 

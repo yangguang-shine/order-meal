@@ -6,62 +6,34 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 
 import Shop from '../../../../components/Shop';
-import TabList from './TabList';
-import { topAddressSearchHeight } from '../homeConfig'
+import { defineComponent, computed, getCurrentInstance } from "vue";
+import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
 
-export default {
+export default defineComponent({
     components: {
         Shop,
-        TabList
     },
-    props: {
-        recommandShopList: {
-            type: Array,
-            default: () => []
-        },
-        tabListFixedFlag: {
-            type: Boolean,
-            default: false
-        },
-        selectTabItem: {
-            type: Object,
-            default: () => { }
-        },
-    },
-    data() {
+    setup(props) {
+        const { recommandShopList } = mapState('user', ['recommandShopList'])
+
+        function toOrder(shopItem) {
+            console.log('toOrder')
+        }
         return {
-            topAddressSearchHeight,
-            tabList: [
-                {
-                    title: '综合排序',
-                    type: 'comprehensive'
-                },
-                {
-                    title: '销量最高',
-                    type: 'sale'
-                },
-                {
-                    title: '距离最近',
-                    type: 'distance'
-                }
-            ]
-        };
+            recommandShopList
+        }
     },
     mounted() {
     },
     methods: {
-        changeTabItem(tabItem) {
-            if (tabItem.type === this.selectTabItem.type) return;
-            this.$emit('changeTabItem', tabItem);
-        },
         toOrder(shopItem) {
-            this.$emit('toOrder', shopItem)
+            console.log('toOrder')
         }
     }
-};
+})
 </script>
 
 <style lang="scss" scoped>

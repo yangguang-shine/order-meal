@@ -13,7 +13,6 @@ actions['getAddressList'] = async ({commit}, params = {}) => {
 }
 
 actions['getRecommandShopList'] = async ({commit, state}, params = {}) => {
-    console.log(params)
     const recommandShopList: any[] = await fetch('user/shop/list', {
         businessType: 2,
         type: state.home.selectTabItem,
@@ -23,6 +22,7 @@ actions['getRecommandShopList'] = async ({commit, state}, params = {}) => {
     (recommandShopList || []).forEach((item) => {
         item.minusList = getShopMinusList(item.minus || "");
     });
+    recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList));
     recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList))
     commit('setRecommandShopList', recommandShopList)
     return recommandShopList || []

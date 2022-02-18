@@ -6,16 +6,14 @@
     </view>
 </template>
 
-<script>
+<script lang="ts">
 
-import Shop from '../../../../components/Shop';
 import TabList from './TabList';
 import ShopList from './ShopList';
 import { defineComponent } from "vue";
 
 export default defineComponent({
     components: {
-        Shop,
         TabList,
         ShopList
     },

@@ -3,20 +3,6 @@
         <TopAddressSearch></TopAddressSearch>
         <ToolsList></ToolsList>
         <RecommandInfo></RecommandInfo>
-        <ToolsList></ToolsList>
-        <ToolsList></ToolsList>
-
-        <ToolsList></ToolsList>
-        <ToolsList></ToolsList>
-        <ToolsList></ToolsList>
-
-        <ToolsList></ToolsList>
-
-
-
-
-
-        <!-- <common-loading v-if="showLoadingFlag"></common-loading> -->
     </view>
 </template>
 
@@ -118,7 +104,6 @@ export default defineComponent({
         };
     },
     onShow() {
-        console.log(this);
         uni.pageScrollTo({
             scrollTop: 0,
             duration: 0

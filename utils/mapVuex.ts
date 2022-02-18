@@ -1,11 +1,6 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 // ('user', ['hahah'])  or (['hahah'])
-console.log('//////')
-const store = useStore()
-
-console.log(store)
-
 export const mapState = function (namespace: string | any[], states: any[]) {
     const store = useStore()
     const obj: any = {}

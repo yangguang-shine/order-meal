@@ -15,15 +15,11 @@ mutations['setTabListFixedFlag'] = (state: any, tabListFixedFlag: boolean): void
     state.tabListFixedFlag = tabListFixedFlag
 }
 mutations['setAddressList'] = (state: any, addressList: []): void => {
-    console.log('setAddressList')
     state.addressList = addressList
 }
 mutations['setDefaultAddress'] = (state: any, defaultAddress: any): void => {
-    console.log('setDefaultAddress')
-    console.log(defaultAddress)
 
     state.defaultAddress = defaultAddress
-    console.log(state)
 }
 
 mutations['setRecommandShopList'] = (state: any, recommandShopList: any): void => {

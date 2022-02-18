@@ -23,12 +23,13 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapMutations } from 'vuex'
 import { host } from '@/config/host'
 import MinusList from '@/components/MinusList.vue'
+import { defineComponent, computed, getCurrentInstance } from "vue";
 
-export default {
+export default defineComponent({
 	components: {
 		MinusList
 	},
@@ -76,7 +77,7 @@ export default {
             })
         },
     }
-}
+})
 </script>
 <style scoped lang="scss">
 

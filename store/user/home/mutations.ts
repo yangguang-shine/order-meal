@@ -11,6 +11,6 @@ mutations['setDefaultAddress'] = (state: any, address: any): void => {
     state.defaultAddress = address
 }
 mutations['changeTabItem'] = (state, tabItem) => {
-    state.selectTabItem = tabItem
+    state.selectedTabItem = tabItem
 }
 export default mutations

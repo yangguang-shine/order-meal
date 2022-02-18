@@ -1,30 +1,61 @@
 <template>
     <view class="tab-list-container">
         <view id="tab-list-fixed-id" class="tab-list flex-row flex-a-center" :class="{ 'tab-list-fixed': tabListFixedFlag }" :style="{ top: tabListFixedFlag ? topAddressSearchHeight + 'px' : '' }">
-            <view v-for="(tabItem, index) in tabList" :key="index" class="tab-item flex-item flex-row flex-ja-center" :class="selectTabItem.type === tabItem.type ? 'select-tab-item' : ''" @click="clickTabItem(tabItem)">{{ tabItem.title }}</view>
+            <view v-for="(tabItem, index) in tabList" :key="index" class="tab-item flex-item flex-row flex-ja-center" :class="selectedTabItem.type === tabItem.type ? 'select-tab-item' : ''" @click="clickTabItem(tabItem)">{{ tabItem.title }}</view>
         </view>
     </view>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, computed, getCurrentInstance, ref } from "vue";
+import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
+import { topAddressSearchHeight, tabListTop } from "../homeConfig";
 
-import { defineComponent, computed } from 'vue'
-import { mapState, mapMutations, mapActions, useStore } from "vuex";
-import computedMapState from "../../../../utils/computedMapState";
 export default defineComponent({
     setup() {
-        const { changeTabItem } = mapMutations('user/home', ['changeTabItem'])
-        const clickTabItem = (tabItem) => {
-            changeTabItem(tabItem)
-        }
-        return {
-            ...computedMapState('user/home', ['tabList', 'selectTabItem']),
-            clickTabItem
-            // ...mapMutations('user/home', ['changeTabItem']),
-        }
-    },
-})
+        const internalInstance = getCurrentInstance();
+        const {
+            $showLoading,
+            $hideLoading,
+            $showModal,
+            $delaySync
+        } = internalInstance.proxy;
+        const { tabList, selectedTabItem } = mapState("user/home", [
+            "tabList",
+            "selectedTabItem"
+        ]);
+        const { tabListFixedFlag } = mapState("user", ["tabListFixedFlag"]);
 
+        const { changeTabItem } = mapMutations("user/home", ["changeTabItem"]);
+        const { getRecommandShopList } = mapActions("user", [
+            "getRecommandShopList"
+        ]);
+        const clickTabItem = async tabItem => {
+            if (selectedTabItem.type === tabItem.type) return;
+            try {
+                $showLoading();
+                await getRecommandShopList();
+                // await $delaySync(2000)
+                changeTabItem(tabItem);
+                uni.pageScrollTo({
+                    scrollTop: tabListTop - topAddressSearchHeight,
+                    duration: 200
+                });
+            } catch (e) {
+                console.log(e);
+            } finally {
+                $hideLoading();
+            }
+        };
+        return {
+            tabList,
+            selectedTabItem,
+            clickTabItem,
+            tabListFixedFlag,
+            topAddressSearchHeight
+        };
+    }
+});
 </script>
 
 <style lang="scss" scoped>

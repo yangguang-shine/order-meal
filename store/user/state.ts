@@ -3,7 +3,7 @@ interface Istate {
     tabListFixedFlag: boolean,
     addressList: any[],
     defaultAddress: any
-    recommanShopList: any[],
+    recommandShopList: any[],
 
 }
 const state: Istate = {
@@ -11,7 +11,7 @@ const state: Istate = {
     tabListFixedFlag: false,
     addressList: [],
     defaultAddress: {},
-    recommanShopList: []
+    recommandShopList: []
     // addressList,
     // namespace: true,
     // user

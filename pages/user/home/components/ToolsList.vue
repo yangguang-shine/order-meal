@@ -9,8 +9,11 @@
 	</view>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+
+import { defineComponent, computed, getCurrentInstance, ref } from "vue";
+
+export default defineComponent({
 	props: {
 
 	},
@@ -59,7 +62,7 @@ export default {
 			console.log('toToolDetail');
 		}
 	}
-}
+})
 </script>
 
 <style lang="scss" scoped>
