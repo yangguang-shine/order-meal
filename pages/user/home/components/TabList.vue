@@ -6,56 +6,43 @@
     </view>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { defineComponent, computed, getCurrentInstance, ref } from "vue";
 import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
 import { topAddressSearchHeight, tabListTop } from "../homeConfig";
 
-export default defineComponent({
-    setup() {
-        const internalInstance = getCurrentInstance();
-        const {
-            $showLoading,
-            $hideLoading,
-            $showModal,
-            $delaySync
-        } = internalInstance.proxy;
-        const { tabList, selectedTabItem } = mapState("user/home", [
-            "tabList",
-            "selectedTabItem"
-        ]);
-        const { tabListFixedFlag } = mapState("user", ["tabListFixedFlag"]);
+const internalInstance = getCurrentInstance();
+const {
+    $showLoading,
+    $hideLoading,
+    $showModal,
+    $delaySync
+} = internalInstance.proxy;
+const { tabList, selectedTabItem } = mapState("user", [
+    "tabList",
+    "selectedTabItem"
+]);
+const { tabListFixedFlag } = mapState("user", ["tabListFixedFlag"]);
 
-        const { changeTabItem } = mapMutations("user/home", ["changeTabItem"]);
-        const { getRecommandShopList } = mapActions("user", [
-            "getRecommandShopList"
-        ]);
-        const clickTabItem = async tabItem => {
-            if (selectedTabItem.type === tabItem.type) return;
-            try {
-                $showLoading();
-                await getRecommandShopList();
-                // await $delaySync(2000)
-                changeTabItem(tabItem);
-                uni.pageScrollTo({
-                    scrollTop: tabListTop - topAddressSearchHeight,
-                    duration: 200
-                });
-            } catch (e) {
-                console.log(e);
-            } finally {
-                $hideLoading();
-            }
-        };
-        return {
-            tabList,
-            selectedTabItem,
-            clickTabItem,
-            tabListFixedFlag,
-            topAddressSearchHeight
-        };
+const { changeTabItem } = mapMutations("user", ["changeTabItem"]);
+const { getRecommandShopList } = mapActions("user", ["getRecommandShopList"]);
+const clickTabItem = async (tabItem: any) => {
+    if (selectedTabItem.type === tabItem.type) return;
+    try {
+        $showLoading();
+        await getRecommandShopList();
+        // await $delaySync(2000)
+        changeTabItem(tabItem);
+        uni.pageScrollTo({
+            scrollTop: tabListTop - topAddressSearchHeight,
+            duration: 200
+        });
+    } catch (e) {
+        console.log(e);
+    } finally {
+        $hideLoading();
     }
-});
+};
 </script>
 
 <style lang="scss" scoped>

@@ -11,28 +11,18 @@
     </view>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import { defineComponent, computed } from "vue";
 import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
 
-export default defineComponent({
-    setup(props, { emit }) {
-        const { topAddressWidthFlag, defaultAddress } = mapState("user", [
-            "topAddressWidthFlag",
-            "defaultAddress"
-        ]);
-        const { toSelectAddress } = mapMutations("user", ["toSelectAddress"]);
-        const toSearchShop = () => {
-            console.log("toSearchShop");
-        };
-        return {
-            topAddressWidthFlag,
-            defaultAddress,
-            toSelectAddress,
-            toSearchShop
-        };
-    },
-});
+const { topAddressWidthFlag, defaultAddress } = mapState("user", [
+    "topAddressWidthFlag",
+    "defaultAddress"
+]);
+const { toSelectAddress } = mapMutations("user", ["toSelectAddress"]);
+const toSearchShop = () => {
+    console.log("toSearchShop");
+};
 </script>
 
 <style lang="scss" scoped>

@@ -2,38 +2,29 @@
 
     <div v-if="recommandShopList.length" class="shop-list-container">
         <!-- <div class="near-shop-title">附近外卖店铺推荐</div> -->
-        <shop v-for="(shopItem, index) in recommandShopList" :key="index" :shopItem="shopItem" @clickShopItem="toOrder" showArrowRight></shop>
+        <shop v-for="(shopItem, index) in recommandShopList" :key="index" :shopItem="shopItem" @clickShopItem="toOrder" showArrowRightFlag></shop>
     </div>
 </template>
 
-<script lang="ts">
-
-import Shop from '../../../../components/Shop';
+<script lang="ts" setup>
+import Shop from "../../../../components/Shop";
 import { defineComponent, computed, getCurrentInstance } from "vue";
 import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
 
-export default defineComponent({
-    components: {
-        Shop,
-    },
-    setup(props) {
-        const { recommandShopList } = mapState('user', ['recommandShopList'])
 
-        function toOrder(shopItem) {
-            console.log('toOrder')
-        }
-        return {
-            recommandShopList
-        }
-    },
-    mounted() {
-    },
-    methods: {
-        toOrder(shopItem) {
-            console.log('toOrder')
-        }
-    }
-})
+const internalInstance = getCurrentInstance();
+const { $myrouter } = internalInstance.proxy;
+const { saveShopInfo, saveBusinessType } = mapMutations('user', ['saveShopInfo', 'saveBusinessType'])
+const { recommandShopList } = mapState("user", ["recommandShopList"]);
+function toOrder(shopItem: any) {
+    console.log("toOrder");
+    console.log(shopItem);
+    saveShopInfo(shopItem);
+    saveBusinessType(2);
+    $myrouter.navigateTo({
+        name: "user/menu/list",
+    });
+}
 </script>
 
 <style lang="scss" scoped>

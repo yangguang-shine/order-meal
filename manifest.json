@@ -89,7 +89,7 @@
         // },
         "devServer" : {
             "open" : false,
-            "port" : 8888, // 自定义修改8080端口
+            "port" : 8889, // 自定义修改8080端口
             "host" : "dev.jr.jd.com",
             // 代理跨域
             "proxy" : {

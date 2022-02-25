@@ -6,18 +6,11 @@
     </view>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 
 import TabList from './TabList';
 import ShopList from './ShopList';
-import { defineComponent } from "vue";
 
-export default defineComponent({
-    components: {
-        TabList,
-        ShopList
-    },
-})
 </script>
 
 <style lang="scss" scoped>
