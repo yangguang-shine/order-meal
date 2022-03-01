@@ -4,20 +4,10 @@
     </view>
 </template>
 
-<script>
-export default {
-    props: {
-        showShopInfo: {
-            type: Boolean,
-            default: 'false'
-        },
-        minusPromotionsObject: {
-            type: Object,
-            default: () => { }
-        }
-    },
-    methods: {}
-};
+<script lang='ts' setup>
+import { mapGetters } from '../../../../../utils/mapVuex';
+const {minusPromotionsObject } = mapGetters('user', ['minusPromotionsObject'])
+const showShopInfo = false
 </script>
 
 <style lang="scss">

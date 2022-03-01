@@ -17,8 +17,8 @@ const user = [
 		path: '/pages/user/home/index'
 	},
 	{
-		name: 'user/menu/list',
-		path: '/pages/user/menu/list/index'
+		name: 'user/menu/info',
+		path: '/pages/user/menu/info/index'
 	},
 	{
 		name: 'user/menu/confirm',

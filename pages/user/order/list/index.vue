@@ -149,7 +149,7 @@ export default {
 				this.saveShopInfo(shopInfo);
 				this.saveBusinessType(orderItem.businessType);
 				this.$myrouter.navigateTo({
-					name: 'user/menu/list',
+					name: 'user/menu/info',
 					query: {
 						orderKey: orderItem.orderKey,
 						orderAgain: 'true'

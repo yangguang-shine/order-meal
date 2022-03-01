@@ -24,9 +24,26 @@ function getNamespaceState (namespace: string, store: any) {
     }, store.state)
 }
 
+
+export const mapGetters = function (namespace: string | any[], states: any[]) {
+    const store = useStore()
+    const obj: any = {}
+    if (typeof namespace === 'string') {
+        states.forEach((key: any) => {
+            obj[key] = computed(() => store.getters[`${namespace}/${key}`])
+        })
+    } else {
+        namespace.forEach((key: any) => {
+            obj[key] = computed(() => {
+                return store.getters[key]
+            })
+        })
+    }
+    return obj
+}
+
 export const mapMutations = (namespace: string | any[], mutations: any[]) => {
     const store = useStore()
-
     const obj: any = {}
     if (typeof namespace === 'string') {
         const module = store._modulesNamespaceMap[`${namespace}/`]

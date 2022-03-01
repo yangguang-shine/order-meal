@@ -1,9 +1,7 @@
 
 import address from './address'
-import home from './home'
-import menu from './menu'
+import home from './shop'
 export default {
     ...address,
     ...home,
-    ...menu,
 }

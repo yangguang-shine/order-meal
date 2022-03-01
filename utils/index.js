@@ -12,7 +12,7 @@ export const getSetting = (scopeName) => {
     })
 }
 
-export const getSystemRpx = () => {
+export const get1rpx2px = () => {
     return new Promise((resolve, reject) => {
         uni.getSystemInfo({
             success(res) {
@@ -163,3 +163,4 @@ export function formatAmountNum(num) {
 function format(number) {
     return number && number.replace(/(?!^)(?=(\d{3})+\.)/g, ",");
   }
+

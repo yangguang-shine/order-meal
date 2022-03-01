@@ -195,7 +195,7 @@ async function init() {
 //     this.saveShopInfo(shopItem);
 //     this.saveBusinessType(2);
 //     this.$myrouter.navigateTo({
-//         name: "user/menu/list",
+//         name: "user/menu/info",
 //         query: {
 //             businessType: 2
 //         }

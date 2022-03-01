@@ -1,18 +1,18 @@
 <template>
 	<view class="food-detail-container flex-row flex-ja-center" @click.stop="closeFoodDetail" @touchmove.stop>
-		<view class="food-detail-box" @click.stop :class="showComponents ? 'show-food-detail-container' : 'hide-food-detail-container'">
+		<view class="food-detail-box" @click.stop >
 			<view class="food-img"></view>
 			<view class="food-info">
 				<view class="food-name">1111</view>
-				<view v-if="foodItem.description" class="food-description">{{ foodItem.description }}</view>
+				<view v-if="foodInfo.description" class="food-description">{{ foodInfo.description }}</view>
 				
 				<view class="food-price-order flex-row flex-j-between">
 					<div class="flex-row flex-a-end">
-						<div class="food-price">¥{{ foodItem.price }}</div>
-						<div v-if="foodItem.unit" class="food-unit">/{{ foodItem.unit }}</div>
+						<div class="food-price">¥{{ foodInfo.price }}</div>
+						<div v-if="foodInfo.unit" class="food-unit">/{{ foodInfo.unit }}</div>
 					</div>
 				
-					<food-add-minus :foodItem="foodItem" @addCount="addCount" @minusCount="minusCount"></food-add-minus>
+					<food-add-minus :foodInfo="foodInfo"></food-add-minus>
 				</view>
 			</view>
 			<image class="close-img" src="/static/img/user-menu/close-food-detail.png" mode="" @click.stop="closeFoodDetail"></image>
@@ -20,43 +20,19 @@
 	</view>
 </template>
 
-<script>
+<script lang='ts' setup>
 import foodAddMinus from './item/foodAddMinus.vue';
 import { delaySync } from '@/utils/index.js';
-export default {
-	components: {
-		foodAddMinus
-	},
-	props: {
-		foodItem: {
-			type: Object,
-			default: () => {}
-		}
-	},
-	data() {
-		return {
-			showComponents: false
-		};
-	},
-	mounted() {
-		setTimeout(() => {
-			this.showComponents = true;
-		}, 0);
-	},
-	methods: {
-		addCount(foodItem) {
-			this.$emit('addCount', foodItem);
-		},
-		minusCount(foodItem) {
-			this.$emit('minusCount', foodItem);
-		},
-		async closeFoodDetail() {
-			this.showComponents = false;
-			await delaySync(300);
-			this.$emit('closeFoodDetail');
-		}
-	}
-};
+import { mapState, mapMutations } from '../../../../../utils/mapVuex';
+const showComponents = false
+const { foodInfo} = mapState('user', [
+	'foodInfo'
+])
+const {setFoodDetailFlag, setFoodInfo} = mapMutations('user', ['setFoodDetailFlag', 'setFoodInfo'])
+function closeFoodDetail() {
+	setFoodDetailFlag(false)
+	setFoodInfo({})
+}
 </script>
 
 <style lang="scss" scoped>

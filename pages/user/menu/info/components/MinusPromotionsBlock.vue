@@ -4,13 +4,9 @@
     </view>
 </template>
 
-<script>
+<script lang='ts' setup>
 
 
-export default {
-  
-
-};
 </script>
 
 <style lang="scss">

@@ -69,7 +69,7 @@
 			}
 		},
 		{
-			"path": "pages/user/menu/list/index",
+			"path": "pages/user/menu/info/index",
 			"style": {
 				"navigationBarTitleText": "点餐",
 				"navigationBarBackgroundColor": "#ffffff"

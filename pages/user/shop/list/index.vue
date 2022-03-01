@@ -47,7 +47,7 @@ export default {
 		toOrder(shopItem) {
 			this.saveShopInfo(shopItem)
 			this.$myrouter.navigateTo({
-				name: 'user/menu/list',
+				name: 'user/menu/info',
 				query: {
 					businessType: this.businessType
 				}

@@ -3,13 +3,11 @@ interface IActions {
     [key: string]: (state: any, payload: any) => any
 }
 import address from './address'
-import home from './home'
-import menu from './menu'
+import shop from './shop'
 
 const mutations: IActions = {
     ...address,
-    ...home,
-    ...menu,
+    ...shop,
 }
 
 export default mutations

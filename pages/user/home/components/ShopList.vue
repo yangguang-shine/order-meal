@@ -22,7 +22,7 @@ function toOrder(shopItem: any) {
     saveShopInfo(shopItem);
     saveBusinessType(2);
     $myrouter.navigateTo({
-        name: "user/menu/list",
+        name: "user/menu/info",
     });
 }
 </script>
