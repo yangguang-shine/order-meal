@@ -2,16 +2,14 @@
 
 const setCategoryTabId = (state: any, payload: any) => {
     state.categoryTabId = payload
-    console.log(state)
 }
-const setScrollIntoCategoryID = (state: any, payload: any) => {
-    state.scrollIntoCategoryID = payload
+const setScrollIntoCategoryTabID = (state: any, payload: any) => {
+    state.scrollIntoCategoryTabID = payload
 }
 const setFoodCategoryList = (state: any, payload: any) => {
-    console.log('setFoodCategoryList')
     state.foodCategoryList = payload
 }
-const setFoodInfo= (state: any, payload: any) => {
+const setFoodInfo = (state: any, payload: any) => {
     state.foodInfo = payload
 }
 const setFoodDetailFlag = (state: any, payload: any) => {
@@ -34,12 +32,38 @@ const clearCart = (state: any, payload: any) => {
             foodItem.orderCount = 0
         })
     })
-    state.cartFoodList = []
-    uni.removeStorageSync(`storageFoodList_${state.shopInfo.shopID}`)
+    // 清空数组
+    state.cartFoodList.length = 0
+    // uni.removeStorageSync(`storageFoodList_${state.shopInfo.shopID}`)
 }
-const cartCountChange = (state: any, foodItem: any) => {
+const cartChange = (state: any, { foodItem, count = 0 }) => {
+    foodItem.orderCount = count || 0
+    const findCategory = state.cartFoodList.find(item => item.categoryID === foodItem.categoryID)
+    if (findCategory) {
+        const findFood = findCategory.foodList.find(item => item.foodName === foodItem.foodName)
+        if (!findFood) {
+            findCategory.foodList.push(foodItem)
+        }
+    } else {
+        state.cartFoodList.push({
+            categoryID: foodItem.categoryID,
+            foodList: [foodItem]
+        })
+    }
+    state.cartFoodList.forEach((item) => {
+        item.foodList = item.foodList.filter(foodItem => {
+            if (foodItem.orderCount > 0) {
+                foodItem.foodItemAmount = Number((foodItem.price * foodItem.orderCount).toFixed(2))
+                return true
+            } else {
+                return false
+            }
+        })
+    })
+    state.cartFoodList = state.cartFoodList.filter(item => item.foodList.length > 0)
+}
 
-}
+
 
 
 
@@ -48,12 +72,13 @@ const cartCountChange = (state: any, foodItem: any) => {
 
 export default {
     setCategoryTabId,
-    setScrollIntoCategoryID,
+    setScrollIntoCategoryTabID,
     setFoodCategoryList,
     setFoodInfo,
     setFoodDetailFlag,
     setTopBarInfo,
     toogleCartDetailFlag,
     setCartDetailFlag,
-    clearCart
+    clearCart,
+    cartChange
 }

@@ -1,10 +1,10 @@
 <template>
     <view class="food-add-minus-container flex-row flex-ja-center">
-        <view class="food-count-minus" :class="showAddAnimate ? 'food-count-minus-show' : ''" :style="{ color: $mainColor, 'transition': addAnimationFlag ? 'all ease-in-out .3s' : ''}" @click.stop="minusCount()">
+        <view class="food-count-minus" v-if="foodItem.orderCount" @click.stop="minusCount()">
             <div class="add-click-area"></div>
             <view class="reduce-icon-css" :style="{ 'background-color': $mainColor }"></view>
         </view>
-        <view :class="showAddAnimate ? 'food-order-count-show' : ''" class="food-order-count">{{ foodItem.orderCount || ''}}</view>
+        <view v-if="foodItem.orderCount" class="food-order-count">{{ foodItem.orderCount || ''}}</view>
         <view class="food-count-add" :style="{ 'background-color': $mainColor }" @click.stop="addCount()">
             <div class="add-click-area"></div>
         </view>
@@ -14,41 +14,51 @@
 
 <script lang="ts" setup>
 import { delaySync } from "@/utils/index.js";
-import { watch } from 'vue'
-const showAddAnimate = false
-const addAnimationFlag = false
+import { watch } from "vue";
+import { mapMutations } from "../../../../../../utils/mapVuex";
+
 interface Props {
     foodItem: any;
 }
+const { cartChange } = mapMutations("user", ["cartChange"]);
 const props = withDefaults(defineProps<Props>(), {
     foodItem: () => ({})
 });
-watch(() => props.foodItem.orderCount,() => {
-	console.log('props.foodItem.orderCount')
-})
+watch(
+    () => props.foodItem.orderCount,
+    () => {
+        console.log("props.foodItem.orderCount");
+    }
+);
 function addCount() {
-	console.log('addCount')
+    cartChange({
+        foodItem: props.foodItem,
+        count: props.foodItem.orderCount + 1
+    });
 }
 
 function minusCount() {
-	console.log('minusCount')
+    cartChange({
+        foodItem: props.foodItem,
+        count: props.foodItem.orderCount - 1
+    });
 }
-        // addCount(foodItem) {
-        //     if (!this.addCountState) return;
-        //     this.addCountState = false;
-        //     foodItem.orderCount += 1;
-        //     this.cartCountChange(foodItem);
-        //     this.addCountState = true;
-        //     if (!this.cartFoodList.length) this.showCartDetail = false;
-        // },
-        // minusCount(foodItem) {
-        //     if (!this.minusCountState) return;
-        //     this.minusCountState = false;
-        //     foodItem.orderCount -= 1;
-        //     this.cartCountChange(foodItem);
-        //     this.minusCountState = true;
-        //     if (!this.cartFoodList.length) this.showCartDetail = false;
-        // },
+// addCount(foodItem) {
+//     if (!this.addCountState) return;
+//     this.addCountState = false;
+//     foodItem.orderCount += 1;
+//     this.cartCountChange(foodItem);
+//     this.addCountState = true;
+//     if (!this.cartFoodList.length) this.showCartDetail = false;
+// },
+// minusCount(foodItem) {
+//     if (!this.minusCountState) return;
+//     this.minusCountState = false;
+//     foodItem.orderCount -= 1;
+//     this.cartCountChange(foodItem);
+//     this.minusCountState = true;
+//     if (!this.cartFoodList.length) this.showCartDetail = false;
+// },
 </script>
 
 <style lang="scss" scoped>
@@ -96,7 +106,7 @@ function minusCount() {
     .food-count-minus {
         position: absolute;
         top: 0;
-        right: 0;
+        right: 100rpx;
         width: 40rpx;
         height: 40rpx;
         border: 1px solid;
@@ -116,7 +126,7 @@ function minusCount() {
         font-size: 30rpx;
         line-height: 36rpx;
         color: #333;
-        opacity: 0;
+        opacity: 1;
         transition: all ease-in-out 0.3s;
     }
 
@@ -134,11 +144,11 @@ function minusCount() {
         border-radius: 2rpx;
     }
     .add-click-area {
-        position: absolute;
-        width: 80rpx;
-        height: 80rpx;
-        top: -20rpx;
-        left: -20rpx;
+        // position: absolute;
+        // width: 60rpx;
+        // height: 60rpx;
+        // top: -10rpx;
+        // left: -10rpx;
     }
 }
 </style>

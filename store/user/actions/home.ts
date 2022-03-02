@@ -10,8 +10,8 @@ const getRecommandShopList = async ({ commit, state }, params = {}) => {
     (recommandShopList || []).forEach((item) => {
         item.minusList = getShopMinusList(item.minus || "");
     });
-    // recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList));
-    // recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList))
+    recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList));
+    recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList))
     commit('setRecommandShopList', recommandShopList)
     return recommandShopList || []
 }

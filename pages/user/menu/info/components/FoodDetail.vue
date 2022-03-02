@@ -12,7 +12,7 @@
 						<div v-if="foodInfo.unit" class="food-unit">/{{ foodInfo.unit }}</div>
 					</div>
 				
-					<food-add-minus :foodInfo="foodInfo"></food-add-minus>
+					<FoodAddMinus :foodItem="foodInfo"></FoodAddMinus>
 				</view>
 			</view>
 			<image class="close-img" src="/static/img/user-menu/close-food-detail.png" mode="" @click.stop="closeFoodDetail"></image>
@@ -21,7 +21,7 @@
 </template>
 
 <script lang='ts' setup>
-import foodAddMinus from './item/foodAddMinus.vue';
+import FoodAddMinus from './item/FoodAddMinus.vue';
 import { delaySync } from '@/utils/index.js';
 import { mapState, mapMutations } from '../../../../../utils/mapVuex';
 const showComponents = false
@@ -50,14 +50,14 @@ function closeFoodDetail() {
 		position: relative;
 		width: 600rpx;
 		margin-bottom: 140rpx;
-		transform: scale(0);
+		// transform: scale(0);
 		transition: all 0.3s;
 		background-color: #fff;
 		border-radius: 16rpx;
 	}
-	.show-food-detail-container {
-		transform: scale(1);
-	}
+	// .show-food-detail-container {
+	// 	transform: scale(1);
+	// }
 	// .hide-food-detail-container {
 	// 	transform: scale(0);
 	// }

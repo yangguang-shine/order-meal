@@ -1,8 +1,8 @@
 <template>
-    <view class="footer-cart-container" :style="{'position': showShopInfo ? 'absolute' : 'fixed'}">
+    <view class="footer-cart-container" :style="{'position': shopInfoFlag ? 'absolute' : 'fixed'}">
         <view class="footer-cart flex-row flex-j-between flex-a-center">
             <view class="cart-img-box">
-                <image class="cart-img" @click="toogleCartDetailFlag" src="/static/img/cart-icon.png" mode="scaleToFill"></image>
+                <image class="cart-img" @click="clickCartImg" src="/static/img/cart-icon.png" mode="scaleToFill"></image>
                 <view v-if="allCartFoodCount" class="cart-all-count" :style="{ background: $mainColor }">{{ allCartFoodCount }}</view>
             </view>
             <view class="flex-item cart-all-amount">
@@ -18,21 +18,29 @@
 
 <script lang='ts' setup>
 import { getCurrentInstance } from "vue";
-import { mapGetters, mapMutations } from "../../../../../utils/mapVuex";
+import {
+    mapGetters,
+    mapMutations,
+    mapState
+} from "../../../../../utils/mapVuex";
 const { cartPriceInfo, allCartFoodCount } = mapGetters("user", [
     "cartPriceInfo",
     "allCartFoodCount"
 ]);
+const { shopInfoFlag, cartFoodList } = mapState("user", ["shopInfoFlag", 'cartFoodList']);
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
 
 const { toogleCartDetailFlag } = mapMutations("user", ["toogleCartDetailFlag"]);
-const showShopInfo = false;
 function toComfirmOrder() {
     $myrouter.navigateTo({
         name: "user/menu/confirm"
     });
 }
-
+function clickCartImg() {
+    if (cartFoodList.value.length > 0) {
+        toogleCartDetailFlag()
+    }
+}
 </script>
 
 <style lang="scss">
@@ -44,7 +52,7 @@ function toComfirmOrder() {
     height: 140rpx;
     background-color: #fff;
     color: #fff;
-    z-index: 500;
+    z-index: 600;
 
     .footer-cart {
         width: 100%;
@@ -79,7 +87,7 @@ function toComfirmOrder() {
         left: 20rpx;
         height: 140rpx;
         width: 140rpx;
-        z-index: 600;
+        // z-index: 600;
     }
     .cart-img {
         height: 140rpx;

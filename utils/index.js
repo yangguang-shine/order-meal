@@ -12,20 +12,16 @@ export const getSetting = (scopeName) => {
     })
 }
 
-export const get1rpx2px = () => {
-    return new Promise((resolve, reject) => {
-        uni.getSystemInfo({
-            success(res) {
-                console.log(111)
-                resolve(res)
-            },
-            fail(e) {
-                console.log(222)
-                reject(e)
-            }
-        });
-    })
+let systemInfo = null
+
+
+export const get1rpx2px = (rpx) => {
+    if (!systemInfo) {
+        systemInfo = uni.getSystemInfoSync()
+    }
+    return (systemInfo.windowWidth / 750) * rpx
 }
+
 
 export const authorize = (scopeName) => {
     return new Promise((resolve, reject) => {

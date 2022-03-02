@@ -1,7 +1,7 @@
 <template>
-    <scroll-view scroll-y scroll-with-animation :scroll-into-view="scrollIntoCategoryID" class="food-main-box flex-item" id="food-main-box" @scroll="foodScrollHandle">
-        <view class="food-category-list-item" v-for="(foodCategoryItem, index) in foodCategoryList" :key="index" :id="foodCategoryItem.scrollTabID + 'id'">
-            <view :id="foodCategoryItem.scrollTabID" class="food-category-name">{{ foodCategoryItem.categoryName }}</view>
+    <scroll-view scroll-y scroll-with-animation :scroll-into-view="scrollIntoCategoryTabID" class="food-main-box flex-item" id="food-main-box" @scroll="foodScrollHandle" :style="{'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightPX + 'px' : '' }">
+        <view class="food-category-list-item" v-for="(foodCategoryItem, index) in foodCategoryList" :key="index" :id="foodCategoryItem.categoryTabID + 'id'">
+            <view :id="foodCategoryItem.categoryTabID" class="food-category-name">{{ foodCategoryItem.categoryName }}</view>
             <view class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex" @click="toShowFoodDetail(foodItem)">
                 <image class="food-img  flex-shrink" :src="foodItem.imgUrl" mode="scaleToFill"></image>
                 <view class="food-info-box flex-item flex-col flex-j-between">
@@ -11,7 +11,7 @@
                     </view>
                     <view class="food-price-button flex-row flex-j-between flex-a-center">
                         <view class="food-price">¥{{ foodItem.price }}</view>
-                        <food-add-minus :foodItem="foodItem"></food-add-minus>
+                        <FoodAddMinus :foodItem="foodItem"></FoodAddMinus>
                     </view>
                 </view>
             </view>
@@ -20,34 +20,33 @@
 </template>
 
 <script lang='ts' setup>
-import foodAddMinus from "./item/foodAddMinus";
+import FoodAddMinus from "./item/FoodAddMinus";
 import { get1rpx2px } from "@/utils/index";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-
+import { topBarHeightPX, minusPromotionsHeightPX } from '../infoConfig'
 import {
     mapState,
     mapGetters,
     mapMutations
 } from "../../../../../utils/mapVuex";
-const { asideCategoryList } = mapGetters("user", ["asideCategoryList"]);
-const { foodCategoryList, scrollIntoCategoryID } = mapState("user", [
+const { asideCategoryList, minusPromotionsObject } = mapGetters("user", ["asideCategoryList", 'minusPromotionsObject']);
+const { foodCategoryList, scrollIntoCategoryTabID } = mapState("user", [
     "foodCategoryList",
-    "scrollIntoCategoryID"
+    "scrollIntoCategoryTabID"
 ]);
+
 const {
     setFoodDetailFlag,
     setFoodInfo,
     setCategoryTabId,
-    setScrollIntoCategoryID
+    setScrollIntoCategoryTabID
 } = mapMutations("user", [
     "setFoodDetailFlag",
     "setFoodInfo",
     "setCategoryTabId",
-    "setScrollIntoCategoryID"
+    "setScrollIntoCategoryTabID"
 ]);
 
-    console.log('foodCategoryList.value')
-    console.log(foodCategoryList.value)
 function toShowFoodDetail(foodItem: any) {
     setFoodDetailFlag(true);
     setFoodInfo(foodItem);
@@ -64,27 +63,18 @@ const debounce = (fn: any, delay: number) => {
         }, delay);
     };
 };
-let topBarHeightPX: number = 40;
 
 onLoad(() => {
-    getTopBarHeightPX();
 
 });
 
-async function getTopBarHeightPX() {
-    const systemInfo = await get1rpx2px();
-    topBarHeightPX = (systemInfo.windowWidth / 750) * 2 * 40;
-}
-
 const handleScroll = async (e: any) => {
-    for (let i = 0; i < asideCategoryList.length; i++) {
-        const categoryItem = asideCategoryList[i];
-        const res: any = await selectQuery(`#${categoryItem.scrollTabID}id`);
-        console.log(`#${categoryItem.scrollTabID}id`);
-        console.log(res);
+    for (let i = 0; i < asideCategoryList.value.length; i++) {
+        const categoryItem = asideCategoryList.value[i];
+        const res: any = await selectQuery(`#${categoryItem.categoryTabID}id`);
         if (topBarHeightPX <= res.top || res.bottom > topBarHeightPX) {
-            setCategoryTabId(categoryItem.scrollTabID);
-            setScrollIntoCategoryID(null);
+            setCategoryTabId(categoryItem.categoryTabID);
+            setScrollIntoCategoryTabID(null);
             break;
         }
     }

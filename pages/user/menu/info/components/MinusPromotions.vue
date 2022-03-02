@@ -21,7 +21,7 @@ const showShopInfo = false
     line-height: 50rpx;
     font-size: 22rpx;
     color: #333;
-    z-index: 450;
+    z-index: 500;
     .content-red {
         color: #e23232;
     }

@@ -6,11 +6,11 @@
                 <CategoryAsideBar></CategoryAsideBar>
                 <FoodCategoryList></FoodCategoryList>
             </view>
-            <CartDetail v-if="cartDetailFlag"></CartDetail>
+            <CartDetail  v-if="cartDetailFlag"></CartDetail>
             <MinusPromotions v-if="minusPromotionsObject.show"></MinusPromotions>
-            <MinusPromotionsBlock v-if="minusPromotionsObject.show"></MinusPromotionsBlock>
-            <FooterCart></FooterCart>
-            <FooterCartBlock></FooterCartBlock>
+            <!-- <MinusPromotionsBlock v-if="minusPromotionsObject.show"></MinusPromotionsBlock> -->
+            <FooterInfo></FooterInfo>
+            <!-- <FooterCartBlock></FooterCartBlock> -->
             <FoodDetail v-if="foodDetailFalg"></FoodDetail>
         </view>
         <!-- <ShopInfo v-if="showShopInfo" ref="shopInfo" :shopInfo="shopInfo"></ShopInfo> -->
@@ -24,7 +24,7 @@ import CategoryAsideBar from "./components/CategoryAsideBar.vue";
 import FoodCategoryList from "./components/FoodCategoryList.vue";
 import MinusPromotions from "./components/MinusPromotions.vue";
 import MinusPromotionsBlock from "./components/MinusPromotionsBlock.vue";
-import FooterCart from "./components/FooterCart.vue";
+import FooterInfo from "./components/FooterInfo.vue";
 import FooterCartBlock from "./components/FooterCartBlock.vue";
 import CartDetail from "./components/CartDetail.vue";
 import FoodDetail from "./components/FoodDetail.vue";
@@ -56,7 +56,7 @@ const {
     foodCategoryList,
     orderCategoryList,
     categoryTabId,
-    scrollIntoCategoryID,
+    scrollIntoCategoryTabID,
     topBarInfo,
     shopInfoFlag,
     cartDetailFlag,
@@ -69,7 +69,7 @@ const {
     "foodCategoryList",
     "orderCategoryList",
     "categoryTabId",
-    "scrollIntoCategoryID",
+    "scrollIntoCategoryTabID",
     "topBarInfo",
     "shopInfoFlag",
     "cartDetailFlag",
@@ -90,14 +90,14 @@ const {
 
 const {
     setCategoryTabId,
-    setScrollIntoCategoryID,
+    setScrollIntoCategoryTabID,
     setFoodCategoryList,
     setFoodInfo,
     setFoodDetailFlag,
     setTopBarInfo
 } = mapMutations("user", [
     "setCategoryTabId",
-    "setScrollIntoCategoryID",
+    "setScrollIntoCategoryTabID",
     "setFoodCategoryList",
     "setFoodInfo",
     "setFoodDetailFlag",
@@ -212,16 +212,16 @@ function toChangeTopBar(title) {
 //         //     for (let i = 0; i < asideCategoryList.length; i++) {
 //         //         const categoryItem = asideCategoryList[i];
 //         //         const res = await selectQuery(
-//         //             `#${categoryItem.scrollTabID}id`
+//         //             `#${categoryItem.categoryTabID}id`
 //         //         );
-//         //         console.log(`#${categoryItem.scrollTabID}id`);
+//         //         console.log(`#${categoryItem.categoryTabID}id`);
 //         //         console.log(res);
 //         //         if (
 //         //             topBarHeightPX <= res.top ||
 //         //             res.bottom > topBarHeightPX
 //         //         ) {
-//         //             selectCategoryTabId = categoryItem.scrollTabID;
-//         //             scrollIntoCategoryID = null;
+//         //             selectCategoryTabId = categoryItem.categoryTabID;
+//         //             scrollIntoCategoryTabID = null;
 
 //         //             break;
 //         //         }
@@ -255,11 +255,11 @@ function toChangeTopBar(title) {
 //                 shopID: shopInfo.shopID
 //             });
 //             foodCategoryList.forEach((item, index) => {
-//                 item.scrollTabID = "id" + item.categoryID;
+//                 item.categoryTabID = "id" + item.categoryID;
 //             });
 //             if (foodCategoryList.length) {
-//                 selectCategoryTabId = foodCategoryList[0].scrollTabID;
-//                 scrollIntoCategoryID = null;
+//                 selectCategoryTabId = foodCategoryList[0].categoryTabID;
+//                 scrollIntoCategoryTabID = null;
 //             }
 //             // 重来一单，orderAgain 和 orderKey 缺一不可
 //             if (orderAgain && orderKey) {
@@ -404,9 +404,9 @@ function toChangeTopBar(title) {
 //         closeCartDetail() {
 //             showCartDetail = false;
 //         },
-//         changeSelectCategoryTab(scrollTabID) {
-//             selectCategoryTabId = scrollTabID;
-//             scrollIntoCategoryID = scrollTabID;
+//         changeSelectCategoryTab(categoryTabID) {
+//             selectCategoryTabId = categoryTabID;
+//             scrollIntoCategoryTabID = categoryTabID;
 //         },
 //         addCount(foodItem) {
 //             if (!addCountState) return;
@@ -452,6 +452,7 @@ page {
         width: 100%;
         height: 100%;
         padding-top: 80rpx;
+        padding-bottom: 140rpx;
         box-sizing: border-box;
         transition: all ease-in-out 0.3s;
     }

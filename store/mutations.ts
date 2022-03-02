@@ -64,9 +64,9 @@ mutations['clearCart'] = (state, shopInfo = {}) => {
     uni.removeStorageSync(`storageFoodList_${(vuexStorage(state, 'shopInfo') || {}).shopID}`)
 }
 
-mutations['saveDefaultAddress'] = (state, address = {}) => {
-    state.defaultAddress = address
-}
+// mutations['saveDefaultAddress'] = (state, address = {}) => {
+//     state.defaultAddress = address
+// }
 
 // mutations['saveShopInfo'] = (state, shopInfo = {}) => {
 //     const minusList = getShopMinusList(shopInfo.minus)
@@ -87,22 +87,22 @@ mutations['saveDefaultAddress'] = (state, address = {}) => {
 // 	})
 // }
 
-mutations['saveCartFoodList'] = (state, cartFoodList) => {
-    state.cartFoodList = cartFoodList
-	uni.setStorage({
-		key: 'cartFoodList',
-		data: cartFoodList
-	})
-}
+// mutations['saveCartFoodList'] = (state, cartFoodList) => {
+//     state.cartFoodList = cartFoodList
+// 	uni.setStorage({
+// 		key: 'cartFoodList',
+// 		data: cartFoodList
+// 	})
+// }
 
 
 // manage
 
-mutations['saveSelectShopItem'] = (state, selectShopItem) => {
-    state.selectShopItem = selectShopItem
-	uni.setStorage({
-		key: 'selectShopItem',
-		data: selectShopItem
-	})
-}
+// mutations['saveSelectShopItem'] = (state, selectShopItem) => {
+//     state.selectShopItem = selectShopItem
+// 	uni.setStorage({
+// 		key: 'selectShopItem',
+// 		data: selectShopItem
+// 	})
+// }
 export default mutations

@@ -1,6 +1,4 @@
 const minusPromotionsObject = (state, getters) => {
-    console.log('>>>>>>')
-    console.log(state)
     if ((state.shopInfo.minusList || []).length === 0 || state.cartFoodList.length === 0) {
         return {
             show: false,
@@ -132,19 +130,49 @@ const asideCategoryList = (state, getters) => {
                 categoryName: foodCategoryItem.categoryName,
                 categoryID: foodCategoryItem.categoryID,
                 orderCount,
-                scrollTabID: foodCategoryItem.scrollTabID
+                categoryTabID: foodCategoryItem.categoryTabID
             };
         } else {
             return {
                 categoryName: foodCategoryItem.categoryName,
                 categoryID: foodCategoryItem.categoryID,
                 orderCount: 0,
-                scrollTabID: foodCategoryItem.scrollTabID
+                categoryTabID: foodCategoryItem.categoryTabID
             };
         }
     });
     return asideCategoryList;
 }
+// const cartFoodList = (state) => {
+//     const cartFoodList = []
+//     state.foodCategoryList.forEach((foodCategoryItem) => {
+//         foodCategoryItem.foodList.forEach((foodItem) => {
+
+//         })
+//     })
+//     const findCategory = state.cartFoodList.find(item => item.categoryID === foodItem.categoryID)
+//     if (findCategory) {
+//         const findFood = findCategory.foodList.find(item => item.foodName === foodItem.foodName)
+//         if (!findFood) {
+//             findCategory.foodList.push(foodItem)
+//         }
+//     } else {
+//         state.cartFoodList.push({
+//             categoryID: foodItem.categoryID,
+//             foodList: [foodItem]
+//         })
+//     }
+//     state.cartFoodList.forEach((item) => {
+//         item.foodList = item.foodList.filter(foodItem => {
+//             if (foodItem.orderCount > 0) {
+//                 foodItem.foodItemAmount = Number((foodItem.price * foodItem.orderCount).toFixed(2))
+//                 return true
+//             } else {
+//                 return false
+//             }
+//         })
+//     })
+// }
 export default {
     minusPromotionsObject,
     cartPriceInfo,

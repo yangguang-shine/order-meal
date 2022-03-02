@@ -1,19 +1,19 @@
 <template>
     <view class="menu-container">
-        <top-bar :selectTopBarItem="selectTopBarItem" @changeTopBar="changeTopBar"></top-bar>
+        <TopBar :selectTopBarItem="selectTopBarItem" @changeTopBar="changeTopBar"></TopBar>
         <view class="menu-order-box flex-col" :class="selectTopBarItem === '点餐' ? 'show-menu-order-box' : 'hide-menu-order-box'">
             <view class="menu-list-box flex-item flex-row ">
-                <categoryAsideBar :asideCategoryList="asideCategoryList" :selectCategoryTabId="selectCategoryTabId" @changeSelectCategoryTab="changeSelectCategoryTab"></categoryAsideBar>
-                <food-category-list :foodCategoryList="foodCategoryList" :scrollIntoCategoryID="scrollIntoCategoryID" @foodScrollHandle="foodScrollHandle" @addCount="addCount" @minusCount="minusCount" @showFoodDetail="showFoodDetail"></food-category-list>
+                <CategoryAsideBar ></CategoryAsideBar>
+                <FoodCategoryList ></FoodCategoryList>
             </view>
-            <cart-detail ref='foodCardDetail' v-if="showCartDetail" :minusPromotionsObject="minusPromotionsObject" :cartFoodList="cartFoodList" @closeCartDetail="closeCartDetail" @cartClearCart="cartClearCart" @addCount="addCount" @minusCount="minusCount"></cart-detail>
-            <minus-promotions :showShopInfo="showShopInfo" v-if="minusPromotionsObject.show" :minusPromotionsObject="minusPromotionsObject"></minus-promotions>
-            <minus-promotions-block v-if="minusPromotionsObject.show"></minus-promotions-block>
-            <footer-cart :showShopInfo="showShopInfo" :cartPriceInfo="cartPriceInfo" :allCartFoodCount="allCartFoodCount" @toogleCartDetail="toogleCartDetail()" @toComfirmOrder="toComfirmOrder"></footer-cart>
-            <footer-cart-block></footer-cart-block>
-            <food-detail v-if="showFoodDetailFalg" :foodItem="selectFoodItem" @closeFoodDetail="closeFoodDetail" @addCount="addCount" @minusCount="minusCount"></food-detail>
+            <CartDetail v-if="showCartDetail" ></CartDetail>
+            <MinusPromotions  v-if="minusPromotionsObject.show" ></MinusPromotions>
+            <MinusPromotionsBlock v-if="minusPromotionsObject.show"></MinusPromotionsBlock>
+            <FooterCart ></FooterCart>
+            <FooterCartBlock></FooterCartBlock>
+            <FoodDetail v-if="showFoodDetailFalg"></FoodDetail>
         </view>
-        <shop-info v-if="showShopInfo" ref="shopInfo" :shopInfo="shopInfo"></shop-info>
+        <ShopInfo v-if="showShopInfo" ref="shopInfo" :shopInfo="shopInfo"></ShopInfo>
 		<!-- <common-loading v-if="showLoadingFlag"></common-loading> -->
     </view>
 </template>
@@ -21,14 +21,14 @@
 <script>
 import { host } from '@/config/host';
 import { getSystemRpx } from '@/utils/index';
-import categoryAsideBar from './components/categoryAsideBar.vue';
-import foodCategoryList from './components/foodCategoryList.vue';
-import minusPromotions from './components/minusPromotions.vue';
-import minusPromotionsBlock from './components/minusPromotionsBlock.vue';
-import footerCart from './components/footerCart.vue';
-import footerCartBlock from './components/footerCartBlock.vue';
-import cartDetail from './components/cartDetail.vue';
-import foodDetail from './components/foodDetail.vue';
+import CategoryAsideBar from './components/CategoryAsideBar.vue';
+import FoodCategoryList from './components/FoodCategoryList.vue';
+import MinusPromotions from './components/MinusPromotions.vue';
+import MinusPromotionsBlock from './components/MinusPromotionsBlock.vue';
+import FooterCart from './components/FooterCart.vue';
+import FooterCartBlock from './components/FooterCartBlock.vue';
+import CartDetail from './components/CartDetail.vue';
+import FoodDetail from './components/FoodDetail.vue';
 
 import topBar from './components/topBar.vue';
 import shopInfo from './components/shopInfo.vue';
@@ -61,16 +61,16 @@ const throttle = (() => {
 })();
 export default {
     components: {
-        categoryAsideBar,
-        foodCategoryList,
-        minusPromotions,
-        footerCart,
-        cartDetail,
+        CategoryAsideBar,
+        FoodCategoryList,
+        MinusPromotions,
+        FooterCart,
+        CartDetail,
         topBar,
         shopInfo,
-        minusPromotionsBlock,
-        footerCartBlock,
-        foodDetail
+        MinusPromotionsBlock,
+        FooterCartBlock,
+        FoodDetail
     },
     data() {
         return {
@@ -79,7 +79,7 @@ export default {
             addCountState: true,
             minusCountState: true,
             selectCategoryTabId: '',
-            scrollIntoCategoryID: '',
+            scrollIntoCategoryTabID: '',
             showCartDetail: false,
             foodCategoryList: [],
             cartFoodList: [],
@@ -201,14 +201,14 @@ export default {
                         categoryName: foodCategoryItem.categoryName,
                         categoryID: foodCategoryItem.categoryID,
                         orderCount,
-                        scrollTabID: foodCategoryItem.scrollTabID
+                        categoryTabID: foodCategoryItem.categoryTabID
                     };
                 } else {
                     return {
                         categoryName: foodCategoryItem.categoryName,
                         categoryID: foodCategoryItem.categoryID,
                         orderCount: 0,
-                        scrollTabID: foodCategoryItem.scrollTabID
+                        categoryTabID: foodCategoryItem.categoryTabID
                     };
                 }
             });
@@ -265,12 +265,12 @@ export default {
             this.asideCategoryList;
             for (let i = 0; i < this.asideCategoryList.length; i++) {
                 const categoryItem = this.asideCategoryList[i];
-                const res = await this.selectQuery(`#${categoryItem.scrollTabID}id`);
-                console.log(`#${categoryItem.scrollTabID}id`)
+                const res = await this.selectQuery(`#${categoryItem.categoryTabID}id`);
+                console.log(`#${categoryItem.categoryTabID}id`)
                 console.log(res)
                 if (this.topBarHeightPX <= res.top || res.bottom > this.topBarHeightPX) {
-                    this.selectCategoryTabId = categoryItem.scrollTabID;
-                    this.scrollIntoCategoryID = null;
+                    this.selectCategoryTabId = categoryItem.categoryTabID;
+                    this.scrollIntoCategoryTabID = null;
 
                     break;
                 }
@@ -301,11 +301,11 @@ export default {
                 shopID: this.shopInfo.shopID
             });
             foodCategoryList.forEach((item, index) => {
-                item.scrollTabID = 'id' + item.categoryID;
+                item.categoryTabID = 'id' + item.categoryID;
             });
             if (foodCategoryList.length) {
-                this.selectCategoryTabId = foodCategoryList[0].scrollTabID;
-                this.scrollIntoCategoryID = null;
+                this.selectCategoryTabId = foodCategoryList[0].categoryTabID;
+                this.scrollIntoCategoryTabID = null;
             }
             // 重来一单，orderAgain 和 orderKey 缺一不可
             if (orderAgain && orderKey) {
@@ -426,9 +426,9 @@ export default {
         closeCartDetail() {
             this.showCartDetail = false
         },
-        changeSelectCategoryTab(scrollTabID) {
-            this.selectCategoryTabId = scrollTabID;
-            this.scrollIntoCategoryID = scrollTabID;
+        changeSelectCategoryTab(categoryTabID) {
+            this.selectCategoryTabId = categoryTabID;
+            this.scrollIntoCategoryTabID = categoryTabID;
         },
         addCount(foodItem) {
             if (!this.addCountState) return;

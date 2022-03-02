@@ -5,11 +5,11 @@ const getMenuList = async ({ commit, state }) => {
         shopID: state.shopInfo.shopID
     });
     foodCategoryList.forEach((item, index) => {
-        item.scrollTabID = "id" + item.categoryID;
+        item.categoryTabID = "id" + item.categoryID;
     });
     if (foodCategoryList.length) {
-        commit('setCategoryTabId', foodCategoryList[0].scrollTabID)
-        commit('setScrollIntoCategoryID', null)
+        commit('setCategoryTabId', foodCategoryList[0].categoryTabID)
+        commit('setScrollIntoCategoryTabID', null)
     }
     commit('setFoodCategoryList', foodCategoryList)
 }

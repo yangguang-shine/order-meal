@@ -53,6 +53,7 @@ const { getAddressList, getRecommandShopList } = mapActions("user", [
     "getAddressList",
     "getRecommandShopList"
 ]);
+
 const { topAddressWidthFlag, tabListFixedFlag, addressList } = mapState(
     "user",
     ["topAddressWidthFlag", "tabListFixedFlag", "addressList"]

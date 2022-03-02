@@ -1,6 +1,6 @@
 <template>
-    <scroll-view scroll-y class="category-aside-bar-box">
-        <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'aside-categroy-item-active': categoryTabId === asideCategoryItem.scrollTabID }" @click="changeSelectCategoryTab(asideCategoryItem.scrollTabID)">
+    <scroll-view scroll-y class="category-aside-bar-box" :style="{'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightPX + 'px' : ''}">
+        <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'aside-categroy-item-active': categoryTabId === asideCategoryItem.categoryTabID }" @click="changeCategoryTab(asideCategoryItem.categoryTabID)">
             {{ asideCategoryItem.categoryName }}
             <view v-if="asideCategoryItem.orderCount" class="category-order-count" :style="{ background: $mainColor }">{{ asideCategoryItem.orderCount }}</view>
         </view>
@@ -16,25 +16,23 @@ import {
     mapGetters,
     mapMutations
 } from "../../../../../utils/mapVuex";
-const { asideCategoryList } = mapGetters("user", ["asideCategoryList"]);
-const { foodCategoryList, categoryTabId, scrollIntoCategoryID } = mapState("user", [
+import {  minusPromotionsHeightPX } from '../infoConfig'
+const { asideCategoryList, minusPromotionsObject } = mapGetters("user", ["asideCategoryList", 'minusPromotionsObject']);
+const { foodCategoryList, categoryTabId, scrollIntoCategoryTabID } = mapState("user", [
     "foodCategoryList",
     "categoryTabId",
-    "scrollIntoCategoryID"
+    "scrollIntoCategoryTabID"
 ]);
 const {
     setCategoryTabId,
-    setScrollIntoCategoryID
+    setScrollIntoCategoryTabID
 } = mapMutations("user", [
     'setCategoryTabId',
-    "setScrollIntoCategoryID"
+    "setScrollIntoCategoryTabID"
 ]);
-console.log('setCategoryTabId')
-console.log(setCategoryTabId)
-console.log()
-function changeSelectCategoryTab(scrollTabID: any) {
-    setCategoryTabId(scrollTabID)
-    setScrollIntoCategoryID(scrollTabID)
+function changeCategoryTab(categoryTabID: any) {
+    setCategoryTabId(categoryTabID)
+    setScrollIntoCategoryTabID(categoryTabID)
 }
 
 </script>
@@ -46,7 +44,7 @@ function changeSelectCategoryTab(scrollTabID: any) {
     background-color: #f5f5f5;
     flex-shrink: 0;
     box-sizing: border-box;
-    padding-bottom: 40rpx;
+    // padding-bottom: 50rpx;
     ::-webkit-scrollbar {
         display: none;
         width: 0 !important;
