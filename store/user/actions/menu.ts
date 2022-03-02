@@ -1,17 +1,17 @@
 import fetch from '../../../utils/fetch'
 import getShopMinusList from '../../../utils/getShopMinusList'
 const getMenuList = async ({ commit, state }) => {
-    const foodCategoryList: any = await fetch("user/order/menuList", {
+    const categoryList: any = await fetch("user/order/menuList", {
         shopID: state.shopInfo.shopID
     });
-    foodCategoryList.forEach((item, index) => {
+    categoryList.forEach((item, index) => {
         item.categoryTabID = "id" + item.categoryID;
     });
-    if (foodCategoryList.length) {
-        commit('setCategoryTabId', foodCategoryList[0].categoryTabID)
+    if (categoryList.length) {
+        commit('setCategoryTabId', categoryList[0].categoryTabID)
         commit('setScrollIntoCategoryTabID', null)
     }
-    commit('setFoodCategoryList', foodCategoryList)
+    commit('setFoodCategoryList', categoryList)
 }
 
 const getOrderKeyFoodList = async ({ commit ,state}, option: any) => {

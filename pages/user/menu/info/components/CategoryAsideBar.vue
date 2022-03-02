@@ -18,8 +18,8 @@ import {
 } from "../../../../../utils/mapVuex";
 import {  minusPromotionsHeightPX } from '../infoConfig'
 const { asideCategoryList, minusPromotionsObject } = mapGetters("user", ["asideCategoryList", 'minusPromotionsObject']);
-const { foodCategoryList, categoryTabId, scrollIntoCategoryTabID } = mapState("user", [
-    "foodCategoryList",
+const { categoryList, categoryTabId, scrollIntoCategoryTabID } = mapState("user", [
+    "categoryList",
     "categoryTabId",
     "scrollIntoCategoryTabID"
 ]);

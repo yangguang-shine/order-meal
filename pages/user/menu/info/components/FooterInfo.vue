@@ -27,7 +27,7 @@ const { cartPriceInfo, allCartFoodCount } = mapGetters("user", [
     "cartPriceInfo",
     "allCartFoodCount"
 ]);
-const { shopInfoFlag, cartFoodList } = mapState("user", ["shopInfoFlag", 'cartFoodList']);
+const { shopInfoFlag, cartCategoryList } = mapState("user", ["shopInfoFlag", 'cartCategoryList']);
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
 
 const { toogleCartDetailFlag } = mapMutations("user", ["toogleCartDetailFlag"]);
@@ -37,7 +37,7 @@ function toComfirmOrder() {
     });
 }
 function clickCartImg() {
-    if (cartFoodList.value.length > 0) {
+    if (cartCategoryList.value.length > 0) {
         toogleCartDetailFlag()
     }
 }

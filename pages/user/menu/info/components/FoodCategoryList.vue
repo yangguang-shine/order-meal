@@ -1,6 +1,6 @@
 <template>
     <scroll-view scroll-y scroll-with-animation :scroll-into-view="scrollIntoCategoryTabID" class="food-main-box flex-item" id="food-main-box" @scroll="foodScrollHandle" :style="{'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightPX + 'px' : '' }">
-        <view class="food-category-list-item" v-for="(foodCategoryItem, index) in foodCategoryList" :key="index" :id="foodCategoryItem.categoryTabID + 'id'">
+        <view class="food-category-list-item" v-for="(foodCategoryItem, index) in categoryList" :key="index" :id="foodCategoryItem.categoryTabID + 'id'">
             <view :id="foodCategoryItem.categoryTabID" class="food-category-name">{{ foodCategoryItem.categoryName }}</view>
             <view class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex" @click="toShowFoodDetail(foodItem)">
                 <image class="food-img  flex-shrink" :src="foodItem.imgUrl" mode="scaleToFill"></image>
@@ -30,8 +30,8 @@ import {
     mapMutations
 } from "../../../../../utils/mapVuex";
 const { asideCategoryList, minusPromotionsObject } = mapGetters("user", ["asideCategoryList", 'minusPromotionsObject']);
-const { foodCategoryList, scrollIntoCategoryTabID } = mapState("user", [
-    "foodCategoryList",
+const { categoryList, scrollIntoCategoryTabID } = mapState("user", [
+    "categoryList",
     "scrollIntoCategoryTabID"
 ]);
 

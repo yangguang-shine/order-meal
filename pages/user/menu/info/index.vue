@@ -52,8 +52,8 @@ const { $showLoading, $hideLoading, $showModal } = getCurrentInstance().proxy;
 const {
     shopInfo,
     businessType,
-    cartFoodList,
-    foodCategoryList,
+    cartCategoryList,
+    categoryList,
     orderCategoryList,
     categoryTabId,
     scrollIntoCategoryTabID,
@@ -65,8 +65,8 @@ const {
 } = mapState("user", [
     "shopInfo",
     "businessType",
-    "cartFoodList",
-    "foodCategoryList",
+    "cartCategoryList",
+    "categoryList",
     "orderCategoryList",
     "categoryTabId",
     "scrollIntoCategoryTabID",
@@ -94,14 +94,16 @@ const {
     setFoodCategoryList,
     setFoodInfo,
     setFoodDetailFlag,
-    setTopBarInfo
+    setTopBarInfo,
+    initCart
 } = mapMutations("user", [
     "setCategoryTabId",
     "setScrollIntoCategoryTabID",
     "setFoodCategoryList",
     "setFoodInfo",
     "setFoodDetailFlag",
-    "setTopBarInfo"
+    "setTopBarInfo",
+    "initCart"
 ]);
 
 const { getMenuList, getOrderKeyFoodList } = mapActions("user", [
@@ -137,8 +139,12 @@ async function init() {
             );
         }
     }
+    initCart()
     getStorageCart();
 }
+// function initCart() {
+
+// }
 // function getOrderFoodList(orderKey) {
 //     try {
 //         const data = await $fetch("user/order/foodList", {
@@ -247,18 +253,18 @@ function toChangeTopBar(title) {
 //             closeCartDetail();
 //         },
 //         async init() {
-//             console.log("cartFoodList");
-//             console.log(JSON.stringify(cartFoodList));
-//             console.log(cartFoodList);
+//             console.log("cartCategoryList");
+//             console.log(JSON.stringify(cartCategoryList));
+//             console.log(cartCategoryList);
 //             const { orderAgain, orderKey } = $root.$mp.query;
-//             const foodCategoryList = await $fetch("user/order/menuList", {
+//             const categoryList = await $fetch("user/order/menuList", {
 //                 shopID: shopInfo.shopID
 //             });
-//             foodCategoryList.forEach((item, index) => {
+//             categoryList.forEach((item, index) => {
 //                 item.categoryTabID = "id" + item.categoryID;
 //             });
-//             if (foodCategoryList.length) {
-//                 selectCategoryTabId = foodCategoryList[0].categoryTabID;
+//             if (categoryList.length) {
+//                 selectCategoryTabId = categoryList[0].categoryTabID;
 //                 scrollIntoCategoryTabID = null;
 //             }
 //             // 重来一单，orderAgain 和 orderKey 缺一不可
@@ -273,13 +279,13 @@ function toChangeTopBar(title) {
 //                     );
 //                 }
 //             }
-//             foodCategoryList = foodCategoryList;
+//             categoryList = categoryList;
 //             getStorageCart();
 //         },
-//         initCart({ foodCategoryList = [], storageFoodList = [] } = {}) {
-//             cartFoodList = [];
+//         initCart({ categoryList = [], storageFoodList = [] } = {}) {
+//             cartCategoryList = [];
 //             storageFoodList.forEach(storageFoodItem => {
-//                 const foodCategoryFind = foodCategoryList.find(
+//                 const foodCategoryFind = categoryList.find(
 //                     foodCategoryItem =>
 //                         foodCategoryItem.categoryID ===
 //                         storageFoodItem.categoryID
@@ -298,7 +304,7 @@ function toChangeTopBar(title) {
 //         },
 //         cartCountChange(foodItem = {}) {
 //             // 购物车数量增加减少使用的是引用改变，其他关联也相应改变
-//             const findCategory = cartFoodList.find(
+//             const findCategory = cartCategoryList.find(
 //                 item => item.categoryID === foodItem.categoryID
 //             );
 //             if (findCategory) {
@@ -309,12 +315,12 @@ function toChangeTopBar(title) {
 //                     findCategory.foodList.push(foodItem);
 //                 }
 //             } else {
-//                 cartFoodList.push({
+//                 cartCategoryList.push({
 //                     categoryID: foodItem.categoryID,
 //                     foodList: [foodItem]
 //                 });
 //             }
-//             cartFoodList.forEach(item => {
+//             cartCategoryList.forEach(item => {
 //                 item.foodList = item.foodList.filter(foodItem => {
 //                     if (foodItem.orderCount > 0) {
 //                         foodItem.foodItemAmount = Number(
@@ -327,21 +333,21 @@ function toChangeTopBar(title) {
 //                     }
 //                 });
 //             });
-//             cartFoodList = cartFoodList.filter(
+//             cartCategoryList = cartCategoryList.filter(
 //                 item => item.foodList.length > 0
 //             );
 //             uni.setStorageSync(
 //                 `storageFoodList_${shopInfo.shopID}`,
-//                 cartFoodList
+//                 cartCategoryList
 //             );
 //         },
 //         clearCart() {
-//             cartFoodList.forEach(categoryTtem => {
+//             cartCategoryList.forEach(categoryTtem => {
 //                 categoryTtem.foodList.forEach(foodItem => {
 //                     foodItem.orderCount = 0;
 //                 });
 //             });
-//             cartFoodList = [];
+//             cartCategoryList = [];
 //             uni.removeStorageSync(`storageFoodList_${shopInfo.shopID}`);
 //         },
 //         async getOrderFoodList(orderKey) {
@@ -385,12 +391,12 @@ function toChangeTopBar(title) {
 //                 [];
 //             if (!storageFoodList.length) return;
 //             initCart({
-//                 foodCategoryList: foodCategoryList,
+//                 categoryList: categoryList,
 //                 storageFoodList
 //             });
 //         },
 //         async toogleCartDetail() {
-//             if (!cartFoodList.length) {
+//             if (!cartCategoryList.length) {
 //                 showCartDetail = false;
 //                 return;
 //             }
@@ -414,7 +420,7 @@ function toChangeTopBar(title) {
 //             foodItem.orderCount += 1;
 //             cartCountChange(foodItem);
 //             addCountState = true;
-//             if (!cartFoodList.length) showCartDetail = false;
+//             if (!cartCategoryList.length) showCartDetail = false;
 //         },
 //         minusCount(foodItem) {
 //             if (!minusCountState) return;
@@ -422,7 +428,7 @@ function toChangeTopBar(title) {
 //             foodItem.orderCount -= 1;
 //             cartCountChange(foodItem);
 //             minusCountState = true;
-//             if (!cartFoodList.length) showCartDetail = false;
+//             if (!cartCategoryList.length) showCartDetail = false;
 //         },
 //         async toComfirmOrder() {
 //             $myrouter.navigateTo({

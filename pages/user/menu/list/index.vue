@@ -81,8 +81,8 @@ export default {
             selectCategoryTabId: '',
             scrollIntoCategoryTabID: '',
             showCartDetail: false,
-            foodCategoryList: [],
-            cartFoodList: [],
+            categoryList: [],
+            cartCategoryList: [],
             selectTopBarItem: '点餐',
             host,
             topBarHeightPX: 40,
@@ -95,7 +95,7 @@ export default {
     },
     computed: {
         minusPromotionsObject() {
-            if ((this.shopInfo.minusList || []).length === 0 || this.cartFoodList.length === 0) {
+            if ((this.shopInfo.minusList || []).length === 0 || this.cartCategoryList.length === 0) {
                 return {
                     show: false,
                     contentList: []
@@ -135,7 +135,7 @@ export default {
             }
         },
         cartPriceInfo() {
-            const cartAllOriginPrice = this.cartFoodList
+            const cartAllOriginPrice = this.cartCategoryList
                 .reduce((amount, item) => {
                     const categoryItemSum = item.foodList.reduce((all, foodItem) => {
                         const price = foodItem.price * foodItem.orderCount;
@@ -180,7 +180,7 @@ export default {
             };
         },
         allCartFoodCount() {
-            return this.cartFoodList.reduce((all, item) => {
+            return this.cartCategoryList.reduce((all, item) => {
                 const itemFoodAll = item.foodList.reduce((all, item) => {
                     all += item.orderCount;
                     return all;
@@ -190,8 +190,8 @@ export default {
             }, 0);
         },
         asideCategoryList() {
-            const asideCategoryList = this.foodCategoryList.map(foodCategoryItem => {
-                const cartFind = this.cartFoodList.find(cartFoodItem => cartFoodItem.categoryID === foodCategoryItem.categoryID);
+            const asideCategoryList = this.categoryList.map(foodCategoryItem => {
+                const cartFind = this.cartCategoryList.find(cartFoodItem => cartFoodItem.categoryID === foodCategoryItem.categoryID);
                 if (cartFind) {
                     const orderCount = cartFind.foodList.reduce((all, item) => {
                         all += item.orderCount;
@@ -293,18 +293,18 @@ export default {
             this.closeCartDetail()
         },
         async init() {
-			console.log('this.cartFoodList');
-			console.log(JSON.stringify((this.cartFoodList)));
-			console.log(this.cartFoodList);
+			console.log('this.cartCategoryList');
+			console.log(JSON.stringify((this.cartCategoryList)));
+			console.log(this.cartCategoryList);
             const { orderAgain, orderKey } = this.$root.$mp.query;
-            const foodCategoryList = await this.$fetch('user/order/menuList', {
+            const categoryList = await this.$fetch('user/order/menuList', {
                 shopID: this.shopInfo.shopID
             });
-            foodCategoryList.forEach((item, index) => {
+            categoryList.forEach((item, index) => {
                 item.categoryTabID = 'id' + item.categoryID;
             });
-            if (foodCategoryList.length) {
-                this.selectCategoryTabId = foodCategoryList[0].categoryTabID;
+            if (categoryList.length) {
+                this.selectCategoryTabId = categoryList[0].categoryTabID;
                 this.scrollIntoCategoryTabID = null;
             }
             // 重来一单，orderAgain 和 orderKey 缺一不可
@@ -314,13 +314,13 @@ export default {
                     uni.setStorageSync(`storageFoodList_${this.shopInfo.shopID}`, orderCategoryFoodList);
                 }
             }
-            this.foodCategoryList = foodCategoryList;
+            this.categoryList = categoryList;
             this.getStorageCart();
         },
-        initCart({ foodCategoryList = [], storageFoodList = [] } = {}) {
-			this.cartFoodList = []
+        initCart({ categoryList = [], storageFoodList = [] } = {}) {
+			this.cartCategoryList = []
             storageFoodList.forEach(storageFoodItem => {
-                const foodCategoryFind = foodCategoryList.find(foodCategoryItem => foodCategoryItem.categoryID === storageFoodItem.categoryID);
+                const foodCategoryFind = categoryList.find(foodCategoryItem => foodCategoryItem.categoryID === storageFoodItem.categoryID);
                 if (foodCategoryFind) {
                     foodCategoryFind.foodList.forEach(foodItem => {
                         storageFoodItem.foodList.forEach(item => {
@@ -335,19 +335,19 @@ export default {
         },
         cartCountChange(foodItem = {}) {
             // 购物车数量增加减少使用的是引用改变，其他关联也相应改变
-            const findCategory = this.cartFoodList.find(item => item.categoryID === foodItem.categoryID);
+            const findCategory = this.cartCategoryList.find(item => item.categoryID === foodItem.categoryID);
             if (findCategory) {
                 const findFood = findCategory.foodList.find(item => item.foodID === foodItem.foodID);
                 if (!findFood) {
                     findCategory.foodList.push(foodItem);
                 }
             } else {
-                this.cartFoodList.push({
+                this.cartCategoryList.push({
                     categoryID: foodItem.categoryID,
                     foodList: [foodItem]
                 });
             }
-            this.cartFoodList.forEach(item => {
+            this.cartCategoryList.forEach(item => {
                 item.foodList = item.foodList.filter(foodItem => {
                     if (foodItem.orderCount > 0) {
                         foodItem.foodItemAmount = Number((foodItem.price * foodItem.orderCount).toFixed(2));
@@ -358,16 +358,16 @@ export default {
                     }
                 });
             });
-            this.cartFoodList = this.cartFoodList.filter(item => item.foodList.length > 0);
-            uni.setStorageSync(`storageFoodList_${this.shopInfo.shopID}`, this.cartFoodList);
+            this.cartCategoryList = this.cartCategoryList.filter(item => item.foodList.length > 0);
+            uni.setStorageSync(`storageFoodList_${this.shopInfo.shopID}`, this.cartCategoryList);
         },
         clearCart() {
-            this.cartFoodList.forEach(categoryTtem => {
+            this.cartCategoryList.forEach(categoryTtem => {
                 categoryTtem.foodList.forEach(foodItem => {
                     foodItem.orderCount = 0;
                 });
             });
-            this.cartFoodList = [];
+            this.cartCategoryList = [];
             uni.removeStorageSync(`storageFoodList_${this.shopInfo.shopID}`);
         },
         async getOrderFoodList(orderKey) {
@@ -407,12 +407,12 @@ export default {
             const storageFoodList = uni.getStorageSync(`storageFoodList_${this.shopInfo.shopID}`) || [];
             if (!storageFoodList.length) return;
             this.initCart({
-                foodCategoryList: this.foodCategoryList,
+                categoryList: this.categoryList,
                 storageFoodList
             });
         },
         async toogleCartDetail() {
-            if (!this.cartFoodList.length) {
+            if (!this.cartCategoryList.length) {
                 this.showCartDetail = false;
                 return;
             }
@@ -436,7 +436,7 @@ export default {
             foodItem.orderCount += 1;
             this.cartCountChange(foodItem);
             this.addCountState = true;
-            if (!this.cartFoodList.length) this.showCartDetail = false;
+            if (!this.cartCategoryList.length) this.showCartDetail = false;
         },
         minusCount(foodItem) {
             if (!this.minusCountState) return;
@@ -444,7 +444,7 @@ export default {
             foodItem.orderCount -= 1;
             this.cartCountChange(foodItem);
             this.minusCountState = true;
-            if (!this.cartFoodList.length) this.showCartDetail = false;
+            if (!this.cartCategoryList.length) this.showCartDetail = false;
         },
         async toComfirmOrder() {
             this.$myrouter.navigateTo({

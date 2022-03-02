@@ -8,19 +8,19 @@ const mutations = {
 // user
 mutations['cartCountChange'] = function(state, { categoryID = '', foodItem = {}, fromStorageCart = false } = {}) {
 	// 购物车数量增加减少使用的是引用改变，其他关联也相应改变
-    const findCategory = state.cartFoodList.find(item => item.categoryID === categoryID)
+    const findCategory = state.cartCategoryList.find(item => item.categoryID === categoryID)
     if (findCategory) {
         const findFood = findCategory.foodList.find(item => item.foodName === foodItem.foodName)
         if (!findFood) {
             findCategory.foodList.push(foodItem)
         }
     } else {
-        state.cartFoodList.push({
+        state.cartCategoryList.push({
             categoryID,
             foodList: [foodItem]
         }) 
     }
-    state.cartFoodList.forEach((item) => {
+    state.cartCategoryList.forEach((item) => {
         item.foodList = item.foodList.filter(foodItem => {
             if (foodItem.orderCount > 0) {
                 foodItem.foodItemAmount = Number((foodItem.price * foodItem.orderCount).toFixed(2))
@@ -30,17 +30,17 @@ mutations['cartCountChange'] = function(state, { categoryID = '', foodItem = {},
             }
         })
     })
-    state.cartFoodList = state.cartFoodList.filter(item => item.foodList.length > 0)
+    state.cartCategoryList = state.cartCategoryList.filter(item => item.foodList.length > 0)
     if (!fromStorageCart) {
         uni.setStorage({
             key: `storageFoodList_${(vuexStorage(state, 'shopInfo') || {}).shopID}`,
-            data: state.cartFoodList
+            data: state.cartCategoryList
         })
     }
 }
-mutations['initCart'] = function (state, { foodCategoryList = [], storageFoodList = [] } = {}) {
+mutations['initCart'] = function (state, { categoryList = [], storageFoodList = [] } = {}) {
     storageFoodList.forEach((storageFoodItem) => {
-        const foodCategoryFind = foodCategoryList.find(foodCategoryItem => foodCategoryItem.categoryID === storageFoodItem.categoryID)
+        const foodCategoryFind = categoryList.find(foodCategoryItem => foodCategoryItem.categoryID === storageFoodItem.categoryID)
         if (foodCategoryFind) {
             foodCategoryFind.foodList.forEach((foodItem) => {
                 storageFoodItem.foodList.forEach((item) => {
@@ -55,12 +55,12 @@ mutations['initCart'] = function (state, { foodCategoryList = [], storageFoodLis
 }
 
 mutations['clearCart'] = (state, shopInfo = {}) => {
-    state.cartFoodList.forEach((categoryTtem) => {
+    state.cartCategoryList.forEach((categoryTtem) => {
         categoryTtem.foodList.forEach((foodItem) => {
             foodItem.orderCount = 0
         })
     })
-    state.cartFoodList = []
+    state.cartCategoryList = []
     uni.removeStorageSync(`storageFoodList_${(vuexStorage(state, 'shopInfo') || {}).shopID}`)
 }
 
@@ -71,7 +71,7 @@ mutations['clearCart'] = (state, shopInfo = {}) => {
 // mutations['saveShopInfo'] = (state, shopInfo = {}) => {
 //     const minusList = getShopMinusList(shopInfo.minus)
 //     shopInfo.minusList = minusList
-//     state.cartFoodList = []
+//     state.cartCategoryList = []
 //     state.shopInfo = shopInfo
 // 	uni.setStorage({
 // 		key: 'shopInfo',
@@ -87,11 +87,11 @@ mutations['clearCart'] = (state, shopInfo = {}) => {
 // 	})
 // }
 
-// mutations['saveCartFoodList'] = (state, cartFoodList) => {
-//     state.cartFoodList = cartFoodList
+// mutations['savecartCategoryList'] = (state, cartCategoryList) => {
+//     state.cartCategoryList = cartCategoryList
 // 	uni.setStorage({
-// 		key: 'cartFoodList',
-// 		data: cartFoodList
+// 		key: 'cartCategoryList',
+// 		data: cartCategoryList
 // 	})
 // }
 

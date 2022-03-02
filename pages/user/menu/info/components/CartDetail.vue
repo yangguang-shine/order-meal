@@ -14,7 +14,7 @@
                         </view>
                     </view>
                     <scroll-view scroll-y class="cart-detail-list-box">
-                        <view class="food-category-item" v-for="(foodCategoryItem) in cartFoodList" :key="foodCategoryItem.categoryID">
+                        <view class="food-category-item" v-for="(foodCategoryItem) in cartCategoryList" :key="foodCategoryItem.categoryID">
                             <view class="cart-food-item flex-row" v-for="(cartFoodItem) in foodCategoryItem.foodList" :key="cartFoodItem.foodID">
                                 <image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="'/static/img/default-img.svg'" mode="scaleToFill"></image>
                                 <view v-if="cartFoodItem.orderCount" class="cart-food-info-box flex-item flex-col flex-j-between">
@@ -57,9 +57,9 @@ import {
     mapMutations
 } from "../../../../../utils/mapVuex";
 const { minusPromotionsObject } = mapGetters("user", ["minusPromotionsObject"]);
-const { cartFoodList, foodCategoryList } = mapState("user", [
-    "cartFoodList",
-    "foodCategoryList"
+const { cartCategoryList, categoryList } = mapState("user", [
+    "cartCategoryList",
+    "categoryList"
 ]);
 const { setCartDetailFlag, clearCart } = mapMutations("user", [
     "setCartDetailFlag",
@@ -113,11 +113,11 @@ async function cartClearCart() {
     z-index: 400;
     .cart-detail-overlay-enter-from,
     .cart-detail-overlay-leave-to {
-        background-color: rgba(0, 0, 0, 0);
+        opacity: 0;
     }
     .cart-detail-overlay-enter-to,
     .cart-detail-overlay-leave-from {
-        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 1;
     }
     .cart-detail-box-enter-from,
     .cart-detail-box-leave-to {

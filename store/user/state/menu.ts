@@ -1,7 +1,7 @@
 
 const state = {
-    cartFoodList: [],
-    foodCategoryList: [],
+    cartCategoryList: [],
+    categoryList: [],
     orderCategoryList: [],
     categoryTabId: 'null',
     scrollIntoCategoryTabID: '',

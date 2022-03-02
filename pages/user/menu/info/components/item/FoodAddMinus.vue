@@ -1,10 +1,14 @@
 <template>
     <view class="food-add-minus-container flex-row flex-ja-center">
-        <view class="food-count-minus" v-if="foodItem.orderCount" @click.stop="minusCount()">
-            <div class="add-click-area"></div>
-            <view class="reduce-icon-css" :style="{ 'background-color': $mainColor }"></view>
-        </view>
-        <view v-if="foodItem.orderCount" class="food-order-count">{{ foodItem.orderCount || ''}}</view>
+        <transition name="food-count-minus">
+            <view class="food-count-minus" v-if="foodItem.orderCount" @click.stop="minusCount()">
+                <div class="add-click-area"></div>
+                <view class="reduce-icon-css" :style="{ 'background-color': $mainColor }"></view>
+            </view>
+        </transition>
+        <transition name="food-order-count">
+            <view v-if="foodItem.orderCount" class="food-order-count">{{ foodItem.orderCount || ''}}</view>
+        </transition>
         <view class="food-count-add" :style="{ 'background-color': $mainColor }" @click.stop="addCount()">
             <div class="add-click-area"></div>
         </view>
@@ -15,12 +19,13 @@
 <script lang="ts" setup>
 import { delaySync } from "@/utils/index.js";
 import { watch } from "vue";
-import { mapMutations } from "../../../../../../utils/mapVuex";
+import { mapMutations, mapState } from "../../../../../../utils/mapVuex";
 
 interface Props {
     foodItem: any;
 }
-const { cartChange } = mapMutations("user", ["cartChange"]);
+const { cartChange,setCartDetailFlag } = mapMutations("user", ["cartChange", "setCartDetailFlag"]);
+const { cartCategoryList, cartDetailFlag} = mapState('user', ["cartCategoryList", "cartDetailFlag"])
 const props = withDefaults(defineProps<Props>(), {
     foodItem: () => ({})
 });
@@ -42,6 +47,9 @@ function minusCount() {
         foodItem: props.foodItem,
         count: props.foodItem.orderCount - 1
     });
+    if (cartCategoryList.value.length === 0 && cartDetailFlag.value) {
+        setCartDetailFlag(false)
+    }
 }
 // addCount(foodItem) {
 //     if (!this.addCountState) return;
@@ -49,7 +57,7 @@ function minusCount() {
 //     foodItem.orderCount += 1;
 //     this.cartCountChange(foodItem);
 //     this.addCountState = true;
-//     if (!this.cartFoodList.length) this.showCartDetail = false;
+//     if (!this.cartCategoryList.length) this.showCartDetail = false;
 // },
 // minusCount(foodItem) {
 //     if (!this.minusCountState) return;
@@ -57,7 +65,7 @@ function minusCount() {
 //     foodItem.orderCount -= 1;
 //     this.cartCountChange(foodItem);
 //     this.minusCountState = true;
-//     if (!this.cartFoodList.length) this.showCartDetail = false;
+//     if (!this.cartCategoryList.length) this.showCartDetail = false;
 // },
 </script>
 
@@ -115,19 +123,43 @@ function minusCount() {
         line-height: 40rpx;
         background-color: #fff;
         box-sizing: border-box;
-        // transition: all ease-in-out .3s;
+        // transform: translateX(-100rpx);
     }
-    .food-count-minus-show {
+    .food-count-minus-enter-from,
+    .food-count-minus-leave-to {
+        right: 0;
+        transform: rotate(0);
+        // transform: translateX(0) rotate(0);
+    }
+    .food-count-minus-enter-active,
+    .food-count-minus-leave-active {
+        transition: all ease-in-out 0.3s;
+    }
+    .food-count-minus-enter-to,
+    .food-count-minus-leave-from {
         right: 100rpx;
         transform: rotate(-180deg);
+        // transform: translateX(-100rpx) rotate(180deg);
     }
+
+    // .food-count-minus-show {
+    //     right: 100rpx;
+    //     transform: rotate(-180deg);
+    // }
 
     .food-order-count {
         font-size: 30rpx;
         line-height: 36rpx;
         color: #333;
-        opacity: 1;
         transition: all ease-in-out 0.3s;
+    }
+    .food-order-count-enter-from,
+    .food-order-count-leave-to {
+        opacity: 0;
+    }
+    .food-order-count-enter-to,
+    .food-order-count-leave-from {
+        opacity: 1;
     }
 
     .food-order-count-show {

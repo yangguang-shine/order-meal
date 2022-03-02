@@ -1,5 +1,5 @@
 const minusPromotionsObject = (state, getters) => {
-    if ((state.shopInfo.minusList || []).length === 0 || state.cartFoodList.length === 0) {
+    if ((state.shopInfo.minusList || []).length === 0 || state.cartCategoryList.length === 0) {
         return {
             show: false,
             contentList: []
@@ -57,7 +57,7 @@ const minusPromotionsObject = (state, getters) => {
     }
 }
 const cartPriceInfo = (state, getters) => {
-    const cartAllOriginPrice = state.cartFoodList.reduce((amount, item) => {
+    const cartAllOriginPrice = state.cartCategoryList.reduce((amount, item) => {
         const categoryItemSum = item.foodList.reduce((all, foodItem) => {
             const price = foodItem.price * foodItem.orderCount;
             all += price;
@@ -106,7 +106,7 @@ const cartPriceInfo = (state, getters) => {
     };
 }
 const allCartFoodCount = (state, getters) => {
-    return state.cartFoodList.reduce((all, item) => {
+    return state.cartCategoryList.reduce((all, item) => {
         const itemFoodAll = item.foodList.reduce((all, item) => {
             all += item.orderCount;
             return all;
@@ -116,8 +116,8 @@ const allCartFoodCount = (state, getters) => {
     }, 0);
 }
 const asideCategoryList = (state, getters) => {
-    const asideCategoryList = state.foodCategoryList.map(foodCategoryItem => {
-        const cartFind = state.cartFoodList.find(
+    const asideCategoryList = state.categoryList.map(foodCategoryItem => {
+        const cartFind = state.cartCategoryList.find(
             cartFoodItem =>
                 cartFoodItem.categoryID === foodCategoryItem.categoryID
         );
@@ -143,26 +143,26 @@ const asideCategoryList = (state, getters) => {
     });
     return asideCategoryList;
 }
-// const cartFoodList = (state) => {
-//     const cartFoodList = []
-//     state.foodCategoryList.forEach((foodCategoryItem) => {
+// const cartCategoryList = (state) => {
+//     const cartCategoryList = []
+//     state.categoryList.forEach((foodCategoryItem) => {
 //         foodCategoryItem.foodList.forEach((foodItem) => {
 
 //         })
 //     })
-//     const findCategory = state.cartFoodList.find(item => item.categoryID === foodItem.categoryID)
+//     const findCategory = state.cartCategoryList.find(item => item.categoryID === foodItem.categoryID)
 //     if (findCategory) {
 //         const findFood = findCategory.foodList.find(item => item.foodName === foodItem.foodName)
 //         if (!findFood) {
 //             findCategory.foodList.push(foodItem)
 //         }
 //     } else {
-//         state.cartFoodList.push({
+//         state.cartCategoryList.push({
 //             categoryID: foodItem.categoryID,
 //             foodList: [foodItem]
 //         })
 //     }
-//     state.cartFoodList.forEach((item) => {
+//     state.cartCategoryList.forEach((item) => {
 //         item.foodList = item.foodList.filter(foodItem => {
 //             if (foodItem.orderCount > 0) {
 //                 foodItem.foodItemAmount = Number((foodItem.price * foodItem.orderCount).toFixed(2))

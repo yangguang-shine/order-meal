@@ -72,14 +72,14 @@ export default {
             type: Number,
             default: 0
         },
-        cartFoodList: {
+        cartCategoryList: {
             type: Array,
             default: () => []
         },
     },
     computed: {
         foodList() {
-            const foodList = this.cartFoodList.reduce((list, item) => {
+            const foodList = this.cartCategoryList.reduce((list, item) => {
                 list = list.concat(item.foodList)
                 return list
             }, [])

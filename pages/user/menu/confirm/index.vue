@@ -1,7 +1,7 @@
 <template>
 	<div class="comfirm-order-container">
 		<address-deliver :defaultAddress="defaultAddress" :takeOutTime="takeOutTime" @takeOutTimeChange="takeOutTimeChange"></address-deliver>
-		<order-info :shopInfo="shopInfo" :cartFoodList="cartFoodList" :originOrderAmount="originOrderAmount" :minusPrice="minusPrice" :payPrice="payPrice" @continueOrder="continueOrder"></order-info>
+		<order-info :shopInfo="shopInfo" :cartCategoryList="cartCategoryList" :originOrderAmount="originOrderAmount" :minusPrice="minusPrice" :payPrice="payPrice" @continueOrder="continueOrder"></order-info>
 		<other-info :noteText="noteText" @showNoteInput="showNoteInput"></other-info>
 		<footer-button @submitOrder="submitOrder"></footer-button>
 		<note-input :noteText="noteText" v-if="noteInputFlag" @hideNoteInput="hideNoteInput" @confirmNoteInput="confirmNoteInput"></note-input>
@@ -35,7 +35,7 @@ export default {
 			shopInfo: {
 				minusList: []
 			},
-			cartFoodList: [],
+			cartCategoryList: [],
 			businessType: {},
 			noteText: '',
 			noteInputFlag: false,
@@ -48,9 +48,9 @@ export default {
 			this.getTakeOutTime();
 			this.shopInfo = uni.getStorageSync('shopInfo');
 			this.businessType = uni.getStorageSync('businessType');
-			this.cartFoodList = uni.getStorageSync(`storageFoodList_${this.shopInfo.shopID}`);
+			this.cartCategoryList = uni.getStorageSync(`storageFoodList_${this.shopInfo.shopID}`);
 			this.originOrderAmount = Number(
-				this.cartFoodList
+				this.cartCategoryList
 					.reduce((amount, item) => {
 						const categoryItemSum = item.foodList.reduce((all, foodItem) => {
 							const price = foodItem.price * foodItem.orderCount;
@@ -130,9 +130,9 @@ export default {
 		async submitOrder() {
 			try {
 				this.$showLoading();
-				if (!this.cartFoodList.length) return;
+				if (!this.cartCategoryList.length) return;
 				const foodList = [];
-				this.cartFoodList.forEach(item => {
+				this.cartCategoryList.forEach(item => {
 					foodList.push(...item.foodList);
 				});
 				const query = {};
@@ -161,7 +161,7 @@ export default {
 			}
 		},
 		clearCart() {
-			this.cartFoodList = [];
+			this.cartCategoryList = [];
 			uni.removeStorageSync(`storageFoodList_${this.shopInfo.shopID}`);
 		},
 		toSelectAddress() {
