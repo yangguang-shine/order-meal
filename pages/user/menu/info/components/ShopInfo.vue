@@ -1,5 +1,5 @@
 <template>
-    <view class="shop-info-container" :class="showComponents ? 'show-shop-info-container' : 'hide-shop-info-container'">
+    <view class="shop-info-container show-shop-info-container">
 
         <!-- 		address: "西直门凯德茂地铁站"
 		businessTypes: "2,3"
@@ -49,7 +49,6 @@
 import MinusList from "@/components/MinusList.vue";
 import { mapState } from "../../../../../utils/mapVuex";
 const { shopInfo } = mapState("user", ["shopInfo"]);
-const showComponents = false
 </script>
 
 <style lang="scss" scoped>

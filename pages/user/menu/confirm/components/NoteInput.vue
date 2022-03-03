@@ -1,6 +1,6 @@
 <template>
-    <div class="note-input-container" :class="{'note-input-container-show': showComponents }" @click.stop="hideNoteInput" @touchmove.stop.prevent>
-        <div class="note-input-box" :class="{'note-input-box-show': showComponents}" @click.stop>
+    <div class="note-input-container note-input-container-show" @click.stop="hideNoteInput" @touchmove.stop.prevent>
+        <div class="note-input-box note-input-box-show" @click.stop>
             <div class="cancel-confirm flex-row flex-a-center flex-j-between">
                 <div class="cancel-button" @click="hideNoteInput">取消</div>
                 <div class="confirm-button" @click="confirmNoteInput">完成</div>
@@ -13,43 +13,20 @@
     </div>
 </template>
 
-<script>
-export default {
-    props: {
-        noteText: {
-            type: String,
-            default: ''
-        }
-    },
-    data() {
-        return {
-            showComponents: false,
-            noteInput: '',
-			maxlength: 20
-        }
-    },
-    computed: {
-        noteInputLength() {
-            return this.noteInput.length
-        }
-    },
-    async mounted() {
-        this.noteInput = this.noteText
-        await this.$delaySync(0)
-        this.showComponents = true
-    },
-    methods: {
-        async hideNoteInput() {
-            this.showComponents = false
-            await this.$delaySync(300)
-            this.$emit('hideNoteInput')
-        },
-        async confirmNoteInput() {
-            this.showComponents = false
-            await this.$delaySync(300)
-            this.$emit('confirmNoteInput', this.noteInput)
-        },
-    }
+<script lang="ts" setup>
+import { mapState, mapMutations } from '../../../../../utils/mapVuex'
+import { computed ,ref} from 'vue'
+const {noteText} = mapState('user', ['noteText'])
+const {setNoteInputFlag, setNoteText } = mapMutations('user', ['setNoteInputFlag', "setNoteText"])
+const noteInput = ref(noteText.value)
+const maxlength = 20
+const noteInputLength = computed(() => noteInput.value.length)
+function hideNoteInput() {
+    setNoteInputFlag(false)
+}
+function confirmNoteInput() {
+    setNoteText(noteInput.value)
+    setNoteInputFlag(false)
 }
 </script>
 

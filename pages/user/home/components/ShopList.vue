@@ -18,7 +18,6 @@ const { saveShopInfo, saveBusinessType } = mapMutations('user', ['saveShopInfo',
 const { recommandShopList } = mapState("user", ["recommandShopList"]);
 function toOrder(shopItem: any) {
     console.log("toOrder");
-    console.log(shopItem);
     saveShopInfo(shopItem);
     saveBusinessType(2);
     $myrouter.navigateTo({

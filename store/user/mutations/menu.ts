@@ -18,12 +18,16 @@ const setFoodDetailFlag = (state: any, payload: any) => {
 const setTopBarInfo = (state: any, payload: any) => {
     state.topBarInfo = payload
 }
+const setShopInfoFlag = (state: any, payload: any) => {
+    state.shopInfoFlag = payload
+}
 const toogleCartDetailFlag = (state: any, payload: any) => {
     state.cartDetailFlag = !state.cartDetailFlag
 }
 const setCartDetailFlag = (state: any, payload: any) => {
     state.cartDetailFlag = payload
 }
+
 
 
 const clearCart = (state: any, payload: any) => {
@@ -80,9 +84,6 @@ const initCart = function (state: any, payload: any){
             });
         }
     });
-    console.log('>>>>>>>')
-    console.log(state.cartCategoryList)
-    console.log(state.categoryList)
 }
 
 
@@ -97,6 +98,7 @@ export default {
     setFoodInfo,
     setFoodDetailFlag,
     setTopBarInfo,
+    setShopInfoFlag,
     toogleCartDetailFlag,
     setCartDetailFlag,
     clearCart,

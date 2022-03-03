@@ -1,13 +1,13 @@
 <template>
-    <view class="promotion-title flex-row flex-ja-center" :style="{'position': showShopInfo ? 'absolute' : 'fixed'}">
+    <view class="promotion-title flex-row flex-ja-center" :style="{'position': shopInfoFlag ? 'absolute' : 'fixed'}">
         <text v-for="(contentItem, index) in minusPromotionsObject.contentList" :key="index" :class="{ 'content-red': index % 2 !== 0 }">{{ contentItem }}</text>
     </view>
 </template>
 
 <script lang='ts' setup>
-import { mapGetters } from '../../../../../utils/mapVuex';
+import { mapGetters, mapState } from '../../../../../utils/mapVuex';
 const {minusPromotionsObject } = mapGetters('user', ['minusPromotionsObject'])
-const showShopInfo = false
+const { shopInfoFlag } = mapState('user', ['shopInfoFlag'])
 </script>
 
 <style lang="scss">

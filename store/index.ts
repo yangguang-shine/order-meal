@@ -5,12 +5,12 @@ import mutations from './mutations'
 import user from './user'
 import manage from './manage'
 const store = createStore({
-    state,
-    mutations,
-    actions,
+    // state,
+    // mutations,
+    // actions,
     modules: {
         user,
-        manage
+        // manage
     }
 })
 export default store

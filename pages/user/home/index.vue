@@ -27,26 +27,23 @@ interface IMutations {
     setTopAddressWidthFlag: any;
     setTabListFixedFlag: any;
     setDefaultAddress: any;
-    toSelectAddress: any;
 }
 interface IActions {
     getAddressList: () => any;
     getRecommandShopList: () => any;
 }
 const internalInstance = getCurrentInstance();
-const { $showLoading, $hideLoading, $showModal } = internalInstance.proxy;
+const { $showLoading, $hideLoading, $showModal, $myrouter } = internalInstance.proxy;
 const {
     setTopAddressWidthFlag,
     setTabListFixedFlag,
     setDefaultAddress,
-    setRecommandShopList,
-    toSelectAddress
+    setRecommandShopList
 } = mapMutations("user", [
     "setTopAddressWidthFlag",
     "setTabListFixedFlag",
     "setDefaultAddress",
-    "setRecommandShopList",
-    "toSelectAddress"
+    "setRecommandShopList"
 ]);
 
 const { getAddressList, getRecommandShopList } = mapActions("user", [
@@ -59,7 +56,8 @@ const { topAddressWidthFlag, tabListFixedFlag, addressList } = mapState(
     ["topAddressWidthFlag", "tabListFixedFlag", "addressList"]
 );
 // console.log(JSON.stringify(addressList.value))
-onShow(() => {
+onLoad(() => {
+    console.log('init')
     uni.pageScrollTo({
         scrollTop: 0,
         duration: 0
@@ -77,7 +75,7 @@ onPageScroll((e: any) => {
     } else {
         setTabListFixedFlag(false);
     }
-})
+});
 async function getDefaultAddress() {
     await getAddressList();
     if (addressList.value.length) {
@@ -87,7 +85,12 @@ async function getDefaultAddress() {
             content: "为提供更好服务，请先选择地址",
             confirmText: "去选择地址"
         });
-        toSelectAddress();
+        $myrouter.navigateTo({
+            name: "user/address/list",
+            query: {
+                fromPage: "userHome"
+            }
+        });
     }
 }
 async function init() {

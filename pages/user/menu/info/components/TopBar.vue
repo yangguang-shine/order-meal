@@ -10,12 +10,18 @@
 
 <script lang="ts" setup>
 import { mapState, mapMutations } from "../../../../../utils/mapVuex";
+
+const { topBarInfo } = mapState("user", ["topBarInfo"]);
+const { setTopBarInfo,setShopInfoFlag } = mapMutations("user", ["setTopBarInfo", "setShopInfoFlag"]);
 function clickTopBar(title) {
     if (topBarInfo === title) return;
+    if (title === "商家") {
+        setShopInfoFlag(true);
+    } else {
+        setShopInfoFlag(false);
+    }
     setTopBarInfo(title);
 }
-const { topBarInfo } = mapState("user", ["topBarInfo"]);
-const { setTopBarInfo } = mapMutations("user", ["setTopBarInfo"]);
 </script>
 
 <style lang="scss" scoped>

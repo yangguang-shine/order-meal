@@ -266,8 +266,6 @@ export default {
             for (let i = 0; i < this.asideCategoryList.length; i++) {
                 const categoryItem = this.asideCategoryList[i];
                 const res = await this.selectQuery(`#${categoryItem.categoryTabID}id`);
-                console.log(`#${categoryItem.categoryTabID}id`)
-                console.log(res)
                 if (this.topBarHeightPX <= res.top || res.bottom > this.topBarHeightPX) {
                     this.selectCategoryTabId = categoryItem.categoryTabID;
                     this.scrollIntoCategoryTabID = null;
@@ -293,9 +291,6 @@ export default {
             this.closeCartDetail()
         },
         async init() {
-			console.log('this.cartCategoryList');
-			console.log(JSON.stringify((this.cartCategoryList)));
-			console.log(this.cartCategoryList);
             const { orderAgain, orderKey } = this.$root.$mp.query;
             const categoryList = await this.$fetch('user/order/menuList', {
                 shopID: this.shopInfo.shopID

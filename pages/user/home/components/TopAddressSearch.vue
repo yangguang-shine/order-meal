@@ -12,14 +12,22 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, getCurrentInstance } from "vue";
 import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
-
+const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
 const { topAddressWidthFlag, defaultAddress } = mapState("user", [
     "topAddressWidthFlag",
     "defaultAddress"
 ]);
-const { toSelectAddress } = mapMutations("user", ["toSelectAddress"]);
+function toSelectAddress() {
+    $myrouter.navigateTo({
+        name: "user/address/list",
+        query: {
+            fromPage: "userHome"
+        }
+    });
+}
+
 const toSearchShop = () => {
     console.log("toSearchShop");
 };

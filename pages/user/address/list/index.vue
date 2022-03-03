@@ -1,7 +1,7 @@
 <template>
     <view class="address-list-container">
         <div class="address-lsit">
-            <div class="address-item" v-for="(addressItem, index) in addressList" :key="index" @click="toSetDefaultAddress(addressItem.addressID)">
+            <div class="address-item" v-for="(addressItem, index) in addressList" :key="index" @click="toSetDefaultAddress(addressItem)">
                 <div class="address-title line1">
                     {{addressItem.address1}} {{addressItem.address2}}
                 </div>
@@ -59,7 +59,7 @@ onShow(() => {
     init();
 });
 onLoad((options: any) => {
-    routerOptions = options
+    routerOptions = options;
 });
 async function init() {
     try {
@@ -87,7 +87,7 @@ async function toDeleteAddress(addressID) {
     try {
         $showLoading();
         await deleteAddress(addressID);
-        $hideLoading()
+        $hideLoading();
         await $showModal({
             content: "删除成功"
         });
@@ -99,8 +99,8 @@ async function toDeleteAddress(addressID) {
     }
     init();
 }
-async function toSetDefaultAddress(addressID) {
-    if (defaultAddress.value.addressID === addressID) return;
+async function toSetDefaultAddress(addressItem) {
+    if (defaultAddress.value.addressID === addressItem.addressID) return;
     try {
         await $showModal({
             content: "确认设置为默认地址吗？",
@@ -112,11 +112,14 @@ async function toSetDefaultAddress(addressID) {
     }
     try {
         $showLoading();
-        await setDefaultAddressFetch(addressID);
+        await setDefaultAddressFetch(addressItem.addressID);
+        setDefaultAddress(addressItem);
         // await $fetch("user/address/setDefault", { addressID });
         if (routerOptions.fromPage) {
             $myrouter.back();
+            return
         }
+        
     } catch (e) {
         console.log(e);
     } finally {

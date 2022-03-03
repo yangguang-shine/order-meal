@@ -10,16 +10,8 @@ const setDefaultAddress = (state: any, defaultAddress: any): void => {
 // const setFindAddressInfo = (state: any, addressInfo: any): void => {
 //     state.findAddressInfo = addressInfo
 // }
-const toSelectAddress = (): void => {
-    router.navigateTo({
-        name: "user/address/list",
-        query: {
-            fromPage: "userHome"
-        }
-    });
-}
+
 export default { 
     setAddressList,
     setDefaultAddress,
-    toSelectAddress,
 }

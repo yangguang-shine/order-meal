@@ -8,12 +8,10 @@
             </view>
             <CartDetail  v-if="cartDetailFlag"></CartDetail>
             <MinusPromotions v-if="minusPromotionsObject.show"></MinusPromotions>
-            <!-- <MinusPromotionsBlock v-if="minusPromotionsObject.show"></MinusPromotionsBlock> -->
             <FooterInfo></FooterInfo>
-            <!-- <FooterCartBlock></FooterCartBlock> -->
             <FoodDetail v-if="foodDetailFalg"></FoodDetail>
         </view>
-        <!-- <ShopInfo v-if="showShopInfo" ref="shopInfo" :shopInfo="shopInfo"></ShopInfo> -->
+        <ShopInfo v-if="shopInfoFlag"></ShopInfo>
         <!-- <common-loading v-if="showLoadingFlag"></common-loading> -->
     </view>
 </template>
@@ -189,10 +187,13 @@ function toCloseFoodDetail() {
     setFoodInfo({});
     setFoodDetailFlag(false);
 }
-function toChangeTopBar(title) {
-    if (topBarInfo === title) return;
-    setTopBarInfo(title);
-}
+// function toChangeTopBar(title) {
+//     if (topBarInfo === title) return;
+//     if (title === '商家') {
+//         setShopInfoFlag(true)
+//     }
+//     setTopBarInfo(title);
+// }
 // export default {
 //     methods: {
 //         // async changeTopBar(title) {
