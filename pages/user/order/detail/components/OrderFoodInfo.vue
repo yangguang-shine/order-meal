@@ -22,20 +22,12 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import OrderFoodItem from '@/components/OrderFoodItem.vue';
+import { mapState } from '../../../../../utils/mapVuex';
+const { orderDetail } = mapState('user', ['orderDetail'])
 
-export default {
-	components: {
-		OrderFoodItem,
-	},
-	props: {
-		orderDetail: {
-			type: Object,
-			default: () => {}
-		}
-	},
-};
+
 </script>
 
 <style lang="scss" scoped>

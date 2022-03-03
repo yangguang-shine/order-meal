@@ -1,18 +1,18 @@
 <template>
     <div class="order-list-container ">
         <div class="tab-list-box flex-row flex-a-center">
-            <div class="tab-item flex-item" v-for="(tabItem, index) in ['全部', '待消费', '完成', '退款']" :style="{ color: index === tabIndex ? $mainColor : '#333' }" @click="changeTabIndex(index)" :key="index">{{ tabItem }}</div>
-            <div class="tab-bottom" :style="{ background: $mainColor, left: (tabIndex * 2 + 1) * 12.5 + '%' }"></div>
+            <div class="tab-item flex-item" v-for="(tabItem, index) in ['全部', '待消费', '完成', '退款']" :style="{ color: index === orderTabIndex ? $mainColor : '#333' }" @click="toChangeTabIndex(index)" :key="index">{{ tabItem }}</div>
+            <div class="tab-bottom" :style="{ background: $mainColor, left: (orderTabIndex * 2 + 1) * 12.5 + '%' }"></div>
         </div>
-        <view v-show="tabIndex === allOrderIndex" class="order-list-box" v-for="(orderList, allOrderIndex) in allOrderList" :key="allOrderIndex">
+        <view v-show="orderTabIndex === allOrderIndex" class="order-list-box" v-for="(orderList, allOrderIndex) in allOrderList" :key="allOrderIndex">
             <div class="order-list-item" v-for="(orderItem, index) in orderList" :key="index" @click="toOrderDetail(orderItem)">
                 <div class="flex-row">
-                    <image class="shop-img" :src="orderItem.imgUrl ? host + orderItem.imgUrl : '/static/img/default-img.svg'" mode="scaleToFill"></image>
+                    <image class="shop-img" :src="'/static/img/default-img.svg'" mode="scaleToFill"></image>
                     <div class="flex-item flex-col flex-j-between">
                         <div class="flex-row flex-a-center flex-j-between">
                             <!-- <div class="shop-name line1">{{orderItem.shopName}}</div> -->
                             <view class="flex-row flex-a-center">
-                                <div class="shop-name line1">洁柔</div>
+                                <div class="shop-name line1">嘻嘻</div>
                                 <image class="arrow-left" src="/static/img/shop/arrow-right.png" mode=""></image>
                             </view>
                             <div class="order-time">{{ orderItem.orderTimeDetail }}</div>
@@ -45,136 +45,139 @@
                 </div>
             </div>
         </view>
-        <div v-if="showErrorList[tabIndex]" class="common-error-box flex-row flex-ja-center">
-            <common-error></common-error>
+        <div v-if="orderErrorListFlag[orderTabIndex]" class="common-error-box flex-row flex-ja-center">
+            <CommonError></CommonError>
         </div>
     </div>
 </template>
 
-<script>
-import { host } from '@/config/host';
-import getShopMinusList from '@/utils/getShopMinusList';
-import { timeStampTranslate } from '@/utils/index.js';
-import MinusList from '@/components/MinusList.vue';
+<script lang="ts" setup>
+import getShopMinusList from "@/utils/getShopMinusList";
+import { timeStampTranslate } from "@/utils/index.js";
+import MinusList from "@/components/MinusList.vue";
+import { getCurrentInstance } from "vue";
+import { mapState, mapActions, mapMutations } from "../../../../utils/mapVuex";
+import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
-export default {
-    components: {
-        MinusList
-    },
-    data() {
-        return {
-            tabIndex: 0,
-            allOrderList: [[], [], [], []],
-            showErrorList: [false, false, false, false],
-            host
-        };
-    },
-    async onShow() {
-        try {
-            this.$showLoading();
-            console.log(this.$router);
-            await this.getOrderList(this.tabIndex);
-        } catch (e) {
-            this.$set(this.showErrorList, this.tabIndex, true);
-            console.log(e);
-        } finally {
-            this.$hideLoading();
+const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
+const { allOrderList, orderTabIndex, orderErrorListFlag } = mapState("user", [
+    "allOrderList",
+    "orderTabIndex",
+    "orderErrorListFlag"
+]);
+const { getOrderList, getShopInfo } = mapActions("user", ["getOrderList", 'getShopInfo']);
+const {
+    setOrderErrorListFlag,
+    setOrderTabIndex,
+    saveShopInfo,
+    saveBusinessType
+} = mapMutations("user", ["setOrderErrorListFlag", 'setOrderTabIndex', 'saveShopInfo', 'saveBusinessType']);
+onLoad(() => {
+    init();
+});
+async function init() {
+    try {
+        $showLoading();
+		const orderList = await getOrderList();
+		console.log(orderList.length === 0)
+        setOrderErrorListFlag(orderList.length === 0);
+        if (orderList.length) {
+        } else {
         }
-    },
-    computed: {},
-    methods: {
-        async getOrderList(index) {
-            const data = await this.$fetch('user/order/orderList', {
-                status: index
-            });
-            const orderList = (data || []).map(orderItem => ({
-                ...orderItem,
-                minusList: getShopMinusList(orderItem.minus || ''),
-                orderTimeDetail: timeStampTranslate(orderItem.orderTime),
-                orderTypeTitle: this.getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType)
-            }));
-            if (!orderList.length) {
-                this.$set(this.showErrorList, index, true);
-            } else {
-                this.$set(this.showErrorList, index, false);
-            }
-            this.$set(this.allOrderList, index, []);
-            this.allOrderList[index].push(...orderList);
-        },
-        getOrderTypeTitle(orderStatus, businessType) {
-            if (orderStatus === 10) {
-                return '待接单';
-            } else if (orderStatus === 20) {
-                return '已接单';
-            } else if (orderStatus === 30) {
-                if (businessType === 2) {
-                    return '已送出';
-                } else if (businessType === 3) {
-                    return '待自提';
-                }
-                return '';
-            } else if (orderStatus === 40) {
-                if (businessType === 2) {
-                    return '已送达';
-                } else if (businessType === 3) {
-                    return '已自提';
-                }
-                return '';
-            } else if (orderStatus === 50) {
-                return '已取消';
-            }
-            return '';
-        },
-        async changeTabIndex(index) {
-            if (index === this.tabIndex) return;
-            try {
-                this.$showLoading();
-                await this.getOrderList(index);
-                this.tabIndex = index;
-            } catch (e) {
-                console.log(e);
-            } finally {
-                this.$hideLoading();
-            }
-        },
-        toOrderDetail(orderItem) {
-            this.$myrouter.navigateTo({
-                name: 'user/order/detail',
-                query: {
-                    orderKey: orderItem.orderKey
-                }
-            });
-        },
-        async orderAgain(orderItem) {
-            try {
-                this.$showLoading();
-                const shopInfo = await this.$fetch('user/shop/find', { shopID: orderItem.shopID });
-                this.saveShopInfo(shopInfo);
-                this.saveBusinessType(orderItem.businessType);
-                this.$myrouter.navigateTo({
-                    name: 'user/menu/info',
-                    query: {
-                        orderKey: orderItem.orderKey,
-                        orderAgain: 'true'
-                    }
-                });
-            } catch (e) {
-                console.log(e);
-            } finally {
-                this.$hideLoading();
-            }
-        },
-        saveBusinessType(businessType) {
-            uni.setStorageSync('businessType', businessType);
-        },
-        saveShopInfo(shopItem) {
-            if (!shopItem.minusList) {
-                shopItem.minusList = getShopMinusList(shopItem.minus || '');
-            }
-            uni.setStorageSync('shopInfo', shopItem);
-        }
+    } catch (e) {
+        setOrderErrorListFlag(true);
+        console.log(e);
+    } finally {
+        $hideLoading();
     }
-};
+}
+async function toChangeTabIndex(index) {
+    try {
+        if (index === orderTabIndex) return;
+        setOrderTabIndex(index);
+        $showLoading();
+        await init();
+    } catch (e) {
+        console.log(e);
+    }
+}
+function toOrderDetail(orderItem) {
+    $myrouter.navigateTo({
+        name: "user/order/detail",
+        query: {
+            orderKey: orderItem.orderKey
+        }
+    });
+}
+async function orderAgain(orderItem) {
+    try {
+        $showLoading();
+        const shopInfo = await getShopInfo({
+            shopID: orderItem.shopID
+        });
+        saveShopInfo(shopInfo);
+        saveBusinessType(orderItem.businessType);
+        $myrouter.navigateTo({
+            name: "user/menu/info",
+            query: {
+                orderKey: orderItem.orderKey,
+                orderAgain: "true"
+            }
+        });
+    } catch (e) {
+        console.log(e);
+    } finally {
+        $hideLoading();
+    }
+}
+
+// export default {
+//     components: {
+//         MinusList
+//     },
+//     async onShow() {
+//         try {
+//             this.$showLoading();
+//             console.log(this.$router);
+//             await this.getOrderList(this.orderTabIndex);
+//         } catch (e) {
+//             this.$set(this.showErrorList, this.orderTabIndex, true);
+//             console.log(e);
+//         } finally {
+//             this.$hideLoading();
+//         }
+//     },
+//     methods: {
+//         async getOrderList(index) {
+//             const data = await this.$fetch('user/order/orderList', {
+//                 status: index
+//             });
+//             const orderList = (data || []).map(orderItem => ({
+//                 ...orderItem,
+//                 minusList: getShopMinusList(orderItem.minus || ''),
+//                 orderTimeDetail: timeStampTranslate(orderItem.orderTime),
+//                 orderTypeTitle: this.getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType)
+//             }));
+//             if (!orderList.length) {
+//                 this.$set(this.showErrorList, index, true);
+//             } else {
+//                 this.$set(this.showErrorList, index, false);
+//             }
+//             this.$set(this.allOrderList, index, []);
+//             this.allOrderList[index].push(...orderList);
+//         },
+
+//         toOrderDetail(orderItem) {
+//             this.$myrouter.navigateTo({
+//                 name: 'user/order/detail',
+//                 query: {
+//                     orderKey: orderItem.orderKey
+//                 }
+//             });
+//         },
+
+//     }
+// };
 </script>
 
 <style lang="scss">

@@ -1,7 +1,7 @@
 import fetch from '../../../utils/fetch'
 import getShopMinusList from '../../../utils/getShopMinusList'
 const getRecommandShopList = async ({ commit, state }, params = {}) => {
-    const recommandShopList: any[] = await fetch('user/shop/list', {
+    const recommandShopList: any = await fetch('user/shop/list', {
         businessType: 2,
         type: state.selectTabItem,
         latitude: state.defaultAddress.latitude,

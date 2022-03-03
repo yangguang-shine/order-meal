@@ -35,9 +35,9 @@ export function createApp() {
 	app.config.globalProperties.$getStorage = getStorage
 	app.config.globalProperties.$delaySync = delaySync
 	app.config.globalProperties.$getShopMinusList = getShopMinusList
-	app.component('common-error', CommonError)
-	app.component('common-loading', CommonLoading)
-	app.component('bottom-button', BottomButton)
+	app.component('CommonError', CommonError)
+	app.component('CommonLoading', CommonLoading)
+	app.component('BottomButton', BottomButton)
 	const $mainColor = "#0096ff"
 	const $mainColor2 = "#58a3dd"
 

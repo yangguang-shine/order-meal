@@ -4,15 +4,15 @@
 			<div
 				class="tab-item flex-item"
 				v-for="(tabItem, index) in ['全部', '待消费', '已完成', '已退款']"
-				:style="{ color: index === tabIndex ? $mainColor : '#333' }"
+				:style="{ color: index === orderTabIndex ? $mainColor : '#333' }"
 				@click="changeTabIndex(index)"
 				:key="index"
 			>
 				{{ tabItem }}
 			</div>
-			<div class="tab-bottom" :style="{ background: $mainColor, left: (tabIndex * 2 + 1) * 12.5 + '%' }"></div>
+			<div class="tab-bottom" :style="{ background: $mainColor, left: (orderTabIndex * 2 + 1) * 12.5 + '%' }"></div>
 		</div>
-		<view v-show="tabIndex === allOrderIndex" class="order-list-box" v-for="(orderList, allOrderIndex) in allOrderList" :key="allOrderIndex">
+		<view v-show="orderTabIndex === allOrderIndex" class="order-list-box" v-for="(orderList, allOrderIndex) in allOrderList" :key="allOrderIndex">
 			<div class="order-list-item" v-for="(orderItem, index) in orderList" :key="index" @click="toOrderDetail(orderItem)">
 				<div class="flex-row">
 					<image class="shop-img" :src="orderItem.imgUrl ? host + orderItem.imgUrl : '/static/img/default-img.svg'" mode="scaleToFill"></image>
@@ -57,7 +57,7 @@ import SelectModal from '@/components/SelectModal.vue';
 export default {
 	data() {
 		return {
-			tabIndex: 0,
+			orderTabIndex: 0,
 			allOrderList: [[], [], [], []],
 			host,
 			shopList: [],
@@ -85,16 +85,16 @@ export default {
 			saveSelectShopItem: 'saveSelectShopItem'
 		}),
 		async getOrderList() {
-			this.$set(this.allOrderList, this.tabIndex, []);
+			this.$set(this.allOrderList, this.orderTabIndex, []);
 			const data = await this.$fetch('manage/order/orderList', {
-				status: this.tabIndex,
+				status: this.orderTabIndex,
 				shopID: this.selectShopItem.shopID
 			});
 			const orderList = (data || []).map(orderItem => ({
 				...orderItem,
 				orderTypeTitle: this.getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType)
 			}));
-			this.allOrderList[this.tabIndex].push(...orderList);
+			this.allOrderList[this.orderTabIndex].push(...orderList);
 		},
 		getOrderTypeTitle(orderStatus, businessType) {
 			if (orderStatus === 10) {
@@ -137,9 +137,9 @@ export default {
 			}
 		},
 		changeTabIndex(index) {
-			if (index === this.tabIndex) return;
-			this.tabIndex = index;
-			// if (this.allOrderList[this.tabIndex].length) return;
+			if (index === this.orderTabIndex) return;
+			this.orderTabIndex = index;
+			// if (this.allOrderList[this.orderTabIndex].length) return;
 			this.getOrderList();
 		},
 		toOrderDetail(orderItem) {

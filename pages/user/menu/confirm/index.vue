@@ -15,10 +15,17 @@ import OrderInfo from "./components/OrderInfo.vue";
 import OtherInfo from "./components/OtherInfo.vue";
 import FooterButton from "./components/FooterButton.vue";
 import NoteInput from "./components/NoteInput.vue";
-import { mapMutations, mapState } from "../../../../utils/mapVuex";
+import { mapMutations, mapState, mapActions } from "../../../../utils/mapVuex";
+import { getCurrentInstance } from "vue";
+import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
+
+const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
 
 const { setTakeOutTime } = mapMutations("user", ["setTakeOutTime"]);
 const { noteInputFlag } = mapState("user", ["noteInputFlag"]);
+const { getDefaultAddress } = mapActions("user", [
+    "getDefaultAddress"
+]);
 getCurrentTakeOutTime();
 function getCurrentTakeOutTime() {
     const current = +new Date();
@@ -35,7 +42,34 @@ function getCurrentTakeOutTime() {
             : `${deliverTime.getMinutes()}`;
     setTakeOutTime(`${hours}:${minute}`);
 }
+onShow(() => {
+    toGetDefaultAddress();
+});
 
+async function toGetDefaultAddress() {
+    try {
+        $showLoading();
+
+        const defaultAddress = await getDefaultAddress();
+        if (!defaultAddress.addressID) {
+            $hideLoading();
+            await $showModal({
+                content: "为提供更好服务，请先选择地址",
+                confirmText: "去选择地址"
+            });
+            $myrouter.navigateTo({
+                name: "user/address/list",
+                query: {
+                    fromPage: "userHome"
+                }
+            });
+        }
+    } catch (e) {
+        console.log(e);
+    } finally {
+        $hideLoading();
+    }
+}
 // async submitOrder() {
 // 	try {
 // 		this.$showLoading();

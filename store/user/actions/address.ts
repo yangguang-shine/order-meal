@@ -22,6 +22,12 @@ const editAddress = async ({ commit }, addressInfo: any) => {
     await fetch('user/address/edit', addressInfo)
 }
 
+const getDefaultAddress = async ({ commit }) => {
+    const defaultAddress = await fetch('user/address/getDefault',{}, {error: false})
+    commit('setDefaultAddress', defaultAddress)
+    return defaultAddress
+}
+
 
 export default {
     getAddressList,
@@ -29,5 +35,6 @@ export default {
     setDefaultAddressFetch,
     addAddress,
     findAddress,
-    editAddress
+    editAddress,
+    getDefaultAddress
 }

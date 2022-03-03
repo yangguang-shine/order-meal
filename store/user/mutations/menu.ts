@@ -27,8 +27,9 @@ const toogleCartDetailFlag = (state: any, payload: any) => {
 const setCartDetailFlag = (state: any, payload: any) => {
     state.cartDetailFlag = payload
 }
-
-
+const setCartCategoryList = (state: any, payload: any) => {
+    state.cartCategoryList = payload
+}
 
 const clearCart = (state: any, payload: any) => {
     state.cartCategoryList.forEach((categoryTtem) => {
@@ -101,6 +102,7 @@ export default {
     setShopInfoFlag,
     toogleCartDetailFlag,
     setCartDetailFlag,
+    setCartCategoryList,
     clearCart,
     cartChange,
     initCart

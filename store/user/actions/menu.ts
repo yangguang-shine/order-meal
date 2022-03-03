@@ -42,7 +42,9 @@ const getOrderKeyFoodList = async ({ commit ,state}, option: any) => {
             }
             return list;
         }, []);
-        commit('setOrderCategoryList', orderCategoryList)
+
+        commit('setCartCategoryList', orderCategoryList)
+        return orderCategoryList
 }
 
 

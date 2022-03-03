@@ -29,11 +29,16 @@ interface IMutations {
     setDefaultAddress: any;
 }
 interface IActions {
-    getAddressList: () => any;
+    getDefaultAddress: () => any;
     getRecommandShopList: () => any;
 }
 const internalInstance = getCurrentInstance();
-const { $showLoading, $hideLoading, $showModal, $myrouter } = internalInstance.proxy;
+const {
+    $showLoading,
+    $hideLoading,
+    $showModal,
+    $myrouter
+} = internalInstance.proxy;
 const {
     setTopAddressWidthFlag,
     setTabListFixedFlag,
@@ -46,8 +51,8 @@ const {
     "setRecommandShopList"
 ]);
 
-const { getAddressList, getRecommandShopList } = mapActions("user", [
-    "getAddressList",
+const { getDefaultAddress, getRecommandShopList } = mapActions("user", [
+    "getDefaultAddress",
     "getRecommandShopList"
 ]);
 
@@ -56,8 +61,8 @@ const { topAddressWidthFlag, tabListFixedFlag, addressList } = mapState(
     ["topAddressWidthFlag", "tabListFixedFlag", "addressList"]
 );
 // console.log(JSON.stringify(addressList.value))
-onLoad(() => {
-    console.log('init')
+onShow(() => {
+    console.log("init");
     uni.pageScrollTo({
         scrollTop: 0,
         duration: 0
@@ -76,11 +81,9 @@ onPageScroll((e: any) => {
         setTabListFixedFlag(false);
     }
 });
-async function getDefaultAddress() {
-    await getAddressList();
-    if (addressList.value.length) {
-        setDefaultAddress(addressList.value[0]);
-    } else {
+async function toGetDefaultAddress() {
+    const defaultAddress = await getDefaultAddress();
+    if (!defaultAddress.addressID) {
         await $showModal({
             content: "为提供更好服务，请先选择地址",
             confirmText: "去选择地址"
@@ -96,7 +99,7 @@ async function getDefaultAddress() {
 async function init() {
     try {
         $showLoading();
-        await getDefaultAddress();
+        await toGetDefaultAddress();
         await getRecommandShopList();
     } catch (e) {
         console.log(e);
@@ -136,7 +139,7 @@ async function init() {
 //     }
 // },
 // async getDefaultAddress() {
-//     await this.getAddressList();
+//     await this.getDefaultAddress();
 //     console.log(this);
 //     if (this.addressList.length) {
 //         console.log(this.addressList[0]);

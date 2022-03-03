@@ -109,11 +109,9 @@ const { getMenuList, getOrderKeyFoodList } = mapActions("user", [
     "getOrderKeyFoodList"
 ]);
 
-let orderAgain: any;
 let orderKey = "";
 onLoad(async option => {
     try {
-        orderAgain = option.orderAgain;
         orderKey = option.orderKey;
         $showLoading();
         await init();
@@ -126,7 +124,7 @@ onLoad(async option => {
 async function init() {
     await getMenuList();
     // 重来一单，orderAgain 和 orderKey 缺一不可
-    if (orderAgain && orderKey) {
+    if (orderKey) {
         await getOrderKeyFoodList({
             orderKey
         });
@@ -136,6 +134,8 @@ async function init() {
                 orderCategoryList.value
             );
         }
+    } else {
+        
     }
     initCart()
     getStorageCart();
