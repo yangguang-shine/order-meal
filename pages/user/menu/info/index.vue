@@ -4,7 +4,7 @@
         <view class="menu-order-box flex-col" :class="topBarInfo === '点餐' ? 'show-menu-order-box' : 'hide-menu-order-box'">
             <view class="menu-list-box flex-item flex-row ">
                 <CategoryAsideBar></CategoryAsideBar>
-                <FoodCategoryList></FoodCategoryList>
+                <FoodCategoryList class="flex-item"></FoodCategoryList>
             </view>
             <CartDetail  v-if="cartDetailFlag"></CartDetail>
             <MinusPromotions v-if="minusPromotionsObject.show"></MinusPromotions>

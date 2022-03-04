@@ -41,7 +41,7 @@
 
 <script lang='ts' setup>
 import { delaySync } from "@/utils/index.js";
-import FoodAddMinus from "./item/FoodAddMinus";
+import FoodAddMinus from "./item/FoodAddMinus.vue";
 import { getCurrentInstance, computed, onMounted, ref } from "vue";
 import { footerInfoAndMinusPromotionsHeightPX } from "../infoConfig";
 

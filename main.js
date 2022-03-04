@@ -1,4 +1,4 @@
-import App from './App'
+import App from './App.vue'
 import router from './utils/router'
 import fetch from './utils/fetch'
 import store from './store'

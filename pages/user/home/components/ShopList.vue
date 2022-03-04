@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import Shop from "../../../../components/Shop";
+import Shop from "../../../../components/Shop.vue";
 import { defineComponent, computed, getCurrentInstance } from "vue";
 import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
 

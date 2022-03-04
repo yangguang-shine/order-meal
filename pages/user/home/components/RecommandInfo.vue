@@ -8,8 +8,8 @@
 
 <script lang="ts" setup>
 
-import TabList from './TabList';
-import ShopList from './ShopList';
+import TabList from './TabList.vue';
+import ShopList from './ShopList.vue';
 
 </script>
 

@@ -20,10 +20,12 @@
 </template>
 
 <script lang='ts' setup>
-import FoodAddMinus from "./item/FoodAddMinus";
+import FoodAddMinus from "./item/FoodAddMinus.vue";
 import { get1rpx2px } from "@/utils/index";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { topBarHeightPX, minusPromotionsHeightPX } from '../infoConfig'
+import { defineComponent, getCurrentInstance, computed } from "vue";
+const currentInstance = getCurrentInstance()
 import {
     mapState,
     mapGetters,
@@ -34,7 +36,9 @@ const { categoryList, scrollIntoCategoryTabID } = mapState("user", [
     "categoryList",
     "scrollIntoCategoryTabID"
 ]);
-
+const props = defineProps()
+console.log('props')
+console.log(props)
 const {
     setFoodDetailFlag,
     setFoodInfo,
@@ -82,8 +86,9 @@ const handleScroll = async (e: any) => {
 const foodScrollHandle = debounce(handleScroll, 30);
 
 function selectQuery(id) {
+    console.log(id)
     return new Promise((resolve, reject) => {
-        uni.createSelectorQuery()
+        uni.createSelectorQuery().in(currentInstance)
             .select(id)
             .boundingClientRect(res => {
                 resolve(res);
@@ -109,7 +114,8 @@ const throttle = (() => {
 .food-main-box {
     // background-color: blue;
     height: 100%;
-    flex-shrink: 0;
+    // flex-shrink: 0;
+    // width: 590rpx;
     box-sizing: border-box;
     // padding-top: 80rpx;
     ::-webkit-scrollbar {
