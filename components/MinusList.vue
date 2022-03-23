@@ -6,15 +6,14 @@
     </div>
 </template>
 
-<script>
-export default {
-    props: {
-        minusList: {
-            type: Array,
+<script setup lang="ts">
+
+const props = defineProps({
+  minusList: {
+        type: Array,
             default: () => []
-        }
-    }
-}
+  }
+})
 </script>
 
 <style lang="scss" scoped>

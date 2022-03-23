@@ -1,6 +1,6 @@
 <template>
 	<div class="order-food-info-container">
-		<div class="shop-info-box line1">洁柔</div>
+		<div class="shop-info-box line1">{{orderDetailShopInfo.shopName}}</div>
 		<div class="order-list-box">
 			<order-food-item v-for="(orderFoodItem, index) in orderDetail.foodList" :orderFoodItem="orderFoodItem" :key="index"></order-food-item>
 		</div>
@@ -25,7 +25,7 @@
 <script lang="ts" setup>
 import OrderFoodItem from '@/components/OrderFoodItem.vue';
 import { mapState } from '../../../../../utils/mapVuex';
-const { orderDetail } = mapState('user', ['orderDetail'])
+const { orderDetail, orderDetailShopInfo } = mapState('user', ['orderDetail', 'orderDetailShopInfo'])
 
 
 </script>

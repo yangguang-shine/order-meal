@@ -8,6 +8,7 @@ const state = {
     orderErrorListFlag: [false, false, false,false],
     orderDetail: {
         address: {}
-    }
+    },
+    orderDetailShopInfo: {}
 }
 export default state

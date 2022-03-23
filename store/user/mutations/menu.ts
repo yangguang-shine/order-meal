@@ -46,7 +46,7 @@ const cartChange = (state: any, { foodItem, count = 0 }) => {
     foodItem.orderCount = count || 0
     const findCategory = state.cartCategoryList.find(item => item.categoryID === foodItem.categoryID)
     if (findCategory) {
-        const findFood = findCategory.foodList.find(item => item.foodName === foodItem.foodName)
+        const findFood = findCategory.foodList.find(item => item.foodID === foodItem.foodID)
         if (!findFood) {
             findCategory.foodList.push(foodItem)
         }

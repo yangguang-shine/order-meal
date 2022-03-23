@@ -7,12 +7,12 @@
         <view v-show="orderTabIndex === allOrderIndex" class="order-list-box" v-for="(orderList, allOrderIndex) in allOrderList" :key="allOrderIndex">
             <div class="order-list-item" v-for="(orderItem, index) in orderList" :key="index" @click="toOrderDetail(orderItem)">
                 <div class="flex-row">
-                    <image class="shop-img" :src="'/static/img/default-img.svg'" mode="scaleToFill"></image>
+                    <image class="shop-img" :src="orderItem.fullImgPath" mode="scaleToFill"></image>
                     <div class="flex-item flex-col flex-j-between">
                         <div class="flex-row flex-a-center flex-j-between">
                             <!-- <div class="shop-name line1">{{orderItem.shopName}}</div> -->
                             <view class="flex-row flex-a-center">
-                                <div class="shop-name line1">嘻嘻</div>
+                                <div class="shop-name line1">{{orderItem.shopName}}</div>
                                 <image class="arrow-left" src="/static/img/shop/arrow-right.png" mode=""></image>
                             </view>
                             <div class="order-time">{{ orderItem.orderTimeDetail }}</div>
@@ -63,15 +63,16 @@ const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
 const { allOrderList, orderTabIndex, orderErrorListFlag } = mapState("user", [
     "allOrderList",
     "orderTabIndex",
-    "orderErrorListFlag"
+    "orderErrorListFlag",
 ]);
 const { getOrderList, getShopInfo } = mapActions("user", ["getOrderList", 'getShopInfo']);
 const {
     setOrderErrorListFlag,
     setOrderTabIndex,
     saveShopInfo,
-    saveBusinessType
-} = mapMutations("user", ["setOrderErrorListFlag", 'setOrderTabIndex', 'saveShopInfo', 'saveBusinessType']);
+    saveBusinessType,
+    setOrderDetailShopInfo
+} = mapMutations("user", ["setOrderErrorListFlag", 'setOrderTabIndex', 'saveShopInfo', 'saveBusinessType', 'setOrderDetailShopInfo']);
 onLoad(() => {
     init();
 });
@@ -102,6 +103,10 @@ async function toChangeTabIndex(index) {
     }
 }
 function toOrderDetail(orderItem) {
+    setOrderDetailShopInfo({
+        shopName: orderItem.shopName,
+        fullImgPath: orderItem.fullImgPath,
+    })
     $myrouter.navigateTo({
         name: "user/order/detail",
         query: {

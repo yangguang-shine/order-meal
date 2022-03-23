@@ -1,5 +1,7 @@
-import fetch from '../../../utils/fetch'
+import fetch from '@/utils/fetch'
 import getShopMinusList from '../../../utils/getShopMinusList'
+import { shopImgPath } from '@/config/index'
+
 const getRecommandShopList = async ({ commit, state }, params = {}) => {
     const recommandShopList: any = await fetch('user/shop/list', {
         businessType: 2,
@@ -8,7 +10,8 @@ const getRecommandShopList = async ({ commit, state }, params = {}) => {
         longitude: state.defaultAddress.longitude,
     });
     (recommandShopList || []).forEach((item) => {
-        item.minusList = getShopMinusList(item.minus || "");
+        item.minusList = JSON.parse(item.minus);
+        item.fullImgPath = `${shopImgPath}/${item.imgUrl}`
     });
     // recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList));
     // recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList))

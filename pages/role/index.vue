@@ -13,7 +13,6 @@
             <view class="user" @click="toClearUserCookie">注销用户登录</view>
             <view class="manage" @click="toClearManageCookie">注销管理员登录</view>
         </view>
-
     </view>
 </template>
 

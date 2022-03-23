@@ -10,8 +10,13 @@ const setOrderErrorListFlag = (state: any, payload): void => {
 const setOrderDetail = (state: any, payload): void => {
     state.orderDetail = payload
 }
+const setOrderDetailShopInfo = (state: any, payload): void => {
+    state.orderDetailShopInfo = payload
+}
+
 export default { 
     setOrderTabIndex,
     setOrderErrorListFlag,
-    setOrderDetail
+    setOrderDetail,
+    setOrderDetailShopInfo
 }

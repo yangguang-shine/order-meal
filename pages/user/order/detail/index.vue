@@ -8,8 +8,6 @@
 </template>
 
 <script lang="ts" setup>
-import getShopMinusList from "@/utils/getShopMinusList";
-import { timeStampTranslate } from "@/utils/index.js";
 import OrderDetailHeader from "./components/OrderDetailHeader.vue";
 import OrderFoodInfo from "./components/OrderFoodInfo.vue";
 import OrderExtInfo from "./components/OrderExtInfo.vue";
@@ -23,10 +21,11 @@ const showLoadingFlag = ref(false);
 let orderKey = ref('')
 const { orderDetail } = mapState("user", ["orderDetail"]);
 const {} = mapMutations("user", [""]);
-const { getOrderDetail, getShopInfo, cancelOrder } = mapActions("user", [
+const { getOrderDetail, getShopInfo, cancelOrder, orderDetailShopInfo } = mapActions("user", [
     "getOrderDetail",
     "getShopInfo",
-    "cancelOrder"
+    "cancelOrder",
+    ""
 ]);
 
 onLoad(async (option: any) => {

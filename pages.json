@@ -1,13 +1,12 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/role/index",
+			"path": "pages/user/home/index",
 			"style": {
-				"navigationBarTitleText": "角色"	,
+				"navigationBarTitleText": "首页",
 				"navigationBarBackgroundColor": "#ffffff"
-				
 			}
-		},
+		}, 
 		{
 			"path": "pages/login/index",
 			"style": {
@@ -24,13 +23,7 @@
 				
 			}
 		},
-		{
-			"path": "pages/user/home/index",
-			"style": {
-				"navigationBarTitleText": "首页",
-				"navigationBarBackgroundColor": "#ffffff"
-			}
-		}, 
+
 		{
 			"path": "pages/user/order/list/index",
 			"style": {
@@ -130,58 +123,58 @@
 		// 	}
 		// },
 
-		{
-			"path": "pages/manage/order/list/index",
-			"style": {
-				"navigationBarTitleText": "订单"
-			}
-		},
-		{
-			"path": "pages/manage/order/detail/index",
-			"style": {
-				"navigationBarTitleText": "订单详情"
-			}
-		},
-		{
-			"path": "pages/manage/shop/list/index",
-			"style": {
-				"navigationBarTitleText": "首页"
-			}
-		},
-		{
-			"path": "pages/manage/shop/edit/index",
-			"style": {
-				"navigationBarTitleText": "店铺编辑"
-			}
-		},
-		{
-			"path": "pages/manage/category/list/index",
-			"style": {
-				"navigationBarTitleText": "分类列表"
-			}
-		},
-		{
-			"path": "pages/manage/category/edit/index",
-			"style": {
-				"navigationBarTitleText": "分类编辑"
-			}
-		},
-		{
-			"path": "pages/manage/food/list/index",
-			"style": {
-				"navigationBarTitleText": "菜品列表"
-			}
-		},
-		{
-			"path": "pages/manage/food/edit/index",
-			"style": {
-				"navigationBarTitleText": "菜品列表"
-			}
-		}
-	    ,{
-            "path" : "pages/manage/meituan/copy/index",
-            "style" : {}
-        },
+		// {
+		// 	"path": "pages/manage/order/list/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "订单"
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/manage/order/detail/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "订单详情"
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/manage/shop/list/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "首页"
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/manage/shop/edit/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "店铺编辑"
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/manage/category/list/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "分类列表"
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/manage/category/edit/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "分类编辑"
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/manage/food/list/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "菜品列表"
+		// 	}
+		// },
+		// {
+		// 	"path": "pages/manage/food/edit/index",
+		// 	"style": {
+		// 		"navigationBarTitleText": "菜品列表"
+		// 	}
+		// }
+	 //    ,{
+  //           "path" : "pages/manage/meituan/copy/index",
+  //           "style" : {}
+  //       },
 		{
 			"path" : "pages/animate/list/index",
 			"style": {

@@ -36,6 +36,7 @@ watch(
     }
 );
 function addCount() {
+    console.log(11111)
     cartChange({
         foodItem: props.foodItem,
         count: props.foodItem.orderCount + 1

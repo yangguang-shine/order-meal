@@ -16,7 +16,7 @@
                     <scroll-view scroll-y class="cart-detail-list-box">
                         <view class="food-category-item" v-for="(foodCategoryItem) in cartCategoryList" :key="foodCategoryItem.categoryID">
                             <view class="cart-food-item flex-row" v-for="(cartFoodItem) in foodCategoryItem.foodList" :key="cartFoodItem.foodID">
-                                <image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="'/static/img/default-img.svg'" mode="scaleToFill"></image>
+                                <image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="cartFoodItem.fullImgPath" mode="scaleToFill"></image>
                                 <view v-if="cartFoodItem.orderCount" class="cart-food-info-box flex-item flex-col flex-j-between">
                                     <view class="cart-food-name-description">
                                         <view class="cart-food-name">{{ cartFoodItem.foodName }}</view>

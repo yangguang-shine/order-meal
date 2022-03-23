@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 // ('user', ['hahah'])  or (['hahah'])
-export const mapState = function (namespace: string | any[], states: any[]) {
+export const mapState = function (namespace: string | string[], states: string[]) : any {
     const store = useStore()
     const obj: any = {}
     if (typeof namespace === 'string') {
@@ -17,7 +17,7 @@ export const mapState = function (namespace: string | any[], states: any[]) {
     }
     return obj
 }
-function getNamespaceState (namespace: string, store: any) {
+function getNamespaceState (namespace: string, store: any): any {
     const spaceArr = namespace.split('/')
     return spaceArr.reduce((state, item) => {
         return state[item]
@@ -25,7 +25,7 @@ function getNamespaceState (namespace: string, store: any) {
 }
 
 
-export const mapGetters = function (namespace: string | any[], states: any[]) {
+export const mapGetters = function (namespace: string | any[], states: any[]) : any {
     const store = useStore()
     const obj: any = {}
     if (typeof namespace === 'string') {
@@ -42,7 +42,7 @@ export const mapGetters = function (namespace: string | any[], states: any[]) {
     return obj
 }
 
-export const mapMutations = (namespace: string | any[], mutations: any[]) => {
+export const mapMutations = (namespace: string | any[], mutations: any[]): any => {
     const store = useStore()
     const obj: any = {}
     if (typeof namespace === 'string') {
@@ -58,7 +58,7 @@ export const mapMutations = (namespace: string | any[], mutations: any[]) => {
     return obj
 }
 
-export const mapActions = (namespace: any, mutations: any[]) => {
+export const mapActions = (namespace: any, mutations: any[]) : any => {
     const store = useStore()
 
     const obj: any = {}

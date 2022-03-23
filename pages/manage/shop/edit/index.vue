@@ -39,7 +39,7 @@
       <div class="title">满减营销：</div>
       <div class="flex-item">
         <div v-if="!minusList.length" class="no-minus minus-item center">暂无满减营销</div>
-        <div v-for="(minusItem, index) in minusList" :key="minusItem.random" class="minus-item flex-row flex-j-between flex-a-center">
+        <div v-for="(minusItem, index) in minusList" :key="index" class="minus-item flex-row flex-j-between flex-a-center">
           <div class="flex-row flex-a-center">
             <div class="minus-item-title">第{{ index + 1 }}档:</div>
             <div class="minus-reach-title">满</div>

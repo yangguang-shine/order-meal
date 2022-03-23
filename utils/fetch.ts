@@ -1,5 +1,5 @@
 import router from '@/utils/router'
-import { requestHost } from '../config/host'
+import { requestHost } from '../config'
 import { showModal, showLoading, showToast, hideLoading, hideToast } from '@/utils'
 
 async function handleResponseData({ resolve, reject, responseData, options }) {

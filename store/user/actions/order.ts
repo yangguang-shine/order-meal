@@ -2,6 +2,7 @@ import fetch from '../../../utils/fetch'
 import getShopMinusList from '../../../utils/getShopMinusList'
 import { timeStampTranslate } from '../../../utils/index.js';
 import getOrderTypeTitle from '../../../utils/getOrderTypeTitle.js';
+import { shopImgPath, foodImgPath } from '@/config/index'
 
 const getOrderList = async ({ state, getters, commit }, payload) => {
     let orderList: any = await fetch('user/order/orderList', {
@@ -9,7 +10,8 @@ const getOrderList = async ({ state, getters, commit }, payload) => {
     });
     orderList = orderList.map((orderItem: any) => ({
         ...orderItem,
-        minusList: getShopMinusList(orderItem.minus || ''),
+        minusList: JSON.parse(orderItem.minus),
+        fullImgPath: `${shopImgPath}/${orderItem.imgUrl}`,
         orderTimeDetail: timeStampTranslate(orderItem.orderTime),
         orderTypeTitle: getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType)
     }));
@@ -18,7 +20,9 @@ const getOrderList = async ({ state, getters, commit }, payload) => {
 }
 const getShopInfo = async ({ state, getters, commit }, payload) => {
     const shopInfo: any = await fetch('user/shop/find', payload);
-    shopInfo.minusList = getShopMinusList(shopInfo.minus || "");
+    shopInfo.minusList = JSON.parse(shopInfo.minus);
+    shopInfo.fullImgPath = `${shopImgPath}/${shopInfo.imgUrl}`
+
     return shopInfo
 }
 
@@ -28,6 +32,7 @@ const getOrderDetail = async ({ state, getters, commit }, payload) => {
         foodItem.foodItemAmount = (
             foodItem.price * foodItem.orderCount
         ).toFixed(2);
+        foodItem.fullImgPath = `${foodImgPath}/${foodItem.imgUrl}`
     });
     orderDetail.orderTypeTitle = getOrderTypeTitle(
         orderDetail.orderStatus,

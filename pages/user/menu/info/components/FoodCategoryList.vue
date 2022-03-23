@@ -3,7 +3,7 @@
         <view class="food-category-list-item" v-for="(foodCategoryItem, index) in categoryList" :key="index" :id="foodCategoryItem.categoryTabID + 'id'">
             <view :id="foodCategoryItem.categoryTabID" class="food-category-name">{{ foodCategoryItem.categoryName }}</view>
             <view class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex" @click="toShowFoodDetail(foodItem)">
-                <image class="food-img  flex-shrink" :src="foodItem.imgUrl" mode="scaleToFill"></image>
+                <image class="food-img  flex-shrink" :src="foodItem.fullImgPath" mode="scaleToFill"></image>
                 <view class="food-info-box flex-item flex-col flex-j-between">
                     <view class="food-name-description">
                         <view class="food-name">{{ foodItem.foodName }}</view>

@@ -1,6 +1,6 @@
 <template>
 	<div class="order-food-item-container flex-row flex-a-center">
-		<image class="food-img flex-shrink" :src="orderFoodItem.imgUrl ? host + orderFoodItem.imgUrl : '/static/img/default-img.svg'"></image>
+		<image class="food-img flex-shrink" :src="orderFoodItem.fullImgPath"></image>
 		<div class="food-info flex-col flex-j-between">
 			<div class="food-name line1">嘻嘻嘻嘻</div>
 			<div class="food-price flex-row">
@@ -16,23 +16,13 @@
 	</div>
 </template>
 
-<script>
-export default {
-	props: {
-		orderFoodItem: {
-			type: Object,
+<script lang='ts' setup>
+defineProps({
+  orderFoodItem: {
+		type: Object,
 			default: () => {}
-		}
-	},
-	data() {
-		return {
-			host: ''
-		}
-	},
-	mounted() {
-		console.log(this.orderFoodItem);
-	}
-};
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -45,10 +35,10 @@ export default {
 	    width: 110rpx;
 	    // border-radius: 8rpx;
 	    margin-right: 20rpx;
-	    background-color: red;
+	    // background-color: red;
 	}
 	.food-info {
-	    flex: 10;
+	    flex: 8;
 	    font-size: 28rpx;
 	    height: 110rpx;
 	
@@ -72,7 +62,7 @@ export default {
 	    color: #666;
 	}
 	.food-count-price {
-	    flex: 3;
+	    flex: 4;
 	    font-size: 28rpx;
 	    text-align: right;
 	    color: #333;

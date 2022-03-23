@@ -4,6 +4,13 @@
       "module": "esnext",
       "strict": true,
       "jsx": "preserve",
-      "moduleResolution": "node"
+      "moduleResolution": "node",
+      "paths": {
+        "@/components/*": ["./components/*"],
+        "@/config/*": ["./config/*"],
+        "@/utils/*": ["./utils/*"],
+        "@/pages/*": ["./pages/*"],
+        "@/static/*": ["./static/*"],
+      }
     }
 }

@@ -1,9 +1,10 @@
 <template>
 	<view class="food-detail-container flex-row flex-ja-center" @click.stop="closeFoodDetail" @touchmove.stop>
 		<view class="food-detail-box" @click.stop >
-			<view class="food-img"></view>
+			<!-- <view class="food-img"></view> -->
+			<img class="food-img" :src="foodInfo.fullImgPath" alt="">
 			<view class="food-info">
-				<view class="food-name">1111</view>
+				<view class="food-name">{{foodInfo.foodName}}</view>
 				<view v-if="foodInfo.description" class="food-description">{{ foodInfo.description }}</view>
 				
 				<view class="food-price-order flex-row flex-j-between">
@@ -64,9 +65,9 @@ function closeFoodDetail() {
 	.food-img {
 		border-top-left-radius: 16rpx;
 		border-top-right-radius: 16rpx;
-		width: 100%;
+		width: 600rpx;
 		height: 600rpx;
-		background-color: red;
+		// background-color: red;
 	}
 	.food-info {
 		padding: 20rpx 34rpx 0;

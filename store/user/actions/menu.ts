@@ -1,11 +1,15 @@
 import fetch from '../../../utils/fetch'
 import getShopMinusList from '../../../utils/getShopMinusList'
+import { foodImgPath} from '@/config/index'
 const getMenuList = async ({ commit, state }) => {
     const categoryList: any = await fetch("user/order/menuList", {
         shopID: state.shopInfo.shopID
     });
     categoryList.forEach((item, index) => {
         item.categoryTabID = "id" + item.categoryID;
+        item.foodList.forEach((foodItem)=>{
+            foodItem.fullImgPath = `${foodImgPath}/${foodItem.imgUrl}`
+        })
     });
     if (categoryList.length) {
         commit('setCategoryTabId', categoryList[0].categoryTabID)

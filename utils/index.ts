@@ -1,21 +1,28 @@
-export const getSetting = (scopeName) => {
-    return new Promise((resolve, reject) => {
+export const getSetting = (scopeName: string) => {
+    return new Promise((resolve, reject) : void => {
         uni.getSetting({
-            success: (res) => {
-                if (res.authSetting[scopeName]) resolve()
-                else reject(res)
+            success: (res: any) => {
+                if (res.authSetting[scopeName]) {
+                    resolve(true)
+                }
+                else {
+                    reject(res)
+                } 
             },
-            fail: (res) => {
+            fail: (res: any) => {
                 reject(res)
             }
         })
     })
 }
+interface SystemInfoI {
+    windowWidth: number
+}
 
-let systemInfo = null
+let systemInfo : SystemInfoI
 
 
-export const get1rpx2px = (rpx) => {
+export const get1rpx2px = (rpx: number) : number => {
     if (!systemInfo) {
         systemInfo = uni.getSystemInfoSync()
     }
