@@ -11,6 +11,8 @@
         "@/utils/*": ["./utils/*"],
         "@/pages/*": ["./pages/*"],
         "@/static/*": ["./static/*"],
+        "@/router/*": ["./router/*"],
+        "@/interface/*": ["./interface/*"],
       }
     }
 }

@@ -1,50 +1,54 @@
-export const getSetting = (scopeName: string) => {
-    return new Promise((resolve, reject) : void => {
+export const getSetting = (scopeName: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
         uni.getSetting({
             success: (res: any) => {
                 if (res.authSetting[scopeName]) {
-                    resolve(true)
+                    resolve();
+                } else {
+                    reject(res);
                 }
-                else {
-                    reject(res)
-                } 
             },
             fail: (res: any) => {
-                reject(res)
-            }
-        })
-    })
-}
+                reject(res);
+            },
+        });
+    });
+};
 interface SystemInfoI {
-    windowWidth: number
+    windowWidth: number;
+    [index: string]: any;
 }
 
-let systemInfo : SystemInfoI
+let systemInfo: SystemInfoI;
 
-
-export const get1rpx2px = (rpx: number) : number => {
+export const get1rpx2px = (rpx: number): number => {
     if (!systemInfo) {
-        systemInfo = uni.getSystemInfoSync()
+        systemInfo = uni.getSystemInfoSync();
     }
-    return (systemInfo.windowWidth / 750) * rpx
-}
+    return (systemInfo.windowWidth / 750) * rpx;
+};
 
-
-export const authorize = (scopeName) => {
+export const authorize = (scopeName: string): Promise<any> => {
     return new Promise((resolve, reject) => {
         uni.authorize({
             scope: scopeName,
-            success: (res) => {
-                resolve(res)
+            success: (res: any) => {
+                resolve(res);
             },
-            fail: (res) => {
-                reject(res)
-            }
-        })
-    })
-}
+            fail: (res: any) => {
+                reject(res);
+            },
+        });
+    });
+};
 
-export const showModal = ({ title = '提示', content = '', showCancel = false, cancelText = '取消', confirmText = '确定' }) => {
+export const showModal = ({
+    title = "提示",
+    content = "",
+    showCancel = false,
+    cancelText = "取消",
+    confirmText = "确定",
+}) : Promise<any> => {
     return new Promise((resolve, reject) => {
         uni.showModal({
             title,
@@ -52,118 +56,121 @@ export const showModal = ({ title = '提示', content = '', showCancel = false, 
             showCancel,
             cancelText,
             confirmText,
-            success: (res) => {
+            success: (res: any) => {
                 if (res.confirm) {
                     resolve(res);
                 } else if (res.cancel) {
                     reject(res);
                 } else {
-                    reject(res)
+                    reject(res);
                 }
             },
             fail: () => {
-                reject()
-            }
-        })
-    })
-}
+                reject();
+            },
+        });
+    });
+};
 
-export const showLoading = ({ title = '加载中', mask = true } = {}) => {
+export const showLoading = ({ title = "加载中", mask = true } = {}): Promise<any> => {
     return new Promise((resolve, reject) => {
         uni.showLoading({
             title,
             mask,
-            success: () => {
-                resolve()
+            success: (res: any) => {
+                resolve(res);
             },
             fail: () => {
-                reject()
-            }
-        })
-    })
-}
+                reject();
+            },
+        });
+    });
+};
 
-export const showToast = ({ title = '', icon = 'none', duration = 1500, mask = false } = {}) => {
+export const showToast = ({
+    title = "",
+    icon = "none",
+    duration = 1500,
+    mask = false,
+} = {}) : Promise<any>=> {
     return new Promise((resolve, reject) => {
         uni.showToast({
             title,
             icon,
             duration,
             mask,
-            success: () => {
-                resolve()
+            success: (res: any) => {
+                resolve(res);
             },
             fail: () => {
-                reject()
-            }
-        })
-    })
-}
+                reject();
+            },
+        });
+    });
+};
 
-export const hideLoading = ({ title = '', icon = 'none', duration = 1500, mask = false } = {}) => {
+export const hideLoading = (): Promise<any> => {
     return new Promise((resolve, reject) => {
         uni.hideLoading({
-            success: () => {
-                resolve()
+            success: (res: any) => {
+                resolve(res);
             },
             fail: () => {
-                reject()
-            }
-        })
-    })
-}
+                reject();
+            },
+        });
+    });
+};
 
-export const hideToast = ({ title = '', icon = 'none', duration = 1500, mask = false } = {}) => {
+export const hideToast = ():Promise<any> => {
     return new Promise((resolve, reject) => {
         uni.hideToast({
-            success: () => {
-                resolve()
+            success: (res: any) => {
+                resolve(res);
             },
             fail: () => {
-                reject()
-            }
-        })
-    })
-}
+                reject();
+            },
+        });
+    });
+};
 
-
-export const delaySync = (time = 1000) => {
+export const delaySync = (time = 1000): Promise<void> => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            resolve()
+            resolve();
         }, time);
-    })
-}
+    });
+};
 
+const formatTime = (unit: number): string => {
+    const timeStr = `${unit}`;
+    return timeStr.length === 1 ? `0${timeStr}` : timeStr;
+};
 
-const formatTime = (unit) => {
-	const timeStr = `${unit}`
-	return timeStr.length === 1 ? `0${timeStr}` : timeStr
-}
-
-export const timeStampTranslate = (timeStame) => {
-	const orderDate = new Date(+timeStame);
-	const year = orderDate.getFullYear()
-	const month = orderDate.getMonth() + 1
-	const date = orderDate.getDate()
-	const hour = orderDate.getHours()
-	const minute = orderDate.getMinutes()
-	return `${year}-${formatTime(month)}-${formatTime(date)} ${formatTime(hour)}:${formatTime(minute)}`
-}
-
+export const timeStampTranslate = (timeStame: number) : string => {
+    const orderDate = new Date(+timeStame);
+    const year = orderDate.getFullYear();
+    const month = orderDate.getMonth() + 1;
+    const date = orderDate.getDate();
+    const hour = orderDate.getHours();
+    const minute = orderDate.getMinutes();
+    return `${year}-${formatTime(month)}-${formatTime(date)} ${formatTime(
+        hour
+    )}:${formatTime(minute)}`;
+};
 
 /**
  * 换算金额，接口返回的数值单位为（分）
  * @param {*} num
  */
-export function formatAmountNum(num) {
+export function formatAmountNum(num: number) : string {
     num = parseFloat(num) || 0;
     num = (num / 100).toFixed(2);
-    num = num.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    num = num.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return num;
 }
 
-function format(number) {
+function format(number: number): string {
     return number && number.replace(/(?!^)(?=(\d{3})+\.)/g, ",");
-  }
-
+}

@@ -1,12 +1,13 @@
-import routerList from '../router';
-const routerMap = routerList.reduce((obj, item) => {
+import routerList from '@/router/index';
+import { RouteInfoI } from '@/router/index';
+const routerMap = routerList.reduce((obj: {[index: string]: string} , item: RouteInfoI) => {
 	obj[item.name] = item.path
 	return obj
 }, {})
-const router = (api) => (params = {}) => {
-	const path = routerMap[params.name]
-	const search =  Object.keys(params.query || {}).map(key => `${key}=${params.query[key]}`).join('&')
-	const url = `${path}${search ? `?${search}` : ''}`
+const router = (api: string) => (params: any) => {
+	const path: string = routerMap[params.name]
+	const search: string =  Object.keys(params.query || {}).map(key => `${key}=${params.query[key]}`).join('&')
+	const url: string = `${path}${search ? `?${search}` : ''}`
 	uni[api]({
 		url
 	})

@@ -1,4 +1,8 @@
-const user = [
+export interface RouteInfoI {
+	name: string,
+	path: string
+}
+const user: RouteInfoI[] = [
 	{
 		name: 'user/center',
 		path: '/pages/user/center/index'
@@ -38,69 +42,69 @@ const user = [
 	},
 ]
 
-const manage = [
-	{
-		name: 'manage/category/list',
-		path: '/pages/manage/category/list/index'
-	},
-	{
-		name: 'manage/category/edit',
-		path: '/pages/manage/category/edit/index'
-	},
-	{
-		name: 'manage/food/list',
-		path: '/pages/manage/food/list/index'
-	},
-	{
-		name: 'manage/food/edit',
-		path: '/pages/manage/food/edit/index'
-	},
+// const manage:RouteInfoI[] = [
+// 	{
+// 		name: 'manage/category/list',
+// 		path: '/pages/manage/category/list/index'
+// 	},
+// 	{
+// 		name: 'manage/category/edit',
+// 		path: '/pages/manage/category/edit/index'
+// 	},
+// 	{
+// 		name: 'manage/food/list',
+// 		path: '/pages/manage/food/list/index'
+// 	},
+// 	{
+// 		name: 'manage/food/edit',
+// 		path: '/pages/manage/food/edit/index'
+// 	},
 
-	{
-		name: 'manage/meituan/copy',
-		path: '/pages/manage/meituan/copy/index'
-	},
-	{
-		name: 'manage/order/list',
-		path: '/pages/manage/order/list/index'
-	},
-	{
-		name: 'manage/order/detail',
-		path: '/pages/manage/order/detail/index'
-	},
-	{
-		name: 'manage/shop/list',
-		path: '/pages/manage/shop/list/index'
-	},
-	{
-		name: 'manage/shop/edit',
-		path: '/pages/manage/shop/edit/index'
-	},
-	{
-		name: 'animate/list',
-		path: '/pages/animate/list/index'
-	},
-	{
-		name: 'animate/item',
-		path: '/pages/animate/item/index'
-	},
-]
+// 	{
+// 		name: 'manage/meituan/copy',
+// 		path: '/pages/manage/meituan/copy/index'
+// 	},
+// 	{
+// 		name: 'manage/order/list',
+// 		path: '/pages/manage/order/list/index'
+// 	},
+// 	{
+// 		name: 'manage/order/detail',
+// 		path: '/pages/manage/order/detail/index'
+// 	},
+// 	{
+// 		name: 'manage/shop/list',
+// 		path: '/pages/manage/shop/list/index'
+// 	},
+// 	{
+// 		name: 'manage/shop/edit',
+// 		path: '/pages/manage/shop/edit/index'
+// 	},
+// 	{
+// 		name: 'animate/list',
+// 		path: '/pages/animate/list/index'
+// 	},
+// 	{
+// 		name: 'animate/item',
+// 		path: '/pages/animate/item/index'
+// 	},
+// ]
 
-const role = [
-	{
-		name: 'role',
-		path: '/pages/role/index'
-	},
-]
+// const role:RouteInfoI[] = [
+// 	{
+// 		name: 'role',
+// 		path: '/pages/role/index'
+// 	},
+// ]
 
-const login = [
+const login:RouteInfoI[] = [
 	{
 		name: 'login',
-		path: '/pages/login/index'
+		path: '/pages/login/index',
 	},
 ]
 
-const register = [
+const register:RouteInfoI[] = [
 	{
 		name: 'register',
 		path: '/pages/register/index'
@@ -187,10 +191,11 @@ const register = [
 // 	...entertainmentList,
 // 	...shopList
 // ]
-export default [
+const route = [
 	...user,
-	...manage,
-	...role,
+	// ...manage,
+	// ...role,
 	...login,
 	...register
 ]
+export default route
