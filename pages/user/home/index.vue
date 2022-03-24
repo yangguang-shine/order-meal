@@ -44,14 +44,14 @@ const {
     setTabListFixedFlag,
     setDefaultAddress,
     setRecommandShopList
-} = mapMutations("user", [
+} = mapMutations([
     "setTopAddressWidthFlag",
     "setTabListFixedFlag",
     "setDefaultAddress",
     "setRecommandShopList"
 ]);
 
-const { getDefaultAddress, getRecommandShopList } = mapActions("user", [
+const { getDefaultAddress, getRecommandShopList } = mapActions([
     "getDefaultAddress",
     "getRecommandShopList"
 ]);

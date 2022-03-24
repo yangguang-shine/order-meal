@@ -36,13 +36,13 @@ const {
     $myrouter,
     $showModal
 } = getCurrentInstance().proxy;
-const { orderDetail } = mapState("user", ["orderDetail"]);
+const { orderDetail } = mapState(["orderDetail"]);
 
-const { saveShopInfo, saveBusinessType } = mapMutations("user", [
+const { saveShopInfo, saveBusinessType } = mapMutations([
     "saveShopInfo",
     "saveBusinessType"
 ]);
-const { cancelOrder, getOrderDetail, getShopInfo } = mapActions("user", [
+const { cancelOrder, getOrderDetail, getShopInfo } = mapActions([
     "cancelOrder",
     "getOrderDetail",
     "getShopInfo"

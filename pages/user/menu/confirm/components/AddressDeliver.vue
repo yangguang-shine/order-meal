@@ -45,11 +45,11 @@ const {
     $myrouter
 } = getCurrentInstance().proxy;
 
-const { defaultAddress, takeOutTime } = mapState("user", [
+const { defaultAddress, takeOutTime } = mapState([
     "defaultAddress",
     "takeOutTime"
 ]);
-const { setTakeOutTime } = mapMutations("user", ["setTakeOutTime"]);
+const { setTakeOutTime } = mapMutations(["setTakeOutTime"]);
 function toAddressList() {
     $myrouter.navigateTo({
         name: "user/address/list",

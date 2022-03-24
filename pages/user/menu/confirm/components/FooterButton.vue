@@ -19,10 +19,10 @@ import {
     mapState,
     mapGetters
 } from "../../../../../utils/mapVuex";
-const { submitOrder } = mapActions("user", [
+const { submitOrder } = mapActions([
     "submitOrder",
 ]);
-const { clearCart, setNoteText } =  mapMutations('user', ['clearCart', 'setNoteText'])
+const { clearCart, setNoteText } =  mapMutations(['clearCart', 'setNoteText'])
 const {
     cartCategoryList,
     takeOutTime,
@@ -30,7 +30,7 @@ const {
     businessType,
     shopInfo,
     noteText
-} = mapState("user", [
+} = mapState([
     "cartCategoryList",
     "takeOutTime",
     "defaultAddress",
@@ -38,7 +38,7 @@ const {
     "shopInfo",
     "noteText"
 ]);
-const { payPrice, originOrderAmount, minusPrice,orderFoodList } = mapGetters("user", [
+const { payPrice, originOrderAmount, minusPrice,orderFoodList } = mapGetters([
     "payPrice",
     "originOrderAmount",
     "minusPrice",

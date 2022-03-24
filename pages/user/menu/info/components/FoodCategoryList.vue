@@ -31,8 +31,8 @@ import {
     mapGetters,
     mapMutations
 } from "../../../../../utils/mapVuex";
-const { asideCategoryList, minusPromotionsObject } = mapGetters("user", ["asideCategoryList", 'minusPromotionsObject']);
-const { categoryList, scrollIntoCategoryTabID } = mapState("user", [
+const { asideCategoryList, minusPromotionsObject } = mapGetters(["asideCategoryList", 'minusPromotionsObject']);
+const { categoryList, scrollIntoCategoryTabID } = mapState([
     "categoryList",
     "scrollIntoCategoryTabID"
 ]);
@@ -44,7 +44,7 @@ const {
     setFoodInfo,
     setCategoryTabId,
     setScrollIntoCategoryTabID
-} = mapMutations("user", [
+} = mapMutations([
     "setFoodDetailFlag",
     "setFoodInfo",
     "setCategoryTabId",

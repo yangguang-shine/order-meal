@@ -14,8 +14,8 @@ import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
 
 const internalInstance = getCurrentInstance();
 const { $myrouter } = internalInstance.proxy;
-const { saveShopInfo, saveBusinessType } = mapMutations('user', ['saveShopInfo', 'saveBusinessType'])
-const { recommandShopList } = mapState("user", ["recommandShopList"]);
+const { saveShopInfo, saveBusinessType } = mapMutations(['saveShopInfo', 'saveBusinessType'])
+const { recommandShopList } = mapState(["recommandShopList"]);
 function toOrder(shopItem: any) {
     console.log("toOrder");
     saveShopInfo(shopItem);

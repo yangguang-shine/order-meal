@@ -60,19 +60,19 @@ import { mapState, mapActions, mapMutations } from "../../../../utils/mapVuex";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
-const { allOrderList, orderTabIndex, orderErrorListFlag } = mapState("user", [
+const { allOrderList, orderTabIndex, orderErrorListFlag } = mapState([
     "allOrderList",
     "orderTabIndex",
     "orderErrorListFlag",
 ]);
-const { getOrderList, getShopInfo } = mapActions("user", ["getOrderList", 'getShopInfo']);
+const { getOrderList, getShopInfo } = mapActions(["getOrderList", 'getShopInfo']);
 const {
     setOrderErrorListFlag,
     setOrderTabIndex,
     saveShopInfo,
     saveBusinessType,
     setOrderDetailShopInfo
-} = mapMutations("user", ["setOrderErrorListFlag", 'setOrderTabIndex', 'saveShopInfo', 'saveBusinessType', 'setOrderDetailShopInfo']);
+} = mapMutations(["setOrderErrorListFlag", 'setOrderTabIndex', 'saveShopInfo', 'saveBusinessType', 'setOrderDetailShopInfo']);
 onLoad(() => {
     init();
 });

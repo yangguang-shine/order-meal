@@ -6,8 +6,8 @@
 
 <script lang='ts' setup>
 import { mapGetters, mapState } from '../../../../../utils/mapVuex';
-const {minusPromotionsObject } = mapGetters('user', ['minusPromotionsObject'])
-const { shopInfoFlag } = mapState('user', ['shopInfoFlag'])
+const {minusPromotionsObject } = mapGetters(['minusPromotionsObject'])
+const { shopInfoFlag } = mapState(['shopInfoFlag'])
 </script>
 
 <style lang="scss">

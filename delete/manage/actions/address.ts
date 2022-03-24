@@ -1,4 +1,4 @@
-import fetch from '../../../utils/fetch'
+import fetch from '@/utils/fetch'
 const getAddressList = async ({ commit }, params = {}) => {
     const addressList = await fetch('user/address/list', {})
     commit('setAddressList', addressList)

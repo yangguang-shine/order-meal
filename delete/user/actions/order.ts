@@ -1,4 +1,4 @@
-import fetch from '../../../utils/fetch'
+import fetch from '@/utils/fetch'
 import getShopMinusList from '../../../utils/getShopMinusList'
 import { timeStampTranslate } from '../../../utils/index.js';
 import getOrderTypeTitle from '../../../utils/getOrderTypeTitle.js';

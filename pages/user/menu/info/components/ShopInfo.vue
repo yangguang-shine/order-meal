@@ -48,7 +48,7 @@
 <script lang='ts' setup>
 import MinusList from "@/components/MinusList.vue";
 import { mapState } from "../../../../../utils/mapVuex";
-const { shopInfo } = mapState("user", ["shopInfo"]);
+const { shopInfo } = mapState(["shopInfo"]);
 </script>
 
 <style lang="scss" scoped>

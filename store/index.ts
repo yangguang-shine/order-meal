@@ -2,11 +2,11 @@ import state from "./state";
 import getters from "./getters";
 import mutations from "./mutations";
 import actions from "./actions";
-
-
-export default {
+import { createStore } from 'vuex'
+const store: any = createStore( {
     state,
     getters,
     mutations,
     actions,
-}
+})
+export default store

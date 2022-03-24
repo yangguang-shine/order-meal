@@ -19,8 +19,8 @@
 
 <script lang="ts" setup>
 import { mapState, mapMutations } from "../../../../../utils/mapVuex";
-const { noteText } = mapState("user", ["noteText"]);
-const {setNoteInputFlag } = mapMutations('user', ['setNoteInputFlag'])
+const { noteText } = mapState(["noteText"]);
+const {setNoteInputFlag } = mapMutations(['setNoteInputFlag'])
 function showNoteInput() {
     setNoteInputFlag(true)
 }

@@ -48,7 +48,7 @@ const {
     $delaySync: delaySync,
     $myrouter: myrouter
 } = internalInstance.proxy;
-const { addAddress, findAddress, editAddress } = mapActions("user", [
+const { addAddress, findAddress, editAddress } = mapActions([
     "addAddress",
     "findAddress",
     "editAddress"

@@ -17,8 +17,8 @@ import {
     mapMutations
 } from "../../../../../utils/mapVuex";
 import {  minusPromotionsHeightPX } from '../infoConfig'
-const { asideCategoryList, minusPromotionsObject } = mapGetters("user", ["asideCategoryList", 'minusPromotionsObject']);
-const { categoryList, categoryTabId, scrollIntoCategoryTabID } = mapState("user", [
+const { asideCategoryList, minusPromotionsObject } = mapGetters(["asideCategoryList", 'minusPromotionsObject']);
+const { categoryList, categoryTabId, scrollIntoCategoryTabID } = mapState([
     "categoryList",
     "categoryTabId",
     "scrollIntoCategoryTabID"
@@ -26,7 +26,7 @@ const { categoryList, categoryTabId, scrollIntoCategoryTabID } = mapState("user"
 const {
     setCategoryTabId,
     setScrollIntoCategoryTabID
-} = mapMutations("user", [
+} = mapMutations([
     'setCategoryTabId',
     "setScrollIntoCategoryTabID"
 ]);

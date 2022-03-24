@@ -1,15 +1,19 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-// ('user', ['hahah'])  or (['hahah'])
+// (['hahah'])  or (['hahah'])
 export const mapState = function (namespace: string | string[], states: string[]) : any {
     const store = useStore()
+console.log(store)
+
     const obj: any = {}
     if (typeof namespace === 'string') {
         states.forEach((key: any) => {
             obj[key] = computed(() => getNamespaceState(namespace, store)[key])
         })
     } else {
-        namespace.forEach((key: any) => {
+        namespace.forEach((key: string) => {
+            console.log(1111)
+            console.log(key)
             obj[key] = computed(() => {
                 return store.state[key]
             })
@@ -44,6 +48,8 @@ export const mapGetters = function (namespace: string | any[], states: any[]) : 
 
 export const mapMutations = (namespace: string | any[], mutations: any[]): any => {
     const store = useStore()
+console.log(store)
+
     const obj: any = {}
     if (typeof namespace === 'string') {
         const module = store._modulesNamespaceMap[`${namespace}/`]
@@ -60,7 +66,7 @@ export const mapMutations = (namespace: string | any[], mutations: any[]): any =
 
 export const mapActions = (namespace: any, mutations: any[]) : any => {
     const store = useStore()
-
+console.log(store)
     const obj: any = {}
     if (typeof namespace === 'string') {
         const module = store._modulesNamespaceMap[`${namespace}/`]

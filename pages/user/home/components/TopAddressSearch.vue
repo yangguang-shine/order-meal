@@ -15,7 +15,7 @@
 import { defineComponent, computed, getCurrentInstance } from "vue";
 import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
-const { topAddressWidthFlag, defaultAddress } = mapState("user", [
+const { topAddressWidthFlag, defaultAddress } = mapState([
     "topAddressWidthFlag",
     "defaultAddress"
 ]);

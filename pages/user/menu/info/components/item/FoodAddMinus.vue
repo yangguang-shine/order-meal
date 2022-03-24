@@ -24,8 +24,8 @@ import { mapMutations, mapState } from "../../../../../../utils/mapVuex";
 interface Props {
     foodItem: any;
 }
-const { cartChange,setCartDetailFlag } = mapMutations("user", ["cartChange", "setCartDetailFlag"]);
-const { cartCategoryList, cartDetailFlag} = mapState('user', ["cartCategoryList", "cartDetailFlag"])
+const { cartChange,setCartDetailFlag } = mapMutations(["cartChange", "setCartDetailFlag"]);
+const { cartCategoryList, cartDetailFlag} = mapState(["cartCategoryList", "cartDetailFlag"])
 const props = withDefaults(defineProps<Props>(), {
     foodItem: () => ({})
 });

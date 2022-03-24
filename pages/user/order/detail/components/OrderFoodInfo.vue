@@ -25,7 +25,7 @@
 <script lang="ts" setup>
 import OrderFoodItem from '@/components/OrderFoodItem.vue';
 import { mapState } from '../../../../../utils/mapVuex';
-const { orderDetail, orderDetailShopInfo } = mapState('user', ['orderDetail', 'orderDetailShopInfo'])
+const { orderDetail, orderDetailShopInfo } = mapState(['orderDetail', 'orderDetailShopInfo'])
 
 
 </script>

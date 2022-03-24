@@ -1,6 +1,6 @@
 import fetch from "@/utils/fetch";
-import { timeStampTranslate } from "@/utils/index.js";
-import getOrderTypeTitle from "@/utils/getOrderTypeTitle.js";
+import { timeStampTranslate } from "@/utils/index";
+import getOrderTypeTitle from "@/utils/getOrderTypeTitle";
 import { shopImgPath, foodImgPath } from "@/config/index";
 import { ActionI } from "@/interface/index";
 

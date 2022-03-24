@@ -1,4 +1,4 @@
-import fetch from '../../../utils/fetch'
+import fetch from '@/utils/fetch'
 import getShopMinusList from '../../../utils/getShopMinusList'
 const submitOrder = async ({state, getters, commit}, payload) => {
     await fetch('user/order/submit', {

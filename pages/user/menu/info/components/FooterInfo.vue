@@ -23,14 +23,14 @@ import {
     mapMutations,
     mapState
 } from "../../../../../utils/mapVuex";
-const { cartPriceInfo, allCartFoodCount } = mapGetters("user", [
+const { cartPriceInfo, allCartFoodCount } = mapGetters([
     "cartPriceInfo",
     "allCartFoodCount"
 ]);
-const { shopInfoFlag, cartCategoryList } = mapState("user", ["shopInfoFlag", 'cartCategoryList']);
+const { shopInfoFlag, cartCategoryList } = mapState(["shopInfoFlag", 'cartCategoryList']);
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
 
-const { toogleCartDetailFlag } = mapMutations("user", ["toogleCartDetailFlag"]);
+const { toogleCartDetailFlag } = mapMutations(["toogleCartDetailFlag"]);
 function toComfirmOrder() {
     $myrouter.navigateTo({
         name: "user/menu/confirm"

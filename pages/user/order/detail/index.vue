@@ -19,9 +19,9 @@ const { $showLoading, $hideLoading, $myrouter, $showModal } = getCurrentInstance
 
 const showLoadingFlag = ref(false);
 let orderKey = ref('')
-const { orderDetail } = mapState("user", ["orderDetail"]);
-const {} = mapMutations("user", [""]);
-const { getOrderDetail, getShopInfo, cancelOrder, orderDetailShopInfo } = mapActions("user", [
+const { orderDetail } = mapState(["orderDetail"]);
+const {} = mapMutations([""]);
+const { getOrderDetail, getShopInfo, cancelOrder, orderDetailShopInfo } = mapActions([
     "getOrderDetail",
     "getShopInfo",
     "cancelOrder",

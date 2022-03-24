@@ -16,8 +16,8 @@
 <script lang="ts" setup>
 import { mapState, mapMutations } from '../../../../../utils/mapVuex'
 import { computed ,ref} from 'vue'
-const {noteText} = mapState('user', ['noteText'])
-const {setNoteInputFlag, setNoteText } = mapMutations('user', ['setNoteInputFlag', "setNoteText"])
+const {noteText} = mapState(['noteText'])
+const {setNoteInputFlag, setNoteText } = mapMutations(['setNoteInputFlag', "setNoteText"])
 const noteInput = ref(noteText.value)
 const maxlength = 20
 const noteInputLength = computed(() => noteInput.value.length)

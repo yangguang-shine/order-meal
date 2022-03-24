@@ -43,7 +43,7 @@
 <script lang='ts' setup>
 import { mapState } from '../../../../../utils/mapVuex';
 
-const { orderDetail } = mapState('user', ['orderDetail'])
+const { orderDetail } = mapState(['orderDetail'])
 function copyOrderKey() {
     wx.setClipboardData({
         data: `${orderDetail.value.orderKey}`,

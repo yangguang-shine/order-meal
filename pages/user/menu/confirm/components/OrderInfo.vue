@@ -51,7 +51,7 @@ import { computed, ref, getCurrentInstance } from "vue";
 import OrderFoodItem from "@/components/OrderFoodItem.vue";
 import { mapState, mapGetters } from "../../../../../utils/mapVuex";
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
-const { cartCategoryList, shopInfo } = mapState("user", [
+const { cartCategoryList, shopInfo } = mapState([
     "cartCategoryList",
     "shopInfo"
 ]);
@@ -60,7 +60,7 @@ const {
     minusPrice,
     payPrice,
     orderFoodList
-} = mapGetters("user", [
+} = mapGetters([
     "originOrderAmount",
     "minusPrice",
     "payPrice",

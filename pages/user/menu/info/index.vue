@@ -60,7 +60,7 @@ const {
     cartDetailFlag,
     foodDetailFalg,
     foodItem
-} = mapState("user", [
+} = mapState([
     "shopInfo",
     "businessType",
     "cartCategoryList",
@@ -79,7 +79,7 @@ const {
     cartPriceInfo,
     allCartFoodCount,
     asideCategoryList
-} = mapGetters("user", [
+} = mapGetters([
     "minusPromotionsObject",
     "cartPriceInfo",
     "allCartFoodCount",
@@ -94,7 +94,7 @@ const {
     setFoodDetailFlag,
     setTopBarInfo,
     initCart
-} = mapMutations("user", [
+} = mapMutations([
     "setCategoryTabId",
     "setScrollIntoCategoryTabID",
     "setFoodCategoryList",
@@ -104,7 +104,7 @@ const {
     "initCart"
 ]);
 
-const { getMenuList, getOrderKeyFoodList } = mapActions("user", [
+const { getMenuList, getOrderKeyFoodList } = mapActions([
     "getMenuList",
     "getOrderKeyFoodList"
 ]);

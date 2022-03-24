@@ -56,12 +56,12 @@ import {
     mapGetters,
     mapMutations
 } from "../../../../../utils/mapVuex";
-const { minusPromotionsObject } = mapGetters("user", ["minusPromotionsObject"]);
-const { cartCategoryList, categoryList } = mapState("user", [
+const { minusPromotionsObject } = mapGetters(["minusPromotionsObject"]);
+const { cartCategoryList, categoryList } = mapState([
     "cartCategoryList",
     "categoryList"
 ]);
-const { setCartDetailFlag, clearCart } = mapMutations("user", [
+const { setCartDetailFlag, clearCart } = mapMutations([
     "setCartDetailFlag",
     "clearCart"
 ]);

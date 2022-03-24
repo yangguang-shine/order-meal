@@ -18,14 +18,14 @@ const {
     $showModal,
     $delaySync
 } = internalInstance.proxy;
-const { tabList, selectedTabItem } = mapState("user", [
+const { tabList, selectedTabItem } = mapState([
     "tabList",
     "selectedTabItem"
 ]);
-const { tabListFixedFlag } = mapState("user", ["tabListFixedFlag"]);
+const { tabListFixedFlag } = mapState(["tabListFixedFlag"]);
 
-const { changeTabItem } = mapMutations("user", ["changeTabItem"]);
-const { getRecommandShopList } = mapActions("user", ["getRecommandShopList"]);
+const { changeTabItem } = mapMutations(["changeTabItem"]);
+const { getRecommandShopList } = mapActions(["getRecommandShopList"]);
 const clickTabItem = async (tabItem: any) => {
     if (selectedTabItem.type === tabItem.type) return;
     try {

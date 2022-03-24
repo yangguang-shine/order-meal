@@ -21,9 +21,9 @@ import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
 const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
 
-const { setTakeOutTime } = mapMutations("user", ["setTakeOutTime"]);
-const { noteInputFlag } = mapState("user", ["noteInputFlag"]);
-const { getDefaultAddress } = mapActions("user", [
+const { setTakeOutTime } = mapMutations(["setTakeOutTime"]);
+const { noteInputFlag } = mapState(["noteInputFlag"]);
+const { getDefaultAddress } = mapActions([
     "getDefaultAddress"
 ]);
 getCurrentTakeOutTime();

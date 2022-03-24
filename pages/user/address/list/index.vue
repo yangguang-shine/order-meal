@@ -40,7 +40,7 @@ const {
     $delaySync,
     $myrouter
 } = internalInstance.proxy;
-const { addressList, defaultAddress } = mapState("user", [
+const { addressList, defaultAddress } = mapState([
     "addressList",
     "defaultAddress"
 ]);
@@ -48,12 +48,12 @@ const {
     getAddressList,
     deleteAddress,
     setDefaultAddressFetch
-} = mapActions("user", [
+} = mapActions([
     "getAddressList",
     "deleteAddress",
     "setDefaultAddressFetch"
 ]);
-const { setDefaultAddress } = mapMutations("user", ["setDefaultAddress"]);
+const { setDefaultAddress } = mapMutations(["setDefaultAddress"]);
 let routerOptions: any;
 onShow(() => {
     init();
