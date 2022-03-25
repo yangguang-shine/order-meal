@@ -2,59 +2,53 @@
     <view class="address-edit-container">
         <div class="item flex-row flex-a-center">
             <div class="title text-center">姓名</div>
-            <input class="flex-item" type="text" v-model="addressInfo.name">
+            <input class="flex-item" type="text" v-model="addressInfo.name" />
         </div>
         <div class="item flex-row flex-a-center">
             <div class="title text-center"></div>
             <div class="flex-row flex-a-center">
-                <div class="sex-item" :style="{'color': addressInfo.sex === 1 ? $mainColor : ''}" @click="changeSex(1)">男</div>
-                <div class="sex-item" :style="{'color': addressInfo.sex === 2 ? $mainColor : ''}" @click="changeSex(2)">女</div>
+                <div class="sex-item" :style="{ color: addressInfo.sex === 1 ? $mainColor : '' }" @click="changeSex(1)">男</div>
+                <div class="sex-item" :style="{ color: addressInfo.sex === 2 ? $mainColor : '' }" @click="changeSex(2)">女</div>
             </div>
         </div>
         <div class="item flex-row flex-a-center">
             <div class="title text-center">手机号</div>
-            <input class="flex-item" type="text" v-model="addressInfo.mobile">
+            <input class="flex-item" type="text" v-model="addressInfo.mobile" />
         </div>
         <div class="item flex-row flex-a-center">
             <div class="title text-center">地址</div>
-            <div class="flex-item" @click="chooseAddress" :style="{color: addressInfo.address1 ? '' : '#999'}">{{addressInfo.address1 || '请选择地址'}}</div>
+            <div class="flex-item" @click="chooseAddress" :style="{ color: addressInfo.address1 ? '' : '#999' }">{{ addressInfo.address1 || "请选择地址" }}</div>
         </div>
         <div class="item flex-row flex-a-center">
             <div class="title text-center">门牌号</div>
-            <input type="text" v-model="addressInfo.address2">
+            <input type="text" v-model="addressInfo.address2" />
         </div>
         <div class="flex-row flex-j-center">
-            <div v-if="routerAddressID" class="button" :style="{'background-color': $mainColor}" @click="toEditAddress">修改</div>
-            <div v-else class="button" :style="{'background-color': $mainColor}" @click="toAddAddress">新增</div>
+            <div v-if="routerAddressID" class="button" :style="{ 'background-color': $mainColor }" @click="toEditAddress">修改</div>
+            <div v-else class="button" :style="{ 'background-color': $mainColor }" @click="toAddAddress">新增</div>
         </div>
     </view>
 </template>
 <script lang="ts" setup>
 import { getSetting, authorize } from "@/utils";
-import {
-    defineComponent,
-    computed,
-    getCurrentInstance,
-    reactive,
-    ref
-} from "vue";
+import { defineComponent, computed, getCurrentInstance, reactive, ref } from "vue";
 import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
 import { onShow, onLoad } from "@dcloudio/uni-app";
+import { AddressInfoI } from "@/interface/index";
 const internalInstance = getCurrentInstance();
-const {
-    $showLoading: showLoading,
-    $hideLoading: hideLoading,
-    $showModal: showModal,
-    $delaySync: delaySync,
-    $myrouter: myrouter
-} = internalInstance.proxy;
-const { addAddress, findAddress, editAddress } = mapActions([
-    "addAddress",
-    "findAddress",
-    "editAddress"
-]);
+const { $showLoading: showLoading, $hideLoading: hideLoading, $showModal: showModal, $delaySync: delaySync, $myrouter: myrouter } = internalInstance.proxy;
+const { addAddress, findAddress, editAddress } = mapActions(["addAddress", "findAddress", "editAddress"]);
+interface AddIndoI {
+    name: string;
+    sex: number;
+    mobile: string;
+    address1: string;
+    address2: string;
+    latitude: string;
+    longitude: string;
+}
 onShow(() => {});
-let routerAddressID = ref("");
+let routerAddressID = ref<string>("");
 onLoad((option: any) => {
     routerAddressID.value = option.addressID;
     if (option.addressID) {
@@ -62,14 +56,14 @@ onLoad((option: any) => {
         init();
     }
 });
-let addressInfo = reactive({
+let addressInfo: AddIndoI | AddressInfoI = reactive({
     name: "",
     sex: 1,
     mobile: "",
     address1: "",
     address2: "",
     latitude: "",
-    longitude: ""
+    longitude: "",
 });
 async function init() {
     try {
@@ -82,7 +76,7 @@ async function init() {
     }
 }
 async function toFindAddress() {
-    let findAddressInfo = await findAddress(routerAddressID.value);
+    let findAddressInfo: AddressInfoI = await findAddress(routerAddressID.value);
     Object.assign(addressInfo, findAddressInfo);
 }
 async function toAddAddress() {
@@ -91,7 +85,7 @@ async function toAddAddress() {
         await addAddress(addressInfo);
         hideLoading();
         await showModal({
-            content: "添加成功"
+            content: "添加成功",
         });
         myrouter.back(1);
     } catch (e) {
@@ -105,11 +99,11 @@ async function toEditAddress() {
         showLoading();
         await editAddress({
             ...addressInfo,
-            addressID: routerAddressID.value
+            addressID: routerAddressID.value,
         });
         hideLoading();
         await showModal({
-            content: "修改成功"
+            content: "修改成功",
         });
         myrouter.back(1);
     } catch (e) {
@@ -137,13 +131,13 @@ async function chooseAddress() {
     }
     // #endif
     uni.chooseLocation({
-        success: res => {
+        success: (res) => {
             console.log("res");
             console.log(res);
             addressInfo.address1 = res.address;
             addressInfo.latitude = res.latitude;
             addressInfo.longitude = res.longitude;
-        }
+        },
     });
 }
 // data() {

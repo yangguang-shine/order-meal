@@ -1,39 +1,38 @@
-import { MutationI } from "@/interface/index";
-
-const setCategoryTabId: MutationI = (state: any, payload: any) => {
+import { MutationI, FoodItemI,StateI } from "@/interface/index";
+function setCategoryTabId (state: StateI, payload: any) {
     state.categoryTabId = payload;
 };
-const setScrollIntoCategoryTabID: MutationI = (state: any, payload: any) => {
+function setScrollIntoCategoryTabID (state: StateI, payload: any) {
     state.scrollIntoCategoryTabID = payload;
 };
-const setFoodCategoryList: MutationI = (state: any, payload: any) => {
+function setFoodCategoryList (state: StateI, payload: any) {
     state.categoryList = payload;
 };
-const setFoodInfo: MutationI = (state: any, payload: any) => {
+function setFoodInfo (state: StateI, payload: any) {
     state.foodInfo = payload;
 };
-const setFoodDetailFlag: MutationI = (state: any, payload: any) => {
+function setFoodDetailFlag (state: StateI, payload: any) {
     state.foodDetailFalg = payload;
 };
-const setTopBarInfo: MutationI = (state: any, payload: any) => {
+function setTopBarInfo (state: StateI, payload: any) {
     state.topBarInfo = payload;
 };
-const setShopInfoFlag: MutationI = (state: any, payload: any) => {
+function setShopInfoFlag (state: StateI, payload: any) {
     state.shopInfoFlag = payload;
 };
-const toogleCartDetailFlag: MutationI = (state: any, payload: any) => {
+function toogleCartDetailFlag (state: StateI, payload: any) {
     state.cartDetailFlag = !state.cartDetailFlag;
 };
-const setCartDetailFlag: MutationI = (state: any, payload: any) => {
+function setCartDetailFlag (state: StateI, payload: any) {
     state.cartDetailFlag = payload;
 };
-const setCartCategoryList: MutationI = (state: any, payload: any) => {
+function setCartCategoryList (state: StateI, payload: any) {
     state.cartCategoryList = payload;
 };
 
-const clearCart: MutationI = (state: any, payload: any) => {
-    state.cartCategoryList.forEach((categoryTtem: any) => {
-        categoryTtem.foodList.forEach((foodItem: any) => {
+function clearCart (state: StateI, payload: any) {
+    state.cartCategoryList.forEach((categoryTtem) => {
+        categoryTtem.foodList.forEach((foodItem) => {
             foodItem.orderCount = 0;
         });
     });
@@ -42,7 +41,10 @@ const clearCart: MutationI = (state: any, payload: any) => {
     // uni.removeStorageSync(`storageFoodList_${state.shopInfo.shopID}`)
 };
 
-const cartChange = (state: any, { foodItem, count = 0 }) => {
+function cartChange (state: StateI, { foodItem, count = 0 }: {
+    foodItem: FoodItemI,
+    count: number
+}) {
     foodItem.orderCount = count || 0;
     const findCategory = state.cartCategoryList.find((item) => item.categoryID === foodItem.categoryID);
     if (findCategory) {
@@ -53,6 +55,7 @@ const cartChange = (state: any, { foodItem, count = 0 }) => {
     } else {
         state.cartCategoryList.push({
             categoryID: foodItem.categoryID,
+            categoryName: foodItem.categoryName,
             foodList: [foodItem],
         });
     }
@@ -69,7 +72,7 @@ const cartChange = (state: any, { foodItem, count = 0 }) => {
     state.cartCategoryList = state.cartCategoryList.filter((item) => item.foodList.length > 0);
 };
 
-const initCart = function (state: any, payload: any) {
+function initCart (state: StateI, payload: any) {
     const cartCategoryListOrigin = state.cartCategoryList;
     state.cartCategoryList = [];
     cartCategoryListOrigin.forEach((cartFoodItem) => {
@@ -78,7 +81,6 @@ const initCart = function (state: any, payload: any) {
             foodCategoryFind.foodList.forEach((foodItem) => {
                 cartFoodItem.foodList.forEach((item) => {
                     if (item.foodID === foodItem.foodID) {
-                        // foodItem.orderCount = item.orderCount;
                         cartChange(state, { foodItem, count: item.orderCount });
                     }
                 });
@@ -101,4 +103,4 @@ export default {
     clearCart,
     cartChange,
     initCart,
-};
+} as MutationI;

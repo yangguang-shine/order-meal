@@ -1,12 +1,12 @@
-import { MutationI } from "@/interface/index";
+import { MutationI, StateI } from "@/interface/index";
 
-const setTakeOutTime: MutationI = (state, payload) => {
+function setTakeOutTime(state:StateI, payload) {
     state.takeOutTime = payload;
 };
-const setNoteInputFlag: MutationI = (state, payload) => {
+function setNoteInputFlag(state:StateI, payload) {
     state.noteInputFlag = payload;
 };
-const setNoteText: MutationI = (state, payload) => {
+function setNoteText(state:StateI, payload) {
     state.noteText = payload;
 };
 
@@ -14,4 +14,4 @@ export default {
     setTakeOutTime,
     setNoteInputFlag,
     setNoteText,
-};
+} as MutationI;

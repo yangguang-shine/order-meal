@@ -1,8 +1,13 @@
 <template>
-
     <div v-if="recommandShopList.length" class="shop-list-container">
         <!-- <div class="near-shop-title">附近外卖店铺推荐</div> -->
-        <shop v-for="(shopItem, index) in recommandShopList" :key="index" :shopItem="shopItem" @clickShopItem="toOrder" showArrowRightFlag></shop>
+        <shop
+            v-for="(shopItem, index) in recommandShopList"
+            :key="index"
+            :shopItem="shopItem"
+            @clickShopItem="toOrder"
+            showArrowRightFlag
+        ></shop>
     </div>
 </template>
 
@@ -10,13 +15,17 @@
 import Shop from "../../../../components/Shop.vue";
 import { defineComponent, computed, getCurrentInstance } from "vue";
 import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
-
+import { ShopInfoI } from "@/interface/index";
+// import { AddressInfoI, ShopInfoI } from '@/interface/index'
 
 const internalInstance = getCurrentInstance();
 const { $myrouter } = internalInstance.proxy;
-const { saveShopInfo, saveBusinessType } = mapMutations(['saveShopInfo', 'saveBusinessType'])
+const { saveShopInfo, saveBusinessType } = mapMutations([
+    "saveShopInfo",
+    "saveBusinessType",
+]);
 const { recommandShopList } = mapState(["recommandShopList"]);
-function toOrder(shopItem: any) {
+function toOrder(shopItem: ShopInfoI) {
     console.log("toOrder");
     saveShopInfo(shopItem);
     saveBusinessType(2);

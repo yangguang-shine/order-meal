@@ -1,6 +1,6 @@
-import { getterI } from "@/interface/index";
+import { GetterI, StateI } from "@/interface/index";
 
-const minusPromotionsObject: getterI = (state, getters) => {
+const minusPromotionsObject: GetterI = (state, getters) => {
     if ((state.shopInfo.minusList || []).length === 0 || state.cartCategoryList.length === 0) {
         return {
             show: false,
@@ -40,7 +40,7 @@ const minusPromotionsObject: getterI = (state, getters) => {
         };
     }
 };
-const cartPriceInfo: getterI = (state, getters) => {
+const cartPriceInfo: GetterI = (state, getters) => {
     const cartAllOriginPrice = state.cartCategoryList
         .reduce((amount: number, item) => {
             const categoryItemSum = item.foodList.reduce((all, foodItem) => {
@@ -85,7 +85,7 @@ const cartPriceInfo: getterI = (state, getters) => {
         noReachFirst,
     };
 };
-const allCartFoodCount: getterI = (state, getters) => {
+const allCartFoodCount: GetterI = (state, getters) => {
     return state.cartCategoryList.reduce((all: number, item) => {
         const itemFoodAll = item.foodList.reduce((all, item) => {
             all += item.orderCount;
@@ -95,7 +95,7 @@ const allCartFoodCount: getterI = (state, getters) => {
         return all;
     }, 0);
 };
-const asideCategoryList: getterI = (state, getters) => {
+const asideCategoryList: GetterI = (state, getters) => {
     const asideCategoryList = state.categoryList.map((foodCategoryItem) => {
         const cartFind = state.cartCategoryList.find((cartFoodItem) => cartFoodItem.categoryID === foodCategoryItem.categoryID);
         if (cartFind) {

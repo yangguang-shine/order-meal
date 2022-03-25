@@ -1,4 +1,4 @@
-// const allCartFoodCount: getterI = (state, getters) => {
+// const allCartFoodCount = (state, getters) => {
 //     return state.cartCategoryList.reduce((all, item) => {
 //         const itemFoodAll = item.foodList.reduce((all, item) => {
 //             all += item.orderCount;
@@ -8,9 +8,9 @@
 //         return all;
 //     }, 0);
 // }
-import { getterI } from "@/interface/index";
+import { GetterI } from "@/interface/index";
 
-const originOrderAmount: getterI = (state, getters) => {
+const originOrderAmount = (state, getters) => {
     return state.cartCategoryList
         .reduce((amount: number, item) => {
             const categoryItemSum = item.foodList.reduce((all: number, foodItem) => {
@@ -23,7 +23,7 @@ const originOrderAmount: getterI = (state, getters) => {
         }, 0)
         .toFixed(2);
 };
-const minusPrice: getterI = (state, getters) => {
+const minusPrice = (state, getters) => {
     if (!state.shopInfo.minusList.length) {
         return 0;
     } else {
@@ -47,20 +47,21 @@ const minusPrice: getterI = (state, getters) => {
     }
 };
 
-const payPrice: getterI = (state, getters) => {
+const payPrice = (state, getters) => {
     return (getters.originOrderAmount - getters.minusPrice).toFixed(2);
 };
 
-const orderFoodList: getterI = (state, getters) => {
+const orderFoodList = (state, getters) => {
     const orderFoodList = state.cartCategoryList.reduce((list: any[], item) => {
-        return [...list, ...item.foodList];
+          return [...list, ...item.foodList];
     }, []);
     return orderFoodList;
 };
-
-export default {
+const Getters:   GetterI= {
     originOrderAmount,
     minusPrice,
     payPrice,
     orderFoodList,
-};
+}
+
+export default  Getters;

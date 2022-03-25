@@ -1,23 +1,25 @@
-import { MutationI } from "@/interface/index";
+import { MutationI, StateI } from "@/interface/index";
 
-const setTopAddressWidthFlag: MutationI = (state: any, topAddressWidthFlag: boolean): void => {
+import { ShopInfoI, TabItemI } from '@/interface/index'
+
+function setTopAddressWidthFlag(state: StateI, topAddressWidthFlag: boolean): void {
     state.topAddressWidthFlag = topAddressWidthFlag;
 };
-const setTabListFixedFlag: MutationI = (state: any, tabListFixedFlag: boolean): void => {
+function setTabListFixedFlag(state: StateI, tabListFixedFlag: boolean): void {
     state.tabListFixedFlag = tabListFixedFlag;
 };
 
-const setRecommandShopList: MutationI = (state: any, recommandShopList: any): void => {
+function setRecommandShopList(state: StateI, recommandShopList: ShopInfoI[]): void {
     state.recommandShopList = recommandShopList;
 };
 
-const changeTabItem: MutationI = (state: any, tabItem: any) => {
+function changeTabItem(state: StateI, tabItem: TabItemI) {
     state.selectedTabItem = tabItem;
 };
-const saveShopInfo: MutationI = (state: any, shopInfo: any) => {
+function saveShopInfo(state: StateI, shopInfo: ShopInfoI) {
     state.shopInfo = shopInfo;
 };
-const saveBusinessType: MutationI = (state: any, type: any) => {
+function saveBusinessType(state: StateI, type: number) {
     state.businessType = type;
 };
 
@@ -28,4 +30,4 @@ export default {
     changeTabItem,
     saveShopInfo,
     saveBusinessType,
-};
+} as MutationI;

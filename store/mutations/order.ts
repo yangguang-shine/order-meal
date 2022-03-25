@@ -1,16 +1,16 @@
-import { MutationI } from "@/interface/index";
+import { MutationI, StateI } from "@/interface/index";
 
-const setOrderTabIndex: MutationI = (state: any, payload): void => {
+function setOrderTabIndex (state: StateI, payload): void  {
     state.orderTabIndex = payload;
 };
 
-const setOrderErrorListFlag: MutationI = (state: any, payload): void => {
+function setOrderErrorListFlag (state: StateI, payload): void  {
     state.orderErrorListFlag[state.orderTabIndex] = payload;
 };
-const setOrderDetail: MutationI = (state: any, payload): void => {
+function setOrderDetail (state: StateI, payload): void  {
     state.orderDetail = payload;
 };
-const setOrderDetailShopInfo: MutationI = (state: any, payload): void => {
+function setOrderDetailShopInfo (state: StateI, payload): void  {
     state.orderDetailShopInfo = payload;
 };
 
@@ -19,4 +19,4 @@ export default {
     setOrderErrorListFlag,
     setOrderDetail,
     setOrderDetailShopInfo,
-};
+} as MutationI;

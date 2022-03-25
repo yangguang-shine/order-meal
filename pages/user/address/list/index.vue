@@ -2,59 +2,53 @@
     <view class="address-list-container">
         <div class="address-lsit">
             <div class="address-item" v-for="(addressItem, index) in addressList" :key="index" @click="toSetDefaultAddress(addressItem)">
-                <div class="address-title line1">
-                    {{addressItem.address1}} {{addressItem.address2}}
-                </div>
+                <div class="address-title line1">{{ addressItem.address1 }} {{ addressItem.address2 }}</div>
                 <div class="user-info flex-row flex-a-center">
-                    <div class="address-name">{{addressItem.name}}</div>
-                    <div class="address-mobile">{{addressItem.mobile}}</div>
+                    <div class="address-name">{{ addressItem.name }}</div>
+                    <div class="address-mobile">{{ addressItem.mobile }}</div>
                 </div>
                 <image class="edit-icon" src="/static/img/shop-edit.svg" @click.stop="toEditAddress(addressItem.addressID)"></image>
                 <image class="delete-icon" src="/static/img/shop-delete.svg" @click.stop="toDeleteAddress(addressItem.addressID)"></image>
 
-                <div v-if="defaultAddress.addressID === addressItem.addressID" class="default-bgc" :style="{'color': $mainColor}"></div>
+                <div v-if="defaultAddress.addressID === addressItem.addressID" class="default-bgc" :style="{ color: $mainColor }"></div>
                 <div v-if="defaultAddress.addressID === addressItem.addressID" class="default-title">默认</div>
             </div>
         </div>
-        <div class="address-add" :style="{'background': $mainColor}" @click="toAddAddress">
-            新增收获地址
-        </div>
+        <div class="address-add" :style="{ background: $mainColor }" @click="toAddAddress">新增收获地址</div>
     </view>
 </template>
 <script lang="ts" setup>
-import {
-    defineComponent,
-    computed,
-    getCurrentInstance,
-    ref,
-    onMounted
-} from "vue";
+import { defineComponent, computed, getCurrentInstance, ref, onMounted } from "vue";
 import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
 import { onShow, onLoad } from "@dcloudio/uni-app";
+import { AddressInfoI } from "@/interface/index";
 
 const internalInstance = getCurrentInstance();
+const { $showLoading, $hideLoading, $showModal, $delaySync, $myrouter } = internalInstance.proxy;
 const {
-    $showLoading,
-    $hideLoading,
-    $showModal,
-    $delaySync,
-    $myrouter
-} = internalInstance.proxy;
-const { addressList, defaultAddress } = mapState([
-    "addressList",
-    "defaultAddress"
-]);
+    addressList,
+    defaultAddress,
+}: {
+    addressList: {
+        value: AddressInfoI[];
+    };
+    defaultAddress: {
+        value: AddressInfoI;
+    };
+} = mapState(["addressList", "defaultAddress"]);
 const {
     getAddressList,
     deleteAddress,
-    setDefaultAddressFetch
-} = mapActions([
-    "getAddressList",
-    "deleteAddress",
-    "setDefaultAddressFetch"
-]);
-const { setDefaultAddress } = mapMutations(["setDefaultAddress"]);
-let routerOptions: any;
+    setDefaultAddressFetch,
+}: {
+    getAddressList: () => void;
+    deleteAddress: (addressID: number) => void;
+    setDefaultAddressFetch: (addressID: number) => void;
+} = mapActions(["getAddressList", "deleteAddress", "setDefaultAddressFetch"]);
+const { setDefaultAddress }: { setDefaultAddress: (addressInfo: AddressInfoI) => void } = mapMutations(["setDefaultAddress"]);
+let routerOptions: {
+    fromPage?: string;
+};
 onShow(() => {
     init();
 });
@@ -74,11 +68,11 @@ async function init() {
         $hideLoading();
     }
 }
-async function toDeleteAddress(addressID) {
+async function toDeleteAddress(addressID: number) {
     try {
         await $showModal({
             content: "确认删除该地址吗？",
-            showCancel: true
+            showCancel: true,
         });
     } catch (e) {
         console.log(e);
@@ -89,7 +83,7 @@ async function toDeleteAddress(addressID) {
         await deleteAddress(addressID);
         $hideLoading();
         await $showModal({
-            content: "删除成功"
+            content: "删除成功",
         });
     } catch (e) {
         console.log(e);
@@ -99,12 +93,12 @@ async function toDeleteAddress(addressID) {
     }
     init();
 }
-async function toSetDefaultAddress(addressItem) {
+async function toSetDefaultAddress(addressItem: AddressInfoI) {
     if (defaultAddress.value.addressID === addressItem.addressID) return;
     try {
         await $showModal({
             content: "确认设置为默认地址吗？",
-            showCancel: true
+            showCancel: true,
         });
     } catch (e) {
         console.log(e);
@@ -117,9 +111,8 @@ async function toSetDefaultAddress(addressItem) {
         // await $fetch("user/address/setDefault", { addressID });
         if (routerOptions.fromPage) {
             $myrouter.back();
-            return
+            return;
         }
-        
     } catch (e) {
         console.log(e);
     } finally {
@@ -128,18 +121,18 @@ async function toSetDefaultAddress(addressItem) {
     init();
 }
 
-function toEditAddress(addressID) {
+function toEditAddress(addressID: number) {
     $myrouter.navigateTo({
         name: "user/address/edit",
         query: {
-            addressID
-        }
+            addressID,
+        },
     });
 }
 
 function toAddAddress() {
     $myrouter.navigateTo({
-        name: "user/address/edit"
+        name: "user/address/edit",
     });
 }
 </script>

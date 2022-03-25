@@ -17,10 +17,17 @@
 import { mapState, mapMutations } from '../../../../../utils/mapVuex'
 import { computed ,ref} from 'vue'
 const {noteText} = mapState(['noteText'])
-const {setNoteInputFlag, setNoteText } = mapMutations(['setNoteInputFlag', "setNoteText"])
-const noteInput = ref(noteText.value)
+const {setNoteInputFlag, setNoteText }: {
+    setNoteInputFlag: (flag: boolean) => void,
+    setNoteText: (text: string) => void
+} = mapMutations(['setNoteInputFlag', "setNoteText"])
+const noteInput: {
+    value: string
+} = ref<string>(noteText.value)
 const maxlength = 20
-const noteInputLength = computed(() => noteInput.value.length)
+const noteInputLength: {
+    value: number
+} = computed(() => noteInput.value.length)
 function hideNoteInput() {
     setNoteInputFlag(false)
 }

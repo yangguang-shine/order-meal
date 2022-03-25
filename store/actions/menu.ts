@@ -1,17 +1,20 @@
 import fetch from '@/utils/fetch'
 import { foodImgPath} from '@/config/index'
-import { ActionI } from "@/interface/index";
+import { ActionI,ActionsContextI, OriginCategoryInfoI, CategoryInfoI, FoodItemI, OriginFoodItemI } from "@/interface/index";
 
-const getMenuList: ActionI = async ({ commit, state }) => {
-    const categoryList: any = await fetch("user/order/menuList", {
+async function getMenuList ({ commit, state }: ActionsContextI) {
+    const data: OriginCategoryInfoI[] = await fetch("user/order/menuList", {
         shopID: state.shopInfo.shopID
     });
-    categoryList.forEach((item, index) => {
-        item.categoryTabID = "id" + item.categoryID;
-        item.foodList.forEach((foodItem)=>{
-            foodItem.fullImgPath = `${foodImgPath}/${foodItem.imgUrl}`
-        })
-    });
+    const categoryList: CategoryInfoI[] = (data|| []).map((item: OriginCategoryInfoI): CategoryInfoI => ({
+        ...item,
+        categoryTabID: "id" + item.categoryID,
+        foodList: (item.foodList || []).map((foodItem) :FoodItemI =>({
+            ...foodItem,
+            fullImgPath: `${foodImgPath}/${foodItem.imgUrl}`,
+            foodItemAmount: 0
+        }))
+    }));
     if (categoryList.length) {
         commit('setCategoryTabId', categoryList[0].categoryTabID)
         commit('setScrollIntoCategoryTabID', null)
@@ -19,12 +22,12 @@ const getMenuList: ActionI = async ({ commit, state }) => {
     commit('setFoodCategoryList', categoryList)
 }
 
-const getOrderKeyFoodList: ActionI = async ({ commit ,state}, option: any) => {
-        const data: any = await fetch("user/order/foodList", {
+async function  getOrderKeyFoodList ({ commit ,state}: ActionsContextI, option: any)  {
+        const data: FoodItemI[] = await fetch("user/order/foodList", {
             ...option,
             shopID: state.shopInfo.shopID,
         });
-        const orderCategoryList = data.reduce((list, item) => {
+        const orderCategoryList = data.reduce((list: OriginCategoryInfoI[], item: FoodItemI) => {
             if (!list.length) {
                 list.push({
                     categoryID: item.categoryID,
@@ -55,5 +58,5 @@ const getOrderKeyFoodList: ActionI = async ({ commit ,state}, option: any) => {
 
 export default {
     getMenuList,
-    getOrderKeyFoodList
-}
+    getOrderKeyFoodList,
+} as ActionI

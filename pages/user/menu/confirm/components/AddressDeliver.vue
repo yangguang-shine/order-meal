@@ -31,34 +31,25 @@
 </template>
 
 <script lang="ts" setup>
-import {
-    mapState,
-    mapMutations,
-    mapActions,
-    mapGetters
-} from "../../../../../utils/mapVuex";
+import { mapState, mapMutations, mapActions, mapGetters } from "../../../../../utils/mapVuex";
 import { computed, ref, getCurrentInstance } from "vue";
-const {
-    $showLoading,
-    $hideLoading,
-    $showModal,
-    $myrouter
-} = getCurrentInstance().proxy;
+const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
 
-const { defaultAddress, takeOutTime } = mapState([
-    "defaultAddress",
-    "takeOutTime"
-]);
+const { defaultAddress, takeOutTime } = mapState(["defaultAddress", "takeOutTime"]);
 const { setTakeOutTime } = mapMutations(["setTakeOutTime"]);
 function toAddressList() {
     $myrouter.navigateTo({
         name: "user/address/list",
         query: {
-            fromPage: "userMenuConfirm"
-        }
+            fromPage: "userMenuConfirm",
+        },
     });
 }
-function takeOutTimeChange(e) {
+function takeOutTimeChange(e: {
+    detail: {
+        value: string;
+    };
+}) {
     setTakeOutTime(e.detail.value);
 }
 

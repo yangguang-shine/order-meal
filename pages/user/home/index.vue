@@ -15,57 +15,42 @@ import TopAddressSearch from "./components/TopAddressSearch.vue";
 import ToolsList from "./components/ToolsList.vue";
 import RecommandInfo from "./components/RecommandInfo.vue";
 import { topAddressSearchHeight, tabListTop } from "./homeConfig";
-import { defineComponent, getCurrentInstance } from "vue";
+import { getCurrentInstance } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
+import { AddressInfoI } from '@/interface/index'
 
-interface Istate {
-    topAddressWidthFlag: boolean;
-    tabListFixedFlag: boolean;
-    addressList: any[];
-}
 interface IMutations {
     setTopAddressWidthFlag: any;
     setTabListFixedFlag: any;
     setDefaultAddress: any;
+    setRecommandShopList: any
 }
 interface IActions {
-    getDefaultAddress: () => any;
-    getRecommandShopList: () => any;
+    getDefaultAddress: any;
+    getRecommandShopList: any;
 }
-const internalInstance = getCurrentInstance();
-const {
-    $showLoading,
-    $hideLoading,
-    $showModal,
-    $myrouter
-} = internalInstance.proxy;
+const internalInstance: any = getCurrentInstance();
+const { $showLoading, $hideLoading, $showModal, $myrouter } = internalInstance.proxy;
 const {
     setTopAddressWidthFlag,
     setTabListFixedFlag,
-    setDefaultAddress,
-    setRecommandShopList
-} = mapMutations([
+}: IMutations = mapMutations([
     "setTopAddressWidthFlag",
     "setTabListFixedFlag",
-    "setDefaultAddress",
-    "setRecommandShopList"
 ]);
 
-const { getDefaultAddress, getRecommandShopList } = mapActions([
+const { getDefaultAddress, getRecommandShopList }:IActions = mapActions([
     "getDefaultAddress",
-    "getRecommandShopList"
+    "getRecommandShopList",
+    "getRecommandShopList1",
 ]);
 
-const { topAddressWidthFlag, tabListFixedFlag, addressList } = mapState(
-    "user",
-    ["topAddressWidthFlag", "tabListFixedFlag", "addressList"]
-);
 // console.log(JSON.stringify(addressList.value))
 onShow(() => {
     console.log("init");
     uni.pageScrollTo({
         scrollTop: 0,
-        duration: 0
+        duration: 0,
     });
     init();
 });
@@ -82,17 +67,17 @@ onPageScroll((e: any) => {
     }
 });
 async function toGetDefaultAddress() {
-    const defaultAddress = await getDefaultAddress();
+    const defaultAddress: AddressInfoI = await getDefaultAddress();
     if (!defaultAddress.addressID) {
         await $showModal({
             content: "为提供更好服务，请先选择地址",
-            confirmText: "去选择地址"
+            confirmText: "去选择地址",
         });
         $myrouter.navigateTo({
             name: "user/address/list",
             query: {
-                fromPage: "userHome"
-            }
+                fromPage: "userHome",
+            },
         });
     }
 }

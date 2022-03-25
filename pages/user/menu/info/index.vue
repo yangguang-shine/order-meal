@@ -2,11 +2,11 @@
     <view class="menu-container">
         <TopBar></TopBar>
         <view class="menu-order-box flex-col" :class="topBarInfo === '点餐' ? 'show-menu-order-box' : 'hide-menu-order-box'">
-            <view class="menu-list-box flex-item flex-row ">
+            <view class="menu-list-box flex-item flex-row">
                 <CategoryAsideBar></CategoryAsideBar>
                 <FoodCategoryList class="flex-item"></FoodCategoryList>
             </view>
-            <CartDetail  v-if="cartDetailFlag"></CartDetail>
+            <CartDetail v-if="cartDetailFlag"></CartDetail>
             <MinusPromotions v-if="minusPromotionsObject.show"></MinusPromotions>
             <FooterInfo></FooterInfo>
             <FoodDetail v-if="foodDetailFalg"></FoodDetail>
@@ -16,7 +16,7 @@
     </view>
 </template>
 
-<script lang='ts' setup>
+<script lang="ts" setup>
 import { get1rpx2px } from "@/utils/index";
 import CategoryAsideBar from "./components/CategoryAsideBar.vue";
 import FoodCategoryList from "./components/FoodCategoryList.vue";
@@ -30,89 +30,42 @@ import TopBar from "./components/TopBar.vue";
 import ShopInfo from "./components/ShopInfo.vue";
 import { delaySync } from "@/utils/index.js";
 
-import {
-    mapState,
-    mapMutations,
-    mapActions,
-    mapGetters
-} from "../../../../utils/mapVuex";
+import { mapState, mapMutations, mapActions, mapGetters } from "../../../../utils/mapVuex";
 import { defineComponent, getCurrentInstance, computed } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-
 
 const remand = {
     businessType: "",
     shopInfo: {},
     addCountState: true,
-    minusCountState: true
+    minusCountState: true,
 };
 const { $showLoading, $hideLoading, $showModal } = getCurrentInstance().proxy;
-const {
-    shopInfo,
-    businessType,
-    cartCategoryList,
-    categoryList,
-    orderCategoryList,
-    categoryTabId,
-    scrollIntoCategoryTabID,
-    topBarInfo,
-    shopInfoFlag,
-    cartDetailFlag,
-    foodDetailFalg,
-    foodItem
-} = mapState([
+const { shopInfo, businessType, cartCategoryList, categoryList, categoryTabId, scrollIntoCategoryTabID, topBarInfo, shopInfoFlag, cartDetailFlag, foodDetailFalg, foodItem } = mapState([
     "shopInfo",
     "businessType",
     "cartCategoryList",
     "categoryList",
-    "orderCategoryList",
     "categoryTabId",
     "scrollIntoCategoryTabID",
     "topBarInfo",
     "shopInfoFlag",
     "cartDetailFlag",
     "foodDetailFalg",
-    "foodItem"
+    "foodItem",
 ]);
-const {
-    minusPromotionsObject,
-    cartPriceInfo,
-    allCartFoodCount,
-    asideCategoryList
-} = mapGetters([
-    "minusPromotionsObject",
-    "cartPriceInfo",
-    "allCartFoodCount",
-    "asideCategoryList"
-]);
+const { minusPromotionsObject, cartPriceInfo, allCartFoodCount, asideCategoryList } = mapGetters(["minusPromotionsObject", "cartPriceInfo", "allCartFoodCount", "asideCategoryList"]);
 
-const {
-    setCategoryTabId,
-    setScrollIntoCategoryTabID,
-    setFoodCategoryList,
-    setFoodInfo,
-    setFoodDetailFlag,
-    setTopBarInfo,
-    initCart
-} = mapMutations([
-    "setCategoryTabId",
-    "setScrollIntoCategoryTabID",
-    "setFoodCategoryList",
-    "setFoodInfo",
-    "setFoodDetailFlag",
-    "setTopBarInfo",
-    "initCart"
-]);
+const { setCategoryTabId, setScrollIntoCategoryTabID, setFoodCategoryList, setFoodInfo, setFoodDetailFlag, setTopBarInfo, initCart } = mapMutations(["setCategoryTabId", "setScrollIntoCategoryTabID", "setFoodCategoryList", "setFoodInfo", "setFoodDetailFlag", "setTopBarInfo", "initCart"]);
 
-const { getMenuList, getOrderKeyFoodList } = mapActions([
-    "getMenuList",
-    "getOrderKeyFoodList"
-]);
+const { getMenuList, getOrderKeyFoodList } = mapActions(["getMenuList", "getOrderKeyFoodList"]);
 
-let orderKey = "";
-onLoad(async option => {
+let orderKey: string = "";
+onLoad(async (option: {
+    orderKey?: string
+}) => {
     try {
-        orderKey = option.orderKey;
+        orderKey = option.orderKey || '';
         $showLoading();
         await init();
     } catch (e) {
@@ -126,18 +79,10 @@ async function init() {
     // 重来一单，orderAgain 和 orderKey 缺一不可
     if (orderKey) {
         await getOrderKeyFoodList({
-            orderKey
+            orderKey,
         });
-        if (orderCategoryList.value.length) {
-            uni.setStorageSync(
-                `storageFoodList_${shopInfo.value.shopID}`,
-                orderCategoryList.value
-            );
-        }
-    } else {
-        
     }
-    initCart()
+    initCart();
     getStorageCart();
 }
 // function initCart() {

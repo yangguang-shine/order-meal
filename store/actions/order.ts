@@ -2,51 +2,59 @@ import fetch from "@/utils/fetch";
 import { timeStampTranslate } from "@/utils/index";
 import getOrderTypeTitle from "@/utils/getOrderTypeTitle";
 import { shopImgPath, foodImgPath } from "@/config/index";
-import { ActionI } from "@/interface/index";
+import { ActionI, ActionsContextI, OriginOrderItemI, OrderItemI, OriginShopInfoI, ShopInfoI, OriginOrderDetail, OrderDetailI } from "@/interface/index";
 
-const getOrderList: ActionI = async ({ state, getters, commit }, payload) => {
-    let orderList: any = await fetch("user/order/orderList", {
+async function getOrderList({ state, getters, commit }: ActionsContextI, payload: any) {
+    let data: OriginOrderItemI[] = await fetch("user/order/orderList", {
         status: state.orderTabIndex,
     });
-    orderList = orderList.map((orderItem: any) => ({
-        ...orderItem,
-        minusList: JSON.parse(orderItem.minus),
-        fullImgPath: `${shopImgPath}/${orderItem.imgUrl}`,
-        orderTimeDetail: timeStampTranslate(orderItem.orderTime),
-        orderTypeTitle: getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType),
-    }));
+    const orderList: OrderItemI[] = data.map(
+        (orderItem: OriginOrderItemI): OrderItemI => ({
+            ...orderItem,
+            minusList: JSON.parse(orderItem.minus),
+            fullImgPath: `${shopImgPath}/${orderItem.imgUrl}`,
+            orderTimeDetail: timeStampTranslate(orderItem.orderTime),
+            orderTypeTitle: getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType),
+        })
+    );
     state.allOrderList[state.orderTabIndex] = orderList;
     return orderList;
-};
-const getShopInfo: ActionI = async ({ state, getters, commit }, payload) => {
-    const shopInfo: any = await fetch("user/shop/find", payload);
-    shopInfo.minusList = JSON.parse(shopInfo.minus);
-    shopInfo.fullImgPath = `${shopImgPath}/${shopInfo.imgUrl}`;
-
+}
+async function getShopInfo({ state, getters, commit }: ActionsContextI, payload: any): Promise<ShopInfoI> {
+    const originShopInfo: OriginShopInfoI = await fetch("user/shop/find", payload);
+    const shopInfo: ShopInfoI = {
+        ...originShopInfo,
+        minusList: JSON.parse(originShopInfo.minus),
+        fullImgPath: `${shopImgPath}/${originShopInfo.imgUrl}`,
+    };
     return shopInfo;
-};
+}
 
-const getOrderDetail: ActionI = async ({ state, getters, commit }, payload) => {
-    const orderDetail: any = await fetch("user/order/orderDetail", payload);
-    (orderDetail.foodList || []).forEach((foodItem) => {
-        foodItem.foodItemAmount = (foodItem.price * foodItem.orderCount).toFixed(2);
-        foodItem.fullImgPath = `${foodImgPath}/${foodItem.imgUrl}`;
-    });
-    orderDetail.orderTypeTitle = getOrderTypeTitle(orderDetail.orderStatus, orderDetail.businessType);
-    orderDetail.orderTimeDetail = timeStampTranslate(orderDetail.orderTime);
-    orderDetail.address = JSON.parse(orderDetail.address);
+async function getOrderDetail({ state, getters, commit }: ActionsContextI, payload: any) {
+    const originOrderDetail: OriginOrderDetail = await fetch("user/order/orderDetail", payload);
+    const orderDetail: OrderDetailI = {
+        ...originOrderDetail,
+        orderTypeTitle: getOrderTypeTitle(originOrderDetail.orderStatus, originOrderDetail.businessType),
+        orderTimeDetail: timeStampTranslate(originOrderDetail.orderTime),
+        address: JSON.parse(originOrderDetail.address),
+        foodList: originOrderDetail.foodList.map((foodItem) => ({
+            ...foodItem,
+            foodItemAmount: Number((foodItem.price * foodItem.orderCount).toFixed(2)),
+            fullImgPath: `${foodImgPath}/${foodItem.imgUrl}`,
+        })),
+    };
     console.log(orderDetail);
     commit("setOrderDetail", orderDetail);
     return orderDetail;
-};
+}
 
-const cancelOrder: ActionI = async ({ state, getters, commit }, payload) => {
-     await fetch("user/order/cancel", payload);
-};
+async function cancelOrder({ state, getters, commit }: ActionsContextI, payload: any) {
+    await fetch("user/order/cancel", payload);
+}
 
 export default {
     getOrderList,
     getShopInfo,
     getOrderDetail,
     cancelOrder,
-};
+} as ActionI;

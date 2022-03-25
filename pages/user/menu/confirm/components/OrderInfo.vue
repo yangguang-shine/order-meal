@@ -66,7 +66,7 @@ const {
     "payPrice",
     "orderFoodList"
 ]);
-const displayMoreFlag = ref(false);
+const displayMoreFlag = ref<boolean>(false);
 function toggleDisplay() {
     displayMoreFlag.value = !displayMoreFlag.value;
 }

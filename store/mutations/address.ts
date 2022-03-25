@@ -1,19 +1,18 @@
-import { MutationI } from "@/interface/index";
+import { MutationI, StateI } from "@/interface/index";
 
 
-const setAddressList: MutationI = (state, payload): void => {
+function setAddressList(state:StateI, payload: any): void {
     state.addressList = payload;
 };
 
-const setDefaultAddress: MutationI = (state, payload,): void => {
+function setDefaultAddress(state: StateI, payload: any): void {
     state.defaultAddress = payload;
 };
 
-// const setFindAddressInfo = (state: any, addressInfo: any): void => {
+// const setFindAddressInfo(state: any, addressInfo: any): void => {
 //     state.findAddressInfo = addressInfo
 // }
-
 export default {
     setAddressList,
     setDefaultAddress,
-};
+} as MutationI

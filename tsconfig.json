@@ -13,6 +13,8 @@
         "@/static/*": ["./static/*"],
         "@/router/*": ["./router/*"],
         "@/interface/*": ["./interface/*"],
+        "@/style/*": ["./style/*"],
+        "@/store/*": ["./store/*"],
       }
     }
 }

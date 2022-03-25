@@ -1,4 +1,5 @@
 import fetch from '@/utils/fetch'
+import { ActionI } from '@/interface/index'
 const getAddressList = async ({ commit }, params = {}) => {
     const addressList = await fetch('user/address/list', {})
     commit('setAddressList', addressList)
@@ -27,9 +28,7 @@ const getDefaultAddress = async ({ commit }) => {
     commit('setDefaultAddress', defaultAddress)
     return defaultAddress
 }
-
-
-export default {
+const mutations: ActionI =  {
     getAddressList,
     deleteAddress,
     setDefaultAddressFetch,
@@ -38,3 +37,4 @@ export default {
     editAddress,
     getDefaultAddress
 }
+export default mutations

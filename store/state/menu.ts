@@ -1,28 +1,42 @@
 
+import { ShopInfoI, CategoryInfoI, OrderCategoryInfoI, FoodItemI } from "@/interface/index";
 
 export interface MenuStateI {
-    cartCategoryList: any[],
-    categoryList: any[],
-    orderCategoryList: any[],
-    categoryTabId: string,
-    scrollIntoCategoryTabID: '',
-    topBarInfo: string,
-    shopInfoFlag: boolean,
-    cartDetailFlag: boolean,
-    foodDetailFalg: boolean,
-    foodInfo: any
+    cartCategoryList: OrderCategoryInfoI[];
+    categoryList: CategoryInfoI[];
+    categoryTabId: string;
+    scrollIntoCategoryTabID: "";
+    topBarInfo: string;
+    shopInfoFlag: boolean;
+    cartDetailFlag: boolean;
+    foodDetailFalg: boolean;
+    foodInfo: FoodItemI;
+
 }
 
-const state:MenuStateI = {
+const state: MenuStateI = {
     cartCategoryList: [],
     categoryList: [],
-    orderCategoryList: [],
-    categoryTabId: 'null',
-    scrollIntoCategoryTabID: '',
-    topBarInfo: '点餐',
+    categoryTabId: "null",
+    scrollIntoCategoryTabID: "",
+    topBarInfo: "点餐",
     shopInfoFlag: false,
     cartDetailFlag: false,
     foodDetailFalg: false,
-    foodInfo: {}
-}
-export default state
+    foodInfo: {
+        categoryID: 0,
+        categoryName: 'string',
+        description: '',
+        foodID: 0,
+        foodName: '',
+        imgUrl: '',
+        manageID: '',
+        orderCount: 0,
+        price: 0,
+        shopID: 0,
+        unit: '',
+        fullImgPath: '',
+        foodItemAmount: 0
+    },
+};
+export default state;

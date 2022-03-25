@@ -1,8 +1,7 @@
 import fetch from '@/utils/fetch'
-import getShopMinusList from '../../../utils/getShopMinusList'
-import { ActionI } from "@/interface/index";
+import { ActionI, ActionsContextI } from "@/interface/index";
 
-const submitOrder:ActionI = async ({state, getters, commit}, payload) => {
+async function submitOrder ({state, getters, commit}: ActionsContextI, payload: any) {
     await fetch('user/order/submit', {
         foodList: getters.orderFoodList,
         shopID: state.shopInfo.shopID,
@@ -18,4 +17,4 @@ const submitOrder:ActionI = async ({state, getters, commit}, payload) => {
 }
 export default {
     submitOrder
-}
+}as ActionI

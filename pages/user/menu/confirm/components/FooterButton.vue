@@ -51,22 +51,6 @@ async function toSubmitOrder() {
     try {
         if (!cartCategoryList.value.length) return;
         $showLoading();
-        // const query = {};
-        // if (businessType.value === 2) {
-        //     query.takeOutTime = takeOutTime.value;
-        //     query.address = JSON.stringify(defaultAddress.value);
-        // }
-        // console.log(111111);
-        // console.log({
-        //     foodList: orderFoodList.value,
-        //     shopID: shopInfo.value.shopID,
-        //     orderAmount: payPrice.value,
-        //     businessType: businessType.value,
-        //     minusPrice: minusPrice.value,
-        //     originOrderAmount: originOrderAmount.value,
-        //     noteText: noteText.value,
-        //     ...query
-        // });
         await submitOrder();
         clearCart();
         setNoteText('')

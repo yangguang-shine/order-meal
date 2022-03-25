@@ -65,6 +65,7 @@ const { setCartDetailFlag, clearCart } = mapMutations([
     "setCartDetailFlag",
     "clearCart"
 ]);
+
 const showComponetnsFlag = ref(false);
 onMounted(() => {
     showComponetnsFlag.value = true;

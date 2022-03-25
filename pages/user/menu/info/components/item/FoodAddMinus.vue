@@ -7,7 +7,7 @@
             </view>
         </transition>
         <transition name="food-order-count">
-            <view v-if="foodItem.orderCount" class="food-order-count">{{ foodItem.orderCount || ''}}</view>
+            <view v-if="foodItem.orderCount" class="food-order-count">{{ foodItem.orderCount || "" }}</view>
         </transition>
         <view class="food-count-add" :style="{ 'background-color': $mainColor }" @click.stop="addCount()">
             <div class="add-click-area"></div>
@@ -15,19 +15,24 @@
     </view>
 </template>
 
-
 <script lang="ts" setup>
 import { delaySync } from "@/utils/index.js";
 import { watch } from "vue";
 import { mapMutations, mapState } from "../../../../../../utils/mapVuex";
-
+import { FoodItemI } from "@/interface/index";
 interface Props {
-    foodItem: any;
+    foodItem: FoodItemI;
 }
-const { cartChange,setCartDetailFlag } = mapMutations(["cartChange", "setCartDetailFlag"]);
-const { cartCategoryList, cartDetailFlag} = mapState(["cartCategoryList", "cartDetailFlag"])
+const {
+    cartChange,
+    setCartDetailFlag,
+}: {
+    cartChange: ({ foodItem, count }: { foodItem: FoodItemI; count: number }) => void;
+    setCartDetailFlag: (flag: boolean) => void;
+} = mapMutations(["cartChange", "setCartDetailFlag"]);
+const { cartCategoryList, cartDetailFlag } = mapState(["cartCategoryList", "cartDetailFlag"]);
 const props = withDefaults(defineProps<Props>(), {
-    foodItem: () => ({})
+    foodItem: {},
 });
 watch(
     () => props.foodItem.orderCount,
@@ -36,20 +41,19 @@ watch(
     }
 );
 function addCount() {
-    console.log(11111)
     cartChange({
         foodItem: props.foodItem,
-        count: props.foodItem.orderCount + 1
+        count: props.foodItem.orderCount + 1,
     });
 }
 
 function minusCount() {
     cartChange({
         foodItem: props.foodItem,
-        count: props.foodItem.orderCount - 1
+        count: props.foodItem.orderCount - 1,
     });
     if (cartCategoryList.value.length === 0 && cartDetailFlag.value) {
-        setCartDetailFlag(false)
+        setCartDetailFlag(false);
     }
 }
 // addCount(foodItem) {

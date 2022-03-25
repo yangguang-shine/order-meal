@@ -1,7 +1,6 @@
 
-interface IActions {
-    [key: string]: (state: any, payload: any) => any
-}
+
+import { ActionI} from '@/interface/index'
 import address from './address'
 import home from './home'
 import menu from './menu'
@@ -9,7 +8,7 @@ import menu from './menu'
 import confirm from './confirm'
 import order from './order'
 
-const mutations: IActions = {
+const actions: ActionI = {
     ...address,
     ...home,
     ...menu,
@@ -17,4 +16,4 @@ const mutations: IActions = {
     ...order,
 }
 
-export default mutations
+export default actions
