@@ -19,41 +19,37 @@
 </template>
 <script lang="ts" setup>
 import { defineComponent, computed, getCurrentInstance, ref, onMounted } from "vue";
-import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
+import { mapState, mapMutation, mapAction } from "../../../../utils/mapVuex";
 import { onShow, onLoad } from "@dcloudio/uni-app";
-import { AddressInfoI } from "@/interface/index";
+import { AddressItemI, ComputedAction, ComputedMutation, ComputedState } from "@/interface/index";
 
-const internalInstance = getCurrentInstance();
-const { $showLoading, $hideLoading, $showModal, $delaySync, $myrouter } = internalInstance.proxy;
-const {
-    addressList,
-    defaultAddress,
-}: {
-    addressList: {
-        value: AddressInfoI[];
-    };
-    defaultAddress: {
-        value: AddressInfoI;
-    };
-} = mapState(["addressList", "defaultAddress"]);
-const {
-    getAddressList,
-    deleteAddress,
-    setDefaultAddressFetch,
-}: {
-    getAddressList: () => void;
-    deleteAddress: (addressID: number) => void;
-    setDefaultAddressFetch: (addressID: number) => void;
-} = mapActions(["getAddressList", "deleteAddress", "setDefaultAddressFetch"]);
-const { setDefaultAddress }: { setDefaultAddress: (addressInfo: AddressInfoI) => void } = mapMutations(["setDefaultAddress"]);
-let routerOptions: {
+const { $showLoading, $hideLoading, $showModal, $delaySync, $myrouter } = getCurrentInstance().proxy;
+interface StateF {
+    addressList: ComputedState<AddressItemI[]>;
+    defaultAddress: ComputedState<AddressItemI>;
+}
+interface MutationF {
+    setDefaultAddress: ComputedMutation<AddressItemI>;
+}
+interface ActionF {
+    getAddressList: ComputedAction<any>;
+    deleteAddress: ComputedAction<number>;
+    setDefaultAddressFetch: ComputedAction<number>;
+}
+const { addressList, defaultAddress }: StateF = mapState(["addressList", "defaultAddress"]);
+const { setDefaultAddress }: MutationF = mapMutation(["setDefaultAddress"]);
+
+const { getAddressList, deleteAddress, setDefaultAddressFetch }: ActionF = mapAction(["getAddressList", "deleteAddress", "setDefaultAddressFetch"]);
+
+interface Option {
     fromPage?: string;
-};
+}
+let routerOptions: Option;
 onShow(() => {
     init();
 });
-onLoad((options: any) => {
-    routerOptions = options;
+onLoad((option: Option) => {
+    routerOptions = option;
 });
 async function init() {
     try {
@@ -93,7 +89,7 @@ async function toDeleteAddress(addressID: number) {
     }
     init();
 }
-async function toSetDefaultAddress(addressItem: AddressInfoI) {
+async function toSetDefaultAddress(addressItem: AddressItemI) {
     if (defaultAddress.value.addressID === addressItem.addressID) return;
     try {
         await $showModal({

@@ -18,7 +18,7 @@
 <script lang="ts" setup>
 import { delaySync } from "@/utils/index.js";
 import { watch } from "vue";
-import { mapMutations, mapState } from "../../../../../../utils/mapVuex";
+import { mapMutation, mapState } from "../../../../../../utils/mapVuex";
 import { FoodItemI } from "@/interface/index";
 interface Props {
     foodItem: FoodItemI;
@@ -29,7 +29,7 @@ const {
 }: {
     cartChange: ({ foodItem, count }: { foodItem: FoodItemI; count: number }) => void;
     setCartDetailFlag: (flag: boolean) => void;
-} = mapMutations(["cartChange", "setCartDetailFlag"]);
+} = mapMutation(["cartChange", "setCartDetailFlag"]);
 const { cartCategoryList, cartDetailFlag } = mapState(["cartCategoryList", "cartDetailFlag"]);
 const props = withDefaults(defineProps<Props>(), {
     foodItem: {},

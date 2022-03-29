@@ -1,31 +1,31 @@
 import fetch from "@/utils/fetch";
-
-import { ActionI, ActionsContextI } from "@/interface/index";
-async function getAddressList({ commit }: ActionsContextI, payload: any) {
-    const addressList = await fetch("user/address/list", {});
+import { AddressItemI} from '@/interface/address'
+import { ActionI, ActionContextI } from "@/interface/index";
+async function getAddressList({ commit }: ActionContextI) {
+    const addressList : AddressItemI[] = await fetch("user/address/list");
     commit("setAddressList", addressList);
     return addressList || [];
 }
 
-async function deleteAddress({ commit }: ActionsContextI, addressID: string) {
+async function deleteAddress({ commit }: ActionContextI, addressID: number) {
     await fetch("user/address/remove", { addressID });
 }
-async function setDefaultAddressFetch({ commit }: ActionsContextI, addressID: string) {
+async function setDefaultAddressFetch({ commit }: ActionContextI, addressID: number) {
     await fetch("user/address/setDefault", { addressID });
 }
-async function addAddress({ commit }: ActionsContextI, addressInfo: any) {
+async function addAddress({ commit }: ActionContextI, addressInfo: AddressItemI) {
     await fetch("user/address/add", addressInfo);
 }
-async function findAddress({ commit }: ActionsContextI, addressID: string) {
+async function findAddress({ commit }: ActionContextI, addressID: number) {
     const addressInfo = await fetch("user/address/find", { addressID });
     return addressInfo;
 }
-async function editAddress({ commit }: ActionsContextI, addressInfo: any) {
+async function editAddress({ commit }: ActionContextI, addressInfo: AddressItemI) {
     await fetch("user/address/edit", addressInfo);
 }
 
-async function getDefaultAddress({ commit }: ActionsContextI) {
-    const defaultAddress = await fetch("user/address/getDefault", {}, { error: false });
+async function getDefaultAddress({ commit }: ActionContextI) {
+    const defaultAddress: AddressItemI = await fetch("user/address/getDefault", {}, { AutoErrorFlag: false });
     commit("setDefaultAddress", defaultAddress);
     return defaultAddress;
 }

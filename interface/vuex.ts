@@ -1,35 +1,29 @@
-import { AddressStateI } from "@/store/state/address";
-import { HomeStateI } from "@/store/state/home";
-import { MenuStateI } from "@/store/state/menu";
-import { ConfirmStateI } from "@/store/state/confirm";
-import { orderStateI } from "@/store/state/order";
-export type StateI = AddressStateI & HomeStateI & MenuStateI & ConfirmStateI & orderStateI;
-
+import { StateAddressI } from "@/store/state/address";
+import { StateHomeI } from "@/store/state/home";
+import { StateMenuI } from "@/store/state/menu";
+import { StateConfirmI } from "@/store/state/confirm";
+import { StateOrderI } from "@/store/state/order";
+import { GetterStateConfirmI } from '@/store/getters/confirm'
+import { GetterStateMenuI } from '@/store/getters/menu'
+export type StateI = StateAddressI & StateHomeI & StateMenuI & StateConfirmI & StateOrderI;
+export type GetterStateI = GetterStateConfirmI & GetterStateMenuI;
 export interface MutationI {
     [index: string]: (state: StateI, payload?: any) => any;
 }
-
 export interface CommitI {
-    (action: string, payload?: any): any
+    (action: string, payload?: any): any;
 }
-
-export interface ActionsContextI {
-    commit: CommitI,
-    state: StateI,
-    getters:any;
+export interface ActionContextI {
+    commit: CommitI;
+    state: StateI;
+    getter: any;
 }
-
-
-
-
 export interface ActionI {
-    [index: string]: (
-        store: ActionsContextI,
-        payload?: any
-    ) => any;
+    [index: string]: (store: ActionContextI, payload?: any) => any;
 }
-
 export interface GetterI {
-    [index: string]: (state: StateI, getter: any) => any;
+    [index: string]: (state: StateI, getter: GetterStateI) => any;
 }
-
+export type ComputedState<T> = { value: T };
+export type ComputedMutation<T> = (payload: T) => void;
+export type ComputedAction<T> = (payload: T) => any;

@@ -1,33 +1,35 @@
-import { MutationI, FoodItemI,StateI } from "@/interface/index";
-function setCategoryTabId (state: StateI, payload: any) {
-    state.categoryTabId = payload;
+import { MutationI, FoodItemI,StateI , CategoryItemI} from "@/interface/index";
+import { timeStampTranslate, toFixedToNumber } from "@/utils/index";
+
+function setCategoryTabId (state: StateI, categoryTabID: string) {
+    state.categoryTabID = categoryTabID;
 };
-function setScrollIntoCategoryTabID (state: StateI, payload: any) {
-    state.scrollIntoCategoryTabID = payload;
+function setScrollIntoCategoryTabID (state: StateI, scrollIntoCategoryTabID: string) {
+    state.scrollIntoCategoryTabID = scrollIntoCategoryTabID;
 };
-function setFoodCategoryList (state: StateI, payload: any) {
-    state.categoryList = payload;
+function setFoodCategoryList (state: StateI, categoryList: CategoryItemI[]) {
+    state.categoryList = categoryList;
 };
-function setFoodInfo (state: StateI, payload: any) {
-    state.foodInfo = payload;
+function setFoodInfo (state: StateI, foodInfo: FoodItemI) {
+    state.foodInfo = foodInfo;
 };
-function setFoodDetailFlag (state: StateI, payload: any) {
-    state.foodDetailFalg = payload;
+function setFoodDetailFlag (state: StateI, foodDetailFalg: boolean) {
+    state.foodDetailFalg = foodDetailFalg;
 };
-function setTopBarInfo (state: StateI, payload: any) {
-    state.topBarInfo = payload;
+function setTopBarInfo (state: StateI, topBarInfo: string) {
+    state.topBarInfo = topBarInfo;
 };
-function setShopInfoFlag (state: StateI, payload: any) {
-    state.shopInfoFlag = payload;
+function setShopInfoFlag (state: StateI, shopInfoFlag: boolean) {
+    state.shopInfoFlag = shopInfoFlag;
 };
-function toogleCartDetailFlag (state: StateI, payload: any) {
+function toogleCartDetailFlag (state: StateI, ) {
     state.cartDetailFlag = !state.cartDetailFlag;
 };
-function setCartDetailFlag (state: StateI, payload: any) {
-    state.cartDetailFlag = payload;
+function setCartDetailFlag (state: StateI, cartDetailFlag: boolean) {
+    state.cartDetailFlag = cartDetailFlag;
 };
-function setCartCategoryList (state: StateI, payload: any) {
-    state.cartCategoryList = payload;
+function setCartCategoryList (state: StateI, cartCategoryList: CategoryItemI[]) {
+    state.cartCategoryList = cartCategoryList;
 };
 
 function clearCart (state: StateI, payload: any) {
@@ -45,7 +47,7 @@ function cartChange (state: StateI, { foodItem, count = 0 }: {
     foodItem: FoodItemI,
     count: number
 }) {
-    foodItem.orderCount = count || 0;
+    foodItem.orderCount = count;
     const findCategory = state.cartCategoryList.find((item) => item.categoryID === foodItem.categoryID);
     if (findCategory) {
         const findFood = findCategory.foodList.find((item) => item.foodID === foodItem.foodID);
@@ -55,6 +57,7 @@ function cartChange (state: StateI, { foodItem, count = 0 }: {
     } else {
         state.cartCategoryList.push({
             categoryID: foodItem.categoryID,
+            categoryTabID: `id${foodItem.categoryID}`,
             categoryName: foodItem.categoryName,
             foodList: [foodItem],
         });
@@ -62,9 +65,10 @@ function cartChange (state: StateI, { foodItem, count = 0 }: {
     state.cartCategoryList.forEach((item) => {
         item.foodList = item.foodList.filter((foodItem) => {
             if (foodItem.orderCount > 0) {
-                foodItem.foodItemAmount = Number((foodItem.price * foodItem.orderCount).toFixed(2));
+                foodItem.foodItemAmount = toFixedToNumber(foodItem.price * foodItem.orderCount);
                 return true;
             } else {
+                foodItem.foodItemAmount = 0
                 return false;
             }
         });

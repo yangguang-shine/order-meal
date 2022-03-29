@@ -1,14 +1,14 @@
 import fetch from '@/utils/fetch'
-import { ActionI, ActionsContextI } from "@/interface/index";
+import { ActionI, ActionContextI } from "@/interface/index";
 
-async function submitOrder ({state, getters, commit}: ActionsContextI, payload: any) {
+async function submitOrder ({state, getter, commit}: ActionContextI, payload: any) {
     await fetch('user/order/submit', {
-        foodList: getters.orderFoodList,
+        foodList: getter.orderFoodList,
         shopID: state.shopInfo.shopID,
-        orderAmount: getters.payPrice,
+        orderAmount: getter.payPrice,
         businessType: state.businessType,
-        minusPrice: getters.minusPrice,
-        originOrderAmount: getters.originOrderAmount,
+        minusPrice: getter.minusPrice,
+        originOrderAmount: getter.originOrderAmount,
         noteText: state.noteText,
         takeOutTime: state.takeOutTime,
         address: JSON.stringify(state.defaultAddress),

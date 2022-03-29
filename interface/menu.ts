@@ -1,4 +1,4 @@
-import { OriginShopInfoI } from "./home";
+import { OriginShopItemI } from "./home";
 
 export interface OriginFoodItemI {
     categoryID: number;
@@ -13,22 +13,27 @@ export interface OriginFoodItemI {
     shopID: number;
     unit: string;
 }
+
+export interface OriginCategoryItemI {
+    categoryID: number;
+    categoryName: string;
+    foodList: OriginFoodItemI[];
+}
 export interface FoodItemI extends OriginFoodItemI {
-   fullImgPath: string,
-   foodItemAmount: number
+    fullImgPath: string;
+    foodItemAmount: number;
 }
 
-export interface OriginCategoryInfoI {
-    categoryID: number,
-    categoryName: string,
-    foodList: OriginFoodItemI[]
+export interface CategoryItemI extends OriginCategoryItemI {
+    categoryTabID: string;
+    foodList: FoodItemI[];
 }
-export interface OrderCategoryInfoI extends OriginCategoryInfoI {
-    foodList: FoodItemI[]
-}
-
-
-export interface CategoryInfoI extends OriginCategoryInfoI {
-    categoryTabID: string,
-    foodList: FoodItemI[]
+// export interface CartCategoryInfoI extends OriginCategoryItemI {
+//     foodList: FoodItemI[];
+// }
+export interface AsideCategoryItemI {
+    categoryName: string;
+    categoryID: number;
+    categoryOrderCount: number;
+    categoryTabID: string;
 }

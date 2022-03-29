@@ -15,15 +15,15 @@ import OrderInfo from "./components/OrderInfo.vue";
 import OtherInfo from "./components/OtherInfo.vue";
 import FooterButton from "./components/FooterButton.vue";
 import NoteInput from "./components/NoteInput.vue";
-import { mapMutations, mapState, mapActions } from "../../../../utils/mapVuex";
+import { mapMutation, mapState, mapAction } from "../../../../utils/mapVuex";
 import { getCurrentInstance } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
 const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
 
-const { setTakeOutTime } = mapMutations(["setTakeOutTime"]);
+const { setTakeOutTime } = mapMutation(["setTakeOutTime"]);
 const { noteInputFlag } = mapState(["noteInputFlag"]);
-const { getDefaultAddress } = mapActions([
+const { getDefaultAddress } = mapAction([
     "getDefaultAddress"
 ]);
 getCurrentTakeOutTime();

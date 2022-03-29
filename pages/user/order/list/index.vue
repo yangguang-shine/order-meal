@@ -7,19 +7,19 @@
         <view v-show="orderTabIndex === allOrderIndex" class="order-list-box" v-for="(orderList, allOrderIndex) in allOrderList" :key="allOrderIndex">
             <div class="order-list-item" v-for="(orderItem, index) in orderList" :key="index" @click="toOrderDetail(orderItem)">
                 <div class="flex-row">
-                    <image class="shop-img" :src="orderItem.fullImgPath" mode="scaleToFill"></image>
+                    <image class="shop-img" :src="orderItem.shopInfo.fullImgPath" mode="scaleToFill"></image>
                     <div class="flex-item flex-col flex-j-between">
                         <div class="flex-row flex-a-center flex-j-between">
                             <!-- <div class="shop-name line1">{{orderItem.shopName}}</div> -->
                             <view class="flex-row flex-a-center">
-                                <div class="shop-name line1">{{orderItem.shopName}}</div>
+                                <div class="shop-name line1">{{orderItem.shopInfo.shopName}}</div>
                                 <image class="arrow-left" src="/static/img/shop/arrow-right.png" mode=""></image>
                             </view>
                             <div class="order-time">{{ orderItem.orderTimeDetail }}</div>
                         </div>
                         <view class="flex-row flex-a-center flex-j-between">
                             <view class="minus-box flex-row">
-                                <MinusList :minusList="orderItem.minusList"></MinusList>
+                                <MinusList :minusList="orderItem.shopInfo.minusList"></MinusList>
                             </view>
                             <view class="order-status-box">
                                 <text class="order-status-title">状态：</text>
@@ -56,8 +56,14 @@ import getShopMinusList from "@/utils/getShopMinusList";
 import { timeStampTranslate } from "@/utils/index.js";
 import MinusList from "@/components/MinusList.vue";
 import { getCurrentInstance } from "vue";
-import { mapState, mapActions, mapMutations } from "../../../../utils/mapVuex";
+import { mapState, mapAction, mapMutation } from "../../../../utils/mapVuex";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
+import { ComputedState,  } from "@/interface/vuex";
+import { OrderInfoI } from  "@/interface/order"
+
+interface StateF {
+    allOrderList: ComputedState<OrderInfoI[][]>, orderTabIndex, orderErrorListFlag
+}
 
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
 const { allOrderList, orderTabIndex, orderErrorListFlag } = mapState([
@@ -65,14 +71,14 @@ const { allOrderList, orderTabIndex, orderErrorListFlag } = mapState([
     "orderTabIndex",
     "orderErrorListFlag",
 ]);
-const { getOrderList, getShopInfo } = mapActions(["getOrderList", 'getShopInfo']);
+const { getOrderList, getShopInfo } = mapAction(["getOrderList", 'getShopInfo']);
 const {
     setOrderErrorListFlag,
     setOrderTabIndex,
     saveShopInfo,
     saveBusinessType,
     setOrderDetailShopInfo
-} = mapMutations(["setOrderErrorListFlag", 'setOrderTabIndex', 'saveShopInfo', 'saveBusinessType', 'setOrderDetailShopInfo']);
+} = mapMutation(["setOrderErrorListFlag", 'setOrderTabIndex', 'saveShopInfo', 'saveBusinessType', 'setOrderDetailShopInfo']);
 onLoad(() => {
     init();
 });

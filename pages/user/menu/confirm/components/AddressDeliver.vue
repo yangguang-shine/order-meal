@@ -31,12 +31,12 @@
 </template>
 
 <script lang="ts" setup>
-import { mapState, mapMutations, mapActions, mapGetters } from "../../../../../utils/mapVuex";
+import { mapState, mapMutation, mapAction, mapGetter } from "../../../../../utils/mapVuex";
 import { computed, ref, getCurrentInstance } from "vue";
 const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
 
 const { defaultAddress, takeOutTime } = mapState(["defaultAddress", "takeOutTime"]);
-const { setTakeOutTime } = mapMutations(["setTakeOutTime"]);
+const { setTakeOutTime } = mapMutation(["setTakeOutTime"]);
 function toAddressList() {
     $myrouter.navigateTo({
         name: "user/address/list",

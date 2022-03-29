@@ -8,7 +8,7 @@ import menu from './menu'
 import confirm from './confirm'
 import order from './order'
 
-const actions: ActionI = {
+const action: ActionI = {
     ...address,
     ...home,
     ...menu,
@@ -16,4 +16,4 @@ const actions: ActionI = {
     ...order,
 }
 
-export default actions
+export default action

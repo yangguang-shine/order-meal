@@ -14,13 +14,13 @@
 </template>
 
 <script lang="ts" setup>
-import { mapState, mapMutations } from '../../../../../utils/mapVuex'
+import { mapState, mapMutation } from '../../../../../utils/mapVuex'
 import { computed ,ref} from 'vue'
 const {noteText} = mapState(['noteText'])
 const {setNoteInputFlag, setNoteText }: {
     setNoteInputFlag: (flag: boolean) => void,
     setNoteText: (text: string) => void
-} = mapMutations(['setNoteInputFlag', "setNoteText"])
+} = mapMutation(['setNoteInputFlag', "setNoteText"])
 const noteInput: {
     value: string
 } = ref<string>(noteText.value)

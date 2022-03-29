@@ -149,12 +149,12 @@ const formatTime = (unit: number): string => {
 };
 
 export const timeStampTranslate = (timeStame: number) : string => {
-    const orderDate = new Date(+timeStame);
-    const year = orderDate.getFullYear();
-    const month = orderDate.getMonth() + 1;
-    const date = orderDate.getDate();
-    const hour = orderDate.getHours();
-    const minute = orderDate.getMinutes();
+    const orderDate: Date = new Date(+timeStame);
+    const year: number = orderDate.getFullYear();
+    const month: number = orderDate.getMonth() + 1;
+    const date: number = orderDate.getDate();
+    const hour: number = orderDate.getHours();
+    const minute: number = orderDate.getMinutes();
     return `${year}-${formatTime(month)}-${formatTime(date)} ${formatTime(
         hour
     )}:${formatTime(minute)}`;
@@ -165,12 +165,14 @@ export const timeStampTranslate = (timeStame: number) : string => {
  * @param {*} num
  */
 export function formatAmountNum(num: number) : string {
-    num = parseFloat(num) || 0;
-    num = (num / 100).toFixed(2);
-    num = num.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return num;
+    const numStr: string = (num / 100).toFixed(2);
+    return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-function format(number: number): string {
+function format(number: string): string {
     return number && number.replace(/(?!^)(?=(\d{3})+\.)/g, ",");
+}
+
+export function toFixedToNumber(num: number ,remain: number = 2) {
+   return Number(num.toFixed(remain))
 }

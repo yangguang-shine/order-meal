@@ -10,44 +10,39 @@
 // import { host } from '@/config/host';
 import getShopMinusList from "../../../utils/getShopMinusList";
 // import SelectModal from '@/components/SelectModal.vue';
-import { mapState, mapMutations, mapActions } from "../../../utils/mapVuex";
+import { mapState, mapMutation, mapAction } from "../../../utils/mapVuex";
 import TopAddressSearch from "./components/TopAddressSearch.vue";
 import ToolsList from "./components/ToolsList.vue";
 import RecommandInfo from "./components/RecommandInfo.vue";
 import { topAddressSearchHeight, tabListTop } from "./homeConfig";
 import { getCurrentInstance } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { AddressInfoI } from '@/interface/index'
+import { AddressItemI, ComputedAction, ComputedMutation } from '@/interface/index'
 
-interface IMutations {
-    setTopAddressWidthFlag: any;
-    setTabListFixedFlag: any;
-    setDefaultAddress: any;
-    setRecommandShopList: any
+interface MutationF {
+    setTopAddressWidthFlag: ComputedMutation<boolean>,
+    setTabListFixedFlag: ComputedMutation<boolean>,
 }
-interface IActions {
-    getDefaultAddress: any;
-    getRecommandShopList: any;
+interface ActionF {
+    getDefaultAddress: ComputedAction<void>,
+    getRecommandShopList: ComputedAction<void>,
 }
-const internalInstance: any = getCurrentInstance();
-const { $showLoading, $hideLoading, $showModal, $myrouter } = internalInstance.proxy;
+const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
 const {
     setTopAddressWidthFlag,
     setTabListFixedFlag,
-}: IMutations = mapMutations([
+}: MutationF = mapMutation([
     "setTopAddressWidthFlag",
     "setTabListFixedFlag",
 ]);
 
-const { getDefaultAddress, getRecommandShopList }:IActions = mapActions([
+const { getDefaultAddress, getRecommandShopList  }:ActionF = mapAction([
     "getDefaultAddress",
     "getRecommandShopList",
-    "getRecommandShopList1",
 ]);
 
 // console.log(JSON.stringify(addressList.value))
 onShow(() => {
-    console.log("init");
     uni.pageScrollTo({
         scrollTop: 0,
         duration: 0,
@@ -67,7 +62,9 @@ onPageScroll((e: any) => {
     }
 });
 async function toGetDefaultAddress() {
-    const defaultAddress: AddressInfoI = await getDefaultAddress();
+    console.log(1111)
+    console.log(getDefaultAddress)
+    const defaultAddress: AddressItemI = await getDefaultAddress();
     if (!defaultAddress.addressID) {
         await $showModal({
             content: "为提供更好服务，请先选择地址",
@@ -93,121 +90,11 @@ async function init() {
     }
 }
 
-// onShow() {
-//     uni.pageScrollTo({
-//         scrollTop: 0,
-//         duration: 0
-//     });
-//     this.init();
-// }
-// onPageScroll(e) {
-//     if (e.scrollTop > topAddressSearchHeight) {
-//         this.setTopAddressWidthFlag(true);
-//     } else {
-//         this.setTopAddressWidthFlag(false);
-//     }
-//     if (e.scrollTop >= tabListTop - topAddressSearchHeight) {
-//         this.setTabListFixedFlag(true);
-//     } else {
-//         this.setTabListFixedFlag(false);
-//     }
-// }
-// async init(): Promise<void> {
-//     try {
-//         this.$showLoading();
-//         await this.getDefaultAddress();
-//         await this.getRecommandShopList();
-//     } catch (e) {
-//         console.log(e);
-//     } finally {
-//         this.$hideLoading();
-//     }
-// },
-// async getDefaultAddress() {
-//     await this.getDefaultAddress();
-//     console.log(this);
-//     if (this.addressList.length) {
-//         console.log(this.addressList[0]);
-//         this.setDefaultAddress(this.addressList[0]);
-//     } else {
-//         await this.$showModal({
-//             content: "为提供更好服务，请先选择地址",
-//             confirmText: "去选择地址"
-//         });
-//         this.toSelectAddress();
-//     }
-// },
-// async getShopList() {
-//     if (!this.defaultAddress.latitude || !this.defaultAddress.longitude)
-//         return;
-//     const params = {
-//         businessType: 2,
-//         // type: this.selectTabItem.type,
-//         latitude: this.defaultAddress.latitude,
-//         longitude: this.defaultAddress.longitude
-//     };
-//     const recommandShopList = await this.$fetch(
-//         "user/shop/list",
-//         params
-//     );
-//     recommandShopList.forEach(item => {
-//         item.minusList = this.$getShopMinusList(item.minus || "");
-//     });
-//     const remandShopList1 = recommandShopList.concat(recommandShopList);
-//     const tmandShopList2 = remandShopList1.concat(remandShopList1);
-//     this.recommandShopList = tmandShopList2.concat(tmandShopList2);
-// },
-// async changeTabItem(tabItem) {
-//     try {
-//         this.$showLoading();
-//         await this.getShopList();
-//         this.selectTabItem = tabItem;
-//         uni.pageScrollTo({
-//             scrollTop: tabListTop - topAddressSearchHeight,
-//             duration: 200
-//         });
-//     } catch (e) {
-//         console.log(e);
-//     } finally {
-//         this.$hideLoading();
-//     }
-// },
 
-// toShopList(businessType) {
-//     this.saveBusinessType(businessType);
-//     this.$myrouter.navigateTo({
-//         name: "user/shop/list",
-//         query: {
-//             businessType
-//         }
-//     });
-// },
-
-// toOrder(shopItem) {
-//     this.saveShopInfo(shopItem);
-//     this.saveBusinessType(2);
-//     this.$myrouter.navigateTo({
-//         name: "user/menu/info",
-//         query: {
-//             businessType: 2
-//         }
-//     });
-// },
-// saveBusinessType(businessType) {
-//     uni.setStorageSync("businessType", businessType);
-// },
-// saveShopInfo(shopItem) {
-//     if (!shopItem.minusList) {
-//         shopItem.minusList = getShopMinusList(shopItem.minus || "");
-//     }
-//     uni.setStorageSync("shopInfo", shopItem);
-// }
 </script>
 
 <style lang="scss">
 page {
-    // minheight: 100%;
-    // background-color: #fff;
     background-color: $color-bg-f5;
 }
 .home-container {

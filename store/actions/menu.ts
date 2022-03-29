@@ -1,62 +1,82 @@
-import fetch from '@/utils/fetch'
-import { foodImgPath} from '@/config/index'
-import { ActionI,ActionsContextI, OriginCategoryInfoI, CategoryInfoI, FoodItemI, OriginFoodItemI } from "@/interface/index";
+import fetch from "@/utils/fetch";
+import { toFixedToNumber } from "@/utils/index";
+import { foodImgPath } from "@/config/index";
+import { ActionI, ActionContextI, OriginCategoryItemI, CategoryItemI, FoodItemI, OriginFoodItemI } from "@/interface/index";
 
-async function getMenuList ({ commit, state }: ActionsContextI) {
-    const data: OriginCategoryInfoI[] = await fetch("user/order/menuList", {
-        shopID: state.shopInfo.shopID
+async function getMenuList({ commit, state }: ActionContextI) {
+    const data: OriginCategoryItemI[] = await fetch("user/order/menuList", {
+        shopID: state.shopInfo.shopID,
     });
-    const categoryList: CategoryInfoI[] = (data|| []).map((item: OriginCategoryInfoI): CategoryInfoI => ({
-        ...item,
-        categoryTabID: "id" + item.categoryID,
-        foodList: (item.foodList || []).map((foodItem) :FoodItemI =>({
-            ...foodItem,
-            fullImgPath: `${foodImgPath}/${foodItem.imgUrl}`,
-            foodItemAmount: 0
-        }))
-    }));
+    const categoryList: CategoryItemI[] = (data || []).map(
+        (item: OriginCategoryItemI): CategoryItemI => ({
+            ...item,
+            categoryTabID: "id" + item.categoryID,
+            foodList: (item.foodList || []).map(
+                (foodItem): FoodItemI => ({
+                    ...foodItem,
+                    fullImgPath: `${foodImgPath}/${foodItem.imgUrl}`,
+                    foodItemAmount: 0,
+                })
+            ),
+        })
+    );
     if (categoryList.length) {
-        commit('setCategoryTabId', categoryList[0].categoryTabID)
-        commit('setScrollIntoCategoryTabID', null)
+        commit("setCategoryTabId", categoryList[0].categoryTabID);
+        commit("setScrollIntoCategoryTabID", null);
     }
-    commit('setFoodCategoryList', categoryList)
+    commit("setFoodCategoryList", categoryList);
 }
 
-async function  getOrderKeyFoodList ({ commit ,state}: ActionsContextI, option: any)  {
-        const data: FoodItemI[] = await fetch("user/order/foodList", {
-            ...option,
-            shopID: state.shopInfo.shopID,
-        });
-        const orderCategoryList = data.reduce((list: OriginCategoryInfoI[], item: FoodItemI) => {
-            if (!list.length) {
+async function getOrderKeyFoodList({ commit, state }: ActionContextI, option: any = {}) {
+    const data: OriginFoodItemI[] = await fetch("user/order/foodList", {
+        ...option,
+        shopID: state.shopInfo.shopID,
+    });
+    const cartCategoryList: CategoryItemI[] = data.reduce((list: CategoryItemI[], item: OriginFoodItemI) => {
+        if (!list.length) {
+            list.push({
+                categoryID: item.categoryID,
+                categoryTabID: "id" + item.categoryID,
+                categoryName: item.categoryName,
+                foodList: [
+                    {
+                        ...item,
+                        fullImgPath: `${foodImgPath}/${item.imgUrl}`,
+                        foodItemAmount: toFixedToNumber(item.price * item.orderCount),
+                    },
+                ],
+            });
+        } else {
+            const find = list.find((ListItem) => ListItem.categoryID === item.categoryID);
+            if (find) {
+                find.foodList.push({
+                    ...item,
+                    fullImgPath: `${foodImgPath}/${item.imgUrl}`,
+                    foodItemAmount: toFixedToNumber(item.price * item.orderCount),
+                });
+            } else {
                 list.push({
                     categoryID: item.categoryID,
                     categoryName: item.categoryName,
-                    foodList: [item]
+                    categoryTabID: "id" + item.categoryID,
+                    foodList: [
+                        {
+                            ...item,
+                            fullImgPath: `${foodImgPath}/${item.imgUrl}`,
+                            foodItemAmount: toFixedToNumber(item.price * item.orderCount),
+                        },
+                    ],
                 });
-            } else {
-                const find = list.find(
-                    ListItem => ListItem.categoryID === item.categoryID
-                );
-                if (find) {
-                    find.foodList.push(item);
-                } else {
-                    list.push({
-                        categoryID: item.categoryID,
-                        categoryName: item.categoryName,
-                        foodList: [item]
-                    });
-                }
             }
-            return list;
-        }, []);
+        }
+        return list;
+    }, []);
 
-        commit('setCartCategoryList', orderCategoryList)
-        return orderCategoryList
+    commit("setCartCategoryList", cartCategoryList);
+    return cartCategoryList;
 }
-
 
 export default {
     getMenuList,
     getOrderKeyFoodList,
-} as ActionI
+} as ActionI;

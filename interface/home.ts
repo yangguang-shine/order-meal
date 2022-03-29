@@ -3,7 +3,7 @@ export interface TabItemI {
     type: string,
 }
 
-export interface OriginShopInfoI {
+export interface OriginShopItemI {
     address: any,
     businessTypes: string,
     description: string,
@@ -24,7 +24,7 @@ export interface minusItemI {
     reach: number,
     reduce: number
 }
-export interface ShopInfoI extends OriginShopInfoI {
+export interface ShopItemI extends OriginShopItemI {
     minusList: minusItemI[],
     fullImgPath: string,
 }

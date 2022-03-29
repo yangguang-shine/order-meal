@@ -1,8 +1,8 @@
 <template>
     <scroll-view scroll-y class="category-aside-bar-box" :style="{'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightPX + 'px' : ''}">
-        <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'aside-categroy-item-active': categoryTabId === asideCategoryItem.categoryTabID }" @click="changeCategoryTab(asideCategoryItem.categoryTabID)">
+        <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'aside-categroy-item-active': categoryTabID === asideCategoryItem.categoryTabID }" @click="changeCategoryTab(asideCategoryItem.categoryTabID)">
             {{ asideCategoryItem.categoryName }}
-            <view v-if="asideCategoryItem.orderCount" class="category-order-count" :style="{ background: $mainColor }">{{ asideCategoryItem.orderCount }}</view>
+            <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count" :style="{ background: $mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
         </view>
     </scroll-view>
 </template>
@@ -13,20 +13,20 @@ import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
 import {
     mapState,
-    mapGetters,
-    mapMutations
+    mapGetter,
+    mapMutation
 } from "../../../../../utils/mapVuex";
 import {  minusPromotionsHeightPX } from '../infoConfig'
-const { asideCategoryList, minusPromotionsObject } = mapGetters(["asideCategoryList", 'minusPromotionsObject']);
-const { categoryList, categoryTabId, scrollIntoCategoryTabID } = mapState([
+const { asideCategoryList, minusPromotionsObject } = mapGetter(["asideCategoryList", 'minusPromotionsObject']);
+const { categoryList, categoryTabID, scrollIntoCategoryTabID } = mapState([
     "categoryList",
-    "categoryTabId",
+    "categoryTabID",
     "scrollIntoCategoryTabID"
 ]);
 const {
     setCategoryTabId,
     setScrollIntoCategoryTabID
-} = mapMutations([
+} = mapMutation([
     'setCategoryTabId',
     "setScrollIntoCategoryTabID"
 ]);

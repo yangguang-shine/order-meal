@@ -1,12 +1,12 @@
 
-import {AddressInfoI} from '@/interface/index'
-export interface AddressStateI {
-    addressList: AddressInfoI[],
-    defaultAddress: AddressInfoI
+import {AddressItemI} from '@/interface/index'
+export interface StateAddressI {
+    addressList: AddressItemI[],
+    defaultAddress: AddressItemI
 }
 
 
-const state: AddressStateI = {
+const state: StateAddressI = {
     addressList: [],
     defaultAddress: {
         address1:'',

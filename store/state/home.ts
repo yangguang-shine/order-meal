@@ -1,11 +1,11 @@
-import { TabItemI, ShopInfoI } from "@/interface/index";
-export interface HomeStateI {
+import { TabItemI, ShopItemI } from "@/interface/index";
+export interface StateHomeI {
     topAddressWidthFlag: boolean;
     tabListFixedFlag: boolean;
-    recommandShopList: ShopInfoI[];
+    recommandShopList: ShopItemI[];
     tabList: TabItemI[];
     selectedTabItem: TabItemI;
-    shopInfo: ShopInfoI;
+    shopInfo: ShopItemI;
     businessType: number;
 }
 const tabList: TabItemI[] = [
@@ -23,7 +23,7 @@ const tabList: TabItemI[] = [
     },
 ];
 
-const state: HomeStateI = {
+const state: StateHomeI = {
     topAddressWidthFlag: false,
     tabListFixedFlag: false,
     recommandShopList: [],

@@ -53,15 +53,15 @@ const {
 } = getCurrentInstance().proxy;
 import {
     mapState,
-    mapGetters,
-    mapMutations
+    mapGetter,
+    mapMutation
 } from "../../../../../utils/mapVuex";
-const { minusPromotionsObject } = mapGetters(["minusPromotionsObject"]);
+const { minusPromotionsObject } = mapGetter(["minusPromotionsObject"]);
 const { cartCategoryList, categoryList } = mapState([
     "cartCategoryList",
     "categoryList"
 ]);
-const { setCartDetailFlag, clearCart } = mapMutations([
+const { setCartDetailFlag, clearCart } = mapMutation([
     "setCartDetailFlag",
     "clearCart"
 ]);

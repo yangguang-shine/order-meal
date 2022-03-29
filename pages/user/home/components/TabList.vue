@@ -1,47 +1,35 @@
 <template>
     <view class="tab-list-container">
-        <view
-            id="tab-list-fixed-id"
-            class="tab-list flex-row flex-a-center"
-            :class="{ 'tab-list-fixed': tabListFixedFlag }"
-            :style="{ top: tabListFixedFlag ? topAddressSearchHeight + 'px' : '' }"
-        >
-            <view
-                v-for="(tabItem, index) in tabList"
-                :key="index"
-                class="tab-item flex-item flex-row flex-ja-center"
-                :class="selectedTabItem.type === tabItem.type ? 'select-tab-item' : ''"
-                @click="clickTabItem(tabItem)"
-                >{{ tabItem.title }}</view
-            >
+        <view id="tab-list-fixed-id" class="tab-list flex-row flex-a-center" :class="{ 'tab-list-fixed': tabListFixedFlag }" :style="{ top: tabListFixedFlag ? topAddressSearchHeight + 'px' : '' }">
+            <view v-for="(tabItem, index) in tabList" :key="index" class="tab-item flex-item flex-row flex-ja-center" :class="selectedTabItem.type === tabItem.type ? 'select-tab-item' : ''" @click="clickTabItem(tabItem)">{{ tabItem.title }}</view>
         </view>
     </view>
 </template>
 
 <script lang="ts" setup>
 import { defineComponent, computed, getCurrentInstance, ref } from "vue";
-import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
+import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { topAddressSearchHeight, tabListTop } from "../homeConfig";
-import { TabItemI } from "@/interface/index";
-const internalInstance = getCurrentInstance();
-const { $showLoading, $hideLoading, $showModal, $delaySync } = internalInstance.proxy;
-const {
-    tabList,
-    selectedTabItem,
-    tabListFixedFlag,
-}: {
-    tabList: TabItemI[];
-    selectedTabItem: TabItemI;
-    tabListFixedFlag: boolean;
-} = mapState(["tabList", "selectedTabItem", "tabListFixedFlag"]);
-const {
-    changeTabItem,
-}: {
-    changeTabItem: (tabItem: TabItemI) => void;
-} = mapMutations(["changeTabItem"]);
-const { getRecommandShopList } = mapActions(["getRecommandShopList"]);
+import { TabItemI, ComputedState, ComputedMutation, ComputedAction } from "@/interface/index";
+const { $showLoading, $hideLoading, $showModal, $delaySync } = getCurrentInstance().proxy;
+
+interface StateF {
+    tabList: ComputedState<TabItemI[]>;
+    selectedTabItem: ComputedState<TabItemI>;
+    tabListFixedFlag: ComputedState<boolean>;
+}
+
+interface MutationF {
+    changeTabItem: ComputedMutation<TabItemI>;
+}
+interface ActionF {
+    getRecommandShopList: ComputedAction<any>;
+}
+const { tabList, selectedTabItem, tabListFixedFlag }: StateF = mapState(["tabList", "selectedTabItem", "tabListFixedFlag"]);
+const { changeTabItem }: MutationF = mapMutation(["changeTabItem"]);
+const { getRecommandShopList }: ActionF = mapAction(["getRecommandShopList"]);
 const clickTabItem = async (tabItem: TabItemI) => {
-    if (selectedTabItem.type === tabItem.type) return;
+    if (selectedTabItem.value.type === tabItem.type) return;
     try {
         $showLoading();
         await getRecommandShopList();

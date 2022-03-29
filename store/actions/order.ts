@@ -1,28 +1,38 @@
 import fetch from "@/utils/fetch";
-import { timeStampTranslate } from "@/utils/index";
+import { timeStampTranslate, toFixedToNumber } from "@/utils/index";
 import getOrderTypeTitle from "@/utils/getOrderTypeTitle";
 import { shopImgPath, foodImgPath } from "@/config/index";
-import { ActionI, ActionsContextI, OriginOrderItemI, OrderItemI, OriginShopInfoI, ShopInfoI, OriginOrderDetail, OrderDetailI } from "@/interface/index";
+import { ActionI, ActionContextI, OriginOrderItemI, OrderItemI, OriginShopItemI, ShopItemI, OriginOrderDetail, OrderDetailI, OrderKeyI } from "@/interface/index";
 
-async function getOrderList({ state, getters, commit }: ActionsContextI, payload: any) {
-    let data: OriginOrderItemI[] = await fetch("user/order/orderList", {
+async function getOrderList({ state, getter, commit }: ActionContextI, payload: any) {
+    let data: {
+        orderKeyList: OrderKeyI[];
+        shopInfoList: OriginShopItemI[];
+    } = await fetch("user/order/orderList", {
         status: state.orderTabIndex,
     });
-    const orderList: OrderItemI[] = data.map(
-        (orderItem: OriginOrderItemI): OrderItemI => ({
-            ...orderItem,
-            minusList: JSON.parse(orderItem.minus),
-            fullImgPath: `${shopImgPath}/${orderItem.imgUrl}`,
-            orderTimeDetail: timeStampTranslate(orderItem.orderTime),
-            orderTypeTitle: getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType),
-        })
-    );
+    const shopListMap: {
+        [index: number]: ShopItemI;
+    } = {};
+    data.shopInfoList.forEach((item: OriginShopItemI): void => {
+        shopListMap[item.shopID] = {
+            ...item,
+            minusList: JSON.parse(item.minus),
+            fullImgPath: `${shopImgPath}/${item.imgUrl}`,
+        };
+    });
+    const orderList: OrderItemI[] = data.orderKeyList.map((item) => ({
+        ...item,
+        shopInfo: shopListMap[item.shopID],
+        orderTimeDetail: timeStampTranslate(item.orderTime),
+        orderTypeTitle: getOrderTypeTitle(item.orderStatus, item.businessType),
+    }));
     state.allOrderList[state.orderTabIndex] = orderList;
     return orderList;
 }
-async function getShopInfo({ state, getters, commit }: ActionsContextI, payload: any): Promise<ShopInfoI> {
-    const originShopInfo: OriginShopInfoI = await fetch("user/shop/find", payload);
-    const shopInfo: ShopInfoI = {
+async function getShopInfo({ state, getter, commit }: ActionContextI, payload: any): Promise<ShopItemI> {
+    const originShopInfo: OriginShopItemI = await fetch("user/shop/find", payload);
+    const shopInfo: ShopItemI = {
         ...originShopInfo,
         minusList: JSON.parse(originShopInfo.minus),
         fullImgPath: `${shopImgPath}/${originShopInfo.imgUrl}`,
@@ -30,7 +40,7 @@ async function getShopInfo({ state, getters, commit }: ActionsContextI, payload:
     return shopInfo;
 }
 
-async function getOrderDetail({ state, getters, commit }: ActionsContextI, payload: any) {
+async function getOrderDetail({ state, getter, commit }: ActionContextI, payload: any) {
     const originOrderDetail: OriginOrderDetail = await fetch("user/order/orderDetail", payload);
     const orderDetail: OrderDetailI = {
         ...originOrderDetail,
@@ -39,7 +49,7 @@ async function getOrderDetail({ state, getters, commit }: ActionsContextI, paylo
         address: JSON.parse(originOrderDetail.address),
         foodList: originOrderDetail.foodList.map((foodItem) => ({
             ...foodItem,
-            foodItemAmount: Number((foodItem.price * foodItem.orderCount).toFixed(2)),
+            foodItemAmount: toFixedToNumber(foodItem.price * foodItem.orderCount),
             fullImgPath: `${foodImgPath}/${foodItem.imgUrl}`,
         })),
     };
@@ -48,7 +58,7 @@ async function getOrderDetail({ state, getters, commit }: ActionsContextI, paylo
     return orderDetail;
 }
 
-async function cancelOrder({ state, getters, commit }: ActionsContextI, payload: any) {
+async function cancelOrder({ state, getter, commit }: ActionContextI, payload: any) {
     await fetch("user/order/cancel", payload);
 }
 

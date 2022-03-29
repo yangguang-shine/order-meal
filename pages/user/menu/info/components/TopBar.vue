@@ -9,10 +9,10 @@
 </template>
 
 <script lang="ts" setup>
-import { mapState, mapMutations } from "../../../../../utils/mapVuex";
+import { mapState, mapMutation } from "../../../../../utils/mapVuex";
 
 const { topBarInfo } = mapState(["topBarInfo"]);
-const { setTopBarInfo,setShopInfoFlag } = mapMutations(["setTopBarInfo", "setShopInfoFlag"]);
+const { setTopBarInfo,setShopInfoFlag } = mapMutation(["setTopBarInfo", "setShopInfoFlag"]);
 function clickTopBar(title) {
     if (topBarInfo === title) return;
     if (title === "商家") {

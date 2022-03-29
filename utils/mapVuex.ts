@@ -3,7 +3,6 @@ import { useStore } from "vuex";
 // (['hahah'])  or (['hahah'])
 export const mapState = function (namespace: string | string[], states?: string[]): any {
     const store = useStore();
-    console.log(store);
 
     const obj: any = {};
     if (typeof namespace === "string") {
@@ -14,8 +13,6 @@ export const mapState = function (namespace: string | string[], states?: string[
         }
     } else {
         namespace.forEach((key: string) => {
-            console.log(1111);
-            console.log(key);
             obj[key] = computed(() => {
                 return store.state[key];
             });
@@ -23,6 +20,7 @@ export const mapState = function (namespace: string | string[], states?: string[
     }
     return obj;
 };
+
 function getNamespaceState(namespace: string, store: any): any {
     const spaceArr = namespace.split("/");
     return spaceArr.reduce((state, item) => {
@@ -30,7 +28,7 @@ function getNamespaceState(namespace: string, store: any): any {
     }, store.state);
 }
 
-export const mapGetters = function (namespace: string | any[], states?: any[]): any {
+export const mapGetter = function (namespace: string | any[], states?: any[]): any {
     const store = useStore();
     const obj: any = {};
     if (typeof namespace === "string") {
@@ -49,15 +47,14 @@ export const mapGetters = function (namespace: string | any[], states?: any[]): 
     return obj;
 };
 
-export const mapMutations = (namespace: string | string[], mutations?: string[]): any => {
+export const mapMutation = (namespace: string | string[], mutation?: string[]): any => {
     const store = useStore();
-    console.log(store);
 
     const obj: any = {};
     if (typeof namespace === "string") {
         const module = store._modulesNamespaceMap[`${namespace}/`];
-        if (mutations) {
-            mutations.forEach((key: string) => {
+        if (mutation) {
+            mutation.forEach((key: string) => {
                 obj[key] = async (payload: any) => await module.context.commit(key, payload);
             });
         }
@@ -69,14 +66,13 @@ export const mapMutations = (namespace: string | string[], mutations?: string[])
     return obj;
 };
 
-export const mapActions = (namespace: string | string[], actions?: string[]): any => {
+export const mapAction = (namespace: string | string[], action?: string[]): any => {
     const store = useStore();
-    console.log(store);
     const obj: any = {};
     if (typeof namespace === "string") {
         const module = store._modulesNamespaceMap[`${namespace}/`];
-        if (actions) {
-            actions.forEach((key: string) => {
+        if (action) {
+            action.forEach((key: string) => {
                 obj[key] = async (payload: any) => await module.context.dispatch(key, payload);
             });
         }
@@ -86,4 +82,5 @@ export const mapActions = (namespace: string | string[], actions?: string[]): an
         });
     }
     return obj;
+
 };

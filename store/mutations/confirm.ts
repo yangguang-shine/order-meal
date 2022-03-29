@@ -1,13 +1,13 @@
 import { MutationI, StateI } from "@/interface/index";
 
-function setTakeOutTime(state:StateI, payload) {
-    state.takeOutTime = payload;
+function setTakeOutTime(state:StateI, takeOutTime: string) {
+    state.takeOutTime = takeOutTime;
 };
-function setNoteInputFlag(state:StateI, payload) {
-    state.noteInputFlag = payload;
+function setNoteInputFlag(state:StateI, noteInputFlag: boolean) {
+    state.noteInputFlag = noteInputFlag;
 };
-function setNoteText(state:StateI, payload) {
-    state.noteText = payload;
+function setNoteText(state:StateI, noteText: string) {
+    state.noteText = noteText;
 };
 
 export default {

@@ -1,12 +1,12 @@
 
 
-export interface AddressInfoI {
+export interface AddressItemI {
     address1:string,
     address2: string,
-    addressID: number,
     latitude: string,
     longitude: string,
     mobile: string,
     name: string,
     sex: number,
+    addressID?: number,
 }

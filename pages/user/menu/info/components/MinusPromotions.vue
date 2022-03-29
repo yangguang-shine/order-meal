@@ -5,8 +5,8 @@
 </template>
 
 <script lang='ts' setup>
-import { mapGetters, mapState } from '../../../../../utils/mapVuex';
-const {minusPromotionsObject } = mapGetters(['minusPromotionsObject'])
+import { mapGetter, mapState } from '../../../../../utils/mapVuex';
+const {minusPromotionsObject } = mapGetter(['minusPromotionsObject'])
 const { shopInfoFlag } = mapState(['shopInfoFlag'])
 </script>
 

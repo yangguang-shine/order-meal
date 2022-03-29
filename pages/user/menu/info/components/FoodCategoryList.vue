@@ -28,10 +28,10 @@ import { defineComponent, getCurrentInstance, computed } from "vue";
 const currentInstance = getCurrentInstance()
 import {
     mapState,
-    mapGetters,
-    mapMutations
+    mapGetter,
+    mapMutation
 } from "../../../../../utils/mapVuex";
-const { asideCategoryList, minusPromotionsObject } = mapGetters(["asideCategoryList", 'minusPromotionsObject']);
+const { asideCategoryList, minusPromotionsObject } = mapGetter(["asideCategoryList", 'minusPromotionsObject']);
 const { categoryList, scrollIntoCategoryTabID } = mapState([
     "categoryList",
     "scrollIntoCategoryTabID"
@@ -44,7 +44,7 @@ const {
     setFoodInfo,
     setCategoryTabId,
     setScrollIntoCategoryTabID
-} = mapMutations([
+} = mapMutation([
     "setFoodDetailFlag",
     "setFoodInfo",
     "setCategoryTabId",

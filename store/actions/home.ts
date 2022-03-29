@@ -1,15 +1,15 @@
 import fetch from '@/utils/fetch'
 import { shopImgPath } from '@/config/index'
-import { ActionI,ActionsContextI, OriginShopInfoI,ShopInfoI } from "@/interface/index";
+import { ActionI,ActionContextI, OriginShopItemI,ShopItemI } from "@/interface/index";
 
-async function getRecommandShopList ({ commit, state }: ActionsContextI, params = {}) {
-    let data: OriginShopInfoI[] = await fetch('user/shop/list', {
+async function getRecommandShopList ({ commit, state }: ActionContextI, params = {}) {
+    let data: OriginShopItemI[] = await fetch('user/shop/list', {
         businessType: 2,
         type: state.selectedTabItem.type,
         latitude: state.defaultAddress.latitude,
         longitude: state.defaultAddress.longitude,
     });
-    const recommandShopList : ShopInfoI[]= (data || []).map((item: OriginShopInfoI): ShopInfoI => ({
+    const recommandShopList : ShopItemI[]= (data || []).map((item: OriginShopItemI): ShopItemI => ({
         ...item,
         minusList: JSON.parse(item.minus),
         fullImgPath: `${shopImgPath}/${item.imgUrl}`,

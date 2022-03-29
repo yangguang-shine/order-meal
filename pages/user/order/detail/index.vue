@@ -13,15 +13,15 @@ import OrderFoodInfo from "./components/OrderFoodInfo.vue";
 import OrderExtInfo from "./components/OrderExtInfo.vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { ref, getCurrentInstance } from "vue";
-import { mapState, mapActions, mapMutations } from "../../../../utils/mapVuex";
+import { mapState, mapAction, mapMutation } from "../../../../utils/mapVuex";
 
 const { $showLoading, $hideLoading, $myrouter, $showModal } = getCurrentInstance().proxy;
 
 const showLoadingFlag = ref(false);
 let orderKey = ref('')
 const { orderDetail } = mapState(["orderDetail"]);
-const {} = mapMutations([""]);
-const { getOrderDetail, getShopInfo, cancelOrder, orderDetailShopInfo } = mapActions([
+const {} = mapMutation([""]);
+const { getOrderDetail, getShopInfo, cancelOrder, orderDetailShopInfo } = mapAction([
     "getOrderDetail",
     "getShopInfo",
     "cancelOrder",

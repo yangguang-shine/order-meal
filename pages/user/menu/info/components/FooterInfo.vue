@@ -7,11 +7,11 @@
             </view>
             <view class="flex-item cart-all-amount">
                 <text class="amount-unit">¥</text>
-                <text class="discounted-price">{{ cartPriceInfo.cartAlldiscountPrice }}</text>
+                <text class="discounted-price">{{ cartPriceInfo.cartAlldiscountedPrice }}</text>
                 <text v-if="cartPriceInfo.discountPrice" class="origin-price">¥{{ cartPriceInfo.cartAllOriginPrice }}</text>
             </view>
-            <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAlldiscountPrice > 0 ? $mainColor : '' }" @click="toComfirmOrder"></view>
-            <!-- <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAlldiscountPrice > 0 ? $mainColor : '' }" @click="toComfirmOrder">去下单</view> -->
+            <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAlldiscountedPrice > 0 ? $mainColor : '' }" @click="toComfirmOrder"></view>
+            <!-- <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAlldiscountedPrice > 0 ? $mainColor : '' }" @click="toComfirmOrder">去下单</view> -->
         </view>
     </view>
 </template>
@@ -19,18 +19,18 @@
 <script lang='ts' setup>
 import { getCurrentInstance } from "vue";
 import {
-    mapGetters,
-    mapMutations,
+    mapGetter,
+    mapMutation,
     mapState
 } from "../../../../../utils/mapVuex";
-const { cartPriceInfo, allCartFoodCount } = mapGetters([
+const { cartPriceInfo, allCartFoodCount } = mapGetter([
     "cartPriceInfo",
     "allCartFoodCount"
 ]);
 const { shopInfoFlag, cartCategoryList } = mapState(["shopInfoFlag", 'cartCategoryList']);
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
 
-const { toogleCartDetailFlag } = mapMutations(["toogleCartDetailFlag"]);
+const { toogleCartDetailFlag } = mapMutation(["toogleCartDetailFlag"]);
 function toComfirmOrder() {
     $myrouter.navigateTo({
         name: "user/menu/confirm"

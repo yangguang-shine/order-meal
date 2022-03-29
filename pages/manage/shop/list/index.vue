@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import Shop from "@/components/Shop";
 import BottomButton from "@/components/BottomButton.vue";
-import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
+import { mapState, mapMutation, mapAction } from "../../../../utils/mapVuex";
 import { ref, getCurrentInstance } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 const showSelectModal = ref(false);
@@ -33,7 +33,7 @@ const {
 } = getCurrentInstance().proxy;
 
 const { shopList } = mapState("manage", ["shopList"]);
-const { getShopList, saveShopInfo } = mapActions("manage", ["getShopList", 'saveShopInfo']);
+const { getShopList, saveShopInfo } = mapAction("manage", ["getShopList", 'saveShopInfo']);
 onShow(() => {
     init();
 });

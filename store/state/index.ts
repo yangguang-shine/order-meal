@@ -1,8 +1,8 @@
-import address, { AddressStateI } from "./address";
-import home, { HomeStateI } from "./home";
-import menu, { MenuStateI } from "./menu";
-import confirm, { ConfirmStateI } from "./confirm";
-import order, { orderStateI } from "./order";
+import address, { StateAddressI } from "./address";
+import home, { StateHomeI } from "./home";
+import menu, { StateMenuI } from "./menu";
+import confirm, { StateConfirmI } from "./confirm";
+import order, { StateOrderI } from "./order";
 import { StateI } from "@/interface/index";
 
 const state: StateI = {

@@ -20,8 +20,8 @@
 import { getCurrentInstance } from "vue";
 import {
     mapState,
-    mapMutations,
-    mapActions
+    mapMutation,
+    mapAction
 } from "../../../../../utils/mapVuex";
 const props = defineProps({
     orderKey: {
@@ -38,11 +38,11 @@ const {
 } = getCurrentInstance().proxy;
 const { orderDetail } = mapState(["orderDetail"]);
 
-const { saveShopInfo, saveBusinessType } = mapMutations([
+const { saveShopInfo, saveBusinessType } = mapMutation([
     "saveShopInfo",
     "saveBusinessType"
 ]);
-const { cancelOrder, getOrderDetail, getShopInfo } = mapActions([
+const { cancelOrder, getOrderDetail, getShopInfo } = mapAction([
     "cancelOrder",
     "getOrderDetail",
     "getShopInfo"

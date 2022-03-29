@@ -50,7 +50,7 @@
 
 <script>
 import getShopMinusList from '@/utils/getShopMinusList';
-import { mapMutations } from 'vuex';
+import { mapMutation } from 'vuex';
 import {host} from '@/config/host';
 import Shop from '@/components/Shop';
 import SelectModal from '@/components/SelectModal.vue';
@@ -81,7 +81,7 @@ export default {
 	},
 	computed: {},
 	methods: {
-		...mapMutations({
+		...mapMutation({
 			saveSelectShopItem: 'saveSelectShopItem'
 		}),
 		async getOrderList() {

@@ -1,11 +1,12 @@
 
-import { ShopInfoI, CategoryInfoI, OrderCategoryInfoI, FoodItemI } from "@/interface/index";
+import { ShopItemI, CategoryItemI, FoodItemI, AsideCategoryItemI } from "@/interface/index";
 
-export interface MenuStateI {
-    cartCategoryList: OrderCategoryInfoI[];
-    categoryList: CategoryInfoI[];
-    categoryTabId: string;
-    scrollIntoCategoryTabID: "";
+export interface StateMenuI {
+    cartCategoryList: CategoryItemI[];
+    categoryList: CategoryItemI[];
+    // asideCategoryList: AsideCategoryItemI[]
+    categoryTabID: string;
+    scrollIntoCategoryTabID: string;
     topBarInfo: string;
     shopInfoFlag: boolean;
     cartDetailFlag: boolean;
@@ -14,10 +15,11 @@ export interface MenuStateI {
 
 }
 
-const state: MenuStateI = {
+const state: StateMenuI = {
     cartCategoryList: [],
     categoryList: [],
-    categoryTabId: "null",
+    // asideCategoryList: [],
+    categoryTabID: "null",
     scrollIntoCategoryTabID: "",
     topBarInfo: "点餐",
     shopInfoFlag: false,

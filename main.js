@@ -18,7 +18,7 @@ import {
 } from '@/utils/tool'
 import '@/style/flex.css'
 import '@/style/common.css'
-import BottomButton from '@/components/BottomButton.vue'
+// import BottomButton from '@/components/BottomButton.vue'
 import getShopMinusList from '@/utils/getShopMinusList';
 
 import { createSSRApp } from 'vue'
@@ -37,7 +37,7 @@ export function createApp() {
 	app.config.globalProperties.$getShopMinusList = getShopMinusList
 	app.component('CommonError', CommonError)
 	app.component('CommonLoading', CommonLoading)
-	app.component('BottomButton', BottomButton)
+	// app.component('BottomButton', BottomButton)
 	const $mainColor = "#0096ff"
 	const $mainColor2 = "#58a3dd"
 

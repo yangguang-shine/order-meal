@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutation } from 'vuex'
 
 export default {
 	props: {

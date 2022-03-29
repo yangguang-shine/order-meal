@@ -24,12 +24,12 @@
 <script lang='ts' setup>
 import FoodAddMinus from './item/FoodAddMinus.vue';
 import { delaySync } from '@/utils/index.js';
-import { mapState, mapMutations } from '../../../../../utils/mapVuex';
+import { mapState, mapMutation } from '../../../../../utils/mapVuex';
 const showComponents = false
 const { foodInfo} = mapState([
 	'foodInfo'
 ])
-const {setFoodDetailFlag, setFoodInfo} = mapMutations(['setFoodDetailFlag', 'setFoodInfo'])
+const {setFoodDetailFlag, setFoodInfo} = mapMutation(['setFoodDetailFlag', 'setFoodInfo'])
 function closeFoodDetail() {
 	setFoodDetailFlag(false)
 	setFoodInfo({})

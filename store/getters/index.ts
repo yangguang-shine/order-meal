@@ -1,10 +1,10 @@
 
 import menu from './menu'
 import confirm from './confirm'
+import { GetterI} from "@/interface/index";
 
-const getters = {
+
+export default {
     ...menu,
     ...confirm,
-}
-
-export default getters
+} as GetterI

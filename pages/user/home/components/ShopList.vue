@@ -14,18 +14,26 @@
 <script lang="ts" setup>
 import Shop from "../../../../components/Shop.vue";
 import { defineComponent, computed, getCurrentInstance } from "vue";
-import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
-import { ShopInfoI } from "@/interface/index";
-// import { AddressInfoI, ShopInfoI } from '@/interface/index'
-
-const internalInstance = getCurrentInstance();
-const { $myrouter } = internalInstance.proxy;
-const { saveShopInfo, saveBusinessType } = mapMutations([
+import { mapState, mapMutation, mapAction } from "../../../../utils/mapVuex";
+import { ShopItemI } from "@/interface/index";
+// import { AddressItemI, ShopItemI } from '@/interface/index'
+interface MutationF {
+saveShopInfo: (shopItem: ShopItemI) => void,
+saveBusinessType: (type: number) => void,
+}
+interface StateU {
+    recommandShopList: {
+        value: ShopItemI[]
+    },
+    
+}
+const { $myrouter } = getCurrentInstance().proxy;
+const { saveShopInfo, saveBusinessType }: MutationF = mapMutation([
     "saveShopInfo",
     "saveBusinessType",
 ]);
-const { recommandShopList } = mapState(["recommandShopList"]);
-function toOrder(shopItem: ShopInfoI) {
+const { recommandShopList }: StateU = mapState(["recommandShopList"]);
+function toOrder(shopItem: ShopItemI) {
     console.log("toOrder");
     saveShopInfo(shopItem);
     saveBusinessType(2);

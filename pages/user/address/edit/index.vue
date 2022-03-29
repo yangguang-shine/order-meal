@@ -32,31 +32,26 @@
 <script lang="ts" setup>
 import { getSetting, authorize } from "@/utils";
 import { defineComponent, computed, getCurrentInstance, reactive, ref } from "vue";
-import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
+import { mapState, mapMutation, mapAction } from "../../../../utils/mapVuex";
 import { onShow, onLoad } from "@dcloudio/uni-app";
-import { AddressInfoI } from "@/interface/index";
-const internalInstance = getCurrentInstance();
-const { $showLoading: showLoading, $hideLoading: hideLoading, $showModal: showModal, $delaySync: delaySync, $myrouter: myrouter } = internalInstance.proxy;
-const { addAddress, findAddress, editAddress } = mapActions(["addAddress", "findAddress", "editAddress"]);
-interface AddIndoI {
-    name: string;
-    sex: number;
-    mobile: string;
-    address1: string;
-    address2: string;
-    latitude: string;
-    longitude: string;
+import { AddressItemI, ComputedAction, ComputedState } from "@/interface/index";
+const { $showLoading: showLoading, $hideLoading: hideLoading, $showModal: showModal, $delaySync: delaySync, $myrouter: myrouter } = getCurrentInstance().proxy;
+
+interface ActionF {
+    addAddress: ComputedAction<AddressItemI>;
+    findAddress: ComputedAction<number>;
+    editAddress: ComputedAction<AddressItemI>;
 }
-onShow(() => {});
-let routerAddressID = ref<string>("");
+const { addAddress, findAddress, editAddress }: ActionF = mapAction(["addAddress", "findAddress", "editAddress"]);
+
+let routerAddressID: ComputedState<string> = ref<string>("");
 onLoad((option: any) => {
-    routerAddressID.value = option.addressID;
     if (option.addressID) {
         routerAddressID.value = option.addressID;
         init();
     }
 });
-let addressInfo: AddIndoI | AddressInfoI = reactive({
+let addressInfo: AddressItemI = reactive<AddressItemI>({
     name: "",
     sex: 1,
     mobile: "",
@@ -76,7 +71,7 @@ async function init() {
     }
 }
 async function toFindAddress() {
-    let findAddressInfo: AddressInfoI = await findAddress(routerAddressID.value);
+    let findAddressInfo: AddressItemI = await findAddress(Number(routerAddressID.value));
     Object.assign(addressInfo, findAddressInfo);
 }
 async function toAddAddress() {
@@ -99,7 +94,7 @@ async function toEditAddress() {
         showLoading();
         await editAddress({
             ...addressInfo,
-            addressID: routerAddressID.value,
+            addressID: Number(routerAddressID.value),
         });
         hideLoading();
         await showModal({
@@ -131,7 +126,7 @@ async function chooseAddress() {
     }
     // #endif
     uni.chooseLocation({
-        success: (res) => {
+        success: (res: any) => {
             console.log("res");
             console.log(res);
             addressInfo.address1 = res.address;
@@ -140,99 +135,6 @@ async function chooseAddress() {
         },
     });
 }
-// data() {
-//     return {
-//         addressInfo: {
-//             name: "",
-//             sex: 1,
-//             mobile: "",
-//             address1: "",
-//             address2: "",
-//             latitude: "",
-//             longitude: ""
-//         },
-//         addressID: ""
-//     };
-// },
-// onLoad(options) {
-//     this.addressID = options.addressID || "";
-//     if (this.addressID) {
-//         this.init();
-//     }
-// },
-// methods: {
-// async init() {
-//     try {
-//         this.$showLoading();
-//         const addressInfo = await this.$fetch("user/address/find", {
-//             addressID: this.addressID
-//         });
-//         this.addressInfo = addressInfo || {};
-//         this.$hideLoading();
-//     } catch (e) {
-//         console.log(e);
-//     }
-// },
-// async addAddress() {
-//     try {
-//         this.$showLoading();
-//         await this.$fetch("user/address/add", { ...this.addressInfo });
-//         this.$hideLoading();
-//         await this.$showModal({
-//             content: "添加成功"
-//         });
-//         this.$myrouter.back(1);
-//     } catch (e) {
-//         console.log(e);
-//     } finally {
-//         this.$hideLoading();
-//     }
-// },
-// async editAddress() {
-//     try {
-//         this.$showLoading();
-//         await this.$fetch("user/address/edit", {
-//             ...this.addressInfo,
-//             addressID: this.addressID
-//         });
-//         this.$hideLoading();
-//         await this.$showModal({
-//             content: "修改成功"
-//         });
-//         this.$myrouter.back(1);
-//     } catch (e) {
-//         console.log(e);
-//     }
-// },
-// async chooseAddress() {
-//     // #ifdef MP-WEIXIN
-//     try {
-//         await getSetting("scope.userLocation");
-//     } catch (e) {
-//         console.log(e);
-//         try {
-//             await authorize("scope.userLocation");
-//         } catch (e) {
-//             console.log(e);
-//             return;
-//         }
-//     }
-//     // #endif
-//     uni.chooseLocation({
-//         success: res => {
-//             console.log("res");
-//             console.log(res);
-//             this.addressInfo.address1 = res.address;
-//             this.addressInfo.latitude = res.latitude;
-//             this.addressInfo.longitude = res.longitude;
-//             console.log(this.addressInfo);
-//         }
-//     });
-// },
-// changeSex(index) {
-//     this.addressInfo.sex = index;
-// }
-// }
 </script>
 
 <style lang="scss">

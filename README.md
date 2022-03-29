@@ -76,4 +76,4 @@
 
 ### 升级后的vue3和vuex使用踩坑
 
-1. mapState，mapMutations，mapActions等在setup中使用时，因无this，mapState不能使用，mapMutations，mapActions在setup中直接调用因无this一样不行，但在setup外却能使用，因为存在这个问题，自己封装了简单的mapState，mapMutations，mapActions，在utils/mapVuex中，当然仅限于基础使用，
+1. mapState，mapMutation，mapAction等在setup中使用时，因无this，mapState不能使用，mapMutation，mapAction在setup中直接调用因无this一样不行，但在setup外却能使用，因为存在这个问题，自己封装了简单的mapState，mapMutation，mapAction，在utils/mapVuex中，当然仅限于基础使用，

@@ -1,17 +1,15 @@
 import router from "@/utils/router";
 import { requestHost } from "@/config/index";
-import {
-    showModal,
-    showLoading,
-    showToast,
-    hideLoading,
-    hideToast,
-} from "@/utils/index";
+import { showModal, showLoading, showToast, hideLoading, hideToast } from "@/utils/index";
 
 const fetch = (
     url: string,
-    data = {},
-    options = { error: true }
+    data: any = {},
+    {
+        AutoErrorFlag = true,
+    }: {
+        AutoErrorFlag?: boolean;
+    } = {}
 ): Promise<any> => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -49,7 +47,7 @@ const fetch = (
                         reject(responseData);
                         break;
                     default:
-                        if (options.error) {
+                        if (AutoErrorFlag) {
                             hideLoading();
                             await showModal({
                                 content: msg,

@@ -12,10 +12,16 @@
 </template>
 
 <script lang="ts" setup>
+import { AddressItemI } from "@/interface/address";
+import { ComputedState } from "@/interface/vuex";
 import { defineComponent, computed, getCurrentInstance } from "vue";
-import { mapState, mapMutations, mapActions } from "../../../../utils/mapVuex";
+import { mapState, mapMutation, mapAction } from "../../../../utils/mapVuex";
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
-const { topAddressWidthFlag, defaultAddress } = mapState([
+interface StateF {
+    topAddressWidthFlag: ComputedState<boolean>,
+    defaultAddress: ComputedState<AddressItemI>,
+}
+const { topAddressWidthFlag, defaultAddress }:StateF = mapState([
     "topAddressWidthFlag",
     "defaultAddress"
 ]);

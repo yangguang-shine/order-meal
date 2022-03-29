@@ -1,6 +1,6 @@
 
 
-export interface orderStateI {
+export interface StateOrderI {
     allOrderList: any[], 
     orderTabIndex: number, 
     orderErrorListFlag: boolean[],
@@ -8,7 +8,7 @@ export interface orderStateI {
     orderDetailShopInfo: {}
 }
 
-const state: orderStateI = {
+const state: StateOrderI = {
     allOrderList: [[], [], [], []], 
     orderTabIndex: 0, 
     orderErrorListFlag: [false, false, false,false],

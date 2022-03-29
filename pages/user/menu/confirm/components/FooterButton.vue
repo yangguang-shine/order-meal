@@ -14,15 +14,15 @@
 <script lang="ts" setup>
 import { getCurrentInstance } from "vue";
 import {
-    mapMutations,
-    mapActions,
+    mapMutation,
+    mapAction,
     mapState,
-    mapGetters
+    mapGetter
 } from "../../../../../utils/mapVuex";
-const { submitOrder } = mapActions([
+const { submitOrder } = mapAction([
     "submitOrder",
 ]);
-const { clearCart, setNoteText } =  mapMutations(['clearCart', 'setNoteText'])
+const { clearCart, setNoteText } =  mapMutation(['clearCart', 'setNoteText'])
 const {
     cartCategoryList,
     takeOutTime,
@@ -38,7 +38,7 @@ const {
     "shopInfo",
     "noteText"
 ]);
-const { payPrice, originOrderAmount, minusPrice,orderFoodList } = mapGetters([
+const { payPrice, originOrderAmount, minusPrice,orderFoodList } = mapGetter([
     "payPrice",
     "originOrderAmount",
     "minusPrice",
