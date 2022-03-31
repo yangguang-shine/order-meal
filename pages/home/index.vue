@@ -69,7 +69,7 @@ async function toGetDefaultAddress() {
             confirmText: "去选择地址",
         });
         $myrouter.navigateTo({
-            name: "user/address/list",
+            name: "address/list",
             query: {
                 fromPage: "userHome",
             },
@@ -99,7 +99,6 @@ page {
     line-height: 1.2;
     font-size: 28rpx;
     color: #333;
-    min-height: 100vh;
     .swiper-box {
         height: 280rpx;
         width: 100%;

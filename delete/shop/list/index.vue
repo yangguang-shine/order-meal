@@ -33,7 +33,7 @@ export default {
                 const query = {
 					businessType: this.businessType
 				}
-                const shopList = await this.$fetch('user/shop/list', query)
+                const shopList = await this.$fetch('shop/list', query)
                 shopList.forEach((item) => {
                     item.minusList = getShopMinusList(item.minus || '')
                 })
@@ -47,7 +47,7 @@ export default {
 		toOrder(shopItem) {
 			this.saveShopInfo(shopItem)
 			this.$myrouter.navigateTo({
-				name: 'user/menu/info',
+				name: 'menu/info',
 				query: {
 					businessType: this.businessType
 				}

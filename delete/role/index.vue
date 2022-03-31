@@ -25,7 +25,7 @@ export default defineComponent({
             const userToken: string = this.$getStorage("userToken");
             if (userToken) {
                 this.$myrouter.navigateTo({
-                    name: "user/home",
+                    name: "home",
                     query: {}
                 });
             } else {
@@ -67,7 +67,7 @@ export default defineComponent({
                     confirmText: "确认清除"
                 });
                 this.$showLoading()
-                await this.$fetch('user/account/logout')
+                await this.$fetch('account/logout')
             } catch (error) {
                 return
             } finally {
@@ -89,10 +89,10 @@ export default defineComponent({
 
         toUserOderList(): void {
             // this.$myrouter.navigateTo({
-            //     name: 'user/order/list'
+            //     name: 'order/list'
             // });
             this.$myrouter.navigateTo({
-                name: "user/order/list"
+                name: "order/list"
             });
         },
 

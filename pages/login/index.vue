@@ -41,9 +41,9 @@ async function userLogin() {
     };
     try {
         $showLoading();
-        await $fetch("user/account/login", params);
+        await $fetch("account/login", params);
         $myrouter.reLaunchTo({
-            name: "user/home",
+            name: "home",
         });
     } catch (e) {
         console.log(e);

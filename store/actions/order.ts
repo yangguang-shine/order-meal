@@ -8,7 +8,7 @@ async function getOrderList({ state, commit }: ActionContextI, payload: any) {
     let data: {
         orderKeyList: OrderKeyI[];
         shopInfoList: OriginShopItemI[];
-    } = await fetch("user/order/orderList", {
+    } = await fetch("order/orderList", {
         status: state.orderTabIndex,
     });
     const shopListMap: {
@@ -33,7 +33,7 @@ async function getOrderList({ state, commit }: ActionContextI, payload: any) {
     return orderList;
 }
 async function getShopInfo({ state, commit }: ActionContextI, payload: any = { shopID: 0 }): Promise<ShopItemI> {
-    const originShopInfo: OriginShopItemI = await fetch("user/shop/find", payload);
+    const originShopInfo: OriginShopItemI = await fetch("shop/find", payload);
     const shopInfo: ShopItemI = {
         ...originShopInfo,
         minusList: JSON.parse(originShopInfo.minus),
@@ -46,7 +46,7 @@ async function getOrderDetail({ state, commit }: ActionContextI, payload: any = 
     const originOrderDetail: {
         orderInfo: OrderKeyI;
         foodList: OriginFoodItemI[];
-    } = await fetch("user/order/orderDetail", payload);
+    } = await fetch("order/orderDetail", payload);
     const { orderInfo, foodList } = originOrderDetail;
     const orderDetail: OrderDetailI = {
         ...orderInfo,
@@ -66,7 +66,7 @@ async function getOrderDetail({ state, commit }: ActionContextI, payload: any = 
 }
 
 async function cancelOrder({ state, commit }: ActionContextI, payload: any = {}) {
-    await fetch("user/order/cancel", payload);
+    await fetch("order/cancel", payload);
 }
 export default {
     getOrderList,

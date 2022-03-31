@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts" setup>
-import Shop from "../../../../components/Shop.vue";
+import Shop from "@/components/Shop.vue";
 import { defineComponent, computed, getCurrentInstance } from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { ShopItemI } from "@/interface/index";
@@ -28,7 +28,7 @@ function toOrder(shopItem: ShopItemI) {
     saveShopInfo(shopItem);
     saveBusinessType(2);
     $myrouter.navigateTo({
-        name: "user/menu/info",
+        name: "menu/info",
     });
 }
 </script>

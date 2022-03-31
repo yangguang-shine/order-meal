@@ -4,41 +4,41 @@ export interface RouteInfoI {
 }
 const user: RouteInfoI[] = [
 	{
-		name: 'user/center',
-		path: '/pages/user/center/index'
+		name: 'center',
+		path: '/pages/center/index'
 	},
 	{
-		name: 'user/address/list',
-		path: '/pages/user/address/list/index'
+		name: 'address/list',
+		path: '/pages/address/list/index'
 	},
 	{
-		name: 'user/address/edit',
-		path: '/pages/user/address/edit/index'
+		name: 'address/edit',
+		path: '/pages/address/edit/index'
 	},
 	
 	{
-		name: 'user/home',
-		path: '/pages/user/home/index'
+		name: 'home',
+		path: '/pages/home/index'
 	},
 	{
-		name: 'user/menu/info',
-		path: '/pages/user/menu/info/index'
+		name: 'menu/info',
+		path: '/pages/menu/info/index'
 	},
 	{
-		name: 'user/menu/confirm',
-		path: '/pages/user/menu/confirm/index'
+		name: 'menu/confirm',
+		path: '/pages/menu/confirm/index'
 	},
 	{
-		name: 'user/order/list',
-		path: '/pages/user/order/list/index'
+		name: 'order/list',
+		path: '/pages/order/list/index'
 	},
 	{
-		name: 'user/order/detail',
-		path: '/pages/user/order/detail/index'
+		name: 'order/detail',
+		path: '/pages/order/detail/index'
 	},
 	{
-		name: 'user/shop/list',
-		path: '/pages/user/shop/list/index'
+		name: 'shop/list',
+		path: '/pages/shop/list/index'
 	},
 ]
 
@@ -173,7 +173,7 @@ const register:RouteInfoI[] = [
 // 	},
 // 	{
 // 		name: 'center',
-// 		path: '/pages/user/center/index'
+// 		path: '/pages/center/index'
 // 	},
 // 	{
 // 		name: 'menu',

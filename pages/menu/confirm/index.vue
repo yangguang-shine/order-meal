@@ -63,7 +63,7 @@ async function toGetDefaultAddress() {
                 confirmText: "去选择地址",
             });
             $myrouter.navigateTo({
-                name: "user/address/list",
+                name: "address/list",
                 query: {
                     fromPage: "userHome",
                 },

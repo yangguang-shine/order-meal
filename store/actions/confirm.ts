@@ -2,7 +2,7 @@ import fetch from '@/utils/fetch'
 import { ActionI, ActionContextI, GetterStateI } from "@/interface/index";
 
 async function submitOrder ({state, getters, commit}: ActionContextI, payload: any) {
-    await fetch('user/order/submit', {
+    await fetch('order/submit', {
         foodList: getters.orderFoodList,
         shopID: state.shopInfo.shopID,
         orderAmount: getters.payPrice,

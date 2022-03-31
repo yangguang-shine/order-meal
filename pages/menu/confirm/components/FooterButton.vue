@@ -45,7 +45,7 @@ async function toSubmitOrder() {
         clearCart();
         setNoteText("");
         $myrouter.reLaunchTo({
-            name: "user/order/list",
+            name: "order/list",
         });
     } catch (e) {
         console.log(e);

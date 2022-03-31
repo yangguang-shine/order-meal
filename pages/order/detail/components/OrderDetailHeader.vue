@@ -81,7 +81,7 @@ async function orderAgain() {
         saveShopInfo(shopInfo);
         saveBusinessType(orderDetail.value.businessType);
         $myrouter.navigateTo({
-            name: "user/menu/info",
+            name: "menu/info",
             query: {
                 orderKey: orderDetail.value.orderKey,
             },

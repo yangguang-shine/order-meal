@@ -27,7 +27,7 @@ const { topAddressWidthFlag, defaultAddress }:StateF = mapState([
 ]);
 function toSelectAddress() {
     $myrouter.navigateTo({
-        name: "user/address/list",
+        name: "address/list",
         query: {
             fromPage: "userHome"
         }

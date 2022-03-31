@@ -50,7 +50,7 @@ const { cartPriceInfo, allCartFoodCount }:GetterF = mapGetter([
 const { toogleCartDetailFlag }: MutationF = mapMutation(["toogleCartDetailFlag"]);
 function toComfirmOrder() {
     $myrouter.navigateTo({
-        name: "user/menu/confirm"
+        name: "menu/confirm"
     });
 }
 function clickCartImg() {

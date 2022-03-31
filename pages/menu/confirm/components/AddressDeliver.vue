@@ -49,7 +49,7 @@ const { defaultAddress, takeOutTime }:StateF = mapState(["defaultAddress", "take
 const { setTakeOutTime }: MutationF = mapMutation(["setTakeOutTime"]);
 function toPagesAddressList() {
     $myrouter.navigateTo({
-        name: "user/address/list",
+        name: "address/list",
         query: {
             fromPage: "userMenuConfirm",
         },

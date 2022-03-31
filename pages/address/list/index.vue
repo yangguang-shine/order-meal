@@ -104,7 +104,7 @@ async function toSetDefaultAddress(addressItem: AddressItemI) {
         $showLoading();
         await setDefaultAddressFetch(addressItem.addressID);
         setDefaultAddress(addressItem);
-        // await $fetch("user/address/setDefault", { addressID });
+        // await $fetch("address/setDefault", { addressID });
         if (routerOptions.fromPage) {
             $myrouter.back();
             return;
@@ -119,7 +119,7 @@ async function toSetDefaultAddress(addressItem: AddressItemI) {
 
 function toEditAddress(addressID: number) {
     $myrouter.navigateTo({
-        name: "user/address/edit",
+        name: "address/edit",
         query: {
             addressID,
         },
@@ -128,7 +128,7 @@ function toEditAddress(addressID: number) {
 
 function toAddAddress() {
     $myrouter.navigateTo({
-        name: "user/address/edit",
+        name: "address/edit",
     });
 }
 </script>

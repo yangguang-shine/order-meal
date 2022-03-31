@@ -3,7 +3,7 @@ import { shopImgPath } from '@/config/index'
 import { ActionI,ActionContextI, OriginShopItemI,ShopItemI } from "@/interface/index";
 
 async function getRecommandShopList ({ commit, state }: ActionContextI, params = {}) {
-    let data: OriginShopItemI[] = await fetch('user/shop/list', {
+    let data: OriginShopItemI[] = await fetch('shop/list', {
         businessType: 2,
         type: state.selectedTabItem.type,
         latitude: state.defaultAddress.latitude,

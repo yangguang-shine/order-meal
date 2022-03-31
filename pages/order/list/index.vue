@@ -113,7 +113,7 @@ async function toChangeTabIndex(index: number) {
 function toOrderDetail(orderItem: OrderItemI) {
     setOrderDetailShopInfo(orderItem.shopInfo);
     $myrouter.navigateTo({
-        name: "user/order/detail",
+        name: "order/detail",
         query: {
             orderKey: orderItem.orderKey,
         },
@@ -128,7 +128,7 @@ async function orderAgain(orderItem: OrderItemI) {
         saveShopInfo(shopInfo);
         saveBusinessType(orderItem.businessType);
         $myrouter.navigateTo({
-            name: "user/menu/info",
+            name: "menu/info",
             query: {
                 orderKey: orderItem.orderKey,
             },
@@ -151,7 +151,7 @@ page {
     font-size: 28rpx;
     color: #333;
 
-    padding: 0 20rpx;
+    padding: 0 20rpx ;
     .tab-list-box {
         position: fixed;
         top: 0;

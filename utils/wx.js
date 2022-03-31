@@ -7,7 +7,7 @@ export const login = () => {
                 if (res.code) {
                 //发起网络请求
                     uni.request({
-                        url: `${requestHost}/user/wechat/wx/login`,
+                        url: `${requestHost}/wechat/wx/login`,
                         data: {
                             code: res.code,
                         },

@@ -15,9 +15,9 @@
 
 ## 在线使用
 
-手机浏览器访问：[个人点餐项目](https://yangguang.natappvip.cc/user/pages/home/index)
+手机浏览器访问：[个人点餐项目](https://yangguang.natappvip.cc/pages/home/index)
 
-用户端：手机浏览器访问 https://yangguang.natappvip.cc/user/pages/home/index
+用户端：手机浏览器访问 https://yangguang.natappvip.cc/pages/home/index
 
 管理端：手机浏览器访问 https://yangguang.natappvip.cc/manage/pages/home/index
 

@@ -51,9 +51,9 @@ async function userRegister() {
     };
     try {
         $showLoading();
-        const data = await $fetch("user/account/register", params);
+        const data = await $fetch("account/register", params);
         $myrouter.reLaunchTo({
-            name: "user/home",
+            name: "home",
         });
         $hideLoading();
     } catch (e) {
