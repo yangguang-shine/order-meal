@@ -1,13 +1,23 @@
 <template>
-    <view class="promotion-title flex-row flex-ja-center" :style="{'position': shopInfoFlag ? 'absolute' : 'fixed'}">
+    <view class="promotion-title flex-row flex-ja-center" :style="{ position: shopInfoFlag ? 'absolute' : 'fixed' }">
         <text v-for="(contentItem, index) in minusPromotionsObject.contentList" :key="index" :class="{ 'content-red': index % 2 !== 0 }">{{ contentItem }}</text>
     </view>
 </template>
 
-<script lang='ts' setup>
-import { mapGetter, mapState } from '../../../../../utils/mapVuex';
-const {minusPromotionsObject } = mapGetter(['minusPromotionsObject'])
-const { shopInfoFlag } = mapState(['shopInfoFlag'])
+<script lang="ts" setup>
+import { mapGetter, mapState } from "@/utils/mapVuex";
+
+import { ComputedGetterI, ComputedStateI } from "@/interface/vuex";
+import { MinusPromotionsObjectI } from "@/store/getters/menu";
+
+interface StateF {
+    shopInfoFlag: ComputedStateI<boolean>;
+}
+interface GetterF {
+    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
+}
+const { shopInfoFlag }: StateF = mapState(["shopInfoFlag"]);
+const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
 </script>
 
 <style lang="scss">

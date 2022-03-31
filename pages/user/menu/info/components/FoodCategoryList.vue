@@ -1,9 +1,9 @@
 <template>
-    <scroll-view scroll-y scroll-with-animation :scroll-into-view="scrollIntoCategoryTabID" class="food-main-box flex-item" id="food-main-box" @scroll="foodScrollHandle" :style="{'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightPX + 'px' : '' }">
+    <scroll-view scroll-y scroll-with-animation :scroll-into-view="scrollIntoCategoryTabID" class="food-main-box flex-item" id="food-main-box" @scroll="foodScrollHandle" :style="{ 'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightPX + 'px' : '' }">
         <view class="food-category-list-item" v-for="(foodCategoryItem, index) in categoryList" :key="index" :id="foodCategoryItem.categoryTabID + 'id'">
             <view :id="foodCategoryItem.categoryTabID" class="food-category-name">{{ foodCategoryItem.categoryName }}</view>
             <view class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex" @click="toShowFoodDetail(foodItem)">
-                <image class="food-img  flex-shrink" :src="foodItem.fullImgPath" mode="scaleToFill"></image>
+                <image class="food-img flex-shrink" :src="foodItem.fullImgPath" mode="scaleToFill"></image>
                 <view class="food-info-box flex-item flex-col flex-j-between">
                     <view class="food-name-description">
                         <view class="food-name">{{ foodItem.foodName }}</view>
@@ -19,45 +19,50 @@
     </scroll-view>
 </template>
 
-<script lang='ts' setup>
+<script lang="ts" setup>
 import FoodAddMinus from "./item/FoodAddMinus.vue";
 import { get1rpx2px } from "@/utils/index";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { topBarHeightPX, minusPromotionsHeightPX } from '../infoConfig'
+import { topBarHeightPX, minusPromotionsHeightPX } from "../infoConfig";
 import { defineComponent, getCurrentInstance, computed } from "vue";
-const currentInstance = getCurrentInstance()
-import {
-    mapState,
-    mapGetter,
-    mapMutation
-} from "../../../../../utils/mapVuex";
-const { asideCategoryList, minusPromotionsObject } = mapGetter(["asideCategoryList", 'minusPromotionsObject']);
-const { categoryList, scrollIntoCategoryTabID } = mapState([
-    "categoryList",
-    "scrollIntoCategoryTabID"
-]);
-const props = defineProps()
-console.log('props')
-console.log(props)
-const {
-    setFoodDetailFlag,
-    setFoodInfo,
-    setCategoryTabId,
-    setScrollIntoCategoryTabID
-} = mapMutation([
-    "setFoodDetailFlag",
-    "setFoodInfo",
-    "setCategoryTabId",
-    "setScrollIntoCategoryTabID"
-]);
+const currentInstance = getCurrentInstance();
+import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
 
-function toShowFoodDetail(foodItem: any) {
+import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import { CategoryItemI, FoodItemI } from "@/interface/menu";
+import { MinusPromotionsObjectI, AsideCategoryItemI } from "@/store/getters/menu";
+import { RefI } from "@/interface/vueInterface";
+
+interface StateF {
+    categoryList: ComputedStateI<CategoryItemI[]>;
+    scrollIntoCategoryTabID: ComputedStateI<string>;
+}
+interface GetterF {
+    asideCategoryList: ComputedGetterI<AsideCategoryItemI[]>;
+    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
+}
+interface MutationF {
+    setFoodDetailFlag: ComputedMutationI<boolean>;
+    setFoodInfo: ComputedMutationI<FoodItemI>;
+    setCategoryTabId: ComputedMutationI<string>;
+    setScrollIntoCategoryTabID: ComputedMutationI<string>;
+}
+const { categoryList, scrollIntoCategoryTabID }: StateF = mapState(["categoryList", "scrollIntoCategoryTabID"]);
+const { asideCategoryList, minusPromotionsObject }:GetterF = mapGetter(["asideCategoryList", "minusPromotionsObject"]);
+
+const { setFoodDetailFlag, setFoodInfo, setCategoryTabId, setScrollIntoCategoryTabID }: MutationF = mapMutation(["setFoodDetailFlag", "setFoodInfo", "setCategoryTabId", "setScrollIntoCategoryTabID"]);
+
+const props = defineProps();
+console.log("props");
+console.log(props);
+
+function toShowFoodDetail(foodItem: FoodItemI) {
     setFoodDetailFlag(true);
     setFoodInfo(foodItem);
 }
 const debounce = (fn: any, delay: number) => {
     let timer: any;
-    return e => {
+    return (e) => {
         if (timer) {
             clearTimeout(timer);
         }
@@ -68,29 +73,27 @@ const debounce = (fn: any, delay: number) => {
     };
 };
 
-onLoad(() => {
+onLoad(() => {});
 
-});
-
-const handleScroll = async (e: any) => {
+const handleScroll = async (e) => {
     for (let i = 0; i < asideCategoryList.value.length; i++) {
         const categoryItem = asideCategoryList.value[i];
-        const res: any = await selectQuery(`#${categoryItem.categoryTabID}id`);
+        const res = await selectQuery(`#${categoryItem.categoryTabID}id`);
         if (topBarHeightPX <= res.top || res.bottom > topBarHeightPX) {
             setCategoryTabId(categoryItem.categoryTabID);
-            setScrollIntoCategoryTabID(null);
+            setScrollIntoCategoryTabID('');
             break;
         }
     }
 };
 const foodScrollHandle = debounce(handleScroll, 30);
 
-function selectQuery(id) {
-    console.log(id)
+function selectQuery(id: string) {
     return new Promise((resolve, reject) => {
-        uni.createSelectorQuery().in(currentInstance)
+        uni.createSelectorQuery()
+            .in(currentInstance)
             .select(id)
-            .boundingClientRect(res => {
+            .boundingClientRect((res) => {
                 resolve(res);
             })
             .exec();
@@ -98,8 +101,8 @@ function selectQuery(id) {
 }
 
 const throttle = (() => {
-    let timer = null;
-    return (fn, delay) => {
+    let timer: null | number = null;
+    return (fn: Function, delay: number) => {
         if (!timer) {
             timer = setTimeout(() => {
                 fn();
@@ -110,7 +113,7 @@ const throttle = (() => {
 })();
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .food-main-box {
     // background-color: blue;
     height: 100%;

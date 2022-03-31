@@ -9,12 +9,19 @@
 </template>
 
 <script lang="ts" setup>
-import { mapState, mapMutation } from "../../../../../utils/mapVuex";
-
-const { topBarInfo } = mapState(["topBarInfo"]);
-const { setTopBarInfo,setShopInfoFlag } = mapMutation(["setTopBarInfo", "setShopInfoFlag"]);
-function clickTopBar(title) {
-    if (topBarInfo === title) return;
+import { mapState, mapMutation } from "@/utils/mapVuex";
+import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+interface StateF {
+    topBarInfo: ComputedStateI<string>
+}
+interface MutationF {
+    setTopBarInfo: ComputedMutationI<string>,
+    setShopInfoFlag: ComputedMutationI<boolean>,
+}
+const { topBarInfo }:StateF = mapState(["topBarInfo"]);
+const { setTopBarInfo,setShopInfoFlag }:MutationF = mapMutation(["setTopBarInfo", "setShopInfoFlag"]);
+function clickTopBar(title: string) {
+    if (topBarInfo.value === title) return;
     if (title === "商家") {
         setShopInfoFlag(true);
     } else {

@@ -7,41 +7,43 @@
             </div>
             <div class="textarea-box">
                 <textarea class="textarea" v-model="noteInput" id="" placeholder="特殊请输入备注" :maxlength="maxlength"></textarea>
-                <div class="letter-limit">{{noteInputLength}}/{{maxlength}}</div>
+                <div class="letter-limit">{{ noteInputLength }}/{{ maxlength }}</div>
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { mapState, mapMutation } from '../../../../../utils/mapVuex'
-import { computed ,ref} from 'vue'
-const {noteText} = mapState(['noteText'])
-const {setNoteInputFlag, setNoteText }: {
-    setNoteInputFlag: (flag: boolean) => void,
-    setNoteText: (text: string) => void
-} = mapMutation(['setNoteInputFlag', "setNoteText"])
-const noteInput: {
-    value: string
-} = ref<string>(noteText.value)
-const maxlength = 20
-const noteInputLength: {
-    value: number
-} = computed(() => noteInput.value.length)
+import { mapState, mapMutation } from "@/utils/mapVuex";
+import { computed, ref } from "vue";
+import { ComputedStateI, ComputedMutationI } from "@/interface/vuex";
+import { ComputedI, RefI} from "@/interface/vueInterface";
+interface StateF {
+    noteText: ComputedStateI<string>;
+}
+interface MutationF {
+    setNoteInputFlag: ComputedMutationI<boolean>;
+    setNoteText: ComputedMutationI<string>;
+}
+const { noteText }: StateF = mapState(["noteText"]);
+const { setNoteInputFlag, setNoteText }: MutationF = mapMutation(["setNoteInputFlag", "setNoteText"]);
+const noteInput: RefI<string> = ref(noteText.value);
+const maxlength: number = 20;
+const noteInputLength: ComputedI<number> = computed(() => noteInput.value.length);
+
 function hideNoteInput() {
-    setNoteInputFlag(false)
+    setNoteInputFlag(false);
 }
 function confirmNoteInput() {
-    setNoteText(noteInput.value)
-    setNoteInputFlag(false)
+    setNoteText(noteInput.value);
+    setNoteInputFlag(false);
 }
 </script>
 
 <style lang="scss" scoped>
-
 .scroll {
     height: 400rpx;
-    overflow-y: auto
+    overflow-y: auto;
 }
 .note-input-container {
     position: fixed;

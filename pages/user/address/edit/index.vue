@@ -32,22 +32,26 @@
 <script lang="ts" setup>
 import { getSetting, authorize } from "@/utils";
 import { defineComponent, computed, getCurrentInstance, reactive, ref } from "vue";
-import { mapState, mapMutation, mapAction } from "../../../../utils/mapVuex";
+import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { onShow, onLoad } from "@dcloudio/uni-app";
-import { AddressItemI, ComputedAction, ComputedState } from "@/interface/index";
+import { AddressItemI, ComputedActionI, ComputedStateI } from "@/interface/index";
+import { RefI } from "@/interface/vueInterface";
 const { $showLoading: showLoading, $hideLoading: hideLoading, $showModal: showModal, $delaySync: delaySync, $myrouter: myrouter } = getCurrentInstance().proxy;
 
 interface ActionF {
-    addAddress: ComputedAction<AddressItemI>;
-    findAddress: ComputedAction<number>;
-    editAddress: ComputedAction<AddressItemI>;
+    addAddress: ComputedActionI<AddressItemI>;
+    findAddress: ComputedActionI<number, AddressItemI>;
+    editAddress: ComputedActionI<AddressItemI>;
 }
 const { addAddress, findAddress, editAddress }: ActionF = mapAction(["addAddress", "findAddress", "editAddress"]);
 
-let routerAddressID: ComputedState<string> = ref<string>("");
-onLoad((option: any) => {
+let routerAddressID: RefI<number> = ref("");
+interface OptionI {
+    addressID: string
+}
+onLoad((option: OptionI) => {
     if (option.addressID) {
-        routerAddressID.value = option.addressID;
+        routerAddressID.value = Number(option.addressID);
         init();
     }
 });
@@ -71,7 +75,7 @@ async function init() {
     }
 }
 async function toFindAddress() {
-    let findAddressInfo: AddressItemI = await findAddress(Number(routerAddressID.value));
+    let findAddressInfo: AddressItemI = await findAddress(routerAddressID.value);
     Object.assign(addressInfo, findAddressInfo);
 }
 async function toAddAddress() {
@@ -94,7 +98,7 @@ async function toEditAddress() {
         showLoading();
         await editAddress({
             ...addressInfo,
-            addressID: Number(routerAddressID.value),
+            addressID: routerAddressID.value,
         });
         hideLoading();
         await showModal({

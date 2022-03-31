@@ -4,7 +4,7 @@
             <div class="footer-box">
                 <div class="footer-discount-price"></div>
                 <div class="footer-pay-price"></div>
-                <div class="submit-order-button flex-row flex-ja-center" :style="{'background': $mainColor}" @click="toSubmitOrder">提交订单</div>
+                <div class="submit-order-button flex-row flex-ja-center" :style="{ background: $mainColor }" @click="toSubmitOrder">提交订单</div>
             </div>
         </div>
         <div class="footer-block"></div>
@@ -12,38 +12,28 @@
 </template>
 
 <script lang="ts" setup>
+import { AddressItemI } from "@/interface/address";
+import { ShopItemI } from "@/interface/home";
+import { CategoryItemI, FoodItemI } from "@/interface/menu";
+import { ComputedActionI, ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { getCurrentInstance } from "vue";
-import {
-    mapMutation,
-    mapAction,
-    mapState,
-    mapGetter
-} from "../../../../../utils/mapVuex";
-const { submitOrder } = mapAction([
-    "submitOrder",
-]);
-const { clearCart, setNoteText } =  mapMutation(['clearCart', 'setNoteText'])
-const {
-    cartCategoryList,
-    takeOutTime,
-    defaultAddress,
-    businessType,
-    shopInfo,
-    noteText
-} = mapState([
-    "cartCategoryList",
-    "takeOutTime",
-    "defaultAddress",
-    "businessType",
-    "shopInfo",
-    "noteText"
-]);
-const { payPrice, originOrderAmount, minusPrice,orderFoodList } = mapGetter([
-    "payPrice",
-    "originOrderAmount",
-    "minusPrice",
-    "orderFoodList"
-]);
+import { mapMutation, mapAction, mapState, mapGetter } from "@/utils/mapVuex";
+
+interface StateF {
+    cartCategoryList: ComputedStateI<CategoryItemI[]>;
+}
+interface MutationF {
+    clearCart: ComputedMutationI
+    setNoteText: ComputedMutationI<string>
+}
+interface ActionF {
+    submitOrder: ComputedActionI
+}
+const { cartCategoryList }: StateF = mapState(["cartCategoryList"]);
+
+const { clearCart, setNoteText }:MutationF = mapMutation(["clearCart", "setNoteText"]);
+
+const { submitOrder }:ActionF = mapAction(["submitOrder"]);
 
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
 
@@ -53,9 +43,9 @@ async function toSubmitOrder() {
         $showLoading();
         await submitOrder();
         clearCart();
-        setNoteText('')
+        setNoteText("");
         $myrouter.reLaunchTo({
-            name: "user/order/list"
+            name: "user/order/list",
         });
     } catch (e) {
         console.log(e);
@@ -101,5 +91,3 @@ async function toSubmitOrder() {
     }
 }
 </style>
-       
-       

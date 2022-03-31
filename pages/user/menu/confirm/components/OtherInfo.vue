@@ -6,7 +6,7 @@
         </div>
         <div class="other-info-item flex-row flex-a-center flex-j-between" @click="showNoteInput">
             <div class="left-title">备注</div>
-            <div v-if="noteText" class="right-title note-text line1">{{noteText}}</div>
+            <div v-if="noteText" class="right-title note-text line1">{{ noteText }}</div>
             <div v-else class="right-title note-tip">特殊要求请输入备注</div>
             <image class="arrow-right-icon" src="/static/img/user-confirm/arrow-right.png" mode=""></image>
         </div>
@@ -18,11 +18,20 @@
 </template>
 
 <script lang="ts" setup>
-import { mapState, mapMutation } from "../../../../../utils/mapVuex";
-const { noteText } = mapState(["noteText"]);
-const {setNoteInputFlag } = mapMutation(['setNoteInputFlag'])
+import { mapState, mapMutation } from "@/utils/mapVuex";
+import { ComputedStateI, ComputedMutationI } from "@/interface/vuex";
+import { ComputedI, RefI } from "@/interface/vueInterface";
+interface StateF {
+    noteText: ComputedStateI<string>;
+}
+interface MutationF {
+    setNoteInputFlag: ComputedMutationI<boolean>;
+}
+
+const { noteText }: StateF = mapState(["noteText"]);
+const { setNoteInputFlag }: MutationF = mapMutation(["setNoteInputFlag"]);
 function showNoteInput() {
-    setNoteInputFlag(true)
+    setNoteInputFlag(true);
 }
 </script>
 

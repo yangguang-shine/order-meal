@@ -16,7 +16,7 @@ export interface CommitI {
 export interface ActionContextI {
     commit: CommitI;
     state: StateI;
-    getter: any;
+    getters: GetterStateI;
 }
 export interface ActionI {
     [index: string]: (store: ActionContextI, payload?: any) => any;
@@ -24,6 +24,7 @@ export interface ActionI {
 export interface GetterI {
     [index: string]: (state: StateI, getter: GetterStateI) => any;
 }
-export type ComputedState<T> = { value: T };
-export type ComputedMutation<T> = (payload: T) => void;
-export type ComputedAction<T> = (payload: T) => any;
+export type ComputedStateI<T> = { value: T };
+export type ComputedGetterI<T> = { value: T };
+export type ComputedMutationI<T = void> = (payload: T) => void;
+export type ComputedActionI<T = void, U = any> = (payload: T) => U;

@@ -24,15 +24,28 @@
 <script lang='ts' setup>
 import FoodAddMinus from './item/FoodAddMinus.vue';
 import { delaySync } from '@/utils/index.js';
-import { mapState, mapMutation } from '../../../../../utils/mapVuex';
+import { mapState, mapMutation } from '@/utils/mapVuex';
 const showComponents = false
-const { foodInfo} = mapState([
+
+
+import {  ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import {  FoodItemI, initFoodItem } from "@/interface/menu";
+
+
+interface StateF {
+    foodInfo: ComputedStateI<FoodItemI[]>;
+}
+interface MutationF {
+    setFoodDetailFlag: ComputedMutationI<boolean>;
+    setFoodInfo: ComputedMutationI<FoodItemI>;
+}
+const { foodInfo} : StateF= mapState([
 	'foodInfo'
 ])
-const {setFoodDetailFlag, setFoodInfo} = mapMutation(['setFoodDetailFlag', 'setFoodInfo'])
+const {setFoodDetailFlag, setFoodInfo}: MutationF = mapMutation(['setFoodDetailFlag', 'setFoodInfo'])
 function closeFoodDetail() {
 	setFoodDetailFlag(false)
-	setFoodInfo({})
+	setFoodInfo(initFoodItem)
 }
 </script>
 

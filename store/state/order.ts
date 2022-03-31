@@ -1,20 +1,20 @@
+import { initShopItem, ShopItemI } from "@/interface/home"
+import { initOrderDetail, OrderDetailI, OrderItemI } from "@/interface/order"
 
 
 export interface StateOrderI {
-    allOrderList: any[], 
+    allOrderList: OrderItemI[][], 
     orderTabIndex: number, 
     orderErrorListFlag: boolean[],
-    orderDetail: any,
-    orderDetailShopInfo: {}
+    orderDetail: OrderDetailI,
+    orderDetailShopInfo: ShopItemI
 }
 
 const state: StateOrderI = {
     allOrderList: [[], [], [], []], 
     orderTabIndex: 0, 
     orderErrorListFlag: [false, false, false,false],
-    orderDetail: {
-        address: {}
-    },
-    orderDetailShopInfo: {}
+    orderDetail: initOrderDetail,
+    orderDetailShopInfo: initShopItem
 }
 export default state

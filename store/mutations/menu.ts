@@ -1,4 +1,4 @@
-import { MutationI, FoodItemI,StateI , CategoryItemI} from "@/interface/index";
+import { MutationI, FoodItemI,StateI , CategoryItemI, initFoodItem} from "@/interface/index";
 import { timeStampTranslate, toFixedToNumber } from "@/utils/index";
 
 function setCategoryTabId (state: StateI, categoryTabID: string) {
@@ -10,7 +10,7 @@ function setScrollIntoCategoryTabID (state: StateI, scrollIntoCategoryTabID: str
 function setFoodCategoryList (state: StateI, categoryList: CategoryItemI[]) {
     state.categoryList = categoryList;
 };
-function setFoodInfo (state: StateI, foodInfo: FoodItemI) {
+function setFoodInfo (state: StateI, foodInfo: FoodItemI = initFoodItem) {
     state.foodInfo = foodInfo;
 };
 function setFoodDetailFlag (state: StateI, foodDetailFalg: boolean) {

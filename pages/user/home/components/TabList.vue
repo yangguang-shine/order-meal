@@ -10,20 +10,20 @@
 import { defineComponent, computed, getCurrentInstance, ref } from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { topAddressSearchHeight, tabListTop } from "../homeConfig";
-import { TabItemI, ComputedState, ComputedMutation, ComputedAction } from "@/interface/index";
+import { TabItemI, ComputedStateI, ComputedMutationI, ComputedActionI } from "@/interface/index";
 const { $showLoading, $hideLoading, $showModal, $delaySync } = getCurrentInstance().proxy;
 
 interface StateF {
-    tabList: ComputedState<TabItemI[]>;
-    selectedTabItem: ComputedState<TabItemI>;
-    tabListFixedFlag: ComputedState<boolean>;
+    tabList: ComputedStateI<TabItemI[]>;
+    selectedTabItem: ComputedStateI<TabItemI>;
+    tabListFixedFlag: ComputedStateI<boolean>;
 }
 
 interface MutationF {
-    changeTabItem: ComputedMutation<TabItemI>;
+    changeTabItem: ComputedMutationI<TabItemI>;
 }
 interface ActionF {
-    getRecommandShopList: ComputedAction<any>;
+    getRecommandShopList: ComputedActionI<void>;
 }
 const { tabList, selectedTabItem, tabListFixedFlag }: StateF = mapState(["tabList", "selectedTabItem", "tabListFixedFlag"]);
 const { changeTabItem }: MutationF = mapMutation(["changeTabItem"]);

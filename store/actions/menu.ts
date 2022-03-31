@@ -22,15 +22,14 @@ async function getMenuList({ commit, state }: ActionContextI) {
     );
     if (categoryList.length) {
         commit("setCategoryTabId", categoryList[0].categoryTabID);
-        commit("setScrollIntoCategoryTabID", null);
+        commit("setScrollIntoCategoryTabID", '');
     }
     commit("setFoodCategoryList", categoryList);
 }
 
-async function getOrderKeyFoodList({ commit, state }: ActionContextI, option: any = {}) {
+async function getOrderKeyFoodList({ commit, state }: ActionContextI, option: any = {orderKey: ''}) {
     const data: OriginFoodItemI[] = await fetch("user/order/foodList", {
         ...option,
-        shopID: state.shopInfo.shopID,
     });
     const cartCategoryList: CategoryItemI[] = data.reduce((list: CategoryItemI[], item: OriginFoodItemI) => {
         if (!list.length) {

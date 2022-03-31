@@ -47,8 +47,13 @@
 
 <script lang='ts' setup>
 import MinusList from "@/components/MinusList.vue";
-import { mapState } from "../../../../../utils/mapVuex";
-const { shopInfo } = mapState(["shopInfo"]);
+import { ShopItemI } from "@/interface/home";
+import { ComputedStateI } from "@/interface/vuex";
+import { mapState } from "@/utils/mapVuex";
+interface StateF {
+    shopInfo: ComputedStateI<ShopItemI>
+}
+const { shopInfo }: StateF = mapState(["shopInfo"]);
 </script>
 
 <style lang="scss" scoped>

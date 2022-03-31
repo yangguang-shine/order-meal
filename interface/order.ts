@@ -1,8 +1,10 @@
-import { AddressItemI } from "./address";
+import { AddressItemI, initAddressItem } from "./address";
+import { initShopItem } from "./home";
 import { OriginShopItemI, ShopItemI, minusItemI, OriginFoodItemI, FoodItemI } from "./index";
-
+import { initFoodItem } from "./menu";
+initAddressItem
 export interface OrderKeyI {
-    address: string | AddressItemI[];
+    address: string;
     businessType: number;
     id: number;
     minusPrice: number;
@@ -15,10 +17,26 @@ export interface OrderKeyI {
     reservePhone: string;
     selfTakeTime: string;
     shopID: number;
-    takeOutTime: "17:06";
+    takeOutTime: string;
+}
+export const initOrderKey: OrderKeyI = {
+    address: '',
+    businessType: 0,
+    id: 0,
+    minusPrice: 0,
+    noteText: '',
+    orderAmount: 0,
+    orderKey: 0,
+    orderStatus: 0,
+    orderTime: 0,
+    originOrderAmount: 0,
+    reservePhone: '',
+    selfTakeTime: '',
+    shopID: 0,
+    takeOutTime: '',
 }
 
-export type OriginOrderItemI = OriginShopItemI & OrderKeyI;
+// export type OriginOrderItemI = OriginShopItemI & OrderKeyI;
 
 export interface OrderItemI extends OrderKeyI {
     shopInfo: ShopItemI,
@@ -26,13 +44,17 @@ export interface OrderItemI extends OrderKeyI {
     orderTypeTitle: string;
 }
 
-export interface OriginOrderDetail extends OrderKeyI {
-    foodList: OriginFoodItemI[];
-}
-
 export interface OrderDetailI extends OrderKeyI {
     foodList: FoodItemI[];
     orderTimeDetail: string;
     orderTypeTitle: string;
-    address: AddressItemI[];
+    deliverAddress: AddressItemI
+}
+
+export const initOrderDetail: OrderDetailI = {
+    ...initOrderKey,
+    foodList: [],
+    orderTimeDetail: '',
+    orderTypeTitle: '',
+    deliverAddress: initAddressItem
 }

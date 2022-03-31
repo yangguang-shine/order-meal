@@ -13,13 +13,13 @@
 
 <script lang="ts" setup>
 import { AddressItemI } from "@/interface/address";
-import { ComputedState } from "@/interface/vuex";
+import { ComputedStateI } from "@/interface/vuex";
 import { defineComponent, computed, getCurrentInstance } from "vue";
-import { mapState, mapMutation, mapAction } from "../../../../utils/mapVuex";
+import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
 interface StateF {
-    topAddressWidthFlag: ComputedState<boolean>,
-    defaultAddress: ComputedState<AddressItemI>,
+    topAddressWidthFlag: ComputedStateI<boolean>,
+    defaultAddress: ComputedStateI<AddressItemI>,
 }
 const { topAddressWidthFlag, defaultAddress }:StateF = mapState([
     "topAddressWidthFlag",

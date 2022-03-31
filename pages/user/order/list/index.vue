@@ -1,5 +1,5 @@
 <template>
-    <div class="order-list-container ">
+    <div class="order-list-container">
         <div class="tab-list-box flex-row flex-a-center">
             <div class="tab-item flex-item" v-for="(tabItem, index) in ['全部', '待消费', '完成', '退款']" :style="{ color: index === orderTabIndex ? $mainColor : '#333' }" @click="toChangeTabIndex(index)" :key="index">{{ tabItem }}</div>
             <div class="tab-bottom" :style="{ background: $mainColor, left: (orderTabIndex * 2 + 1) * 12.5 + '%' }"></div>
@@ -12,7 +12,7 @@
                         <div class="flex-row flex-a-center flex-j-between">
                             <!-- <div class="shop-name line1">{{orderItem.shopName}}</div> -->
                             <view class="flex-row flex-a-center">
-                                <div class="shop-name line1">{{orderItem.shopInfo.shopName}}</div>
+                                <div class="shop-name line1">{{ orderItem.shopInfo.shopName }}</div>
                                 <image class="arrow-left" src="/static/img/shop/arrow-right.png" mode=""></image>
                             </view>
                             <div class="order-time">{{ orderItem.orderTimeDetail }}</div>
@@ -56,41 +56,43 @@ import getShopMinusList from "@/utils/getShopMinusList";
 import { timeStampTranslate } from "@/utils/index.js";
 import MinusList from "@/components/MinusList.vue";
 import { getCurrentInstance } from "vue";
-import { mapState, mapAction, mapMutation } from "../../../../utils/mapVuex";
+import { mapState, mapAction, mapMutation } from "@/utils/mapVuex";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { ComputedState,  } from "@/interface/vuex";
-import { OrderInfoI } from  "@/interface/order"
+import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import { OrderItemI } from "@/interface/order";
+import { ShopItemI } from "@/interface/home";
 
 interface StateF {
-    allOrderList: ComputedState<OrderInfoI[][]>, orderTabIndex, orderErrorListFlag
+    allOrderList: ComputedStateI<OrderItemI[][]>;
+    orderTabIndex: ComputedStateI<number>;
+    orderErrorListFlag: ComputedStateI<boolean>;
+}
+interface ActionF {
+    getOrderList: ComputedActionI<void, OrderItemI[]>;
+    getShopInfo: ComputedActionI<{ shopID: number }, ShopItemI>;
+}
+interface MutationF {
+    setOrderErrorListFlag: ComputedMutationI<boolean>;
+    setOrderTabIndex: ComputedMutationI<number>;
+    saveShopInfo: ComputedMutationI<ShopItemI>;
+    saveBusinessType: ComputedMutationI<number>;
+    setOrderDetailShopInfo: ComputedMutationI<ShopItemI>;
 }
 
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
-const { allOrderList, orderTabIndex, orderErrorListFlag } = mapState([
-    "allOrderList",
-    "orderTabIndex",
-    "orderErrorListFlag",
-]);
-const { getOrderList, getShopInfo } = mapAction(["getOrderList", 'getShopInfo']);
-const {
-    setOrderErrorListFlag,
-    setOrderTabIndex,
-    saveShopInfo,
-    saveBusinessType,
-    setOrderDetailShopInfo
-} = mapMutation(["setOrderErrorListFlag", 'setOrderTabIndex', 'saveShopInfo', 'saveBusinessType', 'setOrderDetailShopInfo']);
+const { allOrderList, orderTabIndex, orderErrorListFlag }: StateF = mapState(["allOrderList", "orderTabIndex", "orderErrorListFlag"]);
+
+const { getOrderList, getShopInfo }: ActionF = mapAction(["getOrderList", "getShopInfo"]);
+
+const { setOrderErrorListFlag, setOrderTabIndex, saveShopInfo, saveBusinessType, setOrderDetailShopInfo }: MutationF = mapMutation(["setOrderErrorListFlag", "setOrderTabIndex", "saveShopInfo", "saveBusinessType", "setOrderDetailShopInfo"]);
 onLoad(() => {
     init();
 });
 async function init() {
     try {
         $showLoading();
-		const orderList = await getOrderList();
-		console.log(orderList.length === 0)
+        const orderList = await getOrderList();
         setOrderErrorListFlag(orderList.length === 0);
-        if (orderList.length) {
-        } else {
-        }
     } catch (e) {
         setOrderErrorListFlag(true);
         console.log(e);
@@ -98,9 +100,9 @@ async function init() {
         $hideLoading();
     }
 }
-async function toChangeTabIndex(index) {
+async function toChangeTabIndex(index: number) {
     try {
-        if (index === orderTabIndex) return;
+        if (index === orderTabIndex.value) return;
         setOrderTabIndex(index);
         $showLoading();
         await init();
@@ -108,23 +110,20 @@ async function toChangeTabIndex(index) {
         console.log(e);
     }
 }
-function toOrderDetail(orderItem) {
-    setOrderDetailShopInfo({
-        shopName: orderItem.shopName,
-        fullImgPath: orderItem.fullImgPath,
-    })
+function toOrderDetail(orderItem: OrderItemI) {
+    setOrderDetailShopInfo(orderItem.shopInfo);
     $myrouter.navigateTo({
         name: "user/order/detail",
         query: {
-            orderKey: orderItem.orderKey
-        }
+            orderKey: orderItem.orderKey,
+        },
     });
 }
-async function orderAgain(orderItem) {
+async function orderAgain(orderItem: OrderItemI) {
     try {
         $showLoading();
         const shopInfo = await getShopInfo({
-            shopID: orderItem.shopID
+            shopID: orderItem.shopID,
         });
         saveShopInfo(shopInfo);
         saveBusinessType(orderItem.businessType);
@@ -132,8 +131,7 @@ async function orderAgain(orderItem) {
             name: "user/menu/info",
             query: {
                 orderKey: orderItem.orderKey,
-                orderAgain: "true"
-            }
+            },
         });
     } catch (e) {
         console.log(e);
@@ -142,53 +140,6 @@ async function orderAgain(orderItem) {
     }
 }
 
-// export default {
-//     components: {
-//         MinusList
-//     },
-//     async onShow() {
-//         try {
-//             this.$showLoading();
-//             console.log(this.$router);
-//             await this.getOrderList(this.orderTabIndex);
-//         } catch (e) {
-//             this.$set(this.showErrorList, this.orderTabIndex, true);
-//             console.log(e);
-//         } finally {
-//             this.$hideLoading();
-//         }
-//     },
-//     methods: {
-//         async getOrderList(index) {
-//             const data = await this.$fetch('user/order/orderList', {
-//                 status: index
-//             });
-//             const orderList = (data || []).map(orderItem => ({
-//                 ...orderItem,
-//                 minusList: getShopMinusList(orderItem.minus || ''),
-//                 orderTimeDetail: timeStampTranslate(orderItem.orderTime),
-//                 orderTypeTitle: this.getOrderTypeTitle(orderItem.orderStatus, orderItem.businessType)
-//             }));
-//             if (!orderList.length) {
-//                 this.$set(this.showErrorList, index, true);
-//             } else {
-//                 this.$set(this.showErrorList, index, false);
-//             }
-//             this.$set(this.allOrderList, index, []);
-//             this.allOrderList[index].push(...orderList);
-//         },
-
-//         toOrderDetail(orderItem) {
-//             this.$myrouter.navigateTo({
-//                 name: 'user/order/detail',
-//                 query: {
-//                     orderKey: orderItem.orderKey
-//                 }
-//             });
-//         },
-
-//     }
-// };
 </script>
 
 <style lang="scss">

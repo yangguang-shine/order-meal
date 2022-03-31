@@ -12,7 +12,7 @@ export interface GetterStateMenuI {
  * @params show - 营销信息是否展示
  * @params contentList - 营销满减信息文案展示列表
  */
-interface MinusPromotionsObjectI {
+export interface MinusPromotionsObjectI {
     show: boolean;
     contentList: string[];
 }
@@ -24,7 +24,7 @@ interface MinusPromotionsObjectI {
  * @params minusIndex - 满减信息索引
  * @params noReachFirst - 是否达到首次满减门槛
  */
-interface CartPriceInfoI {
+export interface CartPriceInfoI {
     cartAllOriginPrice: number;
     cartAlldiscountedPrice: number;
     discountPrice: number;
@@ -38,7 +38,7 @@ interface CartPriceInfoI {
  * @params categoryOrderCount - 分类总下单数
  * @params categoryTabID - 分类滑动时需要的tabID
  */
-interface AsideCategoryItemI {
+export interface AsideCategoryItemI {
     categoryName: string;
     categoryID: number;
     categoryOrderCount: number;

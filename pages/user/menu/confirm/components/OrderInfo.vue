@@ -3,19 +3,19 @@
         <div class="shop-info flex-row flex-a-center flex-j-between">
             <div class="flex-row flex-a-center">
                 <image class="shop-img"></image>
-                <div class="shop-name">{{shopInfo.shopName}}</div>
+                <div class="shop-name">{{ shopInfo.shopName }}</div>
             </div>
-            <div @click="continueOrder" class="continue-order flex-row flex-ja-center" :style="{'color': $mainColor}">继续点单</div>
+            <div @click="continueOrder" class="continue-order flex-row flex-ja-center" :style="{ color: $mainColor }">继续点单</div>
         </div>
         <div class="food-list">
             <OrderFoodItem v-show="index < 3 || displayMoreFlag" v-for="(orderFoodItem, index) in orderFoodList" :orderFoodItem="orderFoodItem" :key="index"></OrderFoodItem>
         </div>
         <div v-if="orderFoodList.length > 3" class="display-more flex-row flex-ja-center" @click="toggleDisplay">
-            <div v-if="displayMoreFlag" class=" flex-row flex-ja-center">
+            <div v-if="displayMoreFlag" class="flex-row flex-ja-center">
                 <div class="display-more-title">点击收起</div>
                 <image class="show-more-arrow" src="/static/img/user-confirm/show-more-order.png" mode=""></image>
             </div>
-            <div v-else class=" flex-row flex-ja-center">
+            <div v-else class="flex-row flex-ja-center">
                 <div class="display-more-title">展开更多</div>
                 <image class="hide-more-arrow" src="/static/img/user-confirm/show-more-order.png" mode=""></image>
             </div>
@@ -29,7 +29,7 @@
                 <div class="minus-icon">减</div>
                 <div class="minus-title">满减优惠</div>
             </div>
-            <div class="minus-price">-¥{{minusPrice}}</div>
+            <div class="minus-price">-¥{{ minusPrice }}</div>
         </div>
         <div v-if="minusPrice" class="dash-split">
             <div class="left-circle"></div>
@@ -38,9 +38,11 @@
         <div class="all-price-box flex-row flex-a-center flex-j-between">
             <div></div>
             <div class="all-price-info flex-row flex-a-center">
-                <div class="origin-price">共计￥{{originOrderAmount}}</div>
-                <div class="discount-price">已优惠￥{{minusPrice}}</div>
-                <div class="pay-price">小计<span class="pay-price-color">￥{{payPrice}}</span></div>
+                <div class="origin-price">共计￥{{ originOrderAmount }}</div>
+                <div class="discount-price">已优惠￥{{ minusPrice }}</div>
+                <div class="pay-price">
+                    小计<span class="pay-price-color">￥{{ payPrice }}</span>
+                </div>
             </div>
         </div>
     </div>
@@ -49,29 +51,28 @@
 <script lang="ts" setup>
 import { computed, ref, getCurrentInstance } from "vue";
 import OrderFoodItem from "@/components/OrderFoodItem.vue";
-import { mapState, mapGetter } from "../../../../../utils/mapVuex";
+import { mapState, mapGetter } from "@/utils/mapVuex";
+import { ComputedStateI, ComputedGetterI } from "@/interface/vuex";
+import { CategoryItemI, FoodItemI } from "@/interface/menu";
+import { ShopItemI } from "@/interface/home";
+import { RefI } from "@/interface/vueInterface";
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
-const { cartCategoryList, shopInfo } = mapState([
-    "cartCategoryList",
-    "shopInfo"
-]);
-const {
-    originOrderAmount,
-    minusPrice,
-    payPrice,
-    orderFoodList
-} = mapGetter([
-    "originOrderAmount",
-    "minusPrice",
-    "payPrice",
-    "orderFoodList"
-]);
-const displayMoreFlag = ref<boolean>(false);
+interface StateF {
+    shopInfo: ComputedStateI<ShopItemI>;
+}
+interface GetterF {
+    payPrice: ComputedGetterI<number>;
+    originOrderAmount: ComputedGetterI<number>;
+    minusPrice: ComputedGetterI<number>;
+    orderFoodList: ComputedGetterI<FoodItemI>;
+}
+const { shopInfo }: StateF = mapState(["shopInfo"]);
+const { originOrderAmount, minusPrice, payPrice, orderFoodList }: GetterF = mapGetter(["originOrderAmount", "minusPrice", "payPrice", "orderFoodList"]);
+const displayMoreFlag: RefI<boolean> = ref<boolean>(false);
 function toggleDisplay() {
     displayMoreFlag.value = !displayMoreFlag.value;
 }
 function continueOrder() {
-    console.log();
     $myrouter.back();
 }
 </script>

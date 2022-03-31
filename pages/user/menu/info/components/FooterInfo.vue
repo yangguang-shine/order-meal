@@ -22,15 +22,32 @@ import {
     mapGetter,
     mapMutation,
     mapState
-} from "../../../../../utils/mapVuex";
-const { cartPriceInfo, allCartFoodCount } = mapGetter([
+} from "@/utils/mapVuex";
+const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
+import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import { CategoryItemI, FoodItemI } from "@/interface/menu";
+import { MinusPromotionsObjectI, AsideCategoryItemI, CartPriceInfoI } from "@/store/getters/menu";
+import { RefI } from "@/interface/vueInterface";
+
+interface StateF {
+    shopInfoFlag: ComputedStateI<boolean>;
+    cartCategoryList: ComputedStateI<CategoryItemI[]>;
+}
+interface GetterF {
+    cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
+    allCartFoodCount: ComputedGetterI<number>;
+}
+interface MutationF {
+    toogleCartDetailFlag: ComputedMutationI;
+}
+const { shopInfoFlag, cartCategoryList } = mapState(["shopInfoFlag", 'cartCategoryList']);
+
+const { cartPriceInfo, allCartFoodCount }:GetterF = mapGetter([
     "cartPriceInfo",
     "allCartFoodCount"
 ]);
-const { shopInfoFlag, cartCategoryList } = mapState(["shopInfoFlag", 'cartCategoryList']);
-const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
 
-const { toogleCartDetailFlag } = mapMutation(["toogleCartDetailFlag"]);
+const { toogleCartDetailFlag }: MutationF = mapMutation(["toogleCartDetailFlag"]);
 function toComfirmOrder() {
     $myrouter.navigateTo({
         name: "user/menu/confirm"

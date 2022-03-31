@@ -19,36 +19,36 @@
 </template>
 <script lang="ts" setup>
 import { defineComponent, computed, getCurrentInstance, ref, onMounted } from "vue";
-import { mapState, mapMutation, mapAction } from "../../../../utils/mapVuex";
+import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { onShow, onLoad } from "@dcloudio/uni-app";
-import { AddressItemI, ComputedAction, ComputedMutation, ComputedState } from "@/interface/index";
+import { AddressItemI, ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/index";
 
 const { $showLoading, $hideLoading, $showModal, $delaySync, $myrouter } = getCurrentInstance().proxy;
 interface StateF {
-    addressList: ComputedState<AddressItemI[]>;
-    defaultAddress: ComputedState<AddressItemI>;
+    addressList: ComputedStateI<AddressItemI[]>;
+    defaultAddress: ComputedStateI<AddressItemI>;
 }
 interface MutationF {
-    setDefaultAddress: ComputedMutation<AddressItemI>;
+    setDefaultAddress: ComputedMutationI<AddressItemI>;
 }
 interface ActionF {
-    getAddressList: ComputedAction<any>;
-    deleteAddress: ComputedAction<number>;
-    setDefaultAddressFetch: ComputedAction<number>;
+    getAddressList: ComputedActionI<void>;
+    deleteAddress: ComputedActionI<number>;
+    setDefaultAddressFetch: ComputedActionI<number>;
 }
 const { addressList, defaultAddress }: StateF = mapState(["addressList", "defaultAddress"]);
 const { setDefaultAddress }: MutationF = mapMutation(["setDefaultAddress"]);
 
 const { getAddressList, deleteAddress, setDefaultAddressFetch }: ActionF = mapAction(["getAddressList", "deleteAddress", "setDefaultAddressFetch"]);
 
-interface Option {
+interface OptionI {
     fromPage?: string;
 }
-let routerOptions: Option;
+let routerOptions: OptionI;
 onShow(() => {
     init();
 });
-onLoad((option: Option) => {
+onLoad((option: OptionI) => {
     routerOptions = option;
 });
 async function init() {
@@ -90,7 +90,7 @@ async function toDeleteAddress(addressID: number) {
     init();
 }
 async function toSetDefaultAddress(addressItem: AddressItemI) {
-    if (defaultAddress.value.addressID === addressItem.addressID) return;
+    if (defaultAddress.value.addressID === addressItem.addressID || !addressItem.addressID) return;
     try {
         await $showModal({
             content: "确认设置为默认地址吗？",

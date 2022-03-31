@@ -37,3 +37,19 @@ export interface AsideCategoryItemI {
     categoryOrderCount: number;
     categoryTabID: string;
 }
+
+export const initFoodItem: FoodItemI = {
+    categoryID: 0,
+    categoryName: "",
+    description: "",
+    foodID: 0,
+    foodName: "",
+    imgUrl: "",
+    manageID: "",
+    orderCount: 0,
+    price: 0,
+    shopID: 0,
+    unit: "",
+    fullImgPath: "",
+    foodItemAmount: 0,
+};

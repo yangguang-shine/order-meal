@@ -10,7 +10,7 @@
             <div class="answer-title">
                 {{answer.type}}
             </div>
-            <div class="answer-content-item" v-for="(contentItem, index) in answer.contentList">{{contentItem}}</div>
+            <div class="answer-content-item" v-for="(contentItem, index) in answer.contentList" :key="index">{{contentItem}}</div>
         </div>
     </div>
 </template>

@@ -18,20 +18,29 @@
 <script lang="ts" setup>
 import { delaySync } from "@/utils/index.js";
 import { watch } from "vue";
-import { mapMutation, mapState } from "../../../../../../utils/mapVuex";
-import { FoodItemI } from "@/interface/index";
-interface Props {
+import { mapMutation, mapState } from "@/utils/mapVuex";
+import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI } from "@/interface/index";
+interface PropsI {
     foodItem: FoodItemI;
+}
+interface CartChangeParamI {
+    foodItem: FoodItemI;
+    count: number;
+}
+interface StateF {
+    cartCategoryList: ComputedStateI<CategoryItemI[]>
+    cartDetailFlag: ComputedStateI<boolean>
+}
+interface MutationF {
+     cartChange: ComputedMutationI<CartChangeParamI>,
+    setCartDetailFlag: ComputedMutationI<boolean>,
 }
 const {
     cartChange,
     setCartDetailFlag,
-}: {
-    cartChange: ({ foodItem, count }: { foodItem: FoodItemI; count: number }) => void;
-    setCartDetailFlag: (flag: boolean) => void;
-} = mapMutation(["cartChange", "setCartDetailFlag"]);
-const { cartCategoryList, cartDetailFlag } = mapState(["cartCategoryList", "cartDetailFlag"]);
-const props = withDefaults(defineProps<Props>(), {
+}: MutationF = mapMutation(["cartChange", "setCartDetailFlag"]);
+const { cartCategoryList, cartDetailFlag }: StateF = mapState(["cartCategoryList", "cartDetailFlag"]);
+const props: PropsI = withDefaults(defineProps<PropsI>(), {
     foodItem: {},
 });
 watch(

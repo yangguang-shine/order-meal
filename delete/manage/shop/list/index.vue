@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import Shop from "@/components/Shop";
 import BottomButton from "@/components/BottomButton.vue";
-import { mapState, mapMutation, mapAction } from "../../../../utils/mapVuex";
+import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { ref, getCurrentInstance } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 const showSelectModal = ref(false);

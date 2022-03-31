@@ -1,6 +1,6 @@
 <template>
     <div class="address-deliver-container">
-        <div class="address-detail-box flex-row flex-a-center" @click="toAddressList">
+        <div class="address-detail-box flex-row flex-a-center" @click="toPagesAddressList">
             <image class="address-icon" src="/static/img/user-confirm/address-icon.png"></image>
             <div class="address-detail flex-item">
                 <div class="address-info line1">{{ defaultAddress.address1 }} {{ defaultAddress.address2 }}</div>
@@ -31,13 +31,23 @@
 </template>
 
 <script lang="ts" setup>
-import { mapState, mapMutation, mapAction, mapGetter } from "../../../../../utils/mapVuex";
+import { mapState, mapMutation, mapAction, mapGetter } from "@/utils/mapVuex";
 import { computed, ref, getCurrentInstance } from "vue";
+import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import { AddressItemI } from "@/interface/address";
+import { InputEventI } from "@/interface/input";
 const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
+interface StateF {
+    defaultAddress: ComputedStateI<AddressItemI>, 
+    takeOutTime: ComputedStateI<string>, 
+}
+interface MutationF {
+    setTakeOutTime: ComputedMutationI<string>
+}
 
-const { defaultAddress, takeOutTime } = mapState(["defaultAddress", "takeOutTime"]);
-const { setTakeOutTime } = mapMutation(["setTakeOutTime"]);
-function toAddressList() {
+const { defaultAddress, takeOutTime }:StateF = mapState(["defaultAddress", "takeOutTime"]);
+const { setTakeOutTime }: MutationF = mapMutation(["setTakeOutTime"]);
+function toPagesAddressList() {
     $myrouter.navigateTo({
         name: "user/address/list",
         query: {
@@ -45,29 +55,11 @@ function toAddressList() {
         },
     });
 }
-function takeOutTimeChange(e: {
-    detail: {
-        value: string;
-    };
-}) {
+function takeOutTimeChange(e: InputEventI) {
     setTakeOutTime(e.detail.value);
 }
 
-// export default {
-//     props: {
-//         takeOutTime: {
-//             type: String,
-//             default: "00:00"
-//         }
-//     },
-//     methods: {
-//         toAddressList() {},
 
-//         takeOutTimeChange(e) {
-//             this.$emit("takeOutTimeChange", e);
-//         }
-//     }
-// };
 </script>
 
 <style lang="scss" scoped>

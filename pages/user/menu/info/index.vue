@@ -30,31 +30,32 @@ import TopBar from "./components/TopBar.vue";
 import ShopInfo from "./components/ShopInfo.vue";
 import { delaySync } from "@/utils/index.js";
 
-import { mapState, mapMutation, mapAction, mapGetter } from "../../../../utils/mapVuex";
+import { mapState, mapMutation, mapAction, mapGetter } from "@/utils/mapVuex";
 import { defineComponent, getCurrentInstance, computed } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { ComputedAction, ComputedMutation, ComputedState } from "@/interface/vuex";
+import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { ShopItemI } from "@/interface/home";
 import { CategoryItemI, FoodItemI } from "@/interface/menu";
 
 interface StateF {
-    topBarInfo: ComputedState<string>;
-    shopInfoFlag: ComputedState<boolean>;
-    cartDetailFlag: ComputedState<boolean>;
-    foodDetailFalg: ComputedState<boolean>;
+    shopInfo: ComputedStateI<ShopItemI>;
+    topBarInfo: ComputedStateI<string>;
+    shopInfoFlag: ComputedStateI<boolean>;
+    cartDetailFlag: ComputedStateI<boolean>;
+    foodDetailFalg: ComputedStateI<boolean>;
 }
 
 interface MutationF {
-    initCart: ComputedMutation<void>;
+    initCart: ComputedMutationI<void>;
 }
 
 interface ActionF {
-    getMenuList: ComputedAction<void>;
-    getOrderKeyFoodList: ComputedAction<{ orderKey: string }>;
+    getMenuList: ComputedActionI<void>;
+    getOrderKeyFoodList: ComputedActionI<{ orderKey: string }>;
 }
 
 const { $showLoading, $hideLoading, $showModal } = getCurrentInstance().proxy;
-const { topBarInfo, shopInfoFlag, cartDetailFlag, foodDetailFalg }: StateF = mapState(["topBarInfo", "shopInfoFlag", "cartDetailFlag", "foodDetailFalg"]);
+const { shopInfo, topBarInfo, shopInfoFlag, cartDetailFlag, foodDetailFalg }: StateF = mapState(["shopInfo", "topBarInfo", "shopInfoFlag", "cartDetailFlag", "foodDetailFalg"]);
 const { minusPromotionsObject } = mapGetter(["minusPromotionsObject"]);
 
 const { initCart }: MutationF = mapMutation(["initCart"]);

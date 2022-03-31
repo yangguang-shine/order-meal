@@ -16,55 +16,54 @@
     </div>
 </template>
 
-<script lang='ts' setup>
+<script lang="ts" setup>
 import { getCurrentInstance } from "vue";
-import {
-    mapState,
-    mapMutation,
-    mapAction
-} from "../../../../../utils/mapVuex";
+import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
+import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import { OrderDetailI } from "@/interface/order";
+import { ShopItemI } from "@/interface/home";
+interface StateF {
+    orderDetail: ComputedStateI<OrderDetailI>;
+}
+interface MutationF {
+    saveShopInfo: ComputedMutationI<ShopItemI>;
+    saveBusinessType: ComputedMutationI<number>;
+}
+interface ActionF {
+    cancelOrder: ComputedActionI<{orderKey: string}>;
+    getOrderDetail: ComputedActionI<{ orderKey: string }>;
+    getShopInfo: ComputedActionI<{ shopID: number }>;
+}
 const props = defineProps({
     orderKey: {
         type: String,
-        defult: ""
-    }
+        defult: "",
+    },
 });
 
-const {
-    $showLoading,
-    $hideLoading,
-    $myrouter,
-    $showModal
-} = getCurrentInstance().proxy;
-const { orderDetail } = mapState(["orderDetail"]);
+const { $showLoading, $hideLoading, $myrouter, $showModal } = getCurrentInstance().proxy;
 
-const { saveShopInfo, saveBusinessType } = mapMutation([
-    "saveShopInfo",
-    "saveBusinessType"
-]);
-const { cancelOrder, getOrderDetail, getShopInfo } = mapAction([
-    "cancelOrder",
-    "getOrderDetail",
-    "getShopInfo"
-]);
+const { orderDetail }: StateF = mapState(["orderDetail"]);
+
+const { saveShopInfo, saveBusinessType }: MutationF = mapMutation(["saveShopInfo", "saveBusinessType"]);
+const { cancelOrder, getOrderDetail, getShopInfo }: ActionF = mapAction(["cancelOrder", "getOrderDetail", "getShopInfo"]);
 
 async function toCancelOrder() {
     try {
         await $showModal({
             content: "确认取消订单",
-            showCancel: true
+            showCancel: true,
         });
         $showLoading();
         await cancelOrder({
             orderKey: props.orderKey,
-            shopID: orderDetail.value.shopID
         });
         $hideLoading();
         $showModal({
-            content: "取消订单成功"
+            content: "取消订单成功",
         });
         await getOrderDetail({
-            orderKey: props.orderKey
+            orderKey: props.orderKey,
         });
     } catch (e) {
         console.log(e);
@@ -77,15 +76,15 @@ async function orderAgain() {
     try {
         $showLoading();
         const shopInfo = await getShopInfo({
-            shopID: orderDetail.value.shopID
+            shopID: orderDetail.value.shopID,
         });
         saveShopInfo(shopInfo);
         saveBusinessType(orderDetail.value.businessType);
         $myrouter.navigateTo({
             name: "user/menu/info",
             query: {
-                orderKey: orderDetail.value.orderKey
-            }
+                orderKey: orderDetail.value.orderKey,
+            },
         });
     } catch (e) {
         console.log(e);

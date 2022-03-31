@@ -8,24 +8,24 @@
 
 <script lang="ts" setup>
 // import { host } from '@/config/host';
-import getShopMinusList from "../../../utils/getShopMinusList";
+import getShopMinusList from "@/utils/getShopMinusList";
 // import SelectModal from '@/components/SelectModal.vue';
-import { mapState, mapMutation, mapAction } from "../../../utils/mapVuex";
+import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import TopAddressSearch from "./components/TopAddressSearch.vue";
 import ToolsList from "./components/ToolsList.vue";
 import RecommandInfo from "./components/RecommandInfo.vue";
 import { topAddressSearchHeight, tabListTop } from "./homeConfig";
 import { getCurrentInstance } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { AddressItemI, ComputedAction, ComputedMutation } from '@/interface/index'
+import { AddressItemI, ComputedActionI, ComputedMutationI } from '@/interface/index'
 
 interface MutationF {
-    setTopAddressWidthFlag: ComputedMutation<boolean>,
-    setTabListFixedFlag: ComputedMutation<boolean>,
+    setTopAddressWidthFlag: ComputedMutationI<boolean>,
+    setTabListFixedFlag: ComputedMutationI<boolean>,
 }
 interface ActionF {
-    getDefaultAddress: ComputedAction<void>,
-    getRecommandShopList: ComputedAction<void>,
+    getDefaultAddress: ComputedActionI<void, AddressItemI>,
+    getRecommandShopList: ComputedActionI<void>,
 }
 const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
 const {
@@ -62,8 +62,6 @@ onPageScroll((e: any) => {
     }
 });
 async function toGetDefaultAddress() {
-    console.log(1111)
-    console.log(getDefaultAddress)
     const defaultAddress: AddressItemI = await getDefaultAddress();
     if (!defaultAddress.addressID) {
         await $showModal({

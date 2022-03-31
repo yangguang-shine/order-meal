@@ -2,9 +2,9 @@ import fetch from "@/utils/fetch";
 import { timeStampTranslate, toFixedToNumber } from "@/utils/index";
 import getOrderTypeTitle from "@/utils/getOrderTypeTitle";
 import { shopImgPath, foodImgPath } from "@/config/index";
-import { ActionI, ActionContextI, OriginOrderItemI, OrderItemI, OriginShopItemI, ShopItemI, OriginOrderDetail, OrderDetailI, OrderKeyI } from "@/interface/index";
+import { ActionI, ActionContextI, OrderItemI, OriginShopItemI, ShopItemI, OriginFoodItemI, FoodItemI, OrderDetailI, OrderKeyI } from "@/interface/index";
 
-async function getOrderList({ state, getter, commit }: ActionContextI, payload: any) {
+async function getOrderList({ state, commit }: ActionContextI, payload: any) {
     let data: {
         orderKeyList: OrderKeyI[];
         shopInfoList: OriginShopItemI[];
@@ -21,16 +21,18 @@ async function getOrderList({ state, getter, commit }: ActionContextI, payload: 
             fullImgPath: `${shopImgPath}/${item.imgUrl}`,
         };
     });
-    const orderList: OrderItemI[] = data.orderKeyList.map((item) => ({
-        ...item,
-        shopInfo: shopListMap[item.shopID],
-        orderTimeDetail: timeStampTranslate(item.orderTime),
-        orderTypeTitle: getOrderTypeTitle(item.orderStatus, item.businessType),
-    }));
+    const orderList: OrderItemI[] = data.orderKeyList.map(
+        (item): OrderItemI => ({
+            ...item,
+            shopInfo: shopListMap[item.shopID],
+            orderTimeDetail: timeStampTranslate(item.orderTime),
+            orderTypeTitle: getOrderTypeTitle(item.orderStatus, item.businessType),
+        })
+    );
     state.allOrderList[state.orderTabIndex] = orderList;
     return orderList;
 }
-async function getShopInfo({ state, getter, commit }: ActionContextI, payload: any): Promise<ShopItemI> {
+async function getShopInfo({ state, commit }: ActionContextI, payload: any = { shopID: 0 }): Promise<ShopItemI> {
     const originShopInfo: OriginShopItemI = await fetch("user/shop/find", payload);
     const shopInfo: ShopItemI = {
         ...originShopInfo,
@@ -40,28 +42,32 @@ async function getShopInfo({ state, getter, commit }: ActionContextI, payload: a
     return shopInfo;
 }
 
-async function getOrderDetail({ state, getter, commit }: ActionContextI, payload: any) {
-    const originOrderDetail: OriginOrderDetail = await fetch("user/order/orderDetail", payload);
+async function getOrderDetail({ state, commit }: ActionContextI, payload: any = {orderKey: ''}): Promise<OrderDetailI> {
+    const originOrderDetail: {
+        orderInfo: OrderKeyI;
+        foodList: OriginFoodItemI[];
+    } = await fetch("user/order/orderDetail", payload);
+    const { orderInfo, foodList } = originOrderDetail;
     const orderDetail: OrderDetailI = {
-        ...originOrderDetail,
-        orderTypeTitle: getOrderTypeTitle(originOrderDetail.orderStatus, originOrderDetail.businessType),
-        orderTimeDetail: timeStampTranslate(originOrderDetail.orderTime),
-        address: JSON.parse(originOrderDetail.address),
-        foodList: originOrderDetail.foodList.map((foodItem) => ({
-            ...foodItem,
-            foodItemAmount: toFixedToNumber(foodItem.price * foodItem.orderCount),
-            fullImgPath: `${foodImgPath}/${foodItem.imgUrl}`,
-        })),
+        ...orderInfo,
+        orderTypeTitle: getOrderTypeTitle(orderInfo.orderStatus, orderInfo.businessType),
+        orderTimeDetail: timeStampTranslate(orderInfo.orderTime),
+        deliverAddress: JSON.parse(orderInfo.address),
+        foodList: foodList.map(
+            (foodItem): FoodItemI => ({
+                ...foodItem,
+                foodItemAmount: toFixedToNumber(foodItem.price * foodItem.orderCount),
+                fullImgPath: `${foodImgPath}/${foodItem.imgUrl}`,
+            })
+        ),
     };
-    console.log(orderDetail);
     commit("setOrderDetail", orderDetail);
     return orderDetail;
 }
 
-async function cancelOrder({ state, getter, commit }: ActionContextI, payload: any) {
+async function cancelOrder({ state, commit }: ActionContextI, payload: any = {}) {
     await fetch("user/order/cancel", payload);
 }
-
 export default {
     getOrderList,
     getShopInfo,

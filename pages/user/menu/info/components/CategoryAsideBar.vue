@@ -1,5 +1,5 @@
 <template>
-    <scroll-view scroll-y class="category-aside-bar-box" :style="{'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightPX + 'px' : ''}">
+    <scroll-view scroll-y class="category-aside-bar-box" :style="{ 'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightPX + 'px' : '' }">
         <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'aside-categroy-item-active': categoryTabID === asideCategoryItem.categoryTabID }" @click="changeCategoryTab(asideCategoryItem.categoryTabID)">
             {{ asideCategoryItem.categoryName }}
             <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count" :style="{ background: $mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
@@ -7,34 +7,36 @@
     </scroll-view>
 </template>
 
-<script lang='ts' setup>
-
+<script lang="ts" setup>
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
-import {
-    mapState,
-    mapGetter,
-    mapMutation
-} from "../../../../../utils/mapVuex";
-import {  minusPromotionsHeightPX } from '../infoConfig'
-const { asideCategoryList, minusPromotionsObject } = mapGetter(["asideCategoryList", 'minusPromotionsObject']);
-const { categoryList, categoryTabID, scrollIntoCategoryTabID } = mapState([
-    "categoryList",
-    "categoryTabID",
-    "scrollIntoCategoryTabID"
-]);
-const {
-    setCategoryTabId,
-    setScrollIntoCategoryTabID
-} = mapMutation([
-    'setCategoryTabId',
-    "setScrollIntoCategoryTabID"
-]);
-function changeCategoryTab(categoryTabID: any) {
-    setCategoryTabId(categoryTabID)
-    setScrollIntoCategoryTabID(categoryTabID)
-}
+import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
+import { minusPromotionsHeightPX } from "../infoConfig";
 
+import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import { CategoryItemI } from "@/interface/menu";
+import { MinusPromotionsObjectI, AsideCategoryItemI } from "@/store/getters/menu";
+import { RefI } from "@/interface/vueInterface";
+
+interface StateF {
+    categoryTabID: ComputedStateI<string>;
+}
+interface GetterF {
+    asideCategoryList: ComputedGetterI<AsideCategoryItemI>;
+    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
+}
+interface MutationF {
+    setCategoryTabId: ComputedMutationI<string>;
+    setScrollIntoCategoryTabID: ComputedMutationI<string>;
+}
+const { categoryTabID } = mapState(["categoryTabID"]);
+const { asideCategoryList, minusPromotionsObject }: GetterF = mapGetter(["asideCategoryList", "minusPromotionsObject"]);
+
+const { setCategoryTabId, setScrollIntoCategoryTabID }: MutationF = mapMutation(["setCategoryTabId", "setScrollIntoCategoryTabID"]);
+function changeCategoryTab(categoryTabID: string) {
+    setCategoryTabId(categoryTabID);
+    setScrollIntoCategoryTabID(categoryTabID);
+}
 </script>
 
 <style lang="scss">

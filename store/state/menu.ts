@@ -1,5 +1,5 @@
 
-import { ShopItemI, CategoryItemI, FoodItemI, AsideCategoryItemI } from "@/interface/index";
+import { ShopItemI, CategoryItemI, FoodItemI, AsideCategoryItemI, initFoodItem } from "@/interface/index";
 
 export interface StateMenuI {
     cartCategoryList: CategoryItemI[];
@@ -19,26 +19,12 @@ const state: StateMenuI = {
     cartCategoryList: [],
     categoryList: [],
     // asideCategoryList: [],
-    categoryTabID: "null",
+    categoryTabID: "",
     scrollIntoCategoryTabID: "",
     topBarInfo: "点餐",
     shopInfoFlag: false,
     cartDetailFlag: false,
     foodDetailFalg: false,
-    foodInfo: {
-        categoryID: 0,
-        categoryName: 'string',
-        description: '',
-        foodID: 0,
-        foodName: '',
-        imgUrl: '',
-        manageID: '',
-        orderCount: 0,
-        price: 0,
-        shopID: 0,
-        unit: '',
-        fullImgPath: '',
-        foodItemAmount: 0
-    },
+    foodInfo:initFoodItem,
 };
 export default state;

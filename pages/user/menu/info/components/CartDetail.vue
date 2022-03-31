@@ -55,18 +55,36 @@ import {
     mapState,
     mapGetter,
     mapMutation
-} from "../../../../../utils/mapVuex";
-const { minusPromotionsObject } = mapGetter(["minusPromotionsObject"]);
-const { cartCategoryList, categoryList } = mapState([
+} from "@/utils/mapVuex";
+import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import { CategoryItemI } from "@/interface/menu";
+import { MinusPromotionsObjectI } from "@/store/getters/menu";
+import { RefI } from "@/interface/vueInterface";
+
+
+interface StateF {
+    cartCategoryList: ComputedStateI<CategoryItemI[]>
+    categoryList: ComputedStateI<CategoryItemI[]>
+}
+interface GetterF {
+    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>
+}
+interface MutationF {
+    setCartDetailFlag: ComputedMutationI<boolean>,
+    clearCart: ComputedMutationI
+}
+const { cartCategoryList, categoryList }:StateF = mapState([
     "cartCategoryList",
     "categoryList"
 ]);
-const { setCartDetailFlag, clearCart } = mapMutation([
+const { minusPromotionsObject }:GetterF = mapGetter(["minusPromotionsObject"]);
+
+const { setCartDetailFlag, clearCart }:MutationF = mapMutation([
     "setCartDetailFlag",
     "clearCart"
 ]);
 
-const showComponetnsFlag = ref(false);
+const showComponetnsFlag: RefI<boolean> = ref(false);
 onMounted(() => {
     showComponetnsFlag.value = true;
 });
@@ -92,14 +110,6 @@ async function cartClearCart() {
     setCartDetailFlag(false);
 }
 
-// cartClearCart() {
-//     this.$emit('cartClearCart');
-// },
-// async closeCartDetail() {
-//     this.showComponents = false
-//     await delaySync(300)
-//     this.$emit('closeCartDetail');
-// },
 </script>
 
 <style lang="scss" scoped>

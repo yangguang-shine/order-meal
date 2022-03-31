@@ -5,7 +5,6 @@
         <OtherInfo></OtherInfo>
         <FooterButton></FooterButton>
         <NoteInput v-if="noteInputFlag"></NoteInput>
-        <!-- <common-loading v-if="showLoadingFlag"></common-loading> -->
     </div>
 </template>
 
@@ -15,31 +14,37 @@ import OrderInfo from "./components/OrderInfo.vue";
 import OtherInfo from "./components/OtherInfo.vue";
 import FooterButton from "./components/FooterButton.vue";
 import NoteInput from "./components/NoteInput.vue";
-import { mapMutation, mapState, mapAction } from "../../../../utils/mapVuex";
+import { mapMutation, mapState, mapAction } from "@/utils/mapVuex";
 import { getCurrentInstance } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
+import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import { AddressItemI } from "@/interface/address";
 
 const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
 
-const { setTakeOutTime } = mapMutation(["setTakeOutTime"]);
-const { noteInputFlag } = mapState(["noteInputFlag"]);
-const { getDefaultAddress } = mapAction([
-    "getDefaultAddress"
-]);
-getCurrentTakeOutTime();
+interface StateF {
+    noteInputFlag: ComputedStateI<boolean>;
+}
+interface MutationF {
+    setTakeOutTime: ComputedMutationI<string>;
+}
+interface ActionF {
+    getDefaultAddress: ComputedActionI<void, AddressItemI>;
+}
+
+const { noteInputFlag }: StateF = mapState(["noteInputFlag"]);
+
+const { setTakeOutTime }: MutationF = mapMutation(["setTakeOutTime"]);
+const { getDefaultAddress }: ActionF = mapAction(["getDefaultAddress"]);
+onLoad(() => {
+    getCurrentTakeOutTime();
+})
 function getCurrentTakeOutTime() {
-    const current = +new Date();
-    const deliverStamp = current + 1000 * 60 * 60;
-    console.log(deliverStamp);
-    const deliverTime = new Date(deliverStamp);
-    const hours =
-        `${deliverTime.getHours()}`.length === 1
-            ? `0${deliverTime.getHours()}`
-            : `${deliverTime.getHours()}`;
-    const minute =
-        `${deliverTime.getMinutes()}`.length === 1
-            ? `0${deliverTime.getMinutes()}`
-            : `${deliverTime.getMinutes()}`;
+    const current: number = +new Date();
+    const deliverStamp: number = current + 1000 * 60 * 60;
+    const deliverTime: Date = new Date(deliverStamp);
+    const hours: string = `${deliverTime.getHours()}`.length === 1 ? `0${deliverTime.getHours()}` : `${deliverTime.getHours()}`;
+    const minute: string = `${deliverTime.getMinutes()}`.length === 1 ? `0${deliverTime.getMinutes()}` : `${deliverTime.getMinutes()}`;
     setTakeOutTime(`${hours}:${minute}`);
 }
 onShow(() => {
@@ -50,18 +55,18 @@ async function toGetDefaultAddress() {
     try {
         $showLoading();
 
-        const defaultAddress = await getDefaultAddress();
+        const defaultAddress: AddressItemI = await getDefaultAddress();
         if (!defaultAddress.addressID) {
             $hideLoading();
             await $showModal({
                 content: "为提供更好服务，请先选择地址",
-                confirmText: "去选择地址"
+                confirmText: "去选择地址",
             });
             $myrouter.navigateTo({
                 name: "user/address/list",
                 query: {
-                    fromPage: "userHome"
-                }
+                    fromPage: "userHome",
+                },
             });
         }
     } catch (e) {
@@ -70,39 +75,6 @@ async function toGetDefaultAddress() {
         $hideLoading();
     }
 }
-// async submitOrder() {
-// 	try {
-// 		this.$showLoading();
-// 		if (!this.cartCategoryList.length) return;
-// 		const foodList = [];
-// 		this.cartCategoryList.forEach(item => {
-// 			foodList.push(...item.foodList);
-// 		});
-// 		const query = {};
-// 		if (this.businessType === 2) {
-// 			query.takeOutTime = this.takeOutTime;
-// 			query.address = JSON.stringify(this.defaultAddress);
-// 		}
-// 		await this.$fetch('user/order/submit', {
-// 			foodList,
-// 			shopID: this.shopInfo.shopID,
-// 			orderAmount: this.payPrice,
-// 			businessType: this.businessType,
-// 			...query,
-// 			minusPrice: this.minusPrice,
-// 			originOrderAmount: this.originOrderAmount,
-// 			noteText: this.noteText
-// 		});
-// 		this.clearCart();
-// 		this.$myrouter.reLaunchTo({
-// 			name: 'user/order/list'
-// 		});
-// 	} catch (e) {
-// 		console.log(e);
-// 	} finally {
-// 		this.$hideLoading();
-// 	}
-// }
 </script>
 
 <style lang="scss">

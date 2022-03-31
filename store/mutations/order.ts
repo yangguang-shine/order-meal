@@ -1,4 +1,4 @@
-import { MutationI, StateI } from "@/interface/index";
+import { MutationI, StateI, OrderDetailI , ShopItemI} from "@/interface/index";
 
 function setOrderTabIndex (state: StateI, payload: number): void  {
     state.orderTabIndex = payload;
@@ -7,11 +7,11 @@ function setOrderTabIndex (state: StateI, payload: number): void  {
 function setOrderErrorListFlag (state: StateI, payload: boolean): void  {
     state.orderErrorListFlag[state.orderTabIndex] = payload;
 };
-function setOrderDetail (state: StateI, payload): void  {
-    state.orderDetail = payload;
+function setOrderDetail (state: StateI, orderDetail: OrderDetailI): void  {
+    state.orderDetail = orderDetail;
 };
-function setOrderDetailShopInfo (state: StateI, payload): void  {
-    state.orderDetailShopInfo = payload;
+function setOrderDetailShopInfo (state: StateI, shopInfo: ShopItemI): void  {
+    state.orderDetailShopInfo = shopInfo;
 };
 
 export default {
