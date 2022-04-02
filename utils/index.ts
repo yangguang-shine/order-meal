@@ -45,7 +45,7 @@ export const authorize = (scopeName: string): Promise<any> => {
 export const showModal = ({
     title = "提示",
     content = "",
-    showCancel = false,
+    showCancelFlag = false,
     cancelText = "取消",
     confirmText = "确定",
 }) : Promise<any> => {
@@ -53,7 +53,7 @@ export const showModal = ({
         uni.showModal({
             title,
             content,
-            showCancel,
+            showCancelFlag,
             cancelText,
             confirmText,
             success: (res: any) => {
@@ -91,7 +91,7 @@ export const showToast = ({
     title = "",
     icon = "none",
     duration = 1500,
-    mask = false,
+    mask = true,
 } = {}) : Promise<any>=> {
     return new Promise((resolve, reject) => {
         uni.showToast({
@@ -99,10 +99,12 @@ export const showToast = ({
             icon,
             duration,
             mask,
-            success: (res: any) => {
+            success: async (res: any) => {
+                await delaySync(duration)
                 resolve(res);
             },
-            fail: () => {
+            fail: async () => {
+                await delaySync(duration)
                 reject();
             },
         });

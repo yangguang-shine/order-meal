@@ -91,7 +91,7 @@ onMounted(() => {
 async function toClearCart() {
     await $showModal({
         content: "确认清空购物车吗？",
-        showCancel: true
+        showCancelFlag: true
     });
     clearCart();
     setCartDetailFlag(false);
@@ -104,7 +104,7 @@ async function closeCartDetail() {
 async function cartClearCart() {
     await $showModal({
         content: "确认清空购物车吗？",
-        showCancel: true
+        showCancelFlag: true
     });
     clearCart();
     setCartDetailFlag(false);

@@ -3,9 +3,10 @@ import { StateHomeI } from "@/store/state/home";
 import { StateMenuI } from "@/store/state/menu";
 import { StateConfirmI } from "@/store/state/confirm";
 import { StateOrderI } from "@/store/state/order";
+import { StateCenterI } from "@/store/state/center";
 import { GetterStateConfirmI } from '@/store/getters/confirm'
 import { GetterStateMenuI } from '@/store/getters/menu'
-export type StateI = StateAddressI & StateHomeI & StateMenuI & StateConfirmI & StateOrderI;
+export type StateI = StateAddressI & StateHomeI & StateMenuI & StateConfirmI & StateOrderI & StateCenterI;
 export type GetterStateI = GetterStateConfirmI & GetterStateMenuI;
 export interface MutationI {
     [index: string]: (state: StateI, payload?: any) => any;

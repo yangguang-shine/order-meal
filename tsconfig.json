@@ -8,6 +8,7 @@
       "paths": {
         "@/components/*": ["./components/*"],
         "@/config/*": ["./config/*"],
+        "@/utils/": ["./utils/index"],
         "@/utils/*": ["./utils/*"],
         "@/pages/*": ["./pages/*"],
         "@/static/*": ["./static/*"],

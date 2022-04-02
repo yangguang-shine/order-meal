@@ -3,6 +3,7 @@ import home, { StateHomeI } from "./home";
 import menu, { StateMenuI } from "./menu";
 import confirm, { StateConfirmI } from "./confirm";
 import order, { StateOrderI } from "./order";
+import center, { StateCenterI } from "./center";
 import { StateI } from "@/interface/index";
 
 const state: StateI = {
@@ -11,5 +12,6 @@ const state: StateI = {
     ...menu,
     ...confirm,
     ...order,
+    ...center,
 };
 export default state;

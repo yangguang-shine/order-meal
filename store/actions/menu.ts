@@ -4,7 +4,7 @@ import { foodImgPath } from "@/config/index";
 import { ActionI, ActionContextI, OriginCategoryItemI, CategoryItemI, FoodItemI, OriginFoodItemI } from "@/interface/index";
 
 async function getMenuList({ commit, state }: ActionContextI) {
-    const data: OriginCategoryItemI[] = await fetch("order/menuList", {
+    const data: OriginCategoryItemI[] = await fetch("shop/menu", {
         shopID: state.shopInfo.shopID,
     });
     const categoryList: CategoryItemI[] = (data || []).map(

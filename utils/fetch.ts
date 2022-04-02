@@ -6,9 +6,9 @@ const fetch = (
     url: string,
     data: any = {},
     {
-        AutoErrorFlag = true,
+        autoErrorFlag = true,
     }: {
-        AutoErrorFlag?: boolean;
+        autoErrorFlag?: boolean;
     } = {}
 ): Promise<any> => {
     return new Promise(async (resolve, reject) => {
@@ -37,17 +37,19 @@ const fetch = (
                         resolve(data);
                         break;
                     case "100":
-                        hideLoading();
-                        router.reLaunchTo({
-                            name: "login",
-                            query: {
-                                roleName: "user",
-                            },
-                        });
+                        if (autoErrorFlag) {
+                            hideLoading();
+                            router.reLaunchTo({
+                                name: "login",
+                                query: {
+                                    roleName: "user",
+                                },
+                            });
+                        }
                         reject(responseData);
                         break;
                     default:
-                        if (AutoErrorFlag) {
+                        if (autoErrorFlag) {
                             hideLoading();
                             await showModal({
                                 content: msg,

@@ -52,7 +52,7 @@ async function toCancelOrder() {
     try {
         await $showModal({
             content: "确认取消订单",
-            showCancel: true,
+            showCancelFlag: true,
         });
         $showLoading();
         await cancelOrder({

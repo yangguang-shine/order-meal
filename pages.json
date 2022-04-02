@@ -48,6 +48,20 @@
 			}
 		},
 		{
+			"path": "pages/center/userInfo/index",
+			"style": {
+				"navigationBarTitleText": "我的信息",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
+			"path": "pages/center/userInfo/edit/index",
+			"style": {
+				"navigationBarTitleText": "信息修改",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
+		{
 			"path": "pages/address/list/index",
 			"style": {
 				"navigationBarTitleText": "地址列表",

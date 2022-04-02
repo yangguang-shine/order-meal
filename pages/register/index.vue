@@ -30,14 +30,16 @@
 <script lang="ts" setup>
 import { ref, getCurrentInstance } from "vue";
 import { RefI } from "@/interface/vueInterface";
-const { $showLoading, $hideLoading, $showModal, $myrouter, $fetch } = getCurrentInstance().proxy;
+import { hideLoading, showLoading, showModal } from "@/utils/";
+import router from "@/utils/router";
+import fetch from "@/utils/fetch";
 
 const phone: RefI<string> = ref("");
 const password: RefI<string> = ref("");
 const confirmPassword: RefI<string> = ref("");
 const nickname: RefI<string> = ref("");
 function toLoginPage() {
-    $myrouter.reLaunchTo({
+    router.reLaunchTo({
         name: "login",
     });
 }
@@ -50,40 +52,40 @@ async function userRegister() {
         nickname: nickname.value,
     };
     try {
-        $showLoading();
-        const data = await $fetch("account/register", params);
-        $myrouter.reLaunchTo({
+        showLoading();
+        const data = await fetch("account/register", params);
+        router.reLaunchTo({
             name: "home",
         });
-        $hideLoading();
+        hideLoading();
     } catch (e) {
         console.log(e);
-        $hideLoading();
+        hideLoading();
     }
 }
 function checkRegisterLegal() {
     const phonereg = /^\d{11}$/;
     const passwordreg = /^[a-zA-Z0-9]{8,30}$/;
     if (!phonereg.test(phone.value)) {
-        $showModal({
+        showModal({
             content: "请输入正确手机号",
         });
         return;
     }
     if (!passwordreg.test(password.value)) {
-        $showModal({
+        showModal({
             content: "密码只支持8-30位的字母或数字",
         });
         return;
     }
     if (password.value !== confirmPassword.value) {
-        $showModal({
+        showModal({
             content: "两次输入密码不一样",
         });
         return;
     }
     if (!nickname.value) {
-        $showModal({
+        showModal({
             content: "请输入昵称",
         });
         return;

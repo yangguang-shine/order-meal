@@ -63,7 +63,7 @@ export default defineComponent({
             try {
                 await this.$showModal({
                     content: "确认清除登录状态吗",
-                    showCancel: true,
+                    showCancelFlag: true,
                     confirmText: "确认清除"
                 });
                 this.$showLoading()

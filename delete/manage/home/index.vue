@@ -107,7 +107,7 @@ export default {
 				try {
 					await this.$showModal({
 						content: '删除店铺将一并删除该店铺的菜品分类、菜品详情、订单列表，操作不可逆',
-						showCancel: true,
+						showCancelFlag: true,
 						confirmText: '确认删除'
 					});
 				} catch (e) {

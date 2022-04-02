@@ -22,13 +22,14 @@
 <script lang="ts" setup>
 import { ref, getCurrentInstance } from "vue";
 import { RefI } from "@/interface/vueInterface";
-const { $showLoading, $hideLoading, $showModal, $myrouter, $fetch } = getCurrentInstance().proxy;
-
+import router from "@/utils/router";
+import { showModal, showLoading, hideLoading } from "@/utils/";
+import fetch from "@/utils/fetch";
 const phone: RefI<string> = ref("");
 const password: RefI<string> = ref("");
 
 function toRegisterPage() {
-    $myrouter.reLaunchTo({
+    router.reLaunchTo({
         name: "register",
     });
 }
@@ -40,28 +41,28 @@ async function userLogin() {
         password: password.value,
     };
     try {
-        $showLoading();
-        await $fetch("account/login", params);
-        $myrouter.reLaunchTo({
+        showLoading();
+        await fetch("account/login", params);
+        router.reLaunchTo({
             name: "home",
         });
     } catch (e) {
         console.log(e);
     } finally {
-        $hideLoading();
+        hideLoading();
     }
 }
 function checkLegal(): boolean {
     const phonereg = /^\d{11}$/;
     const passwordreg = /^[a-zA-Z0-9]{8,30}$/;
     if (!phonereg.test(phone.value)) {
-        $showModal({
+        showModal({
             content: "请输入正确手机号",
         });
         return false;
     }
     if (!passwordreg.test(password.value)) {
-        $showModal({
+        showModal({
             content: "密码只支持8-30位的字母或数字",
         });
         return false;

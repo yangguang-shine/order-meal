@@ -68,7 +68,7 @@ async function toDeleteAddress(addressID: number) {
     try {
         await $showModal({
             content: "确认删除该地址吗？",
-            showCancel: true,
+            showCancelFlag: true,
         });
     } catch (e) {
         console.log(e);
@@ -94,7 +94,7 @@ async function toSetDefaultAddress(addressItem: AddressItemI) {
     try {
         await $showModal({
             content: "确认设置为默认地址吗？",
-            showCancel: true,
+            showCancelFlag: true,
         });
     } catch (e) {
         console.log(e);

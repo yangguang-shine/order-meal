@@ -79,7 +79,7 @@ export default {
             try {
                 await this.$showModal({
                     content: '删除该菜品信息',
-                    showCancel: true,
+                    showCancelFlag: true,
                     confirmText: '确认删除'
                 });
             } catch (e) {

@@ -41,6 +41,9 @@ export function createApp() {
 	const $mainColor = "#0096ff"
 	const $mainColor2 = "#58a3dd"
 
+	const appMainColor = ''
+	const shopMainColor = ''
+
 	app.mixin({ // 用得比较多且需要在模板里用可以放到这里，如果用jsx就没有这么多事
 		computed: { // 不能修改
 			$mainColor() {

@@ -2,11 +2,8 @@ export interface RouteInfoI {
 	name: string,
 	path: string
 }
-const user: RouteInfoI[] = [
-	{
-		name: 'center',
-		path: '/pages/center/index'
-	},
+
+const address: RouteInfoI[] = [
 	{
 		name: 'address/list',
 		path: '/pages/address/list/index'
@@ -15,11 +12,40 @@ const user: RouteInfoI[] = [
 		name: 'address/edit',
 		path: '/pages/address/edit/index'
 	},
+]
+
+const center : RouteInfoI[] = [
+	{
+		name: 'center',
+		path: '/pages/center/index'
+	},
+	{
+		name: 'center/userInfo',
+		path: '/pages/center/userInfo/index'
+	},
+	{
+		name: 'center/userInfo/edit',
+		path: '/pages/center/userInfo/edit/index'
+	}
+
+	
+]
+const home: RouteInfoI[] = [
 	
 	{
 		name: 'home',
 		path: '/pages/home/index'
 	},
+]
+
+const login:RouteInfoI[] = [
+	{
+		name: 'login',
+		path: '/pages/login/index',
+	},
+]
+
+const menu: RouteInfoI[] = [
 	{
 		name: 'menu/info',
 		path: '/pages/menu/info/index'
@@ -28,6 +54,9 @@ const user: RouteInfoI[] = [
 		name: 'menu/confirm',
 		path: '/pages/menu/confirm/index'
 	},
+]
+
+const order: RouteInfoI[] = [
 	{
 		name: 'order/list',
 		path: '/pages/order/list/index'
@@ -36,11 +65,40 @@ const user: RouteInfoI[] = [
 		name: 'order/detail',
 		path: '/pages/order/detail/index'
 	},
+]
+const register:RouteInfoI[] = [
 	{
-		name: 'shop/list',
-		path: '/pages/shop/list/index'
+		name: 'register',
+		path: '/pages/register/index'
 	},
 ]
+
+
+const route = [
+	...address,
+	...center,
+	...home,
+	...login,
+	...menu,
+	...order,
+	...register
+	// ...manage,
+	// ...role,
+]
+export default route
+
+
+// const user: RouteInfoI[] = [
+
+
+
+
+
+// 	{
+// 		name: 'shop/list',
+// 		path: '/pages/shop/list/index'
+// 	},
+// ]
 
 // const manage:RouteInfoI[] = [
 // 	{
@@ -97,19 +155,9 @@ const user: RouteInfoI[] = [
 // 	},
 // ]
 
-const login:RouteInfoI[] = [
-	{
-		name: 'login',
-		path: '/pages/login/index',
-	},
-]
 
-const register:RouteInfoI[] = [
-	{
-		name: 'register',
-		path: '/pages/register/index'
-	},
-]
+
+
 
 
 
@@ -191,11 +239,4 @@ const register:RouteInfoI[] = [
 // 	...entertainmentList,
 // 	...shopList
 // ]
-const route = [
-	...user,
-	// ...manage,
-	// ...role,
-	...login,
-	...register
-]
-export default route
+
