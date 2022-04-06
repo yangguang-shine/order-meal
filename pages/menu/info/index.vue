@@ -52,21 +52,27 @@ interface MutationF {
 interface ActionF {
     getMenuList: ComputedActionI<void>;
     getOrderKeyFoodList: ComputedActionI<{ orderKey: string }>;
+    getShopInfo: ComputedMutationI<{shopID: number}>
 }
 
 const { $showLoading, $hideLoading, $showModal } = getCurrentInstance().proxy;
 const { shopInfo, topBarInfo, shopInfoFlag, cartDetailFlag, foodDetailFalg }: StateF = mapState(["shopInfo", "topBarInfo", "shopInfoFlag", "cartDetailFlag", "foodDetailFalg"]);
 const { minusPromotionsObject } = mapGetter(["minusPromotionsObject"]);
 
-const { initCart }: MutationF = mapMutation(["initCart"]);
+const { initCart,  }: MutationF = mapMutation(["initCart"]);
 
-const { getMenuList, getOrderKeyFoodList }: ActionF = mapAction(["getMenuList", "getOrderKeyFoodList"]);
+const { getMenuList, getOrderKeyFoodList, getShopInfo }: ActionF = mapAction(["getMenuList", "getOrderKeyFoodList", "getShopInfo"]);
 
 let orderKey: string = "";
 onLoad(async (option: { orderKey?: string }) => {
     try {
         orderKey = option.orderKey || "";
         $showLoading();
+        if (!shopInfo.value.shopID) {
+            await getShopInfo({
+                shopID: 100036
+            })
+        }
         await init();
     } catch (e) {
         console.log(e);
@@ -83,7 +89,6 @@ async function init() {
         });
     }
     initCart();
-    getStorageCart();
 }
 function getStorageCart() {}
 </script>

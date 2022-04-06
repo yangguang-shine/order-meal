@@ -18,6 +18,8 @@ function changeTabItem(state: StateI, tabItem: TabItemI): void {
 }
 function saveShopInfo(state: StateI, shopInfo: ShopItemI): void {
     state.shopInfo = shopInfo;
+    // commit("setFoodCategoryList", categoryList);
+
 }
 function saveBusinessType(state: StateI, type: number): void {
     state.businessType = type;

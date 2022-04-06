@@ -4,6 +4,8 @@ import { foodImgPath } from "@/config/index";
 import { ActionI, ActionContextI, OriginCategoryItemI, CategoryItemI, FoodItemI, OriginFoodItemI } from "@/interface/index";
 
 async function getMenuList({ commit, state }: ActionContextI) {
+    // 初始化会出现页面返回再次进入数据混乱问题
+    commit("setFoodCategoryList", []);
     const data: OriginCategoryItemI[] = await fetch("shop/menu", {
         shopID: state.shopInfo.shopID,
     });

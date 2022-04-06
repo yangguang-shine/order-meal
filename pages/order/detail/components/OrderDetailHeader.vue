@@ -75,10 +75,9 @@ async function toCancelOrder() {
 async function orderAgain() {
     try {
         $showLoading();
-        const shopInfo = await getShopInfo({
+        await getShopInfo({
             shopID: orderDetail.value.shopID,
         });
-        saveShopInfo(shopInfo);
         saveBusinessType(orderDetail.value.businessType);
         $myrouter.navigateTo({
             name: "menu/info",

@@ -17,8 +17,13 @@ import RecommandInfo from "./components/RecommandInfo.vue";
 import { topAddressSearchHeight, tabListTop } from "./homeConfig";
 import { getCurrentInstance } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { AddressItemI, ComputedActionI, ComputedMutationI } from '@/interface/index'
+import { AddressItemI, ComputedActionI, ComputedMutationI, ComputedStateI, ShopItemI } from '@/interface/index'
+import { hideLoading, showLoading, showModal } from "@/utils/";
+import router from "@/utils/router";
 
+interface StateF {
+    shopInfo: ComputedStateI<ShopItemI>
+}
 interface MutationF {
     setTopAddressWidthFlag: ComputedMutationI<boolean>,
     setTabListFixedFlag: ComputedMutationI<boolean>,
@@ -27,7 +32,6 @@ interface ActionF {
     getDefaultAddress: ComputedActionI<void, AddressItemI>,
     getRecommandShopList: ComputedActionI<void>,
 }
-const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
 const {
     setTopAddressWidthFlag,
     setTabListFixedFlag,
@@ -64,11 +68,11 @@ onPageScroll((e: any) => {
 async function toGetDefaultAddress() {
     const defaultAddress: AddressItemI = await getDefaultAddress();
     if (!defaultAddress.addressID) {
-        await $showModal({
+        await showModal({
             content: "为提供更好服务，请先选择地址",
             confirmText: "去选择地址",
         });
-        $myrouter.navigateTo({
+        router.navigateTo({
             name: "address/list",
             query: {
                 fromPage: "userHome",
@@ -78,13 +82,13 @@ async function toGetDefaultAddress() {
 }
 async function init() {
     try {
-        $showLoading();
+        showLoading();
         await toGetDefaultAddress();
         await getRecommandShopList();
     } catch (e) {
         console.log(e);
     } finally {
-        $hideLoading();
+        hideLoading();
     }
 }
 
@@ -93,7 +97,7 @@ async function init() {
 
 <style lang="scss">
 page {
-    background-color: $color-bg-f5;
+    background-color: #f5f5f5;
 }
 .home-container {
     line-height: 1.2;
@@ -137,7 +141,7 @@ page {
         // margin-bottom: 20rpx;
     }
     .shop-list {
-        background-color: $color-bg-f5;
+        background-color: #f5f5f5;
         padding: 20rpx 20rpx 0;
     }
     // .near-shop-box {

@@ -1,11 +1,8 @@
 <template>
-    <div>
-        <view class="cart-detail-component" @click.stop="closeCartDetail" :style="{'bottom': minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightPX + 'px' : ''}">
-            <transition name="cart-detail-overlay">
-                <div v-if="showComponetnsFlag" class="cart-detail-overlay"></div>
-            </transition>
-            <transition name="cart-detail-box">
-                <view v-if="showComponetnsFlag" class="cart-detail-box" @click.stop>
+    <view>
+        <view class="cart-detail-component" @click.stop="closeCartDetail" :style="{ bottom: minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightPX + 'px' : '' }">
+                <view :animation="overlayAnimationData" class="cart-detail-overlay"></view>
+                <view :animation="detailAnimationData"  class="cart-detail-box" @click.stop>
                     <view class="cart-select-box flex-row flex-j-between flex-a-center">
                         <view class="select-goods-title">已选商品</view>
                         <view class="flex-row flex-a-center" @click="cartClearCart">
@@ -14,8 +11,8 @@
                         </view>
                     </view>
                     <scroll-view scroll-y class="cart-detail-list-box">
-                        <view class="food-category-item" v-for="(foodCategoryItem) in cartCategoryList" :key="foodCategoryItem.categoryID">
-                            <view class="cart-food-item flex-row" v-for="(cartFoodItem) in foodCategoryItem.foodList" :key="cartFoodItem.foodID">
+                        <view class="food-category-item" v-for="foodCategoryItem in cartCategoryList" :key="foodCategoryItem.categoryID">
+                            <view class="cart-food-item flex-row" v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID">
                                 <image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="cartFoodItem.fullImgPath" mode="scaleToFill"></image>
                                 <view v-if="cartFoodItem.orderCount" class="cart-food-info-box flex-item flex-col flex-j-between">
                                     <view class="cart-food-name-description">
@@ -31,85 +28,82 @@
                         </view>
                     </scroll-view>
                 </view>
-            </transition>
         </view>
-        <!-- 下面用来解决点击购物车无动效的问题 -->
-        <div class="cart-img-transparent" @click="closeCartDetail"></div>
-    </div>
-
+        <!-- 下面用来解决点击购物车图片无动效的问题 -->
+        <view class="cart-img-transparent" @click="closeCartDetail"></view>
+    </view>
 </template>
 
-<script lang='ts' setup>
+<script lang="ts" setup>
 import { delaySync } from "@/utils/index.js";
 import FoodAddMinus from "./item/FoodAddMinus.vue";
 import { getCurrentInstance, computed, onMounted, ref } from "vue";
 import { footerInfoAndMinusPromotionsHeightPX } from "../infoConfig";
 
-const {
-    $showLoading,
-    $hideLoading,
-    $showModal,
-    $delaySync
-} = getCurrentInstance().proxy;
-import {
-    mapState,
-    mapGetter,
-    mapMutation
-} from "@/utils/mapVuex";
+const { $showLoading, $hideLoading, $showModal, $delaySync } = getCurrentInstance().proxy;
+import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI } from "@/interface/menu";
 import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { RefI } from "@/interface/vueInterface";
 
-
 interface StateF {
-    cartCategoryList: ComputedStateI<CategoryItemI[]>
-    categoryList: ComputedStateI<CategoryItemI[]>
+    cartCategoryList: ComputedStateI<CategoryItemI[]>;
+    categoryList: ComputedStateI<CategoryItemI[]>;
 }
 interface GetterF {
-    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>
+    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
 }
 interface MutationF {
-    setCartDetailFlag: ComputedMutationI<boolean>,
-    clearCart: ComputedMutationI
+    setCartDetailFlag: ComputedMutationI<boolean>;
+    clearCart: ComputedMutationI;
 }
-const { cartCategoryList, categoryList }:StateF = mapState([
-    "cartCategoryList",
-    "categoryList"
-]);
-const { minusPromotionsObject }:GetterF = mapGetter(["minusPromotionsObject"]);
+const { cartCategoryList, categoryList }: StateF = mapState(["cartCategoryList", "categoryList"]);
+const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
 
-const { setCartDetailFlag, clearCart }:MutationF = mapMutation([
-    "setCartDetailFlag",
-    "clearCart"
-]);
+const { setCartDetailFlag, clearCart }: MutationF = mapMutation(["setCartDetailFlag", "clearCart"]);
+const transitionTime = 300;
 
-const showComponetnsFlag: RefI<boolean> = ref(false);
-onMounted(() => {
-    showComponetnsFlag.value = true;
+const overlayAnimationData = ref(null);
+const detailAnimationData = ref(null);
+const overlayAnimation = uni.createAnimation({
+    duration: transitionTime,
+    timingFunction: "ease-in-out",
 });
-async function toClearCart() {
-    await $showModal({
-        content: "确认清空购物车吗？",
-        showCancelFlag: true
-    });
-    clearCart();
-    setCartDetailFlag(false);
+
+const detailAnimation = uni.createAnimation({
+    duration: transitionTime,
+    timingFunction: "ease-in-out",
+});
+
+onMounted(() => {
+  toStartAnimation()
+});
+function toStartAnimation() {
+    overlayAnimation.opacity(1).step();
+    overlayAnimationData.value = overlayAnimation.export();
+    detailAnimation.translateY(0).step();
+    detailAnimationData.value = detailAnimation.export();
+}
+function toEndAnimation() {
+    overlayAnimation.opacity(0).step();
+    overlayAnimationData.value = overlayAnimation.export();
+    detailAnimation.translateY('100%').step();
+    detailAnimationData.value = detailAnimation.export();
 }
 async function closeCartDetail() {
-    showComponetnsFlag.value = false;
-    await $delaySync(300);
+    toEndAnimation()
+    await $delaySync(transitionTime);
     setCartDetailFlag(false);
 }
 async function cartClearCart() {
     await $showModal({
         content: "确认清空购物车吗？",
-        showCancelFlag: true
+        showCancelFlag: true,
     });
     clearCart();
     setCartDetailFlag(false);
 }
-
 </script>
 
 <style lang="scss" scoped>
@@ -146,7 +140,8 @@ async function cartClearCart() {
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.5);
-        transition: all ease-in-out 0.3s;
+        // transition: all ease-in-out 0.3s;
+        opacity: 0;
     }
     .cart-detail-box {
         position: absolute;
@@ -159,7 +154,9 @@ async function cartClearCart() {
         background-color: #fff;
         overflow-y: auto;
         border-radius: 30rpx 30rpx 0 0;
-        transition: all ease-in-out 0.3s;
+        // transition: all ease-in-out 0.3s;
+        transform: translateY(100%);
+
     }
 
     .cart-detail-box-show {

@@ -122,10 +122,9 @@ function toOrderDetail(orderItem: OrderItemI) {
 async function orderAgain(orderItem: OrderItemI) {
     try {
         $showLoading();
-        const shopInfo = await getShopInfo({
+        await getShopInfo({
             shopID: orderItem.shopID,
         });
-        saveShopInfo(shopInfo);
         saveBusinessType(orderItem.businessType);
         $myrouter.navigateTo({
             name: "menu/info",
