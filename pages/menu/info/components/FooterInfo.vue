@@ -1,5 +1,5 @@
 <template>
-    <view class="footer-cart-container" :style="{'position': shopInfoFlag ? 'absolute' : 'fixed'}">
+    <view class="footer-cart-container" :style="{'position': startShopInfoAnimationFlag || shopInfoFlag ? 'absolute' : 'fixed'}">
         <view class="footer-cart flex-row flex-j-between flex-a-center">
             <view class="cart-img-box">
                 <image class="cart-img" @click="clickCartImg" src="/static/img/cart-icon.png" mode="scaleToFill"></image>
@@ -30,6 +30,7 @@ import { MinusPromotionsObjectI, AsideCategoryItemI, CartPriceInfoI } from "@/st
 import { RefI } from "@/interface/vueInterface";
 
 interface StateF {
+    startShopInfoAnimationFlag: ComputedStateI<boolean>;
     shopInfoFlag: ComputedStateI<boolean>;
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
 }
@@ -40,7 +41,7 @@ interface GetterF {
 interface MutationF {
     toogleCartDetailFlag: ComputedMutationI;
 }
-const { shopInfoFlag, cartCategoryList } = mapState(["shopInfoFlag", 'cartCategoryList']);
+const { startShopInfoAnimationFlag,shopInfoFlag, cartCategoryList } = mapState(["startShopInfoAnimationFlag","shopInfoFlag", 'cartCategoryList']);
 
 const { cartPriceInfo, allCartFoodCount }:GetterF = mapGetter([
     "cartPriceInfo",

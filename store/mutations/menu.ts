@@ -19,6 +19,9 @@ function setFoodDetailFlag (state: StateI, foodDetailFalg: boolean) {
 function setTopBarInfo (state: StateI, topBarInfo: string) {
     state.topBarInfo = topBarInfo;
 };
+function setStartShopInfoAnimationFlag (state: StateI, startShopInfoAnimationFlag: boolean) {
+    state.startShopInfoAnimationFlag = startShopInfoAnimationFlag;
+};
 function setShopInfoFlag (state: StateI, shopInfoFlag: boolean) {
     state.shopInfoFlag = shopInfoFlag;
 };
@@ -100,6 +103,7 @@ export default {
     setFoodInfo,
     setFoodDetailFlag,
     setTopBarInfo,
+    setStartShopInfoAnimationFlag,
     setShopInfoFlag,
     toogleCartDetailFlag,
     setCartDetailFlag,

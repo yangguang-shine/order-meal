@@ -8,6 +8,7 @@ export interface StateMenuI {
     categoryTabID: string;
     scrollIntoCategoryTabID: string;
     topBarInfo: string;
+    startShopInfoAnimationFlag: boolean,
     shopInfoFlag: boolean;
     cartDetailFlag: boolean;
     foodDetailFalg: boolean;
@@ -22,6 +23,7 @@ const state: StateMenuI = {
     categoryTabID: "",
     scrollIntoCategoryTabID: "",
     topBarInfo: "点餐",
+    startShopInfoAnimationFlag: false,
     shopInfoFlag: false,
     cartDetailFlag: false,
     foodDetailFalg: false,

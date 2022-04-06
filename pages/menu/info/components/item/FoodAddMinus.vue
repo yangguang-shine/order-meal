@@ -12,7 +12,7 @@
         </view>
         <view v-if="foodItem.orderCount" :class="showInfoFlag ? 'show-food-order-count' : ''" :animation="countAnimationData" class="food-order-count">{{ foodItem.orderCount }}</view>
 
-        <!-- <MyTransition name="food-order-count" :flag="!!foodItem.orderCount" :time="transitionTime" v-slot="slotProps">
+        <!-- <MyTransition name="food-order-count" :flag="!!foodItem.orderCount" :time="foodAddMinusTransitionTime" v-slot="slotProps">
             <view class="food-order-count" :class="slotProps.addClass">{{ foodItem.orderCount || "" }}</view>
         </MyTransition> -->
         <view class="food-count-add" :style="{ 'background-color': $mainColor }" @click.stop="addCount()">
@@ -30,6 +30,7 @@ import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
 import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
+import { foodAddMinusTransitionTime } from "../../infoConfig";
 interface PropsI {
     foodItem: FoodItemI;
 }
@@ -37,16 +38,15 @@ interface CartChangeParamI {
     foodItem: FoodItemI;
     count: number;
 }
-const transitionTime = 300;
 const OriginFoodItem = props.foodItem
 const showInfoFlag: RefI<boolean> = ref(false);
 const countAnimation = uni.createAnimation({
-    duration: transitionTime,
+    duration: foodAddMinusTransitionTime,
     timingFunction: "ease-in-out",
 });
 
 const minusAnimation = uni.createAnimation({
-    duration: transitionTime,
+    duration: foodAddMinusTransitionTime,
     timingFunction: "ease-in-out",
 });
 
@@ -121,7 +121,7 @@ async function minusCount() {
     // if (count === 0) {
     //     console.log("fffffff");
     //     canAddFlag = false;
-    //     await delaySync(transitionTime);
+    //     await delaySync(foodAddMinusTransitionTime);
     //     canAddFlag = true;
     // }
 }

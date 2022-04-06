@@ -1,5 +1,5 @@
 <template>
-    <view class="promotion-title flex-row flex-ja-center" :style="{ position: shopInfoFlag ? 'absolute' : 'fixed' }">
+    <view class="promotion-title flex-row flex-ja-center" :style="{ position: startShopInfoAnimationFlag || shopInfoFlag ? 'absolute' : 'fixed' }">
         <text v-for="(contentItem, index) in minusPromotionsObject.contentList" :key="index" :class="{ 'content-red': index % 2 !== 0 }">{{ contentItem }}</text>
     </view>
 </template>
@@ -11,12 +11,13 @@ import { ComputedGetterI, ComputedStateI } from "@/interface/vuex";
 import { MinusPromotionsObjectI } from "@/store/getters/menu";
 
 interface StateF {
+    startShopInfoAnimationFlag: ComputedStateI<boolean>;
     shopInfoFlag: ComputedStateI<boolean>;
 }
 interface GetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
 }
-const { shopInfoFlag }: StateF = mapState(["shopInfoFlag"]);
+const { startShopInfoAnimationFlag, shopInfoFlag }: StateF = mapState(["startShopInfoAnimationFlag", "shopInfoFlag"]);
 const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
 </script>
 

@@ -73,7 +73,7 @@ function checkLegal(): boolean {
 
 <style lang="scss">
 page {
-    height: 100%;
+    // height: 100%;
     background-color: #f4f4f4;
 }
 .login-container {

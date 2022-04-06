@@ -1,33 +1,33 @@
 <template>
     <view>
-        <view class="cart-detail-component" @click.stop="closeCartDetail" :style="{ bottom: minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightPX + 'px' : '' }">
-                <view :animation="overlayAnimationData" class="cart-detail-overlay"></view>
-                <view :animation="detailAnimationData"  class="cart-detail-box" @click.stop>
-                    <view class="cart-select-box flex-row flex-j-between flex-a-center">
-                        <view class="select-goods-title">已选商品</view>
-                        <view class="flex-row flex-a-center" @click="cartClearCart">
-                            <image class="delete-all-icon" src="/static/img/shop-delete.svg"></image>
-                            <text class="clear-cart-title">清空</text>
-                        </view>
+        <view class="cart-detail-component" @click.stop="closeCartDetail" :style="{ bottom: minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX + 'rpx' : '' }">
+            <view :animation="overlayAnimationData" class="cart-detail-overlay"></view>
+            <view :animation="detailAnimationData" class="cart-detail-box" @click.stop>
+                <view class="cart-select-box flex-row flex-j-between flex-a-center">
+                    <view class="select-goods-title">已选商品</view>
+                    <view class="flex-row flex-a-center" @click="cartClearCart">
+                        <image class="delete-all-icon" src="/static/img/shop-delete.svg"></image>
+                        <text class="clear-cart-title">清空</text>
                     </view>
-                    <scroll-view scroll-y class="cart-detail-list-box">
-                        <view class="food-category-item" v-for="foodCategoryItem in cartCategoryList" :key="foodCategoryItem.categoryID">
-                            <view class="cart-food-item flex-row" v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID">
-                                <image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="cartFoodItem.fullImgPath" mode="scaleToFill"></image>
-                                <view v-if="cartFoodItem.orderCount" class="cart-food-info-box flex-item flex-col flex-j-between">
-                                    <view class="cart-food-name-description">
-                                        <view class="cart-food-name">{{ cartFoodItem.foodName }}</view>
-                                        <view class="cart-food-description">{{ cartFoodItem.description }}</view>
-                                    </view>
-                                    <view class="cart-food-price-button flex-row flex-j-between flex-a-center">
-                                        <view class="cart-food-price">¥{{ cartFoodItem.foodItemAmount }}</view>
-                                        <FoodAddMinus :foodItem="cartFoodItem"></FoodAddMinus>
-                                    </view>
+                </view>
+                <scroll-view scroll-y class="cart-detail-list-box">
+                    <view class="food-category-item" v-for="foodCategoryItem in cartCategoryList" :key="foodCategoryItem.categoryID">
+                        <view class="cart-food-item flex-row" v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID">
+                            <image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="cartFoodItem.fullImgPath" mode="scaleToFill"></image>
+                            <view v-if="cartFoodItem.orderCount" class="cart-food-info-box flex-item flex-col flex-j-between">
+                                <view class="cart-food-name-description">
+                                    <view class="cart-food-name">{{ cartFoodItem.foodName }}</view>
+                                    <view class="cart-food-description">{{ cartFoodItem.description }}</view>
+                                </view>
+                                <view class="cart-food-price-button flex-row flex-j-between flex-a-center">
+                                    <view class="cart-food-price">¥{{ cartFoodItem.foodItemAmount }}</view>
+                                    <FoodAddMinus :foodItem="cartFoodItem"></FoodAddMinus>
                                 </view>
                             </view>
                         </view>
-                    </scroll-view>
-                </view>
+                    </view>
+                </scroll-view>
+            </view>
         </view>
         <!-- 下面用来解决点击购物车图片无动效的问题 -->
         <view class="cart-img-transparent" @click="closeCartDetail"></view>
@@ -38,7 +38,7 @@
 import { delaySync } from "@/utils/index.js";
 import FoodAddMinus from "./item/FoodAddMinus.vue";
 import { getCurrentInstance, computed, onMounted, ref } from "vue";
-import { footerInfoAndMinusPromotionsHeightPX } from "../infoConfig";
+import { footerInfoAndMinusPromotionsHeightRPX, cartDetailTransitionTime } from "../infoConfig";
 
 const { $showLoading, $hideLoading, $showModal, $delaySync } = getCurrentInstance().proxy;
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
@@ -62,22 +62,22 @@ const { cartCategoryList, categoryList }: StateF = mapState(["cartCategoryList",
 const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
 
 const { setCartDetailFlag, clearCart }: MutationF = mapMutation(["setCartDetailFlag", "clearCart"]);
-const transitionTime = 300;
 
 const overlayAnimationData = ref(null);
 const detailAnimationData = ref(null);
 const overlayAnimation = uni.createAnimation({
-    duration: transitionTime,
+    duration: cartDetailTransitionTime,
     timingFunction: "ease-in-out",
 });
 
 const detailAnimation = uni.createAnimation({
-    duration: transitionTime,
+    duration: cartDetailTransitionTime,
     timingFunction: "ease-in-out",
 });
 
+
 onMounted(() => {
-  toStartAnimation()
+    toStartAnimation();
 });
 function toStartAnimation() {
     overlayAnimation.opacity(1).step();
@@ -88,12 +88,12 @@ function toStartAnimation() {
 function toEndAnimation() {
     overlayAnimation.opacity(0).step();
     overlayAnimationData.value = overlayAnimation.export();
-    detailAnimation.translateY('100%').step();
+    detailAnimation.translateY("100%").step();
     detailAnimationData.value = detailAnimation.export();
 }
 async function closeCartDetail() {
-    toEndAnimation()
-    await $delaySync(transitionTime);
+    toEndAnimation();
+    await $delaySync(cartDetailTransitionTime * 3);
     setCartDetailFlag(false);
 }
 async function cartClearCart() {
@@ -154,17 +154,13 @@ async function cartClearCart() {
         background-color: #fff;
         overflow-y: auto;
         border-radius: 30rpx 30rpx 0 0;
-        // transition: all ease-in-out 0.3s;
         transform: translateY(100%);
-
     }
 
     .cart-detail-box-show {
         transform: translateY(0%);
     }
-    // .cart-detail-box-hide {
-    //     bottom: -800rpx;
-    // }
+
     .cart-select-box {
         padding: 20rpx 30rpx;
         font-size: 24rpx;

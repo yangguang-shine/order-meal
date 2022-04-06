@@ -32,6 +32,7 @@ const showComponents = false;
 
 import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { FoodItemI, initFoodItem } from "@/interface/menu";
+import { foodDetailTransitionTime } from "../infoConfig";
 
 interface StateF {
     foodInfo: ComputedStateI<FoodItemI[]>;
@@ -42,16 +43,15 @@ interface MutationF {
 }
 const { foodInfo }: StateF = mapState(["foodInfo"]);
 const { setFoodDetailFlag, setFoodInfo }: MutationF = mapMutation(["setFoodDetailFlag", "setFoodInfo"]);
-const transitionTime = 300;
 const overlayAnimationData = ref(null);
 const detailAnimationData = ref(null);
 const overlayAnimation = uni.createAnimation({
-    duration: transitionTime,
+    duration: foodDetailTransitionTime,
     timingFunction: "ease-in-out",
 });
 
 const detailAnimation = uni.createAnimation({
-    duration: transitionTime,
+    duration: foodDetailTransitionTime,
     timingFunction: "ease-in-out",
 });
 
@@ -73,7 +73,7 @@ function toEndAnimation() {
 
 async function closeFoodDetail() {
 	toEndAnimation()
-    await delaySync(transitionTime);
+    await delaySync(foodDetailTransitionTime);
     setFoodDetailFlag(false);
     setFoodInfo(initFoodItem);
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="comfirm-order-container">
+    <div class="comfirm-order-container" :style="{'padding-bottom': footerButtonHeightRPX + 40 + 'rpx'}">
         <AddressDeliver></AddressDeliver>
         <OrderInfo></OrderInfo>
         <OtherInfo></OtherInfo>
@@ -19,6 +19,7 @@ import { getCurrentInstance } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { AddressItemI } from "@/interface/address";
+import { footerButtonHeightRPX } from "./comfirmConfig";
 
 const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
 
@@ -78,13 +79,16 @@ async function toGetDefaultAddress() {
 </script>
 
 <style lang="scss">
-// page {
-// 	height: 100%;
-// 	width: 100%;
-// }
+page {
+	min-height: 100%;
+	width: 100%;
+    background-color: #f4f4f4;
+}
+
 .comfirm-order-container {
-    min-height: 100vh;
     width: 100%;
+    height: 100%;
+
     background-color: #f4f4f4;
     padding: 20rpx 20rpx 50rpx;
     box-sizing: border-box;

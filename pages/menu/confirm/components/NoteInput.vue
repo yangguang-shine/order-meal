@@ -1,16 +1,17 @@
 <template>
-    <div class="note-input-container note-input-container-show" @click.stop="hideNoteInput" @touchmove.stop.prevent>
-        <div class="note-input-box note-input-box-show" @click.stop>
-            <div class="cancel-confirm flex-row flex-a-center flex-j-between">
-                <div class="cancel-button" @click="hideNoteInput">取消</div>
-                <div class="confirm-button" @click="confirmNoteInput">完成</div>
-            </div>
-            <div class="textarea-box">
+    <view class="note-input-container" @click.stop="hideNoteInput" @touchmove.stop.prevent>
+        <view :animation="overlayAnimationData" class="note-input-overlay"></view>
+        <view :animation="inputAnimationData" class="note-input-box " @click.stop>
+            <view class="cancel-confirm flex-row flex-a-center flex-j-between">
+                <view class="cancel-button" @click="hideNoteInput">取消</view>
+                <view class="confirm-button" @click="confirmNoteInput">完成</view>
+            </view>
+            <view class="textarea-box">
                 <textarea class="textarea" v-model="noteInput" id="" placeholder="特殊请输入备注" :maxlength="maxlength"></textarea>
-                <div class="letter-limit">{{ noteInputLength }}/{{ maxlength }}</div>
-            </div>
-        </div>
-    </div>
+                <view class="letter-limit">{{ noteInputLength }}/{{ maxlength }}</view>
+            </view>
+        </view>
+    </view>
 </template>
 
 <script lang="ts" setup>
@@ -18,6 +19,10 @@ import { mapState, mapMutation } from "@/utils/mapVuex";
 import { computed, ref } from "vue";
 import { ComputedStateI, ComputedMutationI } from "@/interface/vuex";
 import { ComputedI, RefI} from "@/interface/vueInterface";
+import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
+import { noteInputTransionTime } from "../comfirmConfig";
+import { delaySync } from "@/utils/";
+
 interface StateF {
     noteText: ComputedStateI<string>;
 }
@@ -31,11 +36,45 @@ const noteInput: RefI<string> = ref(noteText.value);
 const maxlength: number = 20;
 const noteInputLength: ComputedI<number> = computed(() => noteInput.value.length);
 
-function hideNoteInput() {
+
+
+const overlayAnimationData = ref(null);
+const inputAnimationData = ref(null);
+const overlayAnimation = uni.createAnimation({
+    duration: noteInputTransionTime,
+    timingFunction: "ease-in-out",
+});
+
+const inputAnimation = uni.createAnimation({
+    duration: noteInputTransionTime,
+    timingFunction: "ease-in-out",
+});
+
+
+onLoad(() => {
+    toStartAnimation();
+});
+function toStartAnimation() {
+    overlayAnimation.opacity(1).step();
+    overlayAnimationData.value = overlayAnimation.export();
+    inputAnimation.translateY(0).step();
+    inputAnimationData.value = inputAnimation.export();
+}
+function toEndAnimation() {
+    overlayAnimation.opacity(0).step();
+    overlayAnimationData.value = overlayAnimation.export();
+    inputAnimation.translateY("100%").step();
+    inputAnimationData.value = inputAnimation.export();
+}
+async function hideNoteInput() {
+    toEndAnimation()
+    await delaySync(noteInputTransionTime)
     setNoteInputFlag(false);
 }
-function confirmNoteInput() {
+async function confirmNoteInput() {
     setNoteText(noteInput.value);
+    toEndAnimation()
+    await delaySync(noteInputTransionTime)
     setNoteInputFlag(false);
 }
 </script>
@@ -51,10 +90,17 @@ function confirmNoteInput() {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0);
     z-index: 100;
     color: #333;
-    transition: all ease-in-out 0.3s;
+    .note-input-overlay {
+        position: absolute;
+        top: 0%;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+    }
     .note-input-box {
         position: absolute;
         bottom: 0;
@@ -65,10 +111,11 @@ function confirmNoteInput() {
         background-color: #fff;
         transition: all ease-in-out 0.3s;
         transform: translateY(100%);
+
     }
-    .note-input-box-show {
-        transform: translateY(0%);
-    }
+    // .note-input-box-show {
+    //     transform: translateY(0%);
+    // }
     .cancel-confirm {
         line-height: 100rpx;
     }
@@ -108,7 +155,5 @@ function confirmNoteInput() {
         color: #999;
     }
 }
-.note-input-container-show {
-    background-color: rgba(0, 0, 0, 0.4);
-}
+
 </style>

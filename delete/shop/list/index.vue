@@ -83,7 +83,7 @@ export default {
 </script>
 <style lang="scss">
 	page {
-		height: 100%;
+		// height: 100%;
 		background-color: $color-bg-f5;
 
 	}

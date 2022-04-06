@@ -21,7 +21,7 @@ interface SystemInfoI {
 
 let systemInfo: SystemInfoI;
 
-export const get1rpx2px = (rpx: number): number => {
+export const getRpxToPx = (rpx: number): number => {
     if (!systemInfo) {
         systemInfo = uni.getSystemInfoSync();
     }

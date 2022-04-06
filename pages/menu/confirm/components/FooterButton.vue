@@ -7,7 +7,6 @@
                 <div class="submit-order-button flex-row flex-ja-center" :style="{ background: $mainColor }" @click="toSubmitOrder">提交订单</div>
             </div>
         </div>
-        <div class="footer-block"></div>
     </div>
 </template>
 

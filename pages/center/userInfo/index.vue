@@ -88,12 +88,11 @@ async function showLogoutModal() {
     }
 }
 </script>
-<style>
+
+<style lang="scss">
 page {
     background-color: #f5f5f5;
 }
-</style>
-<style lang="scss">
 .page-user-info {
     padding-top: 60rpx;
     .user-info-list {

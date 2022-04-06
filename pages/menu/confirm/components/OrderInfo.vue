@@ -1,61 +1,62 @@
 <template>
-    <div class="order-info-container">
-        <div class="shop-info flex-row flex-a-center flex-j-between">
-            <div class="flex-row flex-a-center">
+    <view class="order-info-container">
+        <view class="shop-info flex-row flex-a-center flex-j-between">
+            <view class="flex-row flex-a-center">
                 <image class="shop-img"></image>
-                <div class="shop-name">{{ shopInfo.shopName }}</div>
-            </div>
-            <div @click="continueOrder" class="continue-order flex-row flex-ja-center" :style="{ color: $mainColor }">继续点单</div>
-        </div>
-        <div class="food-list">
-            <OrderFoodItem v-show="index < 3 || displayMoreFlag" v-for="(orderFoodItem, index) in orderFoodList" :orderFoodItem="orderFoodItem" :key="index"></OrderFoodItem>
-        </div>
-        <div v-if="orderFoodList.length > 3" class="display-more flex-row flex-ja-center" @click="toggleDisplay">
-            <div v-if="displayMoreFlag" class="flex-row flex-ja-center">
-                <div class="display-more-title">点击收起</div>
+                <view class="shop-name">{{ shopInfo.shopName }}</view>
+            </view>
+            <view @click="continueOrder" class="continue-order flex-row flex-ja-center" :style="{ color: $mainColor }">继续点单</view>
+        </view>
+        <view class="food-list" :animation="foodListAnimationData" :style="{'max-height': foodListMaxHeihgt}">
+            <OrderFoodItem  v-for="(orderFoodItem, index) in orderFoodList" :orderFoodItem="orderFoodItem" :key="index"></OrderFoodItem>
+        </view>
+        <view v-if="orderFoodList.length > defaultIndex" class="display-more flex-row flex-ja-center" @click="toggleDisplay" >
+            <view v-if="displayMoreFlag" class="flex-row flex-ja-center">
+                <view class="display-more-title">点击收起</view>
                 <image class="show-more-arrow" src="/static/img/user-confirm/show-more-order.png" mode=""></image>
-            </div>
-            <div v-else class="flex-row flex-ja-center">
-                <div class="display-more-title">展开更多</div>
+            </view>
+            <view v-else class="flex-row flex-ja-center">
+                <view class="display-more-title">展开更多</view>
                 <image class="hide-more-arrow" src="/static/img/user-confirm/show-more-order.png" mode=""></image>
-            </div>
-        </div>
-        <div class="dash-split">
-            <div class="left-circle"></div>
-            <div class="right-circle"></div>
-        </div>
-        <div v-if="minusPrice" class="minus-info flex-row flex-a-center flex-j-between">
-            <div class="minus-left flex-row flex-a-center">
-                <div class="minus-icon">减</div>
-                <div class="minus-title">满减优惠</div>
-            </div>
-            <div class="minus-price">-¥{{ minusPrice }}</div>
-        </div>
-        <div v-if="minusPrice" class="dash-split">
-            <div class="left-circle"></div>
-            <div class="right-circle"></div>
-        </div>
-        <div class="all-price-box flex-row flex-a-center flex-j-between">
-            <div></div>
-            <div class="all-price-info flex-row flex-a-center">
-                <div class="origin-price">共计￥{{ originOrderAmount }}</div>
-                <div class="discount-price">已优惠￥{{ minusPrice }}</div>
-                <div class="pay-price">
+            </view>
+        </view>
+        <view class="dash-split">
+            <view class="left-circle"></view>
+            <view class="right-circle"></view>
+        </view>
+        <view v-if="minusPrice" class="minus-info flex-row flex-a-center flex-j-between">
+            <view class="minus-left flex-row flex-a-center">
+                <view class="minus-icon">减</view>
+                <view class="minus-title">满减优惠</view>
+            </view>
+            <view class="minus-price">-¥{{ minusPrice }}</view>
+        </view>
+        <view v-if="minusPrice" class="dash-split">
+            <view class="left-circle"></view>
+            <view class="right-circle"></view>
+        </view>
+        <view class="all-price-box flex-row flex-a-center flex-j-between">
+            <view></view>
+            <view class="all-price-info flex-row flex-a-center">
+                <view class="origin-price">共计￥{{ originOrderAmount }}</view>
+                <view class="discount-price">已优惠￥{{ minusPrice }}</view>
+                <view class="pay-price">
                     小计<span class="pay-price-color">￥{{ payPrice }}</span>
-                </div>
-            </div>
-        </div>
-    </div>
+                </view>
+            </view>
+        </view>
+    </view>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref, getCurrentInstance } from "vue";
 import OrderFoodItem from "@/components/OrderFoodItem.vue";
 import { mapState, mapGetter } from "@/utils/mapVuex";
+import { foodListTransitionTime} from "../comfirmConfig"
 import { ComputedStateI, ComputedGetterI } from "@/interface/vuex";
 import { CategoryItemI, FoodItemI } from "@/interface/menu";
 import { ShopItemI } from "@/interface/home";
-import { RefI } from "@/interface/vueInterface";
+import { ComputedI, RefI } from "@/interface/vueInterface";
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
 interface StateF {
     shopInfo: ComputedStateI<ShopItemI>;
@@ -64,13 +65,37 @@ interface GetterF {
     payPrice: ComputedGetterI<number>;
     originOrderAmount: ComputedGetterI<number>;
     minusPrice: ComputedGetterI<number>;
-    orderFoodList: ComputedGetterI<FoodItemI>;
+    orderFoodList: ComputedGetterI<FoodItemI[]>;
 }
+
 const { shopInfo }: StateF = mapState(["shopInfo"]);
 const { originOrderAmount, minusPrice, payPrice, orderFoodList }: GetterF = mapGetter(["originOrderAmount", "minusPrice", "payPrice", "orderFoodList"]);
+const defaultIndex = 3;
+const defaultMaxHeight = '480rpx'
+const displayMoreMaxHeight = `${(150 + 10) * orderFoodList.value.length + 50}rpx`
+const foodListMaxHeihgt: RefI<string> = ref(defaultMaxHeight)
 const displayMoreFlag: RefI<boolean> = ref<boolean>(false);
+const foodListAnimationData = ref(null);
+// const foodListAnimation = uni.createAnimation({
+//     duration: foodListTransitionTime,
+//     timingFunction: "ease-in-out",
+// });
+// function toStartAnimation() {
+//     foodListAnimation.height(`${(150 + 10) * orderFoodList.value.length}rpx`).step();
+//     foodListAnimationData.value = foodListAnimation.export();
+// }
+// function toEndAnimation() {
+//     foodListAnimation.height(`${(150 + 10) * defaultIndex}rpx`).step();
+//     foodListAnimationData.value = foodListAnimation.export();
+// }
 function toggleDisplay() {
     displayMoreFlag.value = !displayMoreFlag.value;
+    if (displayMoreFlag.value) {
+        foodListMaxHeihgt.value = displayMoreMaxHeight
+    } else {
+        foodListMaxHeihgt.value = defaultMaxHeight
+
+    }
 }
 function continueOrder() {
     $myrouter.back();
@@ -106,10 +131,14 @@ function continueOrder() {
         border: 1rpx solid;
     }
     .food-list {
-        padding: 0 20rpx 20rpx;
+        padding: 0 20rpx 0;
+        box-sizing: border-box;
+        overflow: hidden;
+        max-height: 480rpx;
+        transition: all .3s ease-in-out;
     }
     .display-more {
-        margin: 0 auto 30rpx;
+        margin: 10rpx auto 30rpx;
         width: 150rpx;
         height: 50rpx;
         box-sizing: border-box;

@@ -1,5 +1,5 @@
 <template>
-    <view class="shop-info-container show-shop-info-container">
+    <view :animation="shopInfoAnimationData" class="shop-info-container">
 
         <!-- 		address: "西直门凯德茂地铁站"
 		businessTypes: "2,3"
@@ -12,7 +12,9 @@
 		shopName: "汉堡"
 		startTime: "09:00" -->
         <view class="shop-title">商家信息</view>
-        <view class="shop-description">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</view>
+        <view class="shop-description">
+            {{shopInfo.description}}
+        </view>
         <view class="shop-item flex-row flex-a-center flex-j-between">
             <view class="item-left flex-row flex-a-center">
                 <image class="item-icon" src="/static/img/shop/eglass-shop.png" mode=""></image>
@@ -39,7 +41,7 @@
                 <image class="item-icon" src="/static/img/shop/shop-minus-icon.png" mode=""></image>
                 <view class="item-title">商家满减</view>
             </view>
-            <minus-list :minusList="shopInfo.minusList"></minus-list>
+            <MinusList :minusList="shopInfo.minusList"></MinusList>
             <!-- <view class="item-right">洁柔</view> -->
         </view>
     </view>
@@ -50,10 +52,36 @@ import MinusList from "@/components/MinusList.vue";
 import { ShopItemI } from "@/interface/home";
 import { ComputedStateI } from "@/interface/vuex";
 import { mapState } from "@/utils/mapVuex";
+import { defineComponent, getCurrentInstance, computed, watch, ref } from "vue";
+import { shopInfoTransitionTime } from "../infoConfig";
+
 interface StateF {
-    shopInfo: ComputedStateI<ShopItemI>
+    shopInfo: ComputedStateI<ShopItemI>,
+    startShopInfoAnimationFlag: ComputedStateI<boolean>,
 }
-const { shopInfo }: StateF = mapState(["shopInfo"]);
+const { shopInfo, startShopInfoAnimationFlag }: StateF = mapState(["shopInfo", 'startShopInfoAnimationFlag']);
+
+const shopInfoAnimationData = ref(null);
+const shopInfoAnimation = uni.createAnimation({
+    duration: shopInfoTransitionTime,
+    timingFunction: "ease-in-out",
+});
+function toStartAnimation() {
+    shopInfoAnimation.left(0).step();
+    shopInfoAnimationData.value = shopInfoAnimation.export();
+}
+function toEndAnimation() {
+    shopInfoAnimation.left('750rpx').step();
+    shopInfoAnimationData.value = shopInfoAnimation.export();
+}
+
+watch(startShopInfoAnimationFlag, (newValue: boolean, oldValue: boolean) => {
+    if (newValue) {
+        toStartAnimation();
+    } else {
+        toEndAnimation();
+    }
+});
 </script>
 
 <style lang="scss" scoped>
@@ -103,9 +131,7 @@ const { shopInfo }: StateF = mapState(["shopInfo"]);
     // 	border-bottom: none;
     // }
 }
-.show-shop-info-container {
-    left: 0;
-}
+
 // .hide-shop-info-container {
 // 	left: 750rpx;
 // }

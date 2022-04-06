@@ -11,23 +11,30 @@
 <script lang="ts" setup>
 import { mapState, mapMutation } from "@/utils/mapVuex";
 import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import { delaySync } from "@/utils/";
+import { shopInfoTransitionTime } from "../infoConfig";
 interface StateF {
     topBarInfo: ComputedStateI<string>
 }
 interface MutationF {
     setTopBarInfo: ComputedMutationI<string>,
     setShopInfoFlag: ComputedMutationI<boolean>,
+    setStartShopInfoAnimationFlag: ComputedMutationI<boolean>,
 }
 const { topBarInfo }:StateF = mapState(["topBarInfo"]);
-const { setTopBarInfo,setShopInfoFlag }:MutationF = mapMutation(["setTopBarInfo", "setShopInfoFlag"]);
-function clickTopBar(title: string) {
+const { setTopBarInfo,setShopInfoFlag, setStartShopInfoAnimationFlag }:MutationF = mapMutation(["setTopBarInfo", "setShopInfoFlag", "setStartShopInfoAnimationFlag"]);
+async function clickTopBar(title: string) {
     if (topBarInfo.value === title) return;
+    setTopBarInfo(title);
     if (title === "商家") {
+        setStartShopInfoAnimationFlag(true)
+        await delaySync(shopInfoTransitionTime)
         setShopInfoFlag(true);
     } else {
+        setStartShopInfoAnimationFlag(false)
+        await delaySync(shopInfoTransitionTime)
         setShopInfoFlag(false);
     }
-    setTopBarInfo(title);
 }
 </script>
 

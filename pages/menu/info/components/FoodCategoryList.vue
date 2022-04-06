@@ -1,5 +1,5 @@
 <template>
-    <scroll-view scroll-y scroll-with-animation :scroll-into-view="scrollIntoCategoryTabID" class="food-main-box flex-item" id="food-main-box" @scroll="foodScrollHandle" :style="{ 'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightPX + 'px' : '' }">
+    <scroll-view scroll-y scroll-with-animation :scroll-into-view="scrollIntoCategoryTabID" class="food-main-box flex-item" id="food-main-box" @scroll="foodScrollHandle" :style="{ 'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightRPX + 'rpx' : '' }">
         <view class="food-category-list-item" v-for="(foodCategoryItem, index) in categoryList" :key="index" :id="foodCategoryItem.categoryTabID + 'id'">
             <view :id="foodCategoryItem.categoryTabID" class="food-category-name">{{ foodCategoryItem.categoryName }}</view>
             <view class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex" @click="toShowFoodDetail(foodItem)">
@@ -21,9 +21,9 @@
 
 <script lang="ts" setup>
 import FoodAddMinus from "./item/FoodAddMinus.vue";
-import { get1rpx2px } from "@/utils/index";
+import { getRpxToPx } from "@/utils/index";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { topBarHeightPX, minusPromotionsHeightPX } from "../infoConfig";
+import { topBarHeightPX, minusPromotionsHeightRPX } from "../infoConfig";
 import { defineComponent, getCurrentInstance, computed } from "vue";
 const currentInstance = getCurrentInstance();
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";

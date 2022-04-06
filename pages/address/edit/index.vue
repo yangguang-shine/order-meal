@@ -143,7 +143,7 @@ async function chooseAddress() {
 
 <style lang="scss">
 page {
-    height: 100%;
+    // height: 100%;
 }
 .address-edit-container {
     height: 100%;

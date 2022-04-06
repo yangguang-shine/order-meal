@@ -1,7 +1,7 @@
 <template>
     <view class="menu-container">
         <TopBar></TopBar>
-        <view class="menu-order-box flex-col" :class="topBarInfo === '点餐' ? 'show-menu-order-box' : 'hide-menu-order-box'">
+        <view :animation="shopInfoAnimationData" class="menu-order-box flex-col">
             <view class="menu-list-box flex-item flex-row">
                 <CategoryAsideBar></CategoryAsideBar>
                 <FoodCategoryList class="flex-item"></FoodCategoryList>
@@ -11,13 +11,13 @@
             <FooterInfo></FooterInfo>
             <FoodDetail v-if="foodDetailFalg"></FoodDetail>
         </view>
-        <ShopInfo v-if="shopInfoFlag"></ShopInfo>
+        <ShopInfo v-show="startShopInfoAnimationFlag || shopInfoFlag"></ShopInfo>
         <!-- <common-loading v-if="showLoadingFlag"></common-loading> -->
     </view>
 </template>
 
 <script lang="ts" setup>
-import { get1rpx2px } from "@/utils/index";
+import { getRpxToPx } from "@/utils/index";
 import CategoryAsideBar from "./components/CategoryAsideBar.vue";
 import FoodCategoryList from "./components/FoodCategoryList.vue";
 import MinusPromotions from "./components/MinusPromotions.vue";
@@ -31,15 +31,17 @@ import ShopInfo from "./components/ShopInfo.vue";
 import { delaySync } from "@/utils/index.js";
 
 import { mapState, mapMutation, mapAction, mapGetter } from "@/utils/mapVuex";
-import { defineComponent, getCurrentInstance, computed } from "vue";
+import { defineComponent, getCurrentInstance, computed, watch, ref } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { ShopItemI } from "@/interface/home";
 import { CategoryItemI, FoodItemI } from "@/interface/menu";
+import { shopInfoTransitionTime } from "./infoConfig";
 
 interface StateF {
     shopInfo: ComputedStateI<ShopItemI>;
     topBarInfo: ComputedStateI<string>;
+    startShopInfoAnimationFlag: ComputedStateI<boolean>;
     shopInfoFlag: ComputedStateI<boolean>;
     cartDetailFlag: ComputedStateI<boolean>;
     foodDetailFalg: ComputedStateI<boolean>;
@@ -52,14 +54,34 @@ interface MutationF {
 interface ActionF {
     getMenuList: ComputedActionI<void>;
     getOrderKeyFoodList: ComputedActionI<{ orderKey: string }>;
-    getShopInfo: ComputedMutationI<{shopID: number}>
+    getShopInfo: ComputedMutationI<{ shopID: number }>;
 }
 
 const { $showLoading, $hideLoading, $showModal } = getCurrentInstance().proxy;
-const { shopInfo, topBarInfo, shopInfoFlag, cartDetailFlag, foodDetailFalg }: StateF = mapState(["shopInfo", "topBarInfo", "shopInfoFlag", "cartDetailFlag", "foodDetailFalg"]);
+const { shopInfo, topBarInfo,startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg }: StateF = mapState(["shopInfo", "topBarInfo","startShopInfoAnimationFlag", "shopInfoFlag", "cartDetailFlag", "foodDetailFalg"]);
 const { minusPromotionsObject } = mapGetter(["minusPromotionsObject"]);
+const shopInfoAnimationData = ref(null);
+const shopInfoAnimation = uni.createAnimation({
+    duration: shopInfoTransitionTime,
+    timingFunction: "ease-in-out",
+});
+function toStartAnimation() {
+    shopInfoAnimation.left("-750rpx").step();
+    shopInfoAnimationData.value = shopInfoAnimation.export();
+}
+function toEndAnimation() {
+    shopInfoAnimation.left(0).step();
+    shopInfoAnimationData.value = shopInfoAnimation.export();
+}
 
-const { initCart,  }: MutationF = mapMutation(["initCart"]);
+watch(startShopInfoAnimationFlag, (newValue: boolean, oldValue: boolean) => {
+    if (newValue) {
+        toStartAnimation();
+    } else {
+        toEndAnimation();
+    }
+});
+const { initCart }: MutationF = mapMutation(["initCart"]);
 
 const { getMenuList, getOrderKeyFoodList, getShopInfo }: ActionF = mapAction(["getMenuList", "getOrderKeyFoodList", "getShopInfo"]);
 
@@ -70,8 +92,8 @@ onLoad(async (option: { orderKey?: string }) => {
         $showLoading();
         if (!shopInfo.value.shopID) {
             await getShopInfo({
-                shopID: 100036
-            })
+                shopID: 100036,
+            });
         }
         await init();
     } catch (e) {
@@ -90,6 +112,7 @@ async function init() {
     }
     initCart();
 }
+
 function getStorageCart() {}
 </script>
 
@@ -109,6 +132,7 @@ page {
     .menu-order-box {
         position: absolute;
         top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         padding-top: 80rpx;
