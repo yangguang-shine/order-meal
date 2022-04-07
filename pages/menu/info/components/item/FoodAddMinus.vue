@@ -3,34 +3,38 @@
         <!-- <MyTransition name="food-count-minus" :flag="!!foodItem.orderCount" :time="500" v-slot="slotProps">
             <view class="food-count-minus" :class="slotProps.addClass" @click.stop="minusCount()">
                 <view class="add-click-area"></view>
-                <view class="reduce-icon-css" :style="{ 'background-color': $mainColor }"></view>
+                <view class="reduce-icon-css" :style="{ 'background-color': shopInfo.mainColor }"></view>
             </view>
         </MyTransition> -->
-        <view :animation="minusAnimationData" class="food-count-minus" :class="showInfoFlag ? 'show-food-count-minus' : ''" @click.stop="minusCount()">
+        <view :animation="minusAnimationData" class="food-count-minus" :style="{ color: shopInfo.mainColor }" :class="showInfoFlag ? 'show-food-count-minus' : ''" @click.stop="minusCount()">
             <view class="add-click-area"></view>
-            <view class="reduce-icon-css" :style="{ 'background-color': $mainColor }"></view>
+            <view class="reduce-icon-css" :style="{ 'background-color': shopInfo.mainColor }"></view>
         </view>
         <view v-if="foodItem.orderCount" :class="showInfoFlag ? 'show-food-order-count' : ''" :animation="countAnimationData" class="food-order-count">{{ foodItem.orderCount }}</view>
 
         <!-- <MyTransition name="food-order-count" :flag="!!foodItem.orderCount" :time="foodAddMinusTransitionTime" v-slot="slotProps">
             <view class="food-order-count" :class="slotProps.addClass">{{ foodItem.orderCount || "" }}</view>
         </MyTransition> -->
-        <view class="food-count-add" :style="{ 'background-color': $mainColor }" @click.stop="addCount()">
+        <view class="food-count-add" :id="'add' + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
             <view class="add-click-area"></view>
         </view>
+        <view v-for="item in list" :key="item.random" class="food-count-add food-count-add-copy" :style="{ 'background-color': shopInfo.mainColor, top: item.style.top + 'px', right: item.style.right + 'px' }"></view>
+
+        <!-- <view ref="foodCountAddRef" :id="'add' + foodItem.foodID" :animation="addAnimationData" class="food-count-add food-count-add-copy" :style="{ 'background-color': shopInfo.mainColor }"></view> -->
     </view>
 </template>
 
 <script lang="ts" setup>
-import { delaySync } from "@/utils/index";
-import { watch, reactive, ref } from "vue";
+import { delaySync, getoffsetRight, selectQuery } from "@/utils/index";
+import { watch, reactive, ref, getCurrentInstance, onMounted } from "vue";
 import { mapMutation, mapState } from "@/utils/mapVuex";
 import MyTransition from "@/components/MyTransition.vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
-import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI } from "@/interface/index";
+import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI, PositionInfoI, ShopItemI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
-import { foodAddMinusTransitionTime } from "../../infoConfig";
+import { countAddTransitionTime, foodAddMinusTransitionTime } from "../../infoConfig";
+const currentInstance = getCurrentInstance();
 interface PropsI {
     foodItem: FoodItemI;
 }
@@ -38,8 +42,12 @@ interface CartChangeParamI {
     foodItem: FoodItemI;
     count: number;
 }
-const OriginFoodItem = props.foodItem
+const list: RandomStyleI[] = reactive([]);
+const OriginFoodItem = props.foodItem;
 const showInfoFlag: RefI<boolean> = ref(false);
+const showAddTransitionflag: RefI<boolean> = ref(false);
+
+const foodCountAddRef: RefI<any> = ref(null);
 const countAnimation = uni.createAnimation({
     duration: foodAddMinusTransitionTime,
     timingFunction: "ease-in-out",
@@ -52,63 +60,91 @@ const minusAnimation = uni.createAnimation({
 
 const countAnimationData = ref(null);
 const minusAnimationData = ref(null);
+const addAnimationData = ref(null);
 
 interface StateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
     cartDetailFlag: ComputedStateI<boolean>;
+    shopInfo: ComputedStateI<ShopItemI>;
+    cartImgPositionInfo: ComputedStateI<PositionInfoI>;
 }
 interface MutationF {
     cartChange: ComputedMutationI<CartChangeParamI>;
     setCartDetailFlag: ComputedMutationI<boolean>;
 }
+interface RandomStyleI {
+    random: number;
+    style: {
+        top: number;
+        right: number;
+    };
+}
 const { cartChange, setCartDetailFlag }: MutationF = mapMutation(["cartChange", "setCartDetailFlag"]);
-const { cartCategoryList, cartDetailFlag }: StateF = mapState(["cartCategoryList", "cartDetailFlag"]);
+const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPositionInfo }: StateF = mapState(["cartCategoryList", "cartDetailFlag", "shopInfo", "cartImgPositionInfo"]);
 const props: PropsI = withDefaults(defineProps<PropsI>(), {
     foodItem: {},
 });
-onLoad(() => {
+const addPositionInfo: RefI<PositionInfoI> = ref({
+    left: 0,
+    top: 0,
+});
+let offsetRight = 0;
+onMounted(async () => {
     if (props.foodItem.orderCount > 0) {
+        // 组件初次挂载不使用动画
         showInfoFlag.value = true;
-        // countAnimation.opacity(1).step();
-        // countAnimationData.value = countAnimation.export();
-        // minusAnimation.right("100rpx").rotate(-180).step();
-        // minusAnimationData.value = minusAnimation.export();
-        // console.log(minusAnimationData.value);
     }
-}),
-    watch(
-        () => props.foodItem.orderCount,
-        (newValue: number, oldValue: number) => {
-            console.log(OriginFoodItem === props.foodItem)
-            console.log(newValue, oldValue);
-            if (newValue === 1 && oldValue === 0) {
-                countAnimation.opacity(1).step();
-                countAnimationData.value = countAnimation.export();
-                minusAnimation.right("100rpx").rotate(-180).step();
-                minusAnimationData.value = minusAnimation.export();
-                console.log(minusAnimationData.value);
-            } else if (newValue === 0 && oldValue === 1) {
-                countAnimation.opacity(0).step();
-                countAnimationData.value = countAnimation.export();
-                minusAnimation.right(0).rotate(0).step();
-                minusAnimationData.value = minusAnimation.export();
-                console.log(minusAnimationData.value);
-            }
+    // 获取曲线起始位置
+    addPositionInfo.value = await getPositionInfo();
+    offsetRight = addPositionInfo.value.left - cartImgPositionInfo.value.left;
+});
+watch(
+    () => props.foodItem.orderCount,
+    (newValue: number, oldValue: number) => {
+        if (newValue === 1 && oldValue === 0) {
+            countAnimation.opacity(1).step();
+            countAnimationData.value = countAnimation.export();
+            minusAnimation.right("100rpx").rotate(-180).step();
+            minusAnimationData.value = minusAnimation.export();
+        } else if (newValue === 0 && oldValue === 1) {
+            countAnimation.opacity(0).step();
+            countAnimationData.value = countAnimation.export();
+            minusAnimation.right(0).rotate(0).step();
+            minusAnimationData.value = minusAnimation.export();
         }
-    );
-function addCount() {
-    // if (!canAddFlag) return;
+    }
+);
+async function getPositionInfo(): Promise<PositionInfoI> {
+    const res = await selectQuery(`#add${props.foodItem.foodID}`, currentInstance);
+    return {
+        left: res.left,
+        top: res.top,
+    };
+}
+function addCount(e: any) {
+    if (offsetRight) {
+        list.push({
+            random: Math.random(),
+            style: {
+                top: 0,
+                right: 0,
+            },
+        });
+        startAddTransition(list[list.length - 1]);
+    }
+    if (e.touches && e.touches.length) {
+        const positionInfo = e.touches[0];
+        const { pageX, pageY } = positionInfo;
+    }
     const count = props.foodItem.orderCount + 1;
     cartChange({
         foodItem: props.foodItem,
         count,
     });
-    console.log("addCount");
 }
 
 async function minusCount() {
     if (!props.foodItem.orderCount) return;
-    console.log("minusCount");
     const count = props.foodItem.orderCount - 1;
     cartChange({
         foodItem: props.foodItem,
@@ -124,6 +160,62 @@ async function minusCount() {
     //     await delaySync(foodAddMinusTransitionTime);
     //     canAddFlag = true;
     // }
+}
+interface OffsetInfoI {
+    offsetTop: number,
+    offsetRight: number,
+}
+async function startAddTransition(item: RandomStyleI) {
+    const offsetTop = cartImgPositionInfo.value.top - addPositionInfo.value.top;
+
+    const offsetInfo: OffsetInfoI = {
+        offsetTop,
+        offsetRight,
+    };
+    console.log(11111);
+    item.style.top = offsetTop
+    item.style.right = offsetRight
+    await startUp(item, offsetInfo);
+    // await startDowm(item);
+
+    // const addAnimation = uni.createAnimation({
+    //     duration: 2000,
+    //     timingFunction: "cubic-bezier(0.14,-1.33,1,0.18)",
+    // });
+
+    // addAnimation.top(offsetTop).right(offsetRight).step();
+    // addAnimationData.value = addAnimation.export();
+    //  = addAnimation.˝
+}
+
+function startUp(item: RandomStyleI, offsetInfo: OffsetInfoI) {
+    return new Promise((resolve, reject) => {
+        const leftSpeed = 10;
+        let topSpeed = 10;
+        const timer = setInterval(() => {
+            item.style.right = item.style.right + leftSpeed;
+            item.style.top = item.style.top - topSpeed;
+            topSpeed = topSpeed - 2;
+            console.log(item.style.top);
+            if (item.style.top > offsetInfo.offsetTop || item.style.right > offsetInfo.offsetRight) {
+
+                clearInterval(timer);
+                console.log(list);
+                resolve(true);
+            }
+        }, 40);
+    });
+}
+function startDowm(item: RandomStyleI, count: number = 1): void {
+    const leftSpeed = 4;
+    const topSpeed = 1;
+    let right = 0;
+    let top = 0;
+    right = item.style.right + 2;
+    top = topSpeed * count;
+    item.style.right = right;
+    item.style.top = item.style.top - topSpeed * count;
+    return startDowm(item, count + 1);
 }
 // addCount(foodItem) {
 //     if (!this.addCountState) return;
@@ -151,14 +243,21 @@ async function minusCount() {
     height: 40rpx;
     .food-count-add {
         position: absolute;
-        right: 0;
+        right: 270px;
+
         top: 0;
         width: 40rpx;
         height: 40rpx;
         border-radius: 50%;
+        z-index: 10;
         // text-align: center;
         // line-height: 40rpx;
         // color: #fff;
+    }
+    .food-count-add-copy {
+        z-index: 5;
+        //         top: 289.25px;
+        // right: 165px;
     }
 
     .food-count-add::after {

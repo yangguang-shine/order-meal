@@ -4,7 +4,7 @@
             <div class="footer-box">
                 <div class="footer-discount-price"></div>
                 <div class="footer-pay-price"></div>
-                <div class="submit-order-button flex-row flex-ja-center" :style="{ background: $mainColor }" @click="toSubmitOrder">提交订单</div>
+                <div class="submit-order-button flex-row flex-ja-center" :style="{ background: shopInfo.mainColor }" @click="toSubmitOrder">提交订单</div>
             </div>
         </div>
     </div>
@@ -20,6 +20,7 @@ import { mapMutation, mapAction, mapState, mapGetter } from "@/utils/mapVuex";
 
 interface StateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
+    shopInfo: ComputedStateI<ShopItemI>;
 }
 interface MutationF {
     clearCart: ComputedMutationI
@@ -28,7 +29,7 @@ interface MutationF {
 interface ActionF {
     submitOrder: ComputedActionI
 }
-const { cartCategoryList }: StateF = mapState(["cartCategoryList"]);
+const { cartCategoryList,shopInfo }: StateF = mapState(["cartCategoryList", "shopInfo"]);
 
 const { clearCart, setNoteText }:MutationF = mapMutation(["clearCart", "setNoteText"]);
 

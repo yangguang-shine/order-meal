@@ -1,38 +1,39 @@
 <template>
-    <view class="footer-cart-container" :style="{'position': startShopInfoAnimationFlag || shopInfoFlag ? 'absolute' : 'fixed'}">
+    <view class="footer-cart-container" :style="{ position: startShopInfoAnimationFlag || shopInfoFlag ? 'absolute' : 'fixed' }">
         <view class="footer-cart flex-row flex-j-between flex-a-center">
-            <view class="cart-img-box">
+            <view class="cart-img-box" id="cart-img-box">
                 <image class="cart-img" @click="clickCartImg" src="/static/img/cart-icon.png" mode="scaleToFill"></image>
-                <view v-if="allCartFoodCount" class="cart-all-count" :style="{ background: $mainColor }">{{ allCartFoodCount }}</view>
+                <view v-if="allCartFoodCount" class="cart-all-count" :style="{ background: shopInfo.mainColor }">{{ allCartFoodCount }}</view>
             </view>
             <view class="flex-item cart-all-amount">
                 <text class="amount-unit">¥</text>
                 <text class="discounted-price">{{ cartPriceInfo.cartAlldiscountedPrice }}</text>
                 <text v-if="cartPriceInfo.discountPrice" class="origin-price">¥{{ cartPriceInfo.cartAllOriginPrice }}</text>
             </view>
-            <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAlldiscountedPrice > 0 ? $mainColor : '' }" @click="toComfirmOrder"></view>
-            <!-- <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAlldiscountedPrice > 0 ? $mainColor : '' }" @click="toComfirmOrder">去下单</view> -->
+            <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAlldiscountedPrice > 0 ? shopInfo.mainColor : '' }" @click="toComfirmOrder"></view>
+            <!-- <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAlldiscountedPrice > 0 ? shopInfo.mainColor : '' }" @click="toComfirmOrder">去下单</view> -->
         </view>
     </view>
 </template>
 
-<script lang='ts' setup>
-import { getCurrentInstance } from "vue";
-import {
-    mapGetter,
-    mapMutation,
-    mapState
-} from "@/utils/mapVuex";
-const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
+<script lang="ts" setup>
+import { getCurrentInstance, onMounted } from "vue";
+import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
-import { CategoryItemI, FoodItemI } from "@/interface/menu";
+import { CategoryItemI, FoodItemI, PositionInfoI } from "@/interface/menu";
 import { MinusPromotionsObjectI, AsideCategoryItemI, CartPriceInfoI } from "@/store/getters/menu";
 import { RefI } from "@/interface/vueInterface";
+import { ShopItemI } from "@/interface/home";
+import { selectQuery } from "@/utils/";
+import router from "@/utils/router";
+const currentInstance= getCurrentInstance();
 
 interface StateF {
     startShopInfoAnimationFlag: ComputedStateI<boolean>;
     shopInfoFlag: ComputedStateI<boolean>;
+    shopInfo: ComputedStateI<ShopItemI>;
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
+    cartImgPositionInfo: ComputedStateI<PositionInfoI>;
 }
 interface GetterF {
     cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
@@ -40,23 +41,32 @@ interface GetterF {
 }
 interface MutationF {
     toogleCartDetailFlag: ComputedMutationI;
+    setCartImgPositionInfo: ComputedMutationI<PositionInfoI>;
 }
-const { startShopInfoAnimationFlag,shopInfoFlag, cartCategoryList } = mapState(["startShopInfoAnimationFlag","shopInfoFlag", 'cartCategoryList']);
+const { startShopInfoAnimationFlag, shopInfoFlag, shopInfo, cartCategoryList, cartImgPositionInfo }: StateF = mapState(["startShopInfoAnimationFlag", "shopInfoFlag", "shopInfo", "cartCategoryList", "cartImgPositionInfo"]);
 
-const { cartPriceInfo, allCartFoodCount }:GetterF = mapGetter([
-    "cartPriceInfo",
-    "allCartFoodCount"
-]);
+const { cartPriceInfo, allCartFoodCount }: GetterF = mapGetter(["cartPriceInfo", "allCartFoodCount"]);
 
-const { toogleCartDetailFlag }: MutationF = mapMutation(["toogleCartDetailFlag"]);
+const { toogleCartDetailFlag, setCartImgPositionInfo }: MutationF = mapMutation(["toogleCartDetailFlag", "setCartImgPositionInfo"]);
+onMounted(async () => {
+    const positionInfo = await getCartImgPositionInfo()
+    setCartImgPositionInfo(positionInfo)
+})
+async function getCartImgPositionInfo (): Promise<PositionInfoI> {
+    const res = await selectQuery('#cart-img-box',currentInstance)
+    return {
+        left: res.left,
+        top: res.top,
+    }
+}
 function toComfirmOrder() {
-    $myrouter.navigateTo({
-        name: "menu/confirm"
+    router.navigateTo({
+        name: "menu/confirm",
     });
 }
 function clickCartImg() {
     if (cartCategoryList.value.length > 0) {
-        toogleCartDetailFlag()
+        toogleCartDetailFlag();
     }
 }
 </script>

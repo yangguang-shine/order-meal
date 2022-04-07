@@ -1,8 +1,8 @@
 <template>
     <scroll-view scroll-y class="category-aside-bar-box" :style="{ 'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightRPX + 'rpx' : '' }">
-        <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'aside-categroy-item-active': categoryTabID === asideCategoryItem.categoryTabID }" @click="changeCategoryTab(asideCategoryItem.categoryTabID)">
+        <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'aside-categroy-item-active': categoryTabID === asideCategoryItem.categoryTabID }" @click="changeCategoryTab(asideCategoryItem.categoryTabID)" :style="{'color': categoryTabID === asideCategoryItem.categoryTabID ? shopInfo.mainColor : ''}">
             {{ asideCategoryItem.categoryName }}
-            <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count" :style="{ background: $mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
+            <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count" :style="{ background: shopInfo.mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
         </view>
     </scroll-view>
 </template>
@@ -17,9 +17,11 @@ import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/
 import { CategoryItemI } from "@/interface/menu";
 import { MinusPromotionsObjectI, AsideCategoryItemI } from "@/store/getters/menu";
 import { RefI } from "@/interface/vueInterface";
+import { ShopItemI } from "@/interface/home";
 
 interface StateF {
     categoryTabID: ComputedStateI<string>;
+    shopInfo: ComputedStateI<ShopItemI>;
 }
 interface GetterF {
     asideCategoryList: ComputedGetterI<AsideCategoryItemI>;
@@ -29,7 +31,7 @@ interface MutationF {
     setCategoryTabId: ComputedMutationI<string>;
     setScrollIntoCategoryTabID: ComputedMutationI<string>;
 }
-const { categoryTabID } = mapState(["categoryTabID"]);
+const { categoryTabID, shopInfo } = mapState(["categoryTabID", "shopInfo"]);
 const { asideCategoryList, minusPromotionsObject }: GetterF = mapGetter(["asideCategoryList", "minusPromotionsObject"]);
 
 const { setCategoryTabId, setScrollIntoCategoryTabID }: MutationF = mapMutation(["setCategoryTabId", "setScrollIntoCategoryTabID"]);

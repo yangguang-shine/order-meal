@@ -15,6 +15,7 @@ export const foodAddMinusTransitionTime: number = transitionTime100 * 2
 export const cartDetailTransitionTime: number = transitionTime100 * 2
 export const foodDetailTransitionTime: number = transitionTime100 * 2
 export const shopInfoTransitionTime: number = transitionTime100 * 2
+export const countAddTransitionTime: number = transitionTime100 * 5
 
 
 

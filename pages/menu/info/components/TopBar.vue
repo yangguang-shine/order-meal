@@ -1,9 +1,9 @@
 <template>
     <view class="com-top-bar-container">
         <view class="top-bar-list flex-row ">
-            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '点餐' }" @click="clickTopBar('点餐')" :style="{'color': topBarInfo === '点餐' ? $mainColor : ''}">点餐</view>
-            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '商家' }" :style="{'color': topBarInfo === '商家' ? $mainColor : ''}" @click="clickTopBar('商家')">商家</view>
-            <div class="select-top-bar-bottom" :style="{ background: $mainColor, left: topBarInfo === '点餐' ? '25%' : '75%' }"></div>
+            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '点餐' }" @click="clickTopBar('点餐')" :style="{'color': topBarInfo === '点餐' ? shopInfo.mainColor : ''}">点餐</view>
+            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '商家' }" :style="{'color': topBarInfo === '商家' ? shopInfo.mainColor : ''}" @click="clickTopBar('商家')">商家</view>
+            <div class="select-top-bar-bottom" :style="{ background: shopInfo.mainColor, left: topBarInfo === '点餐' ? '25%' : '75%' }"></div>
         </view>
     </view>
 </template>
@@ -13,15 +13,17 @@ import { mapState, mapMutation } from "@/utils/mapVuex";
 import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { delaySync } from "@/utils/";
 import { shopInfoTransitionTime } from "../infoConfig";
+import { ShopItemI } from "@/interface/home";
 interface StateF {
     topBarInfo: ComputedStateI<string>
+    shopInfo: ComputedStateI<ShopItemI>
 }
 interface MutationF {
     setTopBarInfo: ComputedMutationI<string>,
     setShopInfoFlag: ComputedMutationI<boolean>,
     setStartShopInfoAnimationFlag: ComputedMutationI<boolean>,
 }
-const { topBarInfo }:StateF = mapState(["topBarInfo"]);
+const { topBarInfo, shopInfo }:StateF = mapState(["topBarInfo", "shopInfo"]);
 const { setTopBarInfo,setShopInfoFlag, setStartShopInfoAnimationFlag }:MutationF = mapMutation(["setTopBarInfo", "setShopInfoFlag", "setStartShopInfoAnimationFlag"]);
 async function clickTopBar(title: string) {
     if (topBarInfo.value === title) return;

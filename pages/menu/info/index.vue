@@ -140,12 +140,6 @@ page {
         box-sizing: border-box;
         transition: all ease-in-out 0.3s;
     }
-    .show-menu-order-box {
-        left: 0;
-    }
-    .hide-menu-order-box {
-        left: -750rpx;
-    }
     //    .shop-info-box  {
     //         position: absolute;
     //         top: 0;

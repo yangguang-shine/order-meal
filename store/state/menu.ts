@@ -1,5 +1,5 @@
 
-import { ShopItemI, CategoryItemI, FoodItemI, AsideCategoryItemI, initFoodItem } from "@/interface/index";
+import { ShopItemI, CategoryItemI, FoodItemI, AsideCategoryItemI, initFoodItem, PositionInfoI } from "@/interface/index";
 
 export interface StateMenuI {
     cartCategoryList: CategoryItemI[];
@@ -13,6 +13,7 @@ export interface StateMenuI {
     cartDetailFlag: boolean;
     foodDetailFalg: boolean;
     foodInfo: FoodItemI;
+    cartImgPositionInfo: PositionInfoI
 
 }
 
@@ -28,5 +29,9 @@ const state: StateMenuI = {
     cartDetailFlag: false,
     foodDetailFalg: false,
     foodInfo:initFoodItem,
+    cartImgPositionInfo: {
+        left:  0,
+        top : 0
+    }
 };
 export default state;

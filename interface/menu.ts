@@ -1,5 +1,8 @@
 import { OriginShopItemI } from "./home";
-
+export interface PositionInfoI {
+    left: number,
+    top: number
+}
 export interface OriginFoodItemI {
     categoryID: number;
     categoryName: string;

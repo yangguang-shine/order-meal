@@ -1,4 +1,4 @@
-import { MutationI, FoodItemI,StateI , CategoryItemI, initFoodItem} from "@/interface/index";
+import { MutationI, FoodItemI,StateI , CategoryItemI, initFoodItem, PositionInfoI} from "@/interface/index";
 import { timeStampTranslate, toFixedToNumber } from "@/utils/index";
 
 function setCategoryTabId (state: StateI, categoryTabID: string) {
@@ -22,8 +22,12 @@ function setTopBarInfo (state: StateI, topBarInfo: string) {
 function setStartShopInfoAnimationFlag (state: StateI, startShopInfoAnimationFlag: boolean) {
     state.startShopInfoAnimationFlag = startShopInfoAnimationFlag;
 };
+
 function setShopInfoFlag (state: StateI, shopInfoFlag: boolean) {
     state.shopInfoFlag = shopInfoFlag;
+};
+function setCartImgPositionInfo (state: StateI, positionInfo: PositionInfoI) {
+    state.cartImgPositionInfo = positionInfo;
 };
 function toogleCartDetailFlag (state: StateI, ) {
     state.cartDetailFlag = !state.cartDetailFlag;
@@ -105,6 +109,7 @@ export default {
     setTopBarInfo,
     setStartShopInfoAnimationFlag,
     setShopInfoFlag,
+    setCartImgPositionInfo,
     toogleCartDetailFlag,
     setCartDetailFlag,
     setCartCategoryList,

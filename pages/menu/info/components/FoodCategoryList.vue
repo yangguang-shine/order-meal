@@ -1,5 +1,5 @@
 <template>
-    <scroll-view scroll-y scroll-with-animation :scroll-into-view="scrollIntoCategoryTabID" class="food-main-box flex-item" id="food-main-box" @scroll="foodScrollHandle" :style="{ 'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightRPX + 'rpx' : '' }">
+    <scroll-view scroll-y scroll-with-animation :scroll-into-view="scrollIntoCategoryTabID" class="food-main-box" id="food-main-box" @scroll="foodScrollHandle" :style="{ 'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightRPX + 'rpx' : '' }">
         <view class="food-category-list-item" v-for="(foodCategoryItem, index) in categoryList" :key="index" :id="foodCategoryItem.categoryTabID + 'id'">
             <view :id="foodCategoryItem.categoryTabID" class="food-category-name">{{ foodCategoryItem.categoryName }}</view>
             <view class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex" @click="toShowFoodDetail(foodItem)">
@@ -21,7 +21,7 @@
 
 <script lang="ts" setup>
 import FoodAddMinus from "./item/FoodAddMinus.vue";
-import { getRpxToPx } from "@/utils/index";
+import { getRpxToPx, selectQuery } from "@/utils/index";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { topBarHeightPX, minusPromotionsHeightRPX } from "../infoConfig";
 import { defineComponent, getCurrentInstance, computed } from "vue";
@@ -78,7 +78,7 @@ onLoad(() => {});
 const handleScroll = async (e) => {
     for (let i = 0; i < asideCategoryList.value.length; i++) {
         const categoryItem = asideCategoryList.value[i];
-        const res = await selectQuery(`#${categoryItem.categoryTabID}id`);
+        const res = await selectQuery(`#${categoryItem.categoryTabID}id`, currentInstance);
         if (topBarHeightPX <= res.top || res.bottom > topBarHeightPX) {
             setCategoryTabId(categoryItem.categoryTabID);
             setScrollIntoCategoryTabID('');
@@ -88,17 +88,6 @@ const handleScroll = async (e) => {
 };
 const foodScrollHandle = debounce(handleScroll, 30);
 
-function selectQuery(id: string) {
-    return new Promise((resolve, reject) => {
-        uni.createSelectorQuery()
-            .in(currentInstance)
-            .select(id)
-            .boundingClientRect((res) => {
-                resolve(res);
-            })
-            .exec();
-    });
-}
 
 const throttle = (() => {
     let timer: null | number = null;

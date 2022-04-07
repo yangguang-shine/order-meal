@@ -5,7 +5,7 @@
                 <image class="shop-img"></image>
                 <view class="shop-name">{{ shopInfo.shopName }}</view>
             </view>
-            <view @click="continueOrder" class="continue-order flex-row flex-ja-center" :style="{ color: $mainColor }">继续点单</view>
+            <view @click="continueOrder" class="continue-order flex-row flex-ja-center" :style="{ color: shopInfo.mainColor }">继续点单</view>
         </view>
         <view class="food-list" :animation="foodListAnimationData" :style="{'max-height': foodListMaxHeihgt}">
             <OrderFoodItem  v-for="(orderFoodItem, index) in orderFoodList" :orderFoodItem="orderFoodItem" :key="index"></OrderFoodItem>
