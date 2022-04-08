@@ -14,7 +14,7 @@
                         <div v-if="foodInfo.unit" class="food-unit">/{{ foodInfo.unit }}</div>
                     </div>
 
-                    <FoodAddMinus :foodItem="foodInfo" :delay="foodDetailTransitionTime"></FoodAddMinus>
+                    <FoodAddMinus :foodItem="foodInfo" ></FoodAddMinus>
                 </view>
             </view>
             <image class="close-img" src="/static/img/user-menu/close-food-detail.png" mode="" @click.stop="closeFoodDetail"></image>

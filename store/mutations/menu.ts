@@ -26,6 +26,10 @@ function setStartShopInfoAnimationFlag (state: StateI, startShopInfoAnimationFla
 function setShopInfoFlag (state: StateI, shopInfoFlag: boolean) {
     state.shopInfoFlag = shopInfoFlag;
 };
+function setCartImgAnimationFlag (state: StateI, cartImgAnimationFlag: boolean) {
+    state.cartImgAnimationFlag = cartImgAnimationFlag;
+};
+
 function setCartImgPositionInfo (state: StateI, positionInfo: PositionInfoI) {
     state.cartImgPositionInfo = positionInfo;
 };
@@ -109,6 +113,7 @@ export default {
     setTopBarInfo,
     setStartShopInfoAnimationFlag,
     setShopInfoFlag,
+    setCartImgAnimationFlag,
     setCartImgPositionInfo,
     toogleCartDetailFlag,
     setCartDetailFlag,

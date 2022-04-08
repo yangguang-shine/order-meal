@@ -1,20 +1,10 @@
 <template>
     <view class="food-add-minus-container flex-row flex-ja-center">
-        <!-- <MyTransition name="food-count-minus" :flag="!!foodItem.orderCount" :time="500" v-slot="slotProps">
-            <view class="food-count-minus" :class="slotProps.addClass" @click.stop="minusCount()">
-                <view class="add-click-area"></view>
-                <view class="reduce-icon-css" :style="{ 'background-color': shopInfo.mainColor }"></view>
-            </view>
-        </MyTransition> -->
         <view :animation="minusAnimationData" class="food-count-minus" :style="{ color: shopInfo.mainColor }" :class="showInfoFlag ? 'show-food-count-minus' : ''" @click.stop="minusCount()">
             <view class="add-click-area"></view>
             <view class="reduce-icon-css" :style="{ 'background-color': shopInfo.mainColor }"></view>
         </view>
         <view v-if="foodItem.orderCount" :class="showInfoFlag ? 'show-food-order-count' : ''" :animation="countAnimationData" class="food-order-count">{{ foodItem.orderCount }}</view>
-
-        <!-- <MyTransition name="food-order-count" :flag="!!foodItem.orderCount" :time="foodAddMinusTransitionTime" v-slot="slotProps">
-            <view class="food-order-count" :class="slotProps.addClass">{{ foodItem.orderCount || "" }}</view>
-        </MyTransition> -->
         <view class="food-count-add" :id="'add' + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
             <view class="add-click-area"></view>
         </view>
@@ -41,7 +31,6 @@ import { cartImgWidthHeightPX, countAddTransitionTime, foodAddMinusTransitionTim
 const currentInstance = getCurrentInstance();
 interface PropsI {
     foodItem: FoodItemI;
-    delay?: number
 }
 interface CartChangeParamI {
     foodItem: FoodItemI;
@@ -77,6 +66,8 @@ interface StateF {
 interface MutationF {
     cartChange: ComputedMutationI<CartChangeParamI>;
     setCartDetailFlag: ComputedMutationI<boolean>;
+    setCartImgAnimationFlag: ComputedMutationI<boolean>;
+    
 }
 interface RandomStyleI {
     random: number;
@@ -85,11 +76,10 @@ interface RandomStyleI {
         right: number;
     };
 }
-const { cartChange, setCartDetailFlag }: MutationF = mapMutation(["cartChange", "setCartDetailFlag"]);
+const { cartChange, setCartDetailFlag, setCartImgAnimationFlag }: MutationF = mapMutation(["cartChange", "setCartDetailFlag", "setCartImgAnimationFlag"]);
 const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPositionInfo }: StateF = mapState(["cartCategoryList", "cartDetailFlag", "shopInfo", "cartImgPositionInfo"]);
 const props: PropsI = withDefaults(defineProps<PropsI>(), {
     foodItem: {},
-    delay: 0
 });
 const addPositionInfo: RefI<PositionInfoI> = ref({
     left: 0,
@@ -102,19 +92,19 @@ onMounted(async () => {
         showInfoFlag.value = true;
     }
     // 获取曲线起始位置
-    await delaySync(props.delay)
-    addPositionInfo.value = await getPositionInfo();
-    offsetRight = addPositionInfo.value.left - cartImgPositionInfo.value.left;
+    
 });
 watch(
     () => props.foodItem.orderCount,
     (newValue: number, oldValue: number) => {
+        console.log('OriginFoodItem === props.foodItem')
+        console.log(OriginFoodItem === props.foodItem)
         if (newValue === 1 && oldValue === 0) {
             countAnimation.opacity(1).step();
             countAnimationData.value = countAnimation.export();
             minusAnimation.right("100rpx").rotate(-180).step();
             minusAnimationData.value = minusAnimation.export();
-        } else if (newValue === 0 && oldValue === 1) {
+        } else if (newValue === 0) {
             countAnimation.opacity(0).step();
             countAnimationData.value = countAnimation.export();
             minusAnimation.right(0).rotate(0).step();
@@ -129,7 +119,9 @@ async function getPositionInfo(): Promise<PositionInfoI> {
         top: res.top,
     };
 }
-function addCount(e: any) {
+async function addCount(e: any) {
+    addPositionInfo.value = await getPositionInfo();
+    offsetRight = addPositionInfo.value.left - cartImgPositionInfo.value.left;
     if (offsetRight) {
         list.push({
             random: Math.random(),
@@ -161,13 +153,6 @@ async function minusCount() {
     if (cartCategoryList.value.length === 0 && cartDetailFlag.value) {
         setCartDetailFlag(false);
     }
-    // console.log(count);
-    // if (count === 0) {
-    //     console.log("fffffff");
-    //     canAddFlag = false;
-    //     await delaySync(foodAddMinusTransitionTime);
-    //     canAddFlag = true;
-    // }
 }
 interface OffsetInfoI {
     offsetTop: number;
@@ -182,32 +167,21 @@ async function startAddTransition(item: RandomStyleI) {
     };
     startAnimationX(offsetInfo)
     startAnimationY(offsetInfo)
+    setCartImgAnimationFlag(true)
     await delaySync(countAddTransitionTime)
+    setCartImgAnimationFlag(false)
     deleteItem(item)
-    // const addAnimation = uni.createAnimation({
-    //     duration: 5000,
-    //     timingFunction: "cubic-bezier(0,1.42,0,1.44)",
-    // });
-
-    // addAnimation.translateX(-offsetRight).translateY(offsetTop).step();
-    // addAnimationData.value = addAnimation.export();
-    //  = addAnimation.˝
 }
 function deleteItem(item: RandomStyleI) {
-    console.log('>>>>')
-    console.log(list)
-    console.log(item)
     const findIndex = list.findIndex((item1) => item1 === item)
     list.splice(findIndex, 1)
-    console.log('findIndex')
-    console.log(findIndex)
 }
 function startAnimationX(offsetInfo: OffsetInfoI) {
     const animationX = uni.createAnimation({
         duration: countAddTransitionTime,
         timingFunction: "linear",
     });
-    animationX.translateX(-(offsetInfo.offsetRight - cartImgWidthHeightPX / 2)).step()
+    animationX.translateX(-(offsetInfo.offsetRight - cartImgWidthHeightPX / 3)).step()
     animationXData.value = animationX.export();
 
 }
@@ -216,57 +190,9 @@ function startAnimationY(offsetInfo: OffsetInfoI) {
         duration: countAddTransitionTime,
         timingFunction: "cubic-bezier(.72,-0.01,.66,.48)",
     });
-    // animationY.translateY(offsetInfo.offsetTop).step({
-    //     duration: 200,
-    // })
     animationY.translateY(offsetInfo.offsetTop).opacity(.2).step()
     animationYData.value = animationY.export();
 }
-
-// function startUp(item: RandomStyleI, offsetInfo: OffsetInfoI) {
-//     return new Promise((resolve, reject) => {
-//         const leftSpeed = 10;
-//         let topSpeed = 10;
-//         const timer = setInterval(() => {
-//             item.style.right = item.style.right + leftSpeed;
-//             item.style.top = item.style.top - topSpeed;
-//             topSpeed = topSpeed - 2;
-//             console.log(item.style.top);
-//             if (item.style.top > offsetInfo.offsetTop || item.style.right > offsetInfo.offsetRight) {
-//                 clearInterval(timer);
-//                 console.log(list);
-//                 resolve(true);
-//             }
-//         }, 16);
-//     });
-// }
-// function startDowm(item: RandomStyleI, count: number = 1): void {
-//     const leftSpeed = 4;
-//     const topSpeed = 1;
-//     let right = 0;
-//     let top = 0;
-//     right = item.style.right + 2;
-//     top = topSpeed * count;
-//     item.style.right = right;
-//     item.style.top = item.style.top - topSpeed * count;
-//     return startDowm(item, count + 1);
-// }
-// addCount(foodItem) {
-//     if (!this.addCountState) return;
-//     this.addCountState = false;
-//     foodItem.orderCount += 1;
-//     this.cartCountChange(foodItem);
-//     this.addCountState = true;
-//     if (!this.cartCategoryList.length) this.showCartDetail = false;
-// },
-// minusCount(foodItem) {
-//     if (!this.minusCountState) return;
-//     this.minusCountState = false;
-//     foodItem.orderCount -= 1;
-//     this.cartCountChange(foodItem);
-//     this.minusCountState = true;
-//     if (!this.cartCategoryList.length) this.showCartDetail = false;
-// },
 </script>
 
 <style lang="scss" scoped>

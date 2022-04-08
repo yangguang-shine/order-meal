@@ -1,7 +1,7 @@
 <template>
     <view class="footer-cart-container" :style="{ position: startShopInfoAnimationFlag || shopInfoFlag ? 'absolute' : 'fixed' }">
         <view class="footer-cart flex-row flex-j-between flex-a-center">
-            <view class="cart-img-box" id="cart-img-box">
+            <view :animation="cartImgAnimationData" class="cart-img-box" id="cart-img-box">
                 <image class="cart-img" @click="clickCartImg" src="/static/img/cart-icon.png" mode="scaleToFill"></image>
                 <view v-if="allCartFoodCount" class="cart-all-count" :style="{ background: shopInfo.mainColor }">{{ allCartFoodCount }}</view>
             </view>
@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, onMounted } from "vue";
+import { getCurrentInstance, onMounted, watch, ref } from "vue";
 import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI, FoodItemI, PositionInfoI } from "@/interface/menu";
@@ -26,7 +26,8 @@ import { RefI } from "@/interface/vueInterface";
 import { ShopItemI } from "@/interface/home";
 import { selectQuery } from "@/utils/";
 import router from "@/utils/router";
-const currentInstance= getCurrentInstance();
+import { countAddTransitionTime } from "../infoConfig";
+const currentInstance = getCurrentInstance();
 
 interface StateF {
     startShopInfoAnimationFlag: ComputedStateI<boolean>;
@@ -34,6 +35,7 @@ interface StateF {
     shopInfo: ComputedStateI<ShopItemI>;
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
     cartImgPositionInfo: ComputedStateI<PositionInfoI>;
+    cartImgAnimationFlag: ComputedStateI<boolean>;
 }
 interface GetterF {
     cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
@@ -43,21 +45,49 @@ interface MutationF {
     toogleCartDetailFlag: ComputedMutationI;
     setCartImgPositionInfo: ComputedMutationI<PositionInfoI>;
 }
-const { startShopInfoAnimationFlag, shopInfoFlag, shopInfo, cartCategoryList, cartImgPositionInfo }: StateF = mapState(["startShopInfoAnimationFlag", "shopInfoFlag", "shopInfo", "cartCategoryList", "cartImgPositionInfo"]);
+
+const { startShopInfoAnimationFlag, shopInfoFlag, shopInfo, cartCategoryList, cartImgPositionInfo, cartImgAnimationFlag }: StateF = mapState(["startShopInfoAnimationFlag", "shopInfoFlag", "shopInfo", "cartCategoryList", "cartImgPositionInfo", "cartImgAnimationFlag"]);
 
 const { cartPriceInfo, allCartFoodCount }: GetterF = mapGetter(["cartPriceInfo", "allCartFoodCount"]);
 
 const { toogleCartDetailFlag, setCartImgPositionInfo }: MutationF = mapMutation(["toogleCartDetailFlag", "setCartImgPositionInfo"]);
+const cartImgAnimationData = ref(null);
 onMounted(async () => {
-    const positionInfo = await getCartImgPositionInfo()
-    setCartImgPositionInfo(positionInfo)
-})
-async function getCartImgPositionInfo (): Promise<PositionInfoI> {
-    const res = await selectQuery('#cart-img-box',currentInstance)
+    const positionInfo = await getCartImgPositionInfo();
+    setCartImgPositionInfo(positionInfo);
+});
+async function getCartImgPositionInfo(): Promise<PositionInfoI> {
+    const res = await selectQuery("#cart-img-box", currentInstance);
     return {
         left: res.left,
         top: res.top,
+    };
+}
+watch(cartImgAnimationFlag, (newValue: boolean, oldValue: boolean) => {
+    if (newValue) {
+        console.log("cartImgAnimationFlag");
+        startCartImgAnimation();
     }
+});
+
+function startCartImgAnimation() {
+    const cartImgAnimation = uni.createAnimation({
+        duration: countAddTransitionTime,
+        timingFunction: "linear",
+    });
+    cartImgAnimation.scale(0.85).step({
+        duration: countAddTransitionTime * 0.4,
+    });
+    cartImgAnimation.scale(1.1).step({
+        duration: countAddTransitionTime * 0.2,
+    });
+    cartImgAnimation.scale(0.9).step({
+        duration: countAddTransitionTime * 0.2,
+    });
+    cartImgAnimation.scale(1).step({
+        duration: countAddTransitionTime * 0.2,
+    });
+    cartImgAnimationData.value = cartImgAnimation.export();
 }
 function toComfirmOrder() {
     router.navigateTo({
