@@ -18,8 +18,12 @@
         <view class="food-count-add" :id="'add' + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
             <view class="add-click-area"></view>
         </view>
-        <view v-for="item in list" :key="item.random" class="food-count-add food-count-add-copy" :style="{ 'background-color': shopInfo.mainColor, top: item.style.top + 'px', right: item.style.right + 'px' }"></view>
-
+        <!-- <view v-for="item in list" :key="item.random" class="food-count-add food-count-add-copy" :style="{ 'background-color': shopInfo.mainColor, top: item.style.top + 'px', right: item.style.right + 'px' }"></view> -->
+        <view v-for="item in list" :key="item.random" class="food-count-add-animation-x" :animation="animationXData">
+            <view class="food-count-add-animation-y" :animation="animationYData">
+                <view ref="foodCountAddRef" :id="'add' + foodItem.foodID"  class="food-count-add food-count-add-copy" :style="{ 'background-color': shopInfo.mainColor }"></view>
+            </view>
+        </view>
         <!-- <view ref="foodCountAddRef" :id="'add' + foodItem.foodID" :animation="addAnimationData" class="food-count-add food-count-add-copy" :style="{ 'background-color': shopInfo.mainColor }"></view> -->
     </view>
 </template>
@@ -33,10 +37,11 @@ import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
 import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI, PositionInfoI, ShopItemI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
-import { countAddTransitionTime, foodAddMinusTransitionTime } from "../../infoConfig";
+import { cartImgWidthHeightPX, countAddTransitionTime, foodAddMinusTransitionTime } from "../../infoConfig";
 const currentInstance = getCurrentInstance();
 interface PropsI {
     foodItem: FoodItemI;
+    delay?: number
 }
 interface CartChangeParamI {
     foodItem: FoodItemI;
@@ -60,7 +65,8 @@ const minusAnimation = uni.createAnimation({
 
 const countAnimationData = ref(null);
 const minusAnimationData = ref(null);
-const addAnimationData = ref(null);
+const animationXData = ref(null);
+const animationYData = ref(null);
 
 interface StateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
@@ -83,6 +89,7 @@ const { cartChange, setCartDetailFlag }: MutationF = mapMutation(["cartChange", 
 const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPositionInfo }: StateF = mapState(["cartCategoryList", "cartDetailFlag", "shopInfo", "cartImgPositionInfo"]);
 const props: PropsI = withDefaults(defineProps<PropsI>(), {
     foodItem: {},
+    delay: 0
 });
 const addPositionInfo: RefI<PositionInfoI> = ref({
     left: 0,
@@ -95,6 +102,7 @@ onMounted(async () => {
         showInfoFlag.value = true;
     }
     // 获取曲线起始位置
+    await delaySync(props.delay)
     addPositionInfo.value = await getPositionInfo();
     offsetRight = addPositionInfo.value.left - cartImgPositionInfo.value.left;
 });
@@ -162,8 +170,8 @@ async function minusCount() {
     // }
 }
 interface OffsetInfoI {
-    offsetTop: number,
-    offsetRight: number,
+    offsetTop: number;
+    offsetRight: number;
 }
 async function startAddTransition(item: RandomStyleI) {
     const offsetTop = cartImgPositionInfo.value.top - addPositionInfo.value.top;
@@ -172,51 +180,77 @@ async function startAddTransition(item: RandomStyleI) {
         offsetTop,
         offsetRight,
     };
-    console.log(11111);
-    item.style.top = offsetTop
-    item.style.right = offsetRight
-    await startUp(item, offsetInfo);
-    // await startDowm(item);
-
+    startAnimationX(offsetInfo)
+    startAnimationY(offsetInfo)
+    await delaySync(countAddTransitionTime)
+    deleteItem(item)
     // const addAnimation = uni.createAnimation({
-    //     duration: 2000,
-    //     timingFunction: "cubic-bezier(0.14,-1.33,1,0.18)",
+    //     duration: 5000,
+    //     timingFunction: "cubic-bezier(0,1.42,0,1.44)",
     // });
 
-    // addAnimation.top(offsetTop).right(offsetRight).step();
+    // addAnimation.translateX(-offsetRight).translateY(offsetTop).step();
     // addAnimationData.value = addAnimation.export();
     //  = addAnimation.˝
 }
-
-function startUp(item: RandomStyleI, offsetInfo: OffsetInfoI) {
-    return new Promise((resolve, reject) => {
-        const leftSpeed = 10;
-        let topSpeed = 10;
-        const timer = setInterval(() => {
-            item.style.right = item.style.right + leftSpeed;
-            item.style.top = item.style.top - topSpeed;
-            topSpeed = topSpeed - 2;
-            console.log(item.style.top);
-            if (item.style.top > offsetInfo.offsetTop || item.style.right > offsetInfo.offsetRight) {
-
-                clearInterval(timer);
-                console.log(list);
-                resolve(true);
-            }
-        }, 40);
+function deleteItem(item: RandomStyleI) {
+    console.log('>>>>')
+    console.log(list)
+    console.log(item)
+    const findIndex = list.findIndex((item1) => item1 === item)
+    list.splice(findIndex, 1)
+    console.log('findIndex')
+    console.log(findIndex)
+}
+function startAnimationX(offsetInfo: OffsetInfoI) {
+    const animationX = uni.createAnimation({
+        duration: countAddTransitionTime,
+        timingFunction: "linear",
     });
+    animationX.translateX(-(offsetInfo.offsetRight - cartImgWidthHeightPX / 2)).step()
+    animationXData.value = animationX.export();
+
 }
-function startDowm(item: RandomStyleI, count: number = 1): void {
-    const leftSpeed = 4;
-    const topSpeed = 1;
-    let right = 0;
-    let top = 0;
-    right = item.style.right + 2;
-    top = topSpeed * count;
-    item.style.right = right;
-    item.style.top = item.style.top - topSpeed * count;
-    return startDowm(item, count + 1);
+function startAnimationY(offsetInfo: OffsetInfoI) {
+    const animationY = uni.createAnimation({
+        duration: countAddTransitionTime,
+        timingFunction: "cubic-bezier(.72,-0.01,.66,.48)",
+    });
+    // animationY.translateY(offsetInfo.offsetTop).step({
+    //     duration: 200,
+    // })
+    animationY.translateY(offsetInfo.offsetTop).opacity(.2).step()
+    animationYData.value = animationY.export();
 }
+
+// function startUp(item: RandomStyleI, offsetInfo: OffsetInfoI) {
+//     return new Promise((resolve, reject) => {
+//         const leftSpeed = 10;
+//         let topSpeed = 10;
+//         const timer = setInterval(() => {
+//             item.style.right = item.style.right + leftSpeed;
+//             item.style.top = item.style.top - topSpeed;
+//             topSpeed = topSpeed - 2;
+//             console.log(item.style.top);
+//             if (item.style.top > offsetInfo.offsetTop || item.style.right > offsetInfo.offsetRight) {
+//                 clearInterval(timer);
+//                 console.log(list);
+//                 resolve(true);
+//             }
+//         }, 16);
+//     });
+// }
+// function startDowm(item: RandomStyleI, count: number = 1): void {
+//     const leftSpeed = 4;
+//     const topSpeed = 1;
+//     let right = 0;
+//     let top = 0;
+//     right = item.style.right + 2;
+//     top = topSpeed * count;
+//     item.style.right = right;
+//     item.style.top = item.style.top - topSpeed * count;
+//     return startDowm(item, count + 1);
+// }
 // addCount(foodItem) {
 //     if (!this.addCountState) return;
 //     this.addCountState = false;
@@ -241,10 +275,24 @@ function startDowm(item: RandomStyleI, count: number = 1): void {
     position: relative;
     min-width: 140rpx;
     height: 40rpx;
+    .food-count-add-animation-x {
+        position: absolute;
+        right: 0;
+        width: 40rpx;
+        height: 40rpx;
+        z-index: 5;
+
+    }
+    .food-count-add-animation-y {
+        position: absolute;
+        top: 0;
+        width: 40rpx;
+        height: 40rpx;
+    }
     .food-count-add {
         position: absolute;
-        right: 270px;
-
+        // right: 270px;
+        right: 0;
         top: 0;
         width: 40rpx;
         height: 40rpx;
@@ -255,7 +303,6 @@ function startDowm(item: RandomStyleI, count: number = 1): void {
         // color: #fff;
     }
     .food-count-add-copy {
-        z-index: 5;
         //         top: 289.25px;
         // right: 165px;
     }

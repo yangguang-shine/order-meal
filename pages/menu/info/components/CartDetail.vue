@@ -227,8 +227,8 @@ async function cartClearCart() {
 }
 .cart-img-transparent {
     position: fixed;
-    width: 140rpx;
-    height: 140rpx;
+    width: 120rpx;
+    height: 120rpx;
     bottom: 50rpx;
     left: 20rpx;
     background-color: transparent;

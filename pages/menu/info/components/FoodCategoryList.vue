@@ -1,5 +1,5 @@
 <template>
-    <scroll-view scroll-y scroll-with-animation :scroll-into-view="scrollIntoCategoryTabID" class="food-main-box" id="food-main-box" @scroll="foodScrollHandle" :style="{ 'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightRPX + 'rpx' : '' }">
+    <scroll-view scroll-y  scroll-with-animation :scroll-into-view="scrollIntoCategoryTabID" class="food-main-box" id="food-main-box" @scroll="foodScrollHandle" :style="{ 'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightRPX + 'rpx' : '' }">
         <view class="food-category-list-item" v-for="(foodCategoryItem, index) in categoryList" :key="index" :id="foodCategoryItem.categoryTabID + 'id'">
             <view :id="foodCategoryItem.categoryTabID" class="food-category-name">{{ foodCategoryItem.categoryName }}</view>
             <view class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex" @click="toShowFoodDetail(foodItem)">
@@ -106,6 +106,7 @@ const throttle = (() => {
 .food-main-box {
     // background-color: blue;
     height: 100%;
+    width: 100%;
     // flex-shrink: 0;
     // width: 590rpx;
     box-sizing: border-box;
@@ -118,7 +119,7 @@ const throttle = (() => {
         background: transparent;
     }
     .food-category-list-item {
-        padding: 0 30rpx 0 20rpx;
+        padding: 0 30rpx 0 180rpx;
     }
 
     .food-category-name {

@@ -1,10 +1,10 @@
 <template>
     <view class="menu-container">
         <TopBar></TopBar>
-        <view :animation="shopInfoAnimationData" class="menu-order-box flex-col">
+        <view :animation="shopInfoAnimationData" class="menu-order-box">
             <view class="menu-list-box flex-item flex-row">
-                <CategoryAsideBar></CategoryAsideBar>
                 <FoodCategoryList class="flex-item"></FoodCategoryList>
+                <CategoryAsideBar></CategoryAsideBar>
             </view>
             <CartDetail v-if="cartDetailFlag"></CartDetail>
             <MinusPromotions v-if="minusPromotionsObject.show"></MinusPromotions>
@@ -126,9 +126,7 @@ page {
     height: 100vh;
     color: #333;
     position: relative;
-    .menu-list-box {
-        height: 0rpx;
-    }
+
     .menu-order-box {
         position: absolute;
         top: 0;
@@ -139,6 +137,10 @@ page {
         padding-bottom: 140rpx;
         box-sizing: border-box;
         transition: all ease-in-out 0.3s;
+    }
+        .menu-list-box {
+            position: relative;
+        height: 100%;
     }
     //    .shop-info-box  {
     //         position: absolute;

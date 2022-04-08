@@ -43,6 +43,9 @@ function changeCategoryTab(categoryTabID: string) {
 
 <style lang="scss">
 .category-aside-bar-box {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 160rpx;
     height: 100%;
     background-color: #f5f5f5;

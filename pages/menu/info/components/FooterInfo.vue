@@ -113,13 +113,13 @@ function clickCartImg() {
         position: absolute;
         bottom: 50rpx;
         left: 20rpx;
-        height: 140rpx;
-        width: 140rpx;
+        height: 120rpx;
+        width: 120rpx;
         // z-index: 600;
     }
     .cart-img {
-        height: 140rpx;
-        width: 140rpx;
+        height: 120rpx;
+        width: 120rpx;
     }
 
     .cart-all-count {
