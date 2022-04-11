@@ -1,6 +1,6 @@
 <template>
     <scroll-view scroll-y class="category-aside-bar-box" :style="{ 'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightRPX + 'rpx' : '' }">
-        <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'aside-categroy-item-active': categoryTabID === asideCategoryItem.categoryTabID }" @click="changeCategoryTab(asideCategoryItem.categoryTabID)" :style="{'color': categoryTabID === asideCategoryItem.categoryTabID ? shopInfo.mainColor : ''}">
+        <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'aside-categroy-item-active': categoryTabID === asideCategoryItem.categoryTabID }" @click="changeCategoryTab(asideCategoryItem.categoryTabID)" :style="{ color: categoryTabID === asideCategoryItem.categoryTabID ? shopInfo.mainColor : '' }">
             {{ asideCategoryItem.categoryName }}
             <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count" :style="{ background: shopInfo.mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
         </view>
@@ -48,7 +48,7 @@ function changeCategoryTab(categoryTabID: string) {
     left: 0;
     width: 160rpx;
     height: 100%;
-    background-color: #f5f5f5;
+    background-color: #fff;
     flex-shrink: 0;
     box-sizing: border-box;
     // padding-bottom: 50rpx;
@@ -73,7 +73,8 @@ function changeCategoryTab(categoryTabID: string) {
     .aside-categroy-item-active {
         color: #333;
         font-weight: bold;
-        background-color: #fff;
+        // background-color: #fff;
+        // background-color: #f5f5f5;
     }
     .category-order-count {
         font-weight: normal;

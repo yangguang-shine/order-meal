@@ -14,7 +14,7 @@
                         <div v-if="foodInfo.unit" class="food-unit">/{{ foodInfo.unit }}</div>
                     </div>
 
-                    <FoodAddMinus :foodItem="foodInfo" ></FoodAddMinus>
+                    <FoodAddMinusItem :foodItem="foodInfo" ></FoodAddMinusItem>
                 </view>
             </view>
             <image class="close-img" src="/static/img/user-menu/close-food-detail.png" mode="" @click.stop="closeFoodDetail"></image>
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import FoodAddMinus from "./item/FoodAddMinus.vue";
+import FoodAddMinusItem from "./item/FoodAddMinusItem.vue";
 import { delaySync } from "@/utils/index";
 import { mapState, mapMutation } from "@/utils/mapVuex";
 import { getCurrentInstance, computed, onMounted, ref } from "vue";

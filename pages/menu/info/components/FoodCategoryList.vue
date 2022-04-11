@@ -2,7 +2,8 @@
     <scroll-view scroll-y  scroll-with-animation :scroll-into-view="scrollIntoCategoryTabID" class="food-main-box" id="food-main-box" @scroll="foodScrollHandle" :style="{ 'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightRPX + 'rpx' : '' }">
         <view class="food-category-list-item" v-for="(foodCategoryItem, index) in categoryList" :key="index" :id="foodCategoryItem.categoryTabID + 'id'">
             <view :id="foodCategoryItem.categoryTabID" class="food-category-name">{{ foodCategoryItem.categoryName }}</view>
-            <view class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex" @click="toShowFoodDetail(foodItem)">
+            <FoodItem class="food-item" v-for="foodItem in foodCategoryItem.foodList" :key="foodItem.foodID" :foodItem="foodItem" @clickFoodItem="toShowFoodDetail"></FoodItem>
+            <!-- <view class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex" @click="toShowFoodDetail(foodItem)">
                 <image class="food-img flex-shrink" :src="foodItem.fullImgPath" mode="scaleToFill"></image>
                 <view class="food-info-box flex-item flex-col flex-j-between">
                     <view class="food-name-description">
@@ -14,13 +15,13 @@
                         <FoodAddMinus :foodItem="foodItem"></FoodAddMinus>
                     </view>
                 </view>
-            </view>
+            </view> -->
         </view>
     </scroll-view>
 </template>
 
 <script lang="ts" setup>
-import FoodAddMinus from "./item/FoodAddMinus.vue";
+import FoodItem from "./item/FoodItem.vue";
 import { getRpxToPx, selectQuery } from "@/utils/index";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { topBarHeightPX, minusPromotionsHeightRPX } from "../infoConfig";
@@ -110,6 +111,7 @@ const throttle = (() => {
     // flex-shrink: 0;
     // width: 590rpx;
     box-sizing: border-box;
+    background-color: #f5f5f5;
     // padding-top: 80rpx;
     ::-webkit-scrollbar {
         display: none;
@@ -119,49 +121,57 @@ const throttle = (() => {
         background: transparent;
     }
     .food-category-list-item {
-        padding: 0 30rpx 0 180rpx;
+        padding: 0 0 0 160rpx;
     }
 
     .food-category-name {
         font-size: 24rpx;
         line-height: 30rpx;
         color: #666;
-        padding: 10rpx 0;
+        padding: 20rpx 0 0 20rpx;
         color: #333;
+        // background-color: #fff;
         // margin: 0 0 20rpx;
     }
 
-    .food-category-list-item:first-child .food-category-name {
-        padding-top: 20rpx;
+    .food-category-list-item:last-child {
+        padding-bottom: 20rpx;
     }
     .food-item {
-        padding: 20rpx 0;
+        margin: 20rpx 20rpx 0;
+
     }
-    .food-img {
-        padding: 6rpx 0;
-        height: 150rpx;
-        width: 150rpx;
-    }
-    .food-info-box {
-        padding-left: 20rpx;
-    }
-    .food-name {
-        font-weight: bold;
-        font-size: 32rpx;
-        line-height: 44rpx;
-        color: #333;
-    }
-    .food-description {
-        font-size: 22rpx;
-        line-height: 30rpx;
-        color: #666;
-        margin-top: 10rpx;
-    }
-    .food-price {
-        line-height: 42rpx;
-        color: $color-red;
-        font-size: 36rpx;
-        font-weight: bold;
-    }
+    // .food-item {
+    //     margin: 20rpx 20rpx 0;
+    //     padding: 20rpx;
+    //     background-color: #fff;
+    //     border-radius: 16rpx;
+    // }
+    // .food-img {
+    //     padding: 6rpx 0;
+    //     height: 150rpx;
+    //     width: 150rpx;
+    // }
+    // .food-info-box {
+    //     padding-left: 20rpx;
+    // }
+    // .food-name {
+    //     font-weight: bold;
+    //     font-size: 32rpx;
+    //     line-height: 44rpx;
+    //     color: #333;
+    // }
+    // .food-description {
+    //     font-size: 22rpx;
+    //     line-height: 30rpx;
+    //     color: #666;
+    //     margin-top: 10rpx;
+    // }
+    // .food-price {
+    //     line-height: 42rpx;
+    //     color: $color-red;
+    //     font-size: 36rpx;
+    //     font-weight: bold;
+    // }
 }
 </style>

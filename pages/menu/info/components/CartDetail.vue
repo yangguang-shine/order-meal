@@ -12,7 +12,9 @@
                 </view>
                 <scroll-view scroll-y class="cart-detail-list-box">
                     <view class="food-category-item" v-for="foodCategoryItem in cartCategoryList" :key="foodCategoryItem.categoryID">
-                        <view class="cart-food-item flex-row" v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID">
+                        <FoodItem v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID" :foodItem="cartFoodItem" mode="small" class="cart-food-item"></FoodItem>
+
+                        <!-- <view class="cart-food-item flex-row" v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID">
                             <image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="cartFoodItem.fullImgPath" mode="scaleToFill"></image>
                             <view v-if="cartFoodItem.orderCount" class="cart-food-info-box flex-item flex-col flex-j-between">
                                 <view class="cart-food-name-description">
@@ -21,10 +23,10 @@
                                 </view>
                                 <view class="cart-food-price-button flex-row flex-j-between flex-a-center">
                                     <view class="cart-food-price">¥{{ cartFoodItem.foodItemAmount }}</view>
-                                    <FoodAddMinus :foodItem="cartFoodItem"></FoodAddMinus>
+                                    <FoodAddMinusItem :foodItem="cartFoodItem"></FoodAddMinusItem>
                                 </view>
                             </view>
-                        </view>
+                        </view> -->
                     </view>
                 </scroll-view>
             </view>
@@ -36,7 +38,8 @@
 
 <script lang="ts" setup>
 import { delaySync } from "@/utils/index.js";
-import FoodAddMinus from "./item/FoodAddMinus.vue";
+import FoodAddMinusItem from "./item/FoodAddMinusItem.vue";
+import FoodItem from "./item/FoodItem.vue";
 import { getCurrentInstance, computed, onMounted, ref } from "vue";
 import { footerInfoAndMinusPromotionsHeightRPX, cartDetailTransitionTime } from "../infoConfig";
 
@@ -74,7 +77,6 @@ const detailAnimation = uni.createAnimation({
     duration: cartDetailTransitionTime,
     timingFunction: "ease-in-out",
 });
-
 
 onMounted(() => {
     toStartAnimation();
@@ -148,9 +150,9 @@ async function cartClearCart() {
         bottom: 0;
         left: 0;
         width: 100%;
-        max-height: 800rpx;
+        // max-height: 800rpx;
         box-sizing: border-box;
-        padding: 0 0 10rpx;
+        // padding: 0 0 10rpx;
         background-color: #fff;
         overflow-y: auto;
         border-radius: 30rpx 30rpx 0 0;
@@ -174,8 +176,8 @@ async function cartClearCart() {
     }
 
     .cart-detail-list-box {
-        max-height: 620rpx;
-        padding-bottom: 20rpx;
+        max-height: 650rpx;
+        // padding-bottom: 20rpx;
         overflow-y: auto;
         ::-webkit-scrollbar {
             display: none;
@@ -192,38 +194,48 @@ async function cartClearCart() {
         -webkit-appearance: none;
         background: transparent;
     }
-    .cart-food-item {
-        padding: 10rpx 30rpx;
-    }
-    .cart-food-img {
-        padding: 4rpx 0 8rpx 0;
-        height: 120rpx;
-        width: 120rpx;
-    }
-    .cart-food-price-button {
-        font-size: 26rpx;
-    }
-    .cart-food-name {
-        font-weight: bold;
-        max-width: 400rpx;
-        font-size: 28rpx;
-        line-height: 38rpx;
-    }
-    .cart-food-description {
-        // margin-top: 10rpx;
-        font-size: 22rpx;
-        color: #999;
-    }
-    .cart-food-price {
-        font-size: 30rpx;
-        line-height: 34rpx;
-        font-weight: bold;
-        color: $color-red;
-    }
+    .food-category-ite:last-child {
 
-    .cart-food-info-box {
-        padding-left: 20rpx;
     }
+    .cart-food-item {
+        // padding: 10rpx 30rpx;
+        margin: 0 20rpx;
+        border-bottom: 1rpx solid #eee;
+    }
+        .food-category-item:last-child .cart-food-item:last-child {
+// margin-bottom: 20rpx;
+        border-bottom: none;
+
+    }
+    // .cart-food-img {
+    //     padding: 4rpx 0 8rpx 0;
+    //     height: 120rpx;
+    //     width: 120rpx;
+    // }
+    // .cart-food-price-button {
+    //     font-size: 26rpx;
+    // }
+    // .cart-food-name {
+    //     font-weight: bold;
+    //     max-width: 400rpx;
+    //     font-size: 28rpx;
+    //     line-height: 38rpx;
+    // }
+    // .cart-food-description {
+    //     // margin-top: 10rpx;
+    //     font-size: 22rpx;
+    //     color: #999;
+    // }
+    // .cart-food-price {
+    //     font-size: 30rpx;
+    //     line-height: 34rpx;
+    //     font-weight: bold;
+    //     color: $color-red;
+    // }
+
+    // .cart-food-info-box {
+    //     padding-left: 20rpx;
+    // }
 }
 .cart-img-transparent {
     position: fixed;

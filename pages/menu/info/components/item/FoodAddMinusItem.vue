@@ -1,10 +1,10 @@
 <template>
     <view class="food-add-minus-container flex-row flex-ja-center">
-        <view :animation="minusAnimationData" class="food-count-minus" :style="{ color: shopInfo.mainColor }" :class="showInfoFlag ? 'show-food-count-minus' : ''" @click.stop="minusCount()">
+        <view :animation="minusAnimationData" class="food-count-minus" :style="{ color: shopInfo.mainColor }" :class="mountedTransitionFlag ? '' : 'show-food-count-minus'" @click.stop="minusCount()">
             <view class="add-click-area"></view>
             <view class="reduce-icon-css" :style="{ 'background-color': shopInfo.mainColor }"></view>
         </view>
-        <view v-if="foodItem.orderCount" :class="showInfoFlag ? 'show-food-order-count' : ''" :animation="countAnimationData" class="food-order-count">{{ foodItem.orderCount }}</view>
+        <view v-if="foodItem.orderCount" :class="mountedTransitionFlag ? '' : 'show-food-order-count'" :animation="countAnimationData" class="food-order-count">{{ foodItem.orderCount }}</view>
         <view class="food-count-add" :id="'add' + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
             <view class="add-click-area"></view>
         </view>
@@ -38,7 +38,7 @@ interface CartChangeParamI {
 }
 const list: RandomStyleI[] = reactive([]);
 const OriginFoodItem = props.foodItem;
-const showInfoFlag: RefI<boolean> = ref(false);
+const mountedTransitionFlag: RefI<boolean> = ref(true);
 const showAddTransitionflag: RefI<boolean> = ref(false);
 
 const foodCountAddRef: RefI<any> = ref(null);
@@ -89,7 +89,7 @@ let offsetRight = 0;
 onMounted(async () => {
     if (props.foodItem.orderCount > 0) {
         // 组件初次挂载不使用动画
-        showInfoFlag.value = true;
+        mountedTransitionFlag.value = false;
     }
     // 获取曲线起始位置
     
@@ -190,7 +190,7 @@ function startAnimationY(offsetInfo: OffsetInfoI) {
         duration: countAddTransitionTime,
         timingFunction: "cubic-bezier(.72,-0.01,.66,.48)",
     });
-    animationY.translateY(offsetInfo.offsetTop).opacity(.2).step()
+    animationY.translateY(offsetInfo.offsetTop).step()
     animationYData.value = animationY.export();
 }
 </script>
