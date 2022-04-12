@@ -181,7 +181,7 @@ function startAnimationX(offsetInfo: OffsetInfoI) {
         duration: countAddTransitionTime,
         timingFunction: "linear",
     });
-    animationX.translateX(-(offsetInfo.offsetRight - cartImgWidthHeightPX / 3)).step()
+    animationX.translateX(-(offsetInfo.offsetRight - cartImgWidthHeightPX / 2)).step()
     animationXData.value = animationX.export();
 
 }

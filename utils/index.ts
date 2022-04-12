@@ -20,7 +20,12 @@ interface SystemInfoI {
     windowWidth: number;
     [index: string]: any;
 }
-
+export let navigationBarHeight = 0
+// H5使用的是模拟导航栏 44px
+// #ifdef H5
+navigationBarHeight = 44
+// #endif
+// 
 let systemInfo: SystemInfoI;
 
 export const getRpxToPx = (rpx: number): number => {
