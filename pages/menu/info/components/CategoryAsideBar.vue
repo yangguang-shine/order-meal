@@ -1,5 +1,5 @@
 <template>
-    <scroll-view scroll-y class="category-aside-bar-box" :style="{ 'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightRPX + 'rpx' : '' }">
+    <scroll-view scroll-y class="category-aside-bar-box" :style="{ 'padding-bottom': minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX + 'rpx' : footerInfoHeightRPX + 'rpx' }">
         <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'aside-categroy-item-active': categoryTabID === asideCategoryItem.categoryTabID }" @click="changeCategoryTab(asideCategoryItem.categoryTabID)" :style="{ color: categoryTabID === asideCategoryItem.categoryTabID ? shopInfo.mainColor : '' }">
             {{ asideCategoryItem.categoryName }}
             <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count" :style="{ background: shopInfo.mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
@@ -11,7 +11,7 @@
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
-import { minusPromotionsHeightRPX } from "../infoConfig";
+import { footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX, minusPromotionsHeightRPX } from "../infoConfig";
 
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI } from "@/interface/menu";

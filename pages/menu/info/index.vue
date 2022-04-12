@@ -35,10 +35,11 @@ import { delaySync } from "@/utils/index.js";
 import { mapState, mapMutation, mapAction, mapGetter } from "@/utils/mapVuex";
 import { defineComponent, getCurrentInstance, computed, watch, ref } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import { ComputedActionI, ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { ShopItemI } from "@/interface/home";
 import { CategoryItemI, FoodItemI } from "@/interface/menu";
-import { shopInfoTransitionTime } from "./infoConfig";
+import { footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX, shopInfoTransitionTime } from "./infoConfig";
+import { MinusPromotionsObjectI } from "@/store/getters/menu";
 
 interface StateF {
     shopInfo: ComputedStateI<ShopItemI>;
@@ -48,6 +49,9 @@ interface StateF {
     cartDetailFlag: ComputedStateI<boolean>;
     foodDetailFalg: ComputedStateI<boolean>;
     searchFlag: ComputedStateI<boolean>;
+}
+interface GetterF {
+    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
 }
 
 interface MutationF {
@@ -61,8 +65,8 @@ interface ActionF {
 }
 
 const { $showLoading, $hideLoading, $showModal } = getCurrentInstance().proxy;
-const { shopInfo, topBarInfo,startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFlag }: StateF = mapState(["shopInfo", "topBarInfo","startShopInfoAnimationFlag", "shopInfoFlag", "cartDetailFlag", "foodDetailFalg", "searchFlag"]);
-const { minusPromotionsObject } = mapGetter(["minusPromotionsObject"]);
+const { shopInfo, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFlag }: StateF = mapState(["shopInfo", "topBarInfo", "startShopInfoAnimationFlag", "shopInfoFlag", "cartDetailFlag", "foodDetailFalg", "searchFlag"]);
+const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
 const shopInfoAnimationData = ref(null);
 const shopInfoAnimation = uni.createAnimation({
     duration: shopInfoTransitionTime,
@@ -137,12 +141,13 @@ page {
         width: 100%;
         height: 100%;
         padding-top: 80rpx;
-        padding-bottom: 140rpx;
+        // padding-bottom: 140rpx;
         box-sizing: border-box;
         transition: all ease-in-out 0.3s;
+        // z-index: 100;
     }
-        .menu-list-box {
-            position: relative;
+    .menu-list-box {
+        position: relative;
         height: 100%;
     }
     //    .shop-info-box  {

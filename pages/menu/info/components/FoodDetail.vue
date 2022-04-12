@@ -161,7 +161,7 @@ async function closeFoodDetail() {
         transform: translateX(-50%);
         width: 80rpx;
         height: 80rpx;
-        z-index: 900;
+        // z-index: 900;
     }
 }
 </style>

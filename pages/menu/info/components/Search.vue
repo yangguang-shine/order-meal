@@ -113,7 +113,7 @@ async function clickCancel() {
         padding: 30rpx;
         box-sizing: border-box;
         background-color: #fff;
-        z-index: 9;
+        // z-index: 9;
         .search-input {
             height: 60rpx;
             padding: 0 60rpx;
@@ -158,7 +158,7 @@ async function clickCancel() {
         padding-top: 120rpx;
         background-color: #fff;
         overflow: auto;
-        z-index: 5;
+        // z-index: 5;
         .search-food-item {
             border-bottom: 1rpx solid #eee;
             // height: 200rpx;
@@ -179,7 +179,7 @@ async function clickCancel() {
         padding-top: 120rpx;
         background-color: #fff;
         overflow: auto;
-        z-index: 5;
+        // z-index: 5;
     }
 }
 </style>

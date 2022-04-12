@@ -1,6 +1,6 @@
 <template>
-    <scroll-view scroll-y  scroll-with-animation :scroll-into-view="scrollIntoCategoryTabID" class="food-main-box" id="food-main-box" @scroll="foodScrollHandle" :style="{ 'padding-bottom': minusPromotionsObject.show ? minusPromotionsHeightRPX + 'rpx' : '' }">
-        <view class="food-category-list-item" v-for="(foodCategoryItem, index) in categoryList" :key="index" :id="foodCategoryItem.categoryTabID + 'id'">
+    <scroll-view scroll-y scroll-with-animation :scroll-into-view="scrollIntoCategoryTabID" class="food-main-box" id="food-main-box" @scroll="foodScrollHandle">
+        <view class="food-category-list-item" v-for="(foodCategoryItem, index) in categoryList" :key="index" :id="foodCategoryItem.categoryTabID + 'id'" :style="{ 'padding-bottom': index === categoryList.length - 1 ? categoryItemLastPaddingBottom : ''}">
             <view :id="foodCategoryItem.categoryTabID" class="food-category-name">{{ foodCategoryItem.categoryName }}</view>
             <FoodItem class="food-item" v-for="foodItem in foodCategoryItem.foodList" :key="foodItem.foodID" :foodItem="foodItem" @clickFoodItem="toShowFoodDetail"></FoodItem>
             <!-- <view class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex" @click="toShowFoodDetail(foodItem)">
@@ -24,7 +24,7 @@
 import FoodItem from "./item/FoodItem.vue";
 import { getRpxToPx, selectQuery } from "@/utils/index";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { topBarHeightPX, minusPromotionsHeightRPX } from "../infoConfig";
+import { topBarHeightPX, minusPromotionsHeightRPX, footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX } from "../infoConfig";
 import { defineComponent, getCurrentInstance, computed } from "vue";
 const currentInstance = getCurrentInstance();
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
@@ -49,10 +49,10 @@ interface MutationF {
     setScrollIntoCategoryTabID: ComputedMutationI<string>;
 }
 const { categoryList, scrollIntoCategoryTabID }: StateF = mapState(["categoryList", "scrollIntoCategoryTabID"]);
-const { asideCategoryList, minusPromotionsObject }:GetterF = mapGetter(["asideCategoryList", "minusPromotionsObject"]);
+const { asideCategoryList, minusPromotionsObject }: GetterF = mapGetter(["asideCategoryList", "minusPromotionsObject"]);
 
 const { setFoodDetailFlag, setFoodInfo, setCategoryTabId, setScrollIntoCategoryTabID }: MutationF = mapMutation(["setFoodDetailFlag", "setFoodInfo", "setCategoryTabId", "setScrollIntoCategoryTabID"]);
-
+const categoryItemLastPaddingBottom: string = computed((): string => (minusPromotionsObject.value.show ? footerInfoAndMinusPromotionsHeightRPX + 20 + "rpx" : footerInfoHeightRPX + 20 + "rpx"));
 const props = defineProps();
 console.log("props");
 console.log(props);
@@ -82,13 +82,12 @@ const handleScroll = async (e) => {
         const res = await selectQuery(`#${categoryItem.categoryTabID}id`, currentInstance);
         if (topBarHeightPX <= res.top || res.bottom > topBarHeightPX) {
             setCategoryTabId(categoryItem.categoryTabID);
-            setScrollIntoCategoryTabID('');
+            setScrollIntoCategoryTabID("");
             break;
         }
     }
 };
 const foodScrollHandle = debounce(handleScroll, 30);
-
 
 const throttle = (() => {
     let timer: null | number = null;
@@ -139,7 +138,6 @@ const throttle = (() => {
     }
     .food-item {
         margin: 20rpx 20rpx 0;
-
     }
     // .food-item {
     //     margin: 20rpx 20rpx 0;

@@ -1,22 +1,20 @@
 <template>
-    <view class="com-top-bar-container">
-        <view class="top-bar-list flex-row flex-a-center flex-j-between">
-            <view class="left flex-row flex--ja-center">
-                <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '点餐' }" @click="clickTopBar('点餐')" :style="{ color: topBarInfo === '点餐' ? shopInfo.mainColor : '' }">点餐</view>
-                <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '商家' }" :style="{ color: topBarInfo === '商家' ? shopInfo.mainColor : '' }" @click="clickTopBar('商家')">商家</view>
+    <view class="com-top-bar-container flex-row flex-a-center flex-j-between">
+        <view class="left flex-row flex--ja-center">
+            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '点餐' }" @click="clickTopBar('点餐')" :style="{ color: topBarInfo === '点餐' ? shopInfo.mainColor : '' }">点餐</view>
+            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '商家' }" :style="{ color: topBarInfo === '商家' ? shopInfo.mainColor : '' }" @click="clickTopBar('商家')">商家</view>
+        </view>
+        <view class="select-top-bar-bottom" :style="{ background: shopInfo.mainColor, left: topBarInfo === '点餐' ? '100rpx' : '300rpx' }"></view>
+        <view class="right flex-row flex-ja-center" :animation="barSearchAnimationData" @click="toSearch">
+            <view class="search-box flex-row flex-ja-center">
+                <view class="search-img"></view>
+                <view class="search-title">想吃点什么</view>
             </view>
-            <view class="select-top-bar-bottom" :style="{ background: shopInfo.mainColor, left: topBarInfo === '点餐' ? '100rpx' : '300rpx' }"></view>
-            <view class="right flex-row flex-ja-center" :animation="barSearchAnimationData" @click="toSearch">
-                <view class="search-box flex-row flex-ja-center">
-                    <view class="search-img"></view>
-                    <view class="search-title">想吃点什么</view>
-                </view>
-                <view class="pattern-icon"></view>
-            </view>
-            <!-- <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '点餐' }" @click="clickTopBar('点餐')" :style="{ color: topBarInfo === '点餐' ? shopInfo.mainColor : '' }">点餐</view>
+            <view class="pattern-icon"></view>
+        </view>
+        <!-- <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '点餐' }" @click="clickTopBar('点餐')" :style="{ color: topBarInfo === '点餐' ? shopInfo.mainColor : '' }">点餐</view>
             <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '商家' }" :style="{ color: topBarInfo === '商家' ? shopInfo.mainColor : '' }" @click="clickTopBar('商家')">商家</view>
             <view class="select-top-bar-bottom" :style="{ background: shopInfo.mainColor, left: topBarInfo === '点餐' ? '16.65%' : '50%' }"></view> -->
-        </view>
     </view>
 </template>
 
@@ -39,14 +37,12 @@ interface MutationF {
     setShopInfoFlag: ComputedMutationI<boolean>;
     setStartShopInfoAnimationFlag: ComputedMutationI<boolean>;
     setSearchFlag: ComputedMutationI<boolean>;
-    
 }
 const { topBarInfo, shopInfo }: StateF = mapState(["topBarInfo", "shopInfo"]);
 const { setTopBarInfo, setShopInfoFlag, setStartShopInfoAnimationFlag, setSearchFlag }: MutationF = mapMutation(["setTopBarInfo", "setShopInfoFlag", "setStartShopInfoAnimationFlag", "setSearchFlag"]);
 
-
 const barSearchAnimationData: RefI<any> = ref(null);
-watch(topBarInfo, (newValue: string, oldValue:string) => {
+watch(topBarInfo, (newValue: string, oldValue: string) => {
     const barSearchAnimation = uni.createAnimation({
         duration: barSearchTransitionTime,
         timingFunction: "linear",
@@ -61,7 +57,7 @@ watch(topBarInfo, (newValue: string, oldValue:string) => {
 });
 function toSearch() {
     if (topBarInfo.value === "商家") return;
-    setSearchFlag(true)
+    setSearchFlag(true);
 }
 async function clickTopBar(title: string) {
     if (topBarInfo.value === title) return;
@@ -81,22 +77,20 @@ async function clickTopBar(title: string) {
 <style lang="scss" scoped>
 .com-top-bar-container {
     // position: relative;
-    width: 100%;
-    height: 80rpx;
+    // width: 100%;
+    // height: 80rpx;
     // background-color: #ffffff;
     // z-index: 200;
-    .top-bar-list {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 80rpx;
-        box-sizing: border-box;
-        border-bottom: 1rpx solid #e4e4e4;
-        background-color: #ffffff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80rpx;
+    box-sizing: border-box;
+    border-bottom: 1rpx solid #e4e4e4;
+    background-color: #ffffff;
 
-        z-index: 200;
-    }
+    z-index: 200;
     .left,
     .right {
         height: 100%;

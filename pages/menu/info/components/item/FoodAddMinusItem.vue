@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { delaySync, getoffsetRight, selectQuery } from "@/utils/index";
+import { delaySync, selectQuery } from "@/utils/index";
 import { watch, reactive, ref, getCurrentInstance, onMounted } from "vue";
 import { mapMutation, mapState } from "@/utils/mapVuex";
 import MyTransition from "@/components/MyTransition.vue";
@@ -27,7 +27,7 @@ import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
 import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI, PositionInfoI, ShopItemI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
-import { cartImgWidthHeightPX, countAddTransitionTime, foodAddMinusTransitionTime } from "../../infoConfig";
+import { cartImgWidthHeightPX, countAddTransitionTime, foodAddMinusTransitionTime, foodAddWidthHeightPX } from "../../infoConfig";
 const currentInstance = getCurrentInstance();
 interface PropsI {
     foodItem: FoodItemI;
@@ -73,7 +73,7 @@ interface RandomStyleI {
     random: number;
     style: {
         top: number;
-        right: number;
+        left: number;
     };
 }
 const { cartChange, setCartDetailFlag, setCartImgAnimationFlag }: MutationF = mapMutation(["cartChange", "setCartDetailFlag", "setCartImgAnimationFlag"]);
@@ -85,7 +85,7 @@ const addPositionInfo: RefI<PositionInfoI> = ref({
     left: 0,
     top: 0,
 });
-let offsetRight = 0;
+let offsetLeft = 0;
 onMounted(async () => {
     if (props.foodItem.orderCount > 0) {
         // 组件初次挂载不使用动画
@@ -121,13 +121,13 @@ async function getPositionInfo(): Promise<PositionInfoI> {
 }
 async function addCount(e: any) {
     addPositionInfo.value = await getPositionInfo();
-    offsetRight = addPositionInfo.value.left - cartImgPositionInfo.value.left;
-    if (offsetRight) {
+    offsetLeft = addPositionInfo.value.left - cartImgPositionInfo.value.left;
+    if (offsetLeft) {
         list.push({
             random: Math.random(),
             style: {
                 top: 0,
-                right: 0,
+                left: 0,
             },
         });
         startAddTransition(list[list.length - 1]);
@@ -156,14 +156,14 @@ async function minusCount() {
 }
 interface OffsetInfoI {
     offsetTop: number;
-    offsetRight: number;
+    offsetLeft: number;
 }
 async function startAddTransition(item: RandomStyleI) {
     const offsetTop = cartImgPositionInfo.value.top - addPositionInfo.value.top;
 
     const offsetInfo: OffsetInfoI = {
         offsetTop,
-        offsetRight,
+        offsetLeft,
     };
     startAnimationX(offsetInfo)
     startAnimationY(offsetInfo)
@@ -181,16 +181,17 @@ function startAnimationX(offsetInfo: OffsetInfoI) {
         duration: countAddTransitionTime,
         timingFunction: "linear",
     });
-    animationX.translateX(-(offsetInfo.offsetRight - cartImgWidthHeightPX / 2)).step()
+    animationX.translateX(-(offsetInfo.offsetLeft - (cartImgWidthHeightPX - foodAddWidthHeightPX) / 2)).step()
     animationXData.value = animationX.export();
 
 }
+
 function startAnimationY(offsetInfo: OffsetInfoI) {
     const animationY = uni.createAnimation({
         duration: countAddTransitionTime,
         timingFunction: "cubic-bezier(.72,-0.01,.66,.48)",
     });
-    animationY.translateY(offsetInfo.offsetTop).step()
+    animationY.translateY(offsetInfo.offsetTop + (cartImgWidthHeightPX - foodAddWidthHeightPX) / 2).step()
     animationYData.value = animationY.export();
 }
 </script>
@@ -206,7 +207,7 @@ function startAnimationY(offsetInfo: OffsetInfoI) {
         right: 0;
         width: 40rpx;
         height: 40rpx;
-        z-index: 5;
+        z-index: 999;
 
     }
     .food-count-add-animation-y {
@@ -223,7 +224,7 @@ function startAnimationY(offsetInfo: OffsetInfoI) {
         width: 40rpx;
         height: 40rpx;
         border-radius: 50%;
-        z-index: 10;
+        // z-index: 10;
         // text-align: center;
         // line-height: 40rpx;
         // color: #fff;
