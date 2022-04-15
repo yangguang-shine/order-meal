@@ -24,16 +24,6 @@ import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI, PositionIn
 import { RefI } from "@/interface/vueInterface";
 import { cartImgWidthHeightPX, countAddTransitionTime, foodAddMinusTransitionTime } from "../../infoConfig";
 
-// const emit = defineEmits(['change', 'update'])
-
-// // 基于类型
-// const emit = defineEmits<{
-//   (e: 'change', id: number): void
-//   (e: 'update', value: string): void
-// }>()
-
-
-const currentInstance = getCurrentInstance();
 interface PropsI {
     foodItem: FoodItemI;
     mode?: string; // large | midden | small

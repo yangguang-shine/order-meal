@@ -141,37 +141,6 @@ const throttle = (() => {
     .food-item {
         margin: 20rpx 20rpx 0;
     }
-    // .food-item {
-    //     margin: 20rpx 20rpx 0;
-    //     padding: 20rpx;
-    //     background-color: #fff;
-    //     border-radius: 16rpx;
-    // }
-    // .food-img {
-    //     padding: 6rpx 0;
-    //     height: 150rpx;
-    //     width: 150rpx;
-    // }
-    // .food-info-box {
-    //     padding-left: 20rpx;
-    // }
-    // .food-name {
-    //     font-weight: bold;
-    //     font-size: 32rpx;
-    //     line-height: 44rpx;
-    //     color: #333;
-    // }
-    // .food-description {
-    //     font-size: 22rpx;
-    //     line-height: 30rpx;
-    //     color: #666;
-    //     margin-top: 10rpx;
-    // }
-    // .food-price {
-    //     line-height: 42rpx;
-    //     color: $color-red;
-    //     font-size: 36rpx;
-    //     font-weight: bold;
-    // }
+
 }
 </style>

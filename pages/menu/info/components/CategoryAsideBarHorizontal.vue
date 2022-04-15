@@ -3,7 +3,7 @@
         <div class="category-list flex-row flex-a-center">
             <view class="category-item flex-shrink flex-row flex-ja-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'categroy-item-active': selectedCategoryID === asideCategoryItem.categoryID }" @click="changeCategoryTab(asideCategoryItem)" :style="{ color: selectedCategoryID === asideCategoryItem.categoryID ? shopInfo.mainColor : '' }" :id="asideCategoryItem.categoryIDAside">
                 {{ asideCategoryItem.categoryName }}哦哦哦哦哦哦
-                <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count" :style="{ background: shopInfo.mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
+                <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count flex-row flex-ja-center" :style="{ background: shopInfo.mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
             </view>
         </div>
     </scroll-view>
@@ -73,7 +73,7 @@ function changeCategoryTab(asideCategoryItem: CategoryItemI) {
     }
     .category-item {
         position: relative;
-        padding: 20rpx;
+        padding: 20rpx 30rpx;
         // height: 80rpx;
         font-size: 26rpx;
         // line-height: 36rpx;
@@ -95,14 +95,14 @@ function changeCategoryTab(asideCategoryItem: CategoryItemI) {
     .category-order-count {
         font-weight: normal;
         position: absolute;
-        padding: 0 5rpx;
+        padding: 0 9rpx;
         top: 4rpx;
         right: 4rpx;
-        min-width: 26rpx;
-        height: 26rpx;
-        line-height: 26rpx;
+        min-width: 30rpx;
+        height: 30rpx;
+        // line-height: 30rpx;
         border-radius: 15rpx;
-        font-size: 20rpx;
+        font-size: 22rpx;
         color: #fff;
         text-align: center;
         box-sizing: border-box;

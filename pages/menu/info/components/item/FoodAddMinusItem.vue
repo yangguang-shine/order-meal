@@ -8,13 +8,11 @@
         <view class="food-count-add" :id="'add' + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
             <view class="add-click-area"></view>
         </view>
-        <!-- <view v-for="item in list" :key="item.random" class="food-count-add food-count-add-copy" :style="{ 'background-color': shopInfo.mainColor, top: item.style.top + 'px', right: item.style.right + 'px' }"></view> -->
-        <view v-for="item in list" :key="item.random" class="food-count-add-animation-x" :animation="animationXData">
-            <view class="food-count-add-animation-y" :animation="animationYData">
-                <view ref="foodCountAddRef" :id="'add' + foodItem.foodID"  class="food-count-add food-count-add-copy" :style="{ 'background-color': shopInfo.mainColor }"></view>
+        <view v-for="item in addList" :key="item.random" class="food-count-add-animation-x" :animation="item.animationXData">
+            <view class="food-count-add-animation-y" :animation="item.animationYData">
+                <view class="food-count-add food-count-add-copy" :style="{ 'background-color': shopInfo.mainColor }"></view>
             </view>
         </view>
-        <!-- <view ref="foodCountAddRef" :id="'add' + foodItem.foodID" :animation="addAnimationData" class="food-count-add food-count-add-copy" :style="{ 'background-color': shopInfo.mainColor }"></view> -->
     </view>
 </template>
 
@@ -22,12 +20,12 @@
 import { delaySync, selectQuery } from "@/utils/index";
 import { watch, reactive, ref, getCurrentInstance, onMounted } from "vue";
 import { mapMutation, mapState } from "@/utils/mapVuex";
-import MyTransition from "@/components/MyTransition.vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
 import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI, PositionInfoI, ShopItemI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
 import { cartImgWidthHeightPX, countAddTransitionTime, foodAddMinusTransitionTime, foodAddWidthHeightPX } from "../../infoConfig";
+import { AddItemI } from "./interface";
 const currentInstance = getCurrentInstance();
 interface PropsI {
     foodItem: FoodItemI;
@@ -36,26 +34,21 @@ interface CartChangeParamI {
     foodItem: FoodItemI;
     count: number;
 }
-const list: RandomStyleI[] = reactive([]);
+const addList: AddItemI[] = reactive([]);
 const OriginFoodItem = props.foodItem;
 const mountedTransitionFlag: RefI<boolean> = ref(true);
 const showAddTransitionflag: RefI<boolean> = ref(false);
 
-const foodCountAddRef: RefI<any> = ref(null);
 const countAnimation = uni.createAnimation({
     duration: foodAddMinusTransitionTime,
     timingFunction: "ease-in-out",
 });
-
 const minusAnimation = uni.createAnimation({
     duration: foodAddMinusTransitionTime,
     timingFunction: "ease-in-out",
 });
-
 const countAnimationData = ref(null);
 const minusAnimationData = ref(null);
-const animationXData = ref(null);
-const animationYData = ref(null);
 
 interface StateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
@@ -67,14 +60,6 @@ interface MutationF {
     cartChange: ComputedMutationI<CartChangeParamI>;
     setCartDetailFlag: ComputedMutationI<boolean>;
     setCartImgAnimationFlag: ComputedMutationI<boolean>;
-    
-}
-interface RandomStyleI {
-    random: number;
-    style: {
-        top: number;
-        left: number;
-    };
 }
 const { cartChange, setCartDetailFlag, setCartImgAnimationFlag }: MutationF = mapMutation(["cartChange", "setCartDetailFlag", "setCartImgAnimationFlag"]);
 const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPositionInfo }: StateF = mapState(["cartCategoryList", "cartDetailFlag", "shopInfo", "cartImgPositionInfo"]);
@@ -92,13 +77,12 @@ onMounted(async () => {
         mountedTransitionFlag.value = false;
     }
     // 获取曲线起始位置
-    
 });
 watch(
     () => props.foodItem.orderCount,
     (newValue: number, oldValue: number) => {
-        console.log('OriginFoodItem === props.foodItem')
-        console.log(OriginFoodItem === props.foodItem)
+        console.log("OriginFoodItem === props.foodItem");
+        console.log(OriginFoodItem === props.foodItem);
         if (newValue === 1 && oldValue === 0) {
             countAnimation.opacity(1).step();
             countAnimationData.value = countAnimation.export();
@@ -120,21 +104,21 @@ async function getPositionInfo(): Promise<PositionInfoI> {
     };
 }
 async function addCount(e: any) {
-    addPositionInfo.value = await getPositionInfo();
-    offsetLeft = addPositionInfo.value.left - cartImgPositionInfo.value.left;
+    const addPositionInfo: PositionInfoI = await getPositionInfo();
+    const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.value.left;
+    const offsetTop: number = cartImgPositionInfo.value.top - addPositionInfo.top;
     if (offsetLeft) {
-        list.push({
+        const addItem = {
             random: Math.random(),
-            style: {
-                top: 0,
-                left: 0,
+            animationXData: null,
+            animationYData: null,
+            offsetInfo: {
+                offsetLeft,
+                offsetTop,
             },
-        });
-        startAddTransition(list[list.length - 1]);
-    }
-    if (e.touches && e.touches.length) {
-        const positionInfo = e.touches[0];
-        const { pageX, pageY } = positionInfo;
+        };
+        addList.push(addItem);
+        startAddTransition(addItem);
     }
     const count = props.foodItem.orderCount + 1;
     cartChange({
@@ -158,41 +142,49 @@ interface OffsetInfoI {
     offsetTop: number;
     offsetLeft: number;
 }
-async function startAddTransition(item: RandomStyleI) {
-    const offsetTop = cartImgPositionInfo.value.top - addPositionInfo.value.top;
-
-    const offsetInfo: OffsetInfoI = {
-        offsetTop,
-        offsetLeft,
-    };
-    startAnimationX(offsetInfo)
-    startAnimationY(offsetInfo)
-    setCartImgAnimationFlag(true)
-    await delaySync(countAddTransitionTime)
-    setCartImgAnimationFlag(false)
-    deleteItem(item)
+async function startAddTransition(addItem: AddItemI) {
+    startAnimationX(addItem);
+    startAnimationY(addItem);
+    setCartImgAnimationFlag(true);
+    await delaySync(countAddTransitionTime);
+    setCartImgAnimationFlag(false);
+    deleteItem(addItem);
 }
-function deleteItem(item: RandomStyleI) {
-    const findIndex = list.findIndex((item1) => item1 === item)
-    list.splice(findIndex, 1)
+function deleteItem(addItem: AddItemI) {
+    const findIndex = addList.findIndex((item) => item.random === addItem.random);
+    addList.splice(findIndex, 1);
 }
-function startAnimationX(offsetInfo: OffsetInfoI) {
+function startAnimationX(addItem: AddItemI) {
     const animationX = uni.createAnimation({
-        duration: countAddTransitionTime,
+        // duration: countAddTransitionTime,
+        // timingFunction: "linear",
+    });
+
+    animationX.translateX(-(addItem.offsetInfo.offsetLeft - (cartImgWidthHeightPX - foodAddWidthHeightPX) / 2) / 10).step({
+        duration: countAddTransitionTime / 4,
         timingFunction: "linear",
     });
-    animationX.translateX(-(offsetInfo.offsetLeft - (cartImgWidthHeightPX - foodAddWidthHeightPX) / 2)).step()
-    animationXData.value = animationX.export();
-
+    animationX.translateX(-(addItem.offsetInfo.offsetLeft - (cartImgWidthHeightPX - foodAddWidthHeightPX) / 2)).step({
+        duration: (countAddTransitionTime * 3) / 4,
+        timingFunction: "linear",
+    });
+    addItem.animationXData = animationX.export();
 }
 
-function startAnimationY(offsetInfo: OffsetInfoI) {
+function startAnimationY(addItem: AddItemI) {
     const animationY = uni.createAnimation({
-        duration: countAddTransitionTime,
-        timingFunction: "cubic-bezier(.72,-0.01,.66,.48)",
+        // duration: countAddTransitionTime,
+        // timingFunction: "cubic-bezier(.72,-0.01,.66,.48)",
     });
-    animationY.translateY(offsetInfo.offsetTop + (cartImgWidthHeightPX - foodAddWidthHeightPX) / 2).step()
-    animationYData.value = animationY.export();
+    animationY.translateY(-addItem.offsetInfo.offsetTop / 10).step({
+        duration: countAddTransitionTime / 3,
+        timingFunction: "ease-out",
+    });
+    animationY.translateY(addItem.offsetInfo.offsetTop + (cartImgWidthHeightPX - foodAddWidthHeightPX) / 2).step({
+        duration: (countAddTransitionTime * 2) / 3,
+        timingFunction: "ease-in",
+    });
+    addItem.animationYData = animationY.export();
 }
 </script>
 
@@ -208,7 +200,6 @@ function startAnimationY(offsetInfo: OffsetInfoI) {
         width: 40rpx;
         height: 40rpx;
         z-index: 999;
-
     }
     .food-count-add-animation-y {
         position: absolute;

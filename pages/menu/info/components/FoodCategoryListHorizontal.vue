@@ -5,7 +5,7 @@
                 <view  class="category-name">{{ foodCategoryItem.categoryName }}{{foodCategoryItem.categoryIDMain}}</view>
                 <div class="food-list-box flex-row flex-wrap">
 
-                    <FoodItemHorizontal v-for="foodItem in foodCategoryItem.foodList" :key="foodItem.foodID" :foodItem="foodItem"></FoodItemHorizontal>
+                    <FoodItemHorizontal v-for="foodItem in foodCategoryItem.foodList" :key="foodItem.foodID" :foodItem="foodItem" @clickFoodItem="toShowFoodDetail"></FoodItemHorizontal>
  
                 </div>
                 <!-- <FoodItem class="food-item" v-for="foodItem in foodCategoryItem.foodList" :key="foodItem.foodID" :foodItem="foodItem" @clickFoodItem="toShowFoodDetail"></FoodItem> -->
