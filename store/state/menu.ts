@@ -5,8 +5,9 @@ export interface StateMenuI {
     cartCategoryList: CategoryItemI[];
     categoryList: CategoryItemI[];
     // asideCategoryList: AsideCategoryItemI[]
-    categoryTabID: string;
-    scrollIntoCategoryTabID: string;
+    selectedCategoryID: number;
+    categoryIDMain: string;
+    categoryIDAside: string
     topBarInfo: string;
     startShopInfoAnimationFlag: boolean,
     shopInfoFlag: boolean;
@@ -23,8 +24,9 @@ const state: StateMenuI = {
     cartCategoryList: [],
     categoryList: [],
     // asideCategoryList: [],
-    categoryTabID: "",
-    scrollIntoCategoryTabID: "",
+    selectedCategoryID: "",
+    categoryIDMain: "",
+    categoryIDAside: '',
     topBarInfo: "点餐",
     startShopInfoAnimationFlag: false,
     shopInfoFlag: false,

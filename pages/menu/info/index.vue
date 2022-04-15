@@ -2,9 +2,13 @@
     <view class="menu-container">
         <TopBar></TopBar>
         <view :animation="shopInfoAnimationData" class="menu-order-box">
-            <view class="menu-list-box flex-item flex-row">
+            <view v-if="shopInfo.mode === 'vertical'" class="vertical-menu-box">
                 <FoodCategoryList class="flex-item"></FoodCategoryList>
                 <CategoryAsideBar></CategoryAsideBar>
+            </view>
+            <view v-else-if="shopInfo.mode === 'horizontal'" class="horizontal-menu-box">
+                <FoodCategoryListHorizontal></FoodCategoryListHorizontal>
+                <CategoryAsideBarHorizontal></CategoryAsideBarHorizontal>
             </view>
             <CartDetail v-if="cartDetailFlag"></CartDetail>
             <MinusPromotions v-if="minusPromotionsObject.show"></MinusPromotions>
@@ -18,9 +22,11 @@
 </template>
 
 <script lang="ts" setup>
-import { getRpxToPx } from "@/utils/index";
+import { getRpxToPx, navigationBarHeightPX } from "@/utils/index";
 import CategoryAsideBar from "./components/CategoryAsideBar.vue";
+import CategoryAsideBarHorizontal from "./components/CategoryAsideBarHorizontal.vue";
 import FoodCategoryList from "./components/FoodCategoryList.vue";
+import FoodCategoryListHorizontal from "./components/FoodCategoryListHorizontal.vue";
 import MinusPromotions from "./components/MinusPromotions.vue";
 import MinusPromotionsBlock from "./components/MinusPromotionsBlock.vue";
 import FooterInfo from "./components/FooterInfo.vue";
@@ -31,7 +37,6 @@ import TopBar from "./components/TopBar.vue";
 import ShopInfo from "./components/ShopInfo.vue";
 import Search from "./components/Search.vue";
 import { delaySync } from "@/utils/index.js";
-
 import { mapState, mapMutation, mapAction, mapGetter } from "@/utils/mapVuex";
 import { defineComponent, getCurrentInstance, computed, watch, ref } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
@@ -63,10 +68,10 @@ interface ActionF {
     getOrderKeyFoodList: ComputedActionI<{ orderKey: string }>;
     getShopInfo: ComputedMutationI<{ shopID: number }>;
 }
-
 const { $showLoading, $hideLoading, $showModal } = getCurrentInstance().proxy;
 const { shopInfo, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFlag }: StateF = mapState(["shopInfo", "topBarInfo", "startShopInfoAnimationFlag", "shopInfoFlag", "cartDetailFlag", "foodDetailFalg", "searchFlag"]);
 const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
+
 const shopInfoAnimationData = ref(null);
 const shopInfoAnimation = uni.createAnimation({
     duration: shopInfoTransitionTime,
@@ -102,6 +107,8 @@ onLoad(async (option: { orderKey?: string }) => {
                 shopID: 100036,
             });
         }
+        console.log(shopInfo.value);
+
         await init();
     } catch (e) {
         console.log(e);
@@ -146,7 +153,8 @@ page {
         transition: all ease-in-out 0.3s;
         // z-index: 100;
     }
-    .menu-list-box {
+    .vertical-menu-box,
+    .horizontal-menu-box {
         position: relative;
         height: 100%;
     }

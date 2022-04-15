@@ -36,13 +36,15 @@ export interface CartPriceInfoI {
  * @params categoryName - 分类名称
  * @params categoryID - 分类ID
  * @params categoryOrderCount - 分类总下单数
- * @params categoryTabID - 分类滑动时需要的tabID
+ * @params categoryIDMain - 分类垂直滑动时需要的id
+ * @params categoryIDAside - 分类水平时需要的id
  */
 export interface AsideCategoryItemI {
     categoryName: string;
     categoryID: number;
     categoryOrderCount: number;
-    categoryTabID: string;
+    categoryIDMain: string;
+    categoryIDAside: string;
 }
 
 
@@ -146,14 +148,18 @@ function asideCategoryList(state: StateI, getters: GetterStateI): AsideCategoryI
                 categoryName: foodCategoryItem.categoryName,
                 categoryID: foodCategoryItem.categoryID,
                 categoryOrderCount,
-                categoryTabID: foodCategoryItem.categoryTabID,
+                categoryIDMain: `main${foodCategoryItem.categoryID}`,
+                categoryIDAside: `aside${foodCategoryItem.categoryID}`,
+                // selectedCategoryID: foodCategoryItem.selectedCategoryID,
             };
         } else {
             return {
                 categoryName: foodCategoryItem.categoryName,
                 categoryID: foodCategoryItem.categoryID,
                 categoryOrderCount: 0,
-                categoryTabID: foodCategoryItem.categoryTabID,
+                categoryIDMain: `main${foodCategoryItem.categoryID}`,
+                categoryIDAside: `aside${foodCategoryItem.categoryID}`,
+                // selectedCategoryID: foodCategoryItem.selectedCategoryID,
             };
         }
     });

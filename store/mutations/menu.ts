@@ -1,11 +1,17 @@
 import { MutationI, FoodItemI,StateI , CategoryItemI, initFoodItem, PositionInfoI} from "@/interface/index";
 import { timeStampTranslate, toFixedToNumber } from "@/utils/index";
 
-function setCategoryTabId (state: StateI, categoryTabID: string) {
-    state.categoryTabID = categoryTabID;
+function setSelectedCategoryID (state: StateI, selectedCategoryID: number) {
+    state.selectedCategoryID = selectedCategoryID;
 };
-function setScrollIntoCategoryTabID (state: StateI, scrollIntoCategoryTabID: string) {
-    state.scrollIntoCategoryTabID = scrollIntoCategoryTabID;
+
+
+function setCategoryIDMain (state: StateI, categoryIDMain: string) {
+    state.categoryIDMain = categoryIDMain;
+};
+
+function setCategoryIDAside (state: StateI, categoryIDAside: string) {
+    state.categoryIDAside = categoryIDAside;
 };
 function setFoodCategoryList (state: StateI, categoryList: CategoryItemI[]) {
     state.categoryList = categoryList;
@@ -71,7 +77,8 @@ function cartChange (state: StateI, { foodItem, count = 0 }: {
     } else {
         state.cartCategoryList.push({
             categoryID: foodItem.categoryID,
-            categoryTabID: `id${foodItem.categoryID}`,
+            categoryIDMain: `main${foodItem.categoryID}`,
+            categoryIDAside: `aside${foodItem.categoryID}`,
             categoryName: foodItem.categoryName,
             foodList: [foodItem],
         });
@@ -108,8 +115,9 @@ function initCart (state: StateI, payload: any) {
 };
 
 export default {
-    setCategoryTabId,
-    setScrollIntoCategoryTabID,
+    setSelectedCategoryID,
+    setCategoryIDMain,
+    setCategoryIDAside,
     setFoodCategoryList,
     setFoodInfo,
     setFoodDetailFlag,

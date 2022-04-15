@@ -1,5 +1,5 @@
 <template>
-    <view class="search-food-container" :animation="searchModalAnimationData" :style="{ bottom: minusPromotionsObject.show ? '190rpx' : '140rpx' }">
+    <view class="search-food-container" :animation="searchModalAnimationData" :style="{ bottom: minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX + 'rpx' : footerInfoHeightRPX + 'rpx' }">
         <view class="search-food-overlay"></view>
         <view class="top-box flex-row flex-ja-center">
             <input type="text" class="search-input flex-item" v-model="searchValue" />
@@ -25,7 +25,7 @@ import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { delaySync } from "@/utils/";
 import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
 import { ref, onMounted, computed } from "vue";
-import { searchModalTransitionTime } from "../infoConfig";
+import { footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX, searchModalTransitionTime } from "../infoConfig";
 import FoodItem from "./item/FoodItem.vue";
 
 interface StateF {
@@ -113,7 +113,7 @@ async function clickCancel() {
         padding: 30rpx;
         box-sizing: border-box;
         background-color: #fff;
-        // z-index: 9;
+        z-index: 10;
         .search-input {
             height: 60rpx;
             padding: 0 60rpx;
@@ -179,7 +179,7 @@ async function clickCancel() {
         padding-top: 120rpx;
         background-color: #fff;
         overflow: auto;
-        // z-index: 5;
+        z-index: 5;
     }
 }
 </style>

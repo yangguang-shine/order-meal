@@ -1,9 +1,11 @@
 <template>
-    <scroll-view scroll-y scroll-with-animation class="category-aside-bar-container" :scroll-into-view="categoryIDAside" :style="{ 'padding-bottom': minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX + 'rpx' : footerInfoHeightRPX + 'rpx' }">
-        <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'aside-categroy-item-active': selectedCategoryID === asideCategoryItem.categoryID }" @click="changeCategoryTab(asideCategoryItem)" :style="{ color: selectedCategoryID === asideCategoryItem.categoryID ? shopInfo.mainColor : '' }" :id="asideCategoryItem.categoryIDAside">
-            {{ asideCategoryItem.categoryName }}
-            <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count" :style="{ background: shopInfo.mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
-        </view>
+    <scroll-view scroll-x="true" scroll-with-animation class="category-aside-bar-horizontal-container" :scroll-into-view="categoryIDAside">
+        <div class="category-list flex-row flex-a-center">
+            <view class="category-item flex-shrink flex-row flex-ja-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'categroy-item-active': selectedCategoryID === asideCategoryItem.categoryID }" @click="changeCategoryTab(asideCategoryItem)" :style="{ color: selectedCategoryID === asideCategoryItem.categoryID ? shopInfo.mainColor : '' }" :id="asideCategoryItem.categoryIDAside">
+                {{ asideCategoryItem.categoryName }}哦哦哦哦哦哦
+                <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count" :style="{ background: shopInfo.mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
+            </view>
+        </div>
     </scroll-view>
 </template>
 
@@ -20,9 +22,9 @@ import { RefI } from "@/interface/vueInterface";
 import { ShopItemI } from "@/interface/home";
 
 interface StateF {
-    selectedCategoryID: ComputedStateI<string>;
-    categoryIDAside: ComputedStateI<string>;
+    selectedCategoryID: ComputedStateI<number>;
     shopInfo: ComputedStateI<ShopItemI>;
+    categoryIDAside: ComputedStateI<string>;
 }
 interface GetterF {
     asideCategoryList: ComputedGetterI<AsideCategoryItemI>;
@@ -33,11 +35,11 @@ interface MutationF {
     setCategoryIDMain: ComputedMutationI<string>;
     setCategoryIDAside: ComputedMutationI<string>;
 }
-const { selectedCategoryID,categoryIDAside, shopInfo } = mapState(["selectedCategoryID","categoryIDAside", "shopInfo"]);
+const { selectedCategoryID, shopInfo, categoryIDAside } = mapState(["selectedCategoryID", "shopInfo", "categoryIDAside"]);
 const { asideCategoryList, minusPromotionsObject }: GetterF = mapGetter(["asideCategoryList", "minusPromotionsObject"]);
 
 const { setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside }: MutationF = mapMutation(["setSelectedCategoryID", "setCategoryIDMain", "setCategoryIDAside"]);
-function changeCategoryTab(asideCategoryItem: AsideCategoryItemI) {
+function changeCategoryTab(asideCategoryItem: CategoryItemI) {
     setSelectedCategoryID(asideCategoryItem.categoryID);
     setCategoryIDMain(asideCategoryItem.categoryIDMain);
     setCategoryIDAside(asideCategoryItem.categoryIDAside);
@@ -45,15 +47,19 @@ function changeCategoryTab(asideCategoryItem: AsideCategoryItemI) {
 </script>
 
 <style lang="scss">
-.category-aside-bar-container {
+.category-aside-bar-horizontal-container {
     position: absolute;
     top: 0;
     left: 0;
-    width: 160rpx;
-    height: 100%;
+    width: 100%;
+    height: 80rpx;
     background-color: #fff;
     flex-shrink: 0;
     box-sizing: border-box;
+    overflow: auto;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: row;
     // padding-bottom: 50rpx;
     ::-webkit-scrollbar {
         display: none;
@@ -62,18 +68,25 @@ function changeCategoryTab(asideCategoryItem: AsideCategoryItemI) {
         -webkit-appearance: none;
         background: transparent;
     }
-    .aside-category-item {
+    .category-list {
+        height: 100%;
+    }
+    .category-item {
         position: relative;
         padding: 20rpx;
         // height: 80rpx;
         font-size: 26rpx;
-        line-height: 36rpx;
+        // line-height: 36rpx;
         text-align: left;
         box-sizing: border-box;
         color: #666;
+        height: 100%;
+
+        // width: 400rpx;
+
         // border-left: 10rpx solid transparent;
     }
-    .aside-categroy-item-active {
+    .categroy-item-active {
         color: #333;
         font-weight: bold;
         // background-color: #fff;

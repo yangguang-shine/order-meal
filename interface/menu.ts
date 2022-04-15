@@ -28,7 +28,8 @@ export interface FoodItemI extends OriginFoodItemI {
 }
 
 export interface CategoryItemI extends OriginCategoryItemI {
-    categoryTabID: string;
+    categoryIDMain: string;
+    categoryIDAside: string;
     foodList: FoodItemI[];
 }
 // export interface CartCategoryInfoI extends OriginCategoryItemI {
@@ -38,7 +39,7 @@ export interface AsideCategoryItemI {
     categoryName: string;
     categoryID: number;
     categoryOrderCount: number;
-    categoryTabID: string;
+    selectedCategoryID: string;
 }
 
 export const initFoodItem: FoodItemI = {

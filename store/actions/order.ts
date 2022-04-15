@@ -19,6 +19,7 @@ async function getOrderList({ state, commit }: ActionContextI, payload: any) {
             ...item,
             minusList: JSON.parse(item.minus),
             fullImgPath: `${shopImgPath}/${item.imgUrl}`,
+            mode: "horizontal",
         };
     });
     const orderList: OrderItemI[] = data.orderKeyList.map(
@@ -32,18 +33,9 @@ async function getOrderList({ state, commit }: ActionContextI, payload: any) {
     state.allOrderList[state.orderTabIndex] = orderList;
     return orderList;
 }
-async function getShopInfo({ state, commit }: ActionContextI, payload: { shopID: number }): Promise<ShopItemI> {
-    const originShopInfo: OriginShopItemI = await fetch("shop/find", payload);
-    const shopInfo: ShopItemI = {
-        ...originShopInfo,
-        minusList: JSON.parse(originShopInfo.minus),
-        fullImgPath: `${shopImgPath}/${originShopInfo.imgUrl}`,
-    };
-    commit('saveShopInfo', shopInfo)
-    return shopInfo;
-}
 
-async function getOrderDetail({ state, commit }: ActionContextI, payload: {orderKey: string}): Promise<OrderDetailI> {
+
+async function getOrderDetail({ state, commit }: ActionContextI, payload: { orderKey: string }): Promise<OrderDetailI> {
     const originOrderDetail: {
         orderInfo: OrderKeyI;
         foodList: OriginFoodItemI[];
@@ -66,12 +58,11 @@ async function getOrderDetail({ state, commit }: ActionContextI, payload: {order
     return orderDetail;
 }
 
-async function cancelOrder({ state, commit }: ActionContextI, payload: {orderKey: string}) {
+async function cancelOrder({ state, commit }: ActionContextI, payload: { orderKey: string }) {
     await fetch("order/cancel", payload);
 }
 export default {
     getOrderList,
-    getShopInfo,
     getOrderDetail,
     cancelOrder,
 } as ActionI;

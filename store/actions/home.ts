@@ -13,10 +13,24 @@ async function getRecommandShopList ({ commit, state }: ActionContextI, params =
         ...item,
         minusList: JSON.parse(item.minus),
         fullImgPath: `${shopImgPath}/${item.imgUrl}`,
+        mode: 'horizontal'
     }));
     // recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList));
     // recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList))
     commit('setRecommandShopList', recommandShopList)
     return recommandShopList || []
 }
-export default { getRecommandShopList } as ActionI
+
+async function getShopInfo({ state, commit }: ActionContextI, payload: { shopID: number }): Promise<ShopItemI> {
+    const originShopInfo: OriginShopItemI = await fetch("shop/find", payload);
+    const shopInfo: ShopItemI = {
+        ...originShopInfo,
+        minusList: JSON.parse(originShopInfo.minus),
+        fullImgPath: `${shopImgPath}/${originShopInfo.imgUrl}`,
+        mode: "horizontal",
+
+    };
+    commit("saveShopInfo", shopInfo);
+    return shopInfo;
+}
+export default { getRecommandShopList, getShopInfo } as ActionI

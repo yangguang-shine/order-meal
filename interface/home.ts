@@ -18,6 +18,7 @@ export interface OriginShopItemI {
     shopID: number;
     shopName: string;
     startTime: string;
+    mode: 'vertical' | 'horizontal' // 
 }
 
 export interface minusItemI {
@@ -46,4 +47,5 @@ export const initShopItem: ShopItemI = {
     startTime: "00:00",
     fullImgPath: "",
     minusList: [],
+    mode: "vertical"
 };

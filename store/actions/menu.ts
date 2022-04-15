@@ -12,7 +12,8 @@ async function getMenuList({ commit, state }: ActionContextI) {
     const categoryList: CategoryItemI[] = (data || []).map(
         (item: OriginCategoryItemI): CategoryItemI => ({
             ...item,
-            categoryTabID: "id" + item.categoryID,
+            categoryIDMain: `main${item.categoryID}`,
+            categoryIDAside: `aside${item.categoryID}`,
             foodList: (item.foodList || []).map(
                 (foodItem): FoodItemI => ({
                     ...foodItem,
@@ -23,13 +24,14 @@ async function getMenuList({ commit, state }: ActionContextI) {
         })
     );
     if (categoryList.length) {
-        commit("setCategoryTabId", categoryList[0].categoryTabID);
-        commit("setScrollIntoCategoryTabID", '');
+        commit("setSelectedCategoryID", categoryList[0].categoryID);
+        commit("setCategoryIDMain", "");
+        commit("setCategoryIDAside", "");
     }
     commit("setFoodCategoryList", categoryList);
 }
 
-async function getOrderKeyFoodList({ commit, state }: ActionContextI, option: any = {orderKey: ''}) {
+async function getOrderKeyFoodList({ commit, state }: ActionContextI, option: any = { orderKey: "" }) {
     const data: OriginFoodItemI[] = await fetch("order/foodList", {
         ...option,
     });
@@ -37,7 +39,8 @@ async function getOrderKeyFoodList({ commit, state }: ActionContextI, option: an
         if (!list.length) {
             list.push({
                 categoryID: item.categoryID,
-                categoryTabID: "id" + item.categoryID,
+                categoryIDMain: `main${item.categoryID}`,
+                categoryIDAside: `aside${item.categoryID}`,
                 categoryName: item.categoryName,
                 foodList: [
                     {
@@ -59,7 +62,8 @@ async function getOrderKeyFoodList({ commit, state }: ActionContextI, option: an
                 list.push({
                     categoryID: item.categoryID,
                     categoryName: item.categoryName,
-                    categoryTabID: "id" + item.categoryID,
+                    categoryIDMain: `main${item.categoryID}`,
+                    categoryIDAside: `aside${item.categoryID}`,
                     foodList: [
                         {
                             ...item,
