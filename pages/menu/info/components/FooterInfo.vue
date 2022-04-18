@@ -110,7 +110,7 @@ function clickCartImg() {
     height: 140rpx;
     background-color: #fff;
     color: #fff;
-    z-index: 600;
+    z-index: 800;
 
     .footer-cart {
         width: 100%;

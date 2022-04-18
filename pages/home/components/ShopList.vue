@@ -1,7 +1,7 @@
 <template>
     <div v-if="recommandShopList.length" class="shop-list-container">
         <!-- <div class="near-shop-title">附近外卖店铺推荐</div> -->
-        <shop v-for="(shopItem, index) in recommandShopList" :key="index" :shopItem="shopItem" @clickShopItem="toOrder" showArrowRightFlag></shop>
+        <shop v-for="(shopItem, index) in recommandShopList" :key="index" :shopItem="shopItem" @clickShopItem="toOrder"></shop>
     </div>
 </template>
 

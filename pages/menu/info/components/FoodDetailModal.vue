@@ -1,57 +1,52 @@
 <template>
-    <view class="food-detail-container flex-row flex-ja-center" @click.stop="closeFoodDetail" @touchmove.stop>
+    <view class="food-detail-container flex-row flex-ja-center" @click.stop="closeFoodDetail" @touchmove.stop.prevent>
         <view :animation="overlayAnimationData" class="food-detail-overlay"></view>
-        <view :animation="detailAnimationData" class="food-detail-box flex-col" @click.stop :style="{ 'padding-bottom': (minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX : footerInfoHeightRPX) + 30 + 'rpx' }">
+        <view :animation="detailAnimationData" class="food-detail-box" @click.stop>
             <!-- <view class="food-img"></view> -->
             <img class="food-img" :src="foodInfo.fullImgPath" alt="" />
-            <img class="food-img" :src="foodInfo.fullImgPath" alt="" />
-            <div class="food-info">
+            <view class="food-info">
                 <view class="food-name">{{ foodInfo.foodName }}</view>
                 <view v-if="foodInfo.description" class="food-description">{{ foodInfo.description }}</view>
+
                 <view class="food-price-order flex-row flex-j-between">
                     <div class="flex-row flex-a-end">
                         <div class="food-price">¥{{ foodInfo.price }}</div>
                         <div v-if="foodInfo.unit" class="food-unit">/{{ foodInfo.unit }}</div>
                     </div>
 
-                    <FoodAddMinusItem :foodItem="foodInfo"></FoodAddMinusItem>
+                    <FoodAddMinusItem :foodItem="foodInfo" ></FoodAddMinusItem>
                 </view>
-            </div>
+            </view>
+            <image class="close-img" src="/static/img/user-menu/close-food-detail.png" mode="" @click.stop="closeFoodDetail"></image>
         </view>
-        <image class="close-img" :animation="overlayAnimationData" src="/static/img/user-menu/close-food-detail.png" mode="" @click.stop="closeFoodDetail"></image>
     </view>
 </template>
 
 <script lang="ts" setup>
 import FoodAddMinusItem from "./item/FoodAddMinusItem.vue";
 import { delaySync } from "@/utils/index";
-import { mapState, mapMutation, mapGetter } from "@/utils/mapVuex";
+import { mapState, mapMutation } from "@/utils/mapVuex";
 import { getCurrentInstance, computed, onMounted, ref } from "vue";
 
 const showComponents = false;
 
 import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { FoodItemI, initFoodItem } from "@/interface/menu";
-import { foodDetailTransitionTime, footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX } from "../infoConfig";
-import { MinusPromotionsObjectI } from "@/store/getters/menu";
+import { foodDetailTransitionTime } from "../infoConfig";
 
 interface StateF {
     foodInfo: ComputedStateI<FoodItemI[]>;
-}
-interface GetterF {
-    minusPromotionsObject: ComputedStateI<MinusPromotionsObjectI[]>;
 }
 interface MutationF {
     setFoodDetailFlag: ComputedMutationI<boolean>;
     setFoodInfo: ComputedMutationI<FoodItemI>;
 }
-const { foodInfo }: GetterF = mapState(["foodInfo"]);
-const { minusPromotionsObject }: StateF = mapGetter(["minusPromotionsObject"]);
+const { foodInfo }: StateF = mapState(["foodInfo"]);
 const { setFoodDetailFlag, setFoodInfo }: MutationF = mapMutation(["setFoodDetailFlag", "setFoodInfo"]);
 const overlayAnimationData = ref(null);
 const detailAnimationData = ref(null);
 const overlayAnimation = uni.createAnimation({
-    duration: foodDetailTransitionTime * 3,
+    duration: foodDetailTransitionTime,
     timingFunction: "ease-in-out",
 });
 
@@ -66,18 +61,18 @@ onMounted(() => {
 function toStartAnimation() {
     overlayAnimation.opacity(1).step();
     overlayAnimationData.value = overlayAnimation.export();
-    detailAnimation.translateY(0).step();
+    detailAnimation.scale(1).step();
     detailAnimationData.value = detailAnimation.export();
 }
 function toEndAnimation() {
     overlayAnimation.opacity(0).step();
     overlayAnimationData.value = overlayAnimation.export();
-    detailAnimation.translateY("100%").step();
+    detailAnimation.scale(0).step();
     detailAnimationData.value = detailAnimation.export();
 }
 
 async function closeFoodDetail() {
-    toEndAnimation();
+	toEndAnimation()
     await delaySync(foodDetailTransitionTime);
     setFoodDetailFlag(false);
     setFoodInfo(initFoodItem);
@@ -89,12 +84,12 @@ async function closeFoodDetail() {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    bottom: 0;
+    width: 100vw;
+    height: 100vh;
     // -webkit-backdrop-filter: blur(20px) brightness(100%);
     // backdrop-filter: blur(20px) brightness(100%);
     // background-color: rgba(0, 0, 0, 0.5);
-    z-index: 500;
+    z-index: 600;
     .food-detail-overlay {
         position: absolute;
         top: 0;
@@ -107,15 +102,12 @@ async function closeFoodDetail() {
         opacity: 0;
     }
     .food-detail-box {
-        position: absolute;
-        top: 10%;
-        left: 0;
-        width: 100%;
-        bottom: 0;
+        position: relative;
+        width: 600rpx;
+        margin-bottom: 140rpx;
+        transform: scale(0);
         background-color: #fff;
-        box-sizing: border-box;
-        transform: translateY(100%);
-        overflow: auto;
+        border-radius: 16rpx;
     }
     // .show-food-detail-container {
     // 	transform: scale(1);
@@ -124,14 +116,16 @@ async function closeFoodDetail() {
     // 	transform: scale(0);
     // }
     .food-img {
-        width: 750rpx;
-        height: 750rpx;
+        border-top-left-radius: 16rpx;
+        border-top-right-radius: 16rpx;
+        width: 600rpx;
+        height: 600rpx;
         // background-color: red;
     }
     .food-info {
-        padding: 32rpx 32rpx 0;
-        // border-bottom-left-radius: 16rpx;
-        // border-bottom-right-radius: 16rpx;
+        padding: 20rpx 34rpx 0;
+        border-bottom-left-radius: 16rpx;
+        border-bottom-right-radius: 16rpx;
     }
     .food-name {
         font-weight: bold;
@@ -162,9 +156,9 @@ async function closeFoodDetail() {
     }
     .close-img {
         position: absolute;
-        top: 11%;
-        opacity: 0;
-        right: 20rpx;
+        left: 50%;
+        bottom: -120rpx;
+        transform: translateX(-50%);
         width: 80rpx;
         height: 80rpx;
         // z-index: 900;

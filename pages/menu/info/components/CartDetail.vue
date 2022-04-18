@@ -117,7 +117,7 @@ async function cartClearCart() {
     width: 100%;
     font-size: 28rpx;
     -webkit-overflow-scrolling: touch;
-    z-index: 400;
+    z-index: 600;
     .cart-detail-overlay-enter-from,
     .cart-detail-overlay-leave-to {
         opacity: 0;

@@ -36,10 +36,10 @@ interface MutationF {
     setTopBarInfo: ComputedMutationI<string>;
     setShopInfoFlag: ComputedMutationI<boolean>;
     setStartShopInfoAnimationFlag: ComputedMutationI<boolean>;
-    setSearchFlag: ComputedMutationI<boolean>;
+    setSearchFoodFlag: ComputedMutationI<boolean>;
 }
 const { topBarInfo, shopInfo }: StateF = mapState(["topBarInfo", "shopInfo"]);
-const { setTopBarInfo, setShopInfoFlag, setStartShopInfoAnimationFlag, setSearchFlag }: MutationF = mapMutation(["setTopBarInfo", "setShopInfoFlag", "setStartShopInfoAnimationFlag", "setSearchFlag"]);
+const { setTopBarInfo, setShopInfoFlag, setStartShopInfoAnimationFlag, setSearchFoodFlag }: MutationF = mapMutation(["setTopBarInfo", "setShopInfoFlag", "setStartShopInfoAnimationFlag", "setSearchFoodFlag"]);
 
 const barSearchAnimationData: RefI<any> = ref(null);
 watch(topBarInfo, (newValue: string, oldValue: string) => {
@@ -57,7 +57,7 @@ watch(topBarInfo, (newValue: string, oldValue: string) => {
 });
 function toSearch() {
     if (topBarInfo.value === "商家") return;
-    setSearchFlag(true);
+    setSearchFoodFlag(true);
 }
 async function clickTopBar(title: string) {
     if (topBarInfo.value === title) return;

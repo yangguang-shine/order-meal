@@ -35,8 +35,8 @@ function setShopInfoFlag (state: StateI, shopInfoFlag: boolean) {
 function setCartImgAnimationFlag (state: StateI, cartImgAnimationFlag: boolean) {
     state.cartImgAnimationFlag = cartImgAnimationFlag;
 };
-function setSearchFlag (state: StateI, searchFlag: boolean) {
-    state.searchFlag = searchFlag;
+function setSearchFoodFlag (state: StateI, searchFoodFlag: boolean) {
+    state.searchFoodFlag = searchFoodFlag;
 };
 
 function setCartImgPositionInfo (state: StateI, positionInfo: PositionInfoI) {
@@ -125,7 +125,7 @@ export default {
     setStartShopInfoAnimationFlag,
     setShopInfoFlag,
     setCartImgAnimationFlag,
-    setSearchFlag,
+    setSearchFoodFlag,
     setCartImgPositionInfo,
     toogleCartDetailFlag,
     setCartDetailFlag,

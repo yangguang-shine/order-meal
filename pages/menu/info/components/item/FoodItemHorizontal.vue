@@ -141,13 +141,11 @@ function clickFoodItem(foodItem: FoodItemI) {
 <style lang="scss" scoped>
 .food-item-horizontal-container {
     position: relative;
-    // height: 400rpx;
     margin: 20rpx 10rpx 0 0;
     width: 230rpx;
     padding-bottom: 10rpx;
     background-color: #fff;
-    border-top-left-radius: 12rpx;
-    border-top-right-radius: 12rpx;
+    border-radius: 12rpx;
     .food-img {
         width: 230rpx;
         height: 230rpx;

@@ -32,7 +32,7 @@ const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
     line-height: 50rpx;
     font-size: 22rpx;
     color: #333;
-    z-index: 500;
+    z-index: 700;
     .content-red {
         color: #e23232;
     }

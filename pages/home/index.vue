@@ -3,6 +3,7 @@
         <TopAddressSearch></TopAddressSearch>
         <ToolsList></ToolsList>
         <RecommandInfo></RecommandInfo>
+        <SearchShop></SearchShop>
     </view>
 </template>
 
@@ -14,6 +15,7 @@ import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import TopAddressSearch from "./components/TopAddressSearch.vue";
 import ToolsList from "./components/ToolsList.vue";
 import RecommandInfo from "./components/RecommandInfo.vue";
+import SearchShop from "./components/SearchShop.vue";
 import { topAddressSearchHeight, tabListTop } from "./homeConfig";
 import { getCurrentInstance } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";

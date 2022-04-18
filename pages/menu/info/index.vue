@@ -2,7 +2,7 @@
     <view class="menu-container">
         <TopBar></TopBar>
         <view :animation="shopInfoAnimationData" class="menu-order-box">
-            <view v-if="shopInfo.mode === 'vertical'" class="vertical-menu-box">
+            <view v-if="shopInfo.mode !== 'vertical'" class="vertical-menu-box">
                 <FoodCategoryList class="flex-item"></FoodCategoryList>
                 <CategoryAsideBar></CategoryAsideBar>
             </view>
@@ -16,7 +16,7 @@
             <FoodDetail v-if="foodDetailFalg"></FoodDetail>
         </view>
         <ShopInfo v-show="startShopInfoAnimationFlag || shopInfoFlag"></ShopInfo>
-        <Search v-if="searchFlag"></Search>
+        <SearchFood v-if="searchFoodFlag"></SearchFood>
         <!-- <common-loading v-if="showLoadingFlag"></common-loading> -->
     </view>
 </template>
@@ -35,7 +35,7 @@ import CartDetail from "./components/CartDetail.vue";
 import FoodDetail from "./components/FoodDetail.vue";
 import TopBar from "./components/TopBar.vue";
 import ShopInfo from "./components/ShopInfo.vue";
-import Search from "./components/Search.vue";
+import SearchFood from "./components/SearchFood.vue";
 import { delaySync } from "@/utils/index.js";
 import { mapState, mapMutation, mapAction, mapGetter } from "@/utils/mapVuex";
 import { defineComponent, getCurrentInstance, computed, watch, ref } from "vue";
@@ -53,7 +53,7 @@ interface StateF {
     shopInfoFlag: ComputedStateI<boolean>;
     cartDetailFlag: ComputedStateI<boolean>;
     foodDetailFalg: ComputedStateI<boolean>;
-    searchFlag: ComputedStateI<boolean>;
+    searchFoodFlag: ComputedStateI<boolean>;
 }
 interface GetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
@@ -69,7 +69,7 @@ interface ActionF {
     getShopInfo: ComputedMutationI<{ shopID: number }>;
 }
 const { $showLoading, $hideLoading, $showModal } = getCurrentInstance().proxy;
-const { shopInfo, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFlag }: StateF = mapState(["shopInfo", "topBarInfo", "startShopInfoAnimationFlag", "shopInfoFlag", "cartDetailFlag", "foodDetailFalg", "searchFlag"]);
+const { shopInfo, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag }: StateF = mapState(["shopInfo", "topBarInfo", "startShopInfoAnimationFlag", "shopInfoFlag", "cartDetailFlag", "foodDetailFalg", "searchFoodFlag"]);
 const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
 
 const shopInfoAnimationData = ref(null);

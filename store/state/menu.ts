@@ -16,7 +16,7 @@ export interface StateMenuI {
     foodInfo: FoodItemI;
     cartImgPositionInfo: PositionInfoI,
     cartImgAnimationFlag: boolean,
-    searchFlag: boolean
+    searchFoodFlag: boolean
 
 }
 
@@ -38,6 +38,6 @@ const state: StateMenuI = {
         top : 0
     },
     cartImgAnimationFlag: false,
-    searchFlag: false
+    searchFoodFlag: false
 };
 export default state;

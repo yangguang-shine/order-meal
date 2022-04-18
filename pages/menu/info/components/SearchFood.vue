@@ -35,13 +35,13 @@ interface GetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
 }
 interface MutationF {
-    setSearchFlag: ComputedMutationI<boolean>;
+    setSearchFoodFlag: ComputedMutationI<boolean>;
     setFoodDetailFlag: ComputedMutationI<boolean>;
     setFoodInfo: ComputedMutationI<FoodItemI>;
 }
 const { categoryList }: StateF = mapState(["categoryList"]);
 const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
-const { setSearchFlag, setFoodDetailFlag, setFoodInfo }: MutationF = mapMutation(["setSearchFlag","setFoodDetailFlag", "setFoodInfo"]);
+const { setSearchFoodFlag, setFoodDetailFlag, setFoodInfo }: MutationF = mapMutation(["setSearchFoodFlag","setFoodDetailFlag", "setFoodInfo"]);
 
 const searchValue: RefI<string> = ref("");
 const searchFoodList: ComputedI<FoodItemI> = computed(() => {
@@ -85,7 +85,7 @@ function toShowFoodDetail(foodItem: FoodItemI) {
 async function clickCancel() {
     showEndAnimation();
     await delaySync(searchModalTransitionTime);
-    setSearchFlag(false);
+    setSearchFoodFlag(false);
 }
 </script>
 

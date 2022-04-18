@@ -16,9 +16,9 @@
                 </div>
 
             </div>
-            <image v-if="showDeleteShopFlag" class="delete-icon" src="/static/img/shop-delete.svg" @click.stop="toDeleteShop"></image>
-            <image v-if="showEditShopFlag" class="edit-icon" src="/static/img/shop-edit.svg" @click.stop="toEditShop(shopItem)"></image>
-            <image v-if="showArrowRightFlag" class="arrow-right-icon" src="/static/img/shop/arrow-right.png"></image>
+            <!-- <image v-if="showDeleteShopFlag" class="delete-icon" src="/static/img/shop-delete.svg" @click.stop="toDeleteShop"></image>
+            <image v-if="showEditShopFlag" class="edit-icon" src="/static/img/shop-edit.svg" @click.stop="toEditShop(shopItem)"></image> -->
+            <image class="arrow-right-icon" src="/static/img/shop/arrow-right.png"></image>
         </div>
     </div>
 </template>
@@ -29,14 +29,14 @@ import { defineComponent, computed, getCurrentInstance } from "vue";
 import { shopImgPath } from '@/config/index'
 interface Props {
     shopItem: any;
-    showDeleteShopFlag?: boolean;
-    showEditShopFlag?: boolean;
-    showArrowRightFlag?: boolean;
+    // showDeleteShopFlag?: boolean;
+    // showEditShopFlag?: boolean;
+    // showArrowRightFlag?: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
-    showDeleteShopFlag: false,
-    showEditShopFlag: false,
-    showArrowRightFlag: false,
+    // showDeleteShopFlag: false,
+    // showEditShopFlag: false,
+    // showArrowRightFlag: false,
     shopItem: () => ({})
 });
 
@@ -61,23 +61,23 @@ const props = withDefaults(defineProps<Props>(), {
 // }
 const emit = defineEmits<{
   (e: 'clickShopItem', shopItem: any): void,
-  (e: 'deleteShop', shopItem: any): void,
+//   (e: 'deleteShop', shopItem: any): void,
 }>()
 function toClickShopItem() {
     emit('clickShopItem', props.shopItem)
 }
-function toDeleteShop() {
-    emit('deleteShop', props.shopItem)
-}
-function toEditShop(shopItem) {
-    console.log('toEditShop')
-    // this.$myrouter.navigateTo({
-    //     name: "manage/shop/edit",
-    //     query: {
-    //         shopID: shopItem.shopID
-    //     }
-    // });
-}
+// function toDeleteShop() {
+//     emit('deleteShop', props.shopItem)
+// }
+// function toEditShop(shopItem) {
+//     console.log('toEditShop')
+//     // this.$myrouter.navigateTo({
+//     //     name: "manage/shop/edit",
+//     //     query: {
+//     //         shopID: shopItem.shopID
+//     //     }
+//     // });
+// }
 </script>
 <style scoped lang="scss">
 .com-shop-container {

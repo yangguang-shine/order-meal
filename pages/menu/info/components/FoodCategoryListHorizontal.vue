@@ -53,7 +53,7 @@ const categoryItemLastPaddingBottom: string = computed((): string => (minusPromo
 const props = defineProps();
 console.log("props");
 console.log(props);
-
+   
 function toShowFoodDetail(foodItem: FoodItemI) {
     setFoodDetailFlag(true);
     setFoodInfo(foodItem);
