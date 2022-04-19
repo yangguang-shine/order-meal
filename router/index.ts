@@ -37,6 +37,13 @@ const home: RouteInfoI[] = [
 		path: '/pages/home/index'
 	},
 ]
+const shop: RouteInfoI[] = [
+	
+	{
+		name: 'shop',
+		path: '/pages/shop/index'
+	},
+]
 
 const login:RouteInfoI[] = [
 	{
@@ -78,6 +85,7 @@ const route = [
 	...address,
 	...center,
 	...home,
+	...shop,
 	...login,
 	...menu,
 	...order,

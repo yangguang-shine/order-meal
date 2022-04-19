@@ -1,28 +1,29 @@
 <template>
-    <view class="search-shop-container">
-        <Search :searchResultList="searchShopList" v-model="searchValue" :bottom="tabBarHeightPX" @clickCancel="clickCancel">
+    <div class="page-shop-container">
+        <Search :searchResultList="searchShopList" v-model="searchValue"  @clickCancel="clickCancel">
             <template #result>
                 <Shop v-for="searchShopItem in searchShopList" :key="searchShopItem.shopID" class="search-shop-item" :shopItem="searchShopItem" @clickShopItem="clickShopItem"></Shop>
             </template>
             <template #default>
+                <div></div>
                 <Shop v-for="searchShopItem in recommandShopList" :key="searchShopItem.shopID" class="search-shop-item" :shopItem="searchShopItem" @clickShopItem="clickShopItem"></Shop>
             </template>
         </Search>
-    </view>
+    </div>
 </template>
 
-<script lang="ts" setup>
-import { ComputedI, RefI } from "@/interface/vueInterface";
-import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
-import { MinusPromotionsObjectI } from "@/store/getters/menu";
-import { delaySync, tabBarHeightPX } from "@/utils/";
-import Shop from "@/components/Shop.vue";
-import Search from "@/components/Search.vue";
-import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
-import { ref, onMounted, computed } from "vue";
+<script setup lang="ts">
+import { getCurrentInstance, reactive, computed, ref } from "vue";
+import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
+import { mapAction, mapMutation, mapState } from "@/utils/mapVuex";
+import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import { UserInfoI } from "@/interface/center";
+import Search from "@/components/Search";
+import Shop from "@/components/Shop";
+import { ComputedI } from "@/interface/vueInterface";
 import { ShopItemI } from "@/interface/home";
-import { searchShopTransitionTime } from "../homeConfig";
 import router from "@/utils/router";
+const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
 interface StateF {
     recommandShopList: ComputedStateI<ShopItemI[]>;
 }
@@ -37,6 +38,9 @@ const { setSearchShopFlag, saveShopInfo, saveBusinessType }: MutationF = mapMuta
 
 const searchValue: RefI<string> = ref("");
 const searchShopList: ComputedI<ShopItemI> = computed(() => {
+    console.log(searchValue.value)
+    console.log('recommandShopList')
+    console.log(recommandShopList)
     if (!searchValue.value) return [];
     const searchShopList: ShopItemI[] = [];
     recommandShopList.value.forEach((shopItem: ShopItemI) => {
@@ -47,20 +51,19 @@ const searchShopList: ComputedI<ShopItemI> = computed(() => {
     return searchShopList;
 });
 function clickShopItem(shopItem: ShopItemI) {
-    saveShopInfo(shopItem);
-    saveBusinessType(2);
-    router.navigateTo({
-        name: "menu/info",
-    });
+    console.log('clickShopItem')
 }
-
-async function clickCancel() {
-    setSearchShopFlag(false);
+function clickCancel() {
+    router.back()
 }
 </script>
-
+<style>
+page {
+    background-color: #f5f5f5;
+}
+</style>
 <style lang="scss">
-.search-shop-container {
+.page-shop-container {
     .search-shop-item {
         border-bottom: 1rpx solid #eee;
     }

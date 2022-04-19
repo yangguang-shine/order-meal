@@ -5,15 +5,19 @@
             <view class="cancel" @click="clickCancel">取消</view>
             <view class="search-icon"></view>
             <view class="clear-input" @click="clearInput"></view>
+            <view class="search-title">{{modelValue ? resultTitle : defaultTitle}}</view>
         </view>
-        <div class="result-box">
-            <view v-if="searchResultList.length" class="result-list">
-                <slot></slot>
-            </view>
+        <view class="result-box" v-if="modelValue">
+            <template v-if="searchResultList.length">
+                <slot name="result"></slot>
+            </template>
             <view v-else class="result-list-empty flex-col flex-ja-center">
                 <CommonError></CommonError>
             </view>
-        </div>
+        </view>
+        <view v-else class="default-box">
+            <slot name="default"></slot>
+        </view>
     </view>
 </template>
 
@@ -28,10 +32,12 @@ import { ref, onMounted, computed } from "vue";
 import { ShopItemI } from "@/interface/home";
 import { searchDefaultTransitionTime } from "./config";
 interface PropsI {
-    bottom: number;
+    bottom?: number;
     searchResultList: any;
     modelValue: string;
     animationTime?: number;
+    resultTitle?: string;
+    defaultTitle?: string;
 }
 interface EmitI {
     (e: "clickResultItem", id: number): void;
@@ -45,6 +51,8 @@ const props: PropsI = withDefaults(defineProps<PropsI>(), {
     searchOriginList: [],
     modelValue: "",
     animationTime: searchDefaultTransitionTime,
+    resultTitle: '搜索结果',
+    defaultTitle: '推荐结果',
 });
 const emit = defineEmits<EmitI>();
 
@@ -66,7 +74,7 @@ function showEndAnimation() {
     searchModalAnimationData.value = searchModalAnimation.opacity(0).step().export();
 }
 function clearInput() {
-    emit("update:modelValue", '');
+    emit("update:modelValue", "");
 }
 async function clickCancel() {
     showEndAnimation();
@@ -85,10 +93,17 @@ async function clickCancel() {
     z-index: 300;
     color: #999;
     opacity: 0;
+    padding-top: 170rpx;
+        box-sizing: border-box;
+        background-color: #fff;
+
     .search-box {
-        position: relative;
+        position: absolute;
+        left: 0;
+        top: 0;
         width: 100%;
-        padding: 30rpx;
+        height: 170rpx;
+        padding: 30rpx 30rpx 80rpx;
         box-sizing: border-box;
         background-color: #fff;
         z-index: 10;
@@ -107,42 +122,34 @@ async function clickCancel() {
         }
         .search-icon {
             position: absolute;
-            top: 50%;
+            top: 52rpx;
             left: 60rpx;
-            transform: translateY(-50%);
             width: 16rpx;
             height: 16rpx;
             background-color: red;
         }
         .clear-input {
             position: absolute;
-            top: 50%;
+            top: 52rpx;
             right: 160rpx;
-            transform: translateY(-50%);
             width: 16rpx;
             height: 16rpx;
             background-color: red;
         }
+        .search-title {
+            position: absolute;
+            bottom: 20rpx;
+            left: 30rpx;
+            font-size: 28rpx;
+            color: #999;
+        }
     }
-    .result-box {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        box-sizing: border-box;
-        padding-top: 120rpx;
-    }
-    .result-list {
-        height: 100%;
-        width: 100%;
-        box-sizing: border-box;
-        background-color: #fff;
-        overflow: auto;
-    }
+    .result-box,
+    .default-box,
     .result-list-empty {
-        height: 100%;
+        position: relative;
         width: 100%;
+        height: 100%;
         box-sizing: border-box;
         background-color: #fff;
         overflow: auto;

@@ -23,7 +23,13 @@
 				
 			}
 		},
-
+		{
+			"path": "pages/shop/index",
+			"style": {
+				"navigationBarTitleText": "店铺列表",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		}, 
 		{
 			"path": "pages/order/list/index",
 			"style": {

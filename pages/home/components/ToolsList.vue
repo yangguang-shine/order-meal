@@ -3,51 +3,71 @@
         <view class="tool-item flex-col flex-a-center" v-for="(toolItem, index) in toolsList" :key="index" @click="toToolDetail(toolItem)">
             <image class="tool-icon"></image>
             <view class="tool-title line1 text-center">
-                {{toolItem.title}}
+                {{ toolItem.title }}
             </view>
         </view>
     </view>
 </template>
 
 <script lang="ts" setup>
+import router from "@/utils/router";
 import { reactive } from "vue";
-
-const toolsList = reactive([
+interface ToolItemI {
+    icon: string;
+    title: string;
+    name?: string;
+    businessType?: string;
+}
+const toolsList: ToolItemI[] = reactive([
     {
         icon: "",
         title: "堂食",
-        path: ''
+        name: "shop",
+        businessType: 1,
     },
     {
         icon: "",
-        title: "外卖"
+        title: "外卖",
+        name: "shop",
+        businessType: 2,
     },
     {
         icon: "",
-        title: "自提"
+        title: "自提",
+        name: "shop",
+        businessType: 3,
     },
     {
         icon: "",
-        title: "嘻嘻嘻4"
+        title: "嘻嘻嘻4",
     },
     {
         icon: "",
-        title: "嘻嘻嘻5"
+        title: "嘻嘻嘻5",
     },
     {
         icon: "",
-        title: "嘻嘻嘻6"
+        title: "嘻嘻嘻6",
     },
     {
         icon: "",
-        title: "嘻嘻嘻7"
+        title: "嘻嘻嘻7",
     },
     {
         icon: "",
-        title: "嘻嘻嘻8"
+        title: "嘻嘻嘻8",
+    },
+] as ToolItemI[]);
+
+function toToolDetail(toolItem: ToolItemI) {
+    if (toolItem.name && toolItem.businessType) {
+        router.navigateTo({
+            name: toolItem.name,
+            query: {
+                businessType: toolItem.businessType,
+            },
+        });
     }
-]);
-function toToolDetail() {
     console.log("toToolDetail");
 }
 </script>
