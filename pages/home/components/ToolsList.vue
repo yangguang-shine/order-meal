@@ -15,15 +15,16 @@ import { reactive } from "vue";
 const toolsList = reactive([
     {
         icon: "",
-        title: "嘻嘻嘻1"
+        title: "堂食",
+        path: ''
     },
     {
         icon: "",
-        title: "嘻嘻嘻2"
+        title: "外卖"
     },
     {
         icon: "",
-        title: "嘻嘻嘻3"
+        title: "自提"
     },
     {
         icon: "",

@@ -15,6 +15,7 @@ export interface OriginFoodItemI {
     price: number;
     shopID: number;
     unit: string;
+    reserveCount: number
 }
 
 export interface OriginCategoryItemI {

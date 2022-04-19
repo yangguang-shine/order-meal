@@ -78,3 +78,7 @@
 ### 升级后的vue3和vuex使用踩坑
 
 1. mapState，mapMutation，mapAction等在setup中使用时，因无this，mapState不能使用，mapMutation，mapAction在setup中直接调用因无this一样不行，但在setup外却能使用，因为存在这个问题，自己封装了简单的mapState，mapMutation，mapAction，在utils/mapVuex中，当然仅限于基础使用，
+
+4.14: 添加点餐页垂直以及水平模式并相互切换
+4.19: 添加菜品售罄功能，仅剩1份等标识
+

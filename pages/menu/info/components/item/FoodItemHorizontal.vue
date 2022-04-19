@@ -1,12 +1,15 @@
 <template>
     <view class="food-item-horizontal-container flex-col" @click.stop="clickFoodItem(foodItem)">
-        <image :src="foodItem.fullImgPath" alt="" class="food-img" ></image>
+        <image :src="foodItem.fullImgPath" alt="" class="food-img"></image>
         <view class="food-name line2">
             {{ foodItem.foodName }}<span class="food-unit">/{{ foodItem.unit }}</span>
         </view>
         <view class="food-price-add flex-row flex-a-center flex-j-between" @click.stop="addCount($event)" :style="{ color: shopInfo.mainColor }">
             <view class="food-price">¥{{ foodItem.price }}</view>
-            <view class="food-add" :id="'add' + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }"></view>
+            <view v-if="foodItem.reserveCount" class="food-add" :id="'add' + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }">
+                <ReserveRemain v-if="foodItem.reserveCount < 10" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
+            </view>
+            <ReserveNotEnough v-else></ReserveNotEnough>
             <view v-for="addItem in addList" :key="addItem.random" class="food-add-x" :animation="addItem.animationXData">
                 <view class="food-add-y" :animation="addItem.animationYData">
                     <view class="food-add food-add-copy" :style="{ 'background-color': shopInfo.mainColor }"></view>
@@ -23,6 +26,9 @@ import { watch, reactive, ref, getCurrentInstance, onMounted } from "vue";
 import { mapMutation, mapState } from "@/utils/mapVuex";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import FoodAddMinusItem from "./FoodAddMinusItem.vue";
+import ReserveNotEnough from "./ReserveNotEnough.vue";
+import ReserveRemain from "./ReserveRemain.vue";
+
 import { AddressItemI, CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI, PositionInfoI, ShopItemI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
 import { cartImgWidthHeightPX, countAddTransitionTime, foodAddMinusTransitionTime, foodAddWidthHeightPX } from "../../infoConfig";
@@ -153,7 +159,8 @@ function clickFoodItem(foodItem: FoodItemI) {
     .food-name {
         padding: 12rpx 20rpx 0;
         font-weight: bold;
-        font-size: 34rpx;
+        font-size: 32rpx;
+        line-height: 34rpx;
         height: 80rpx;
     }
     .food-unit {
@@ -164,7 +171,7 @@ function clickFoodItem(foodItem: FoodItemI) {
     .food-price-add {
         position: relative;
         padding: 10rpx 20rpx;
-        font-size: 34rpx;
+        font-size: 32rpx;
     }
     // .food-add-box {
     //     position: relative;

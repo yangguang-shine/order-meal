@@ -1,6 +1,6 @@
 <template>
     <view class="recommand-info-container">
-        <view class="recommand-title flex-row flex-ja-center">推荐商家</view>
+        <view class="recommand-title flex-row flex-ja-center">推荐外卖商家</view>
         <TabList></TabList>
         <ShopList></ShopList>
     </view>

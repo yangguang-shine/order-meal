@@ -8,7 +8,8 @@
             </view>
             <view class="food-price-button flex-row flex-j-between flex-a-center">
                 <view class="food-price">¥{{ foodItem.price }}</view>
-                <FoodAddMinusItem :foodItem="foodItem"></FoodAddMinusItem>
+                <FoodAddMinusItem v-if="foodItem.reserveCount" :foodItem="foodItem"></FoodAddMinusItem>
+                <ReserveNotEnough v-else></ReserveNotEnough>
             </view>
         </view>
     </view>
@@ -20,6 +21,7 @@ import { watch, reactive, ref, getCurrentInstance, onMounted } from "vue";
 import { mapMutation, mapState } from "@/utils/mapVuex";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import FoodAddMinusItem from "./FoodAddMinusItem.vue";
+import ReserveNotEnough from "./ReserveNotEnough.vue";
 import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI, PositionInfoI, ShopItemI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
 import { cartImgWidthHeightPX, countAddTransitionTime, foodAddMinusTransitionTime } from "../../infoConfig";

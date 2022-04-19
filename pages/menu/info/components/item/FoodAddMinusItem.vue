@@ -1,12 +1,11 @@
 <template>
-    <view class="food-add-minus-container flex-row flex-ja-center">
+    <view class="food-add-minus-container flex-row flex-ja-center" @click.stop>
         <view :animation="minusAnimationData" class="food-count-minus" :style="{ color: shopInfo.mainColor }" :class="mountedTransitionFlag ? '' : 'show-food-count-minus'" @click.stop="minusCount()">
-            <view class="add-click-area"></view>
             <view class="reduce-icon-css" :style="{ 'background-color': shopInfo.mainColor }"></view>
         </view>
         <view v-if="foodItem.orderCount" :class="mountedTransitionFlag ? '' : 'show-food-order-count'" :animation="countAnimationData" class="food-order-count">{{ foodItem.orderCount }}</view>
         <view class="food-count-add" :id="'add' + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
-            <view class="add-click-area"></view>
+            <ReserveRemain v-if="foodItem.reserveCount < 10" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
         </view>
         <view v-for="item in addList" :key="item.random" class="food-count-add-animation-x" :animation="item.animationXData">
             <view class="food-count-add-animation-y" :animation="item.animationYData">
@@ -25,6 +24,8 @@ import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI, PositionInfoI, ShopItemI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
 import { cartImgWidthHeightPX, countAddTransitionTime, foodAddMinusTransitionTime, foodAddWidthHeightPX } from "../../infoConfig";
+import ReserveRemain from "./ReserveRemain.vue";
+
 import { AddItemI } from "./interface";
 const currentInstance = getCurrentInstance();
 interface PropsI {

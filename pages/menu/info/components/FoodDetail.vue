@@ -3,7 +3,7 @@
         <view :animation="overlayAnimationData" class="food-detail-overlay"></view>
         <view :animation="detailAnimationData" class="food-detail-box flex-col" @click.stop :style="{ 'padding-bottom': (minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX : footerInfoHeightRPX) + 30 + 'rpx' }">
             <!-- <view class="food-img"></view> -->
-            <image class="food-img" :src="foodInfo.fullImgPath" alt="" ></image>
+            <image class="food-img" :src="foodInfo.fullImgPath" alt=""></image>
             <!-- <image class="food-img" :src="foodInfo.fullImgPath" alt="" ></image> -->
             <div class="food-info">
                 <view class="food-name">{{ foodInfo.foodName }}</view>
@@ -13,9 +13,11 @@
                         <div class="food-price">¥{{ foodInfo.price }}</div>
                         <div v-if="foodInfo.unit" class="food-unit">/{{ foodInfo.unit }}</div>
                     </div>
-
-                    <FoodAddMinusItem :foodItem="foodInfo"></FoodAddMinusItem>
+                    <FoodAddMinusItem v-if="foodInfo.reserveCount" :foodItem="foodInfo"></FoodAddMinusItem>
+                    <ReserveNotEnough v-else></ReserveNotEnough>
                 </view>
+                <div class="food-detail-title">菜品详情</div>
+                <div class="food-detail">哈哈哈哈哈哈哈哈哈哈或或或哈哈哈哈哈哈哈哈哈哈或或或哈哈哈哈哈哈哈哈哈哈或或或哈哈哈哈哈哈哈哈哈哈或或或</div>
             </div>
         </view>
         <image class="close-img" :animation="overlayAnimationData" src="/static/img/user-menu/close-food-detail.png" mode="" @click.stop="closeFoodDetail"></image>
@@ -24,6 +26,7 @@
 
 <script lang="ts" setup>
 import FoodAddMinusItem from "./item/FoodAddMinusItem.vue";
+import ReserveNotEnough from "./item/ReserveNotEnough.vue";
 import { delaySync } from "@/utils/index";
 import { mapState, mapMutation, mapGetter } from "@/utils/mapVuex";
 import { getCurrentInstance, computed, onMounted, ref } from "vue";
@@ -159,6 +162,17 @@ async function closeFoodDetail() {
         font-size: 24rpx;
         line-height: 28rpx;
         padding-bottom: 8rpx;
+    }
+    .food-detail-title {
+        margin-top: 20rpx;
+        font-size: 28rpx;
+        color: #333;
+        font-size: 28rpx;
+    }
+    .food-detail {
+        margin-top: 10rpx;
+        font-size: 24rpx;
+        color: #aaa;
     }
     .close-img {
         position: absolute;
