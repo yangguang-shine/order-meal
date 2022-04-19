@@ -13,20 +13,27 @@
 
 <script lang="ts" setup>
 import { AddressItemI } from "@/interface/address";
-import { ComputedStateI } from "@/interface/vuex";
+import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { defineComponent, computed, getCurrentInstance } from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
-const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
+import router from "@/utils/router";
 interface StateF {
     topAddressWidthFlag: ComputedStateI<boolean>,
     defaultAddress: ComputedStateI<AddressItemI>,
+}
+interface MutationF {
+    setSearchShopFlag: ComputedMutationI<boolean>
 }
 const { topAddressWidthFlag, defaultAddress }:StateF = mapState([
     "topAddressWidthFlag",
     "defaultAddress"
 ]);
+const { setSearchShopFlag }:MutationF = mapMutation([
+    "setSearchShopFlag",
+]);
+
 function toSelectAddress() {
-    $myrouter.navigateTo({
+    router.navigateTo({
         name: "address/list",
         query: {
             fromPage: "userHome"
@@ -35,7 +42,7 @@ function toSelectAddress() {
 }
 
 const toSearchShop = () => {
-    console.log("toSearchShop");
+    setSearchShopFlag(true)
 };
 </script>
 

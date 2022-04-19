@@ -6,6 +6,7 @@ export interface StateHomeI {
     tabList: TabItemI[];
     selectedTabItem: TabItemI;
     shopInfo: ShopItemI;
+    searchShopFlag: boolean,
     businessType: number;
 }
 const tabList: TabItemI[] = [
@@ -31,6 +32,7 @@ const state: StateHomeI = {
     tabList,
     selectedTabItem: tabList[0],
     shopInfo: initShopItem,
+    searchShopFlag: false,
     businessType: 2,
 };
 

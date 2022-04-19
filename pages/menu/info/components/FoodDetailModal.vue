@@ -3,7 +3,7 @@
         <view :animation="overlayAnimationData" class="food-detail-overlay"></view>
         <view :animation="detailAnimationData" class="food-detail-box" @click.stop>
             <!-- <view class="food-img"></view> -->
-            <img class="food-img" :src="foodInfo.fullImgPath" alt="" />
+            <image class="food-img" :src="foodInfo.fullImgPath" alt="" ></image>
             <view class="food-info">
                 <view class="food-name">{{ foodInfo.foodName }}</view>
                 <view v-if="foodInfo.description" class="food-description">{{ foodInfo.description }}</view>

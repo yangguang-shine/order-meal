@@ -3,7 +3,7 @@
         <TopAddressSearch></TopAddressSearch>
         <ToolsList></ToolsList>
         <RecommandInfo></RecommandInfo>
-        <SearchShop></SearchShop>
+        <SearchShop v-if="searchShopFlag" :bottom="tabBarHeightPX"></SearchShop>
     </view>
 </template>
 
@@ -18,34 +18,26 @@ import RecommandInfo from "./components/RecommandInfo.vue";
 import SearchShop from "./components/SearchShop.vue";
 import { topAddressSearchHeight, tabListTop } from "./homeConfig";
 import { getCurrentInstance } from "vue";
-import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { AddressItemI, ComputedActionI, ComputedMutationI, ComputedStateI, ShopItemI } from '@/interface/index'
-import { hideLoading, showLoading, showModal } from "@/utils/";
+import { onShow, onLoad, onPageScroll, onHide, onUnload } from "@dcloudio/uni-app";
+import { AddressItemI, ComputedActionI, ComputedMutationI, ComputedStateI, ShopItemI } from "@/interface/index";
+import { hideLoading, showLoading, showModal, tabBarHeightPX } from "@/utils/";
 import router from "@/utils/router";
 
 interface StateF {
-    shopInfo: ComputedStateI<ShopItemI>
+    searchShopFlag: ComputedStateI<boolean>;
 }
 interface MutationF {
-    setTopAddressWidthFlag: ComputedMutationI<boolean>,
-    setTabListFixedFlag: ComputedMutationI<boolean>,
+    setTopAddressWidthFlag: ComputedMutationI<boolean>;
+    setTabListFixedFlag: ComputedMutationI<boolean>;
 }
 interface ActionF {
-    getDefaultAddress: ComputedActionI<void, AddressItemI>,
-    getRecommandShopList: ComputedActionI<void>,
+    getDefaultAddress: ComputedActionI<void, AddressItemI>;
+    getRecommandShopList: ComputedActionI<void>;
 }
-const {
-    setTopAddressWidthFlag,
-    setTabListFixedFlag,
-}: MutationF = mapMutation([
-    "setTopAddressWidthFlag",
-    "setTabListFixedFlag",
-]);
+const { searchShopFlag } : StateF = mapState(['searchShopFlag'])
+const { setTopAddressWidthFlag, setTabListFixedFlag }: MutationF = mapMutation(["setTopAddressWidthFlag", "setTabListFixedFlag"]);
 
-const { getDefaultAddress, getRecommandShopList  }:ActionF = mapAction([
-    "getDefaultAddress",
-    "getRecommandShopList",
-]);
+const { getDefaultAddress, getRecommandShopList }: ActionF = mapAction(["getDefaultAddress", "getRecommandShopList"]);
 
 // console.log(JSON.stringify(addressList.value))
 onShow(() => {
@@ -55,6 +47,13 @@ onShow(() => {
     });
     init();
 });
+onHide(() => {
+    console.log('1page hide >>>>>')
+})
+onUnload(() => {
+    console.log('1page onUnload >>>>>')
+})
+
 onPageScroll((e: any) => {
     if (e.scrollTop > topAddressSearchHeight) {
         setTopAddressWidthFlag(true);
@@ -93,8 +92,6 @@ async function init() {
         hideLoading();
     }
 }
-
-
 </script>
 
 <style lang="scss">

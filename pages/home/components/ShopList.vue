@@ -24,7 +24,6 @@ const { $myrouter } = getCurrentInstance().proxy;
 const { saveShopInfo, saveBusinessType }: MutationF = mapMutation(["saveShopInfo", "saveBusinessType"]);
 const { recommandShopList }: StateU = mapState(["recommandShopList"]);
 function toOrder(shopItem: ShopItemI) {
-    console.log("toOrder");
     saveShopInfo(shopItem);
     saveBusinessType(2);
     $myrouter.navigateTo({

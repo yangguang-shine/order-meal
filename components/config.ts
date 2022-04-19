@@ -1,0 +1,1 @@
+export const searchDefaultTransitionTime = 300

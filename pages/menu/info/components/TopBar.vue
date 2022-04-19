@@ -5,12 +5,12 @@
             <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '商家' }" :style="{ color: topBarInfo === '商家' ? shopInfo.mainColor : '' }" @click="clickTopBar('商家')">商家</view>
         </view>
         <view class="select-top-bar-bottom" :style="{ background: shopInfo.mainColor, left: topBarInfo === '点餐' ? '100rpx' : '300rpx' }"></view>
-        <view class="right flex-row flex-ja-center" :animation="barSearchAnimationData" @click="toSearch">
-            <view class="search-box flex-row flex-ja-center">
+        <view class="right flex-row flex-ja-center" :animation="barSearchAnimationData">
+            <view class="search-box flex-row flex-ja-center" @click="toSearch">
                 <view class="search-img"></view>
                 <view class="search-title">想吃点什么</view>
             </view>
-            <view class="pattern-icon"></view>
+            <view class="pattern-icon" @click="changeShopInfoMode"></view>
         </view>
         <!-- <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '点餐' }" @click="clickTopBar('点餐')" :style="{ color: topBarInfo === '点餐' ? shopInfo.mainColor : '' }">点餐</view>
             <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '商家' }" :style="{ color: topBarInfo === '商家' ? shopInfo.mainColor : '' }" @click="clickTopBar('商家')">商家</view>
@@ -31,15 +31,21 @@ import router from "@/utils/router";
 interface StateF {
     topBarInfo: ComputedStateI<string>;
     shopInfo: ComputedStateI<ShopItemI>;
+    selectedCategoryID: ComputedStateI<number>;
 }
 interface MutationF {
     setTopBarInfo: ComputedMutationI<string>;
     setShopInfoFlag: ComputedMutationI<boolean>;
     setStartShopInfoAnimationFlag: ComputedMutationI<boolean>;
     setSearchFoodFlag: ComputedMutationI<boolean>;
+    setShopInfoMode: ComputedMutationI<string>;
+    setCategoryIDMain: ComputedMutationI<string>;
+
+    
+
 }
-const { topBarInfo, shopInfo }: StateF = mapState(["topBarInfo", "shopInfo"]);
-const { setTopBarInfo, setShopInfoFlag, setStartShopInfoAnimationFlag, setSearchFoodFlag }: MutationF = mapMutation(["setTopBarInfo", "setShopInfoFlag", "setStartShopInfoAnimationFlag", "setSearchFoodFlag"]);
+const { topBarInfo, shopInfo, selectedCategoryID }: StateF = mapState(["topBarInfo", "shopInfo", "selectedCategoryID"]);
+const { setTopBarInfo, setShopInfoFlag, setStartShopInfoAnimationFlag, setSearchFoodFlag, setShopInfoMode, setCategoryIDMain }: MutationF = mapMutation(["setTopBarInfo", "setShopInfoFlag", "setStartShopInfoAnimationFlag", "setSearchFoodFlag", "setShopInfoMode", "setCategoryIDMain"]);
 
 const barSearchAnimationData: RefI<any> = ref(null);
 watch(topBarInfo, (newValue: string, oldValue: string) => {
@@ -71,6 +77,10 @@ async function clickTopBar(title: string) {
         await delaySync(shopInfoTransitionTime);
         setShopInfoFlag(false);
     }
+}
+function changeShopInfoMode() {
+    setShopInfoMode(shopInfo.value.mode === "vertical" ? "horizontal" : "vertical");
+    setCategoryIDMain(`main${selectedCategoryID.value}`)
 }
 </script>
 

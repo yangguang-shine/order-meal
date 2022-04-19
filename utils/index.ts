@@ -26,6 +26,12 @@ export let navigationBarHeightPX = 0
 navigationBarHeightPX = 44
 // #endif
 // 
+export let tabBarHeightPX = 0
+// H5使用的是模拟tabBar 50px
+// #ifdef H5
+tabBarHeightPX = 50
+// #endif
+// 
 let systemInfo: SystemInfoI;
 
 export const getRpxToPx = (rpx: number): number => {

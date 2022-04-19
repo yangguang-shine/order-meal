@@ -35,7 +35,6 @@ export default {
     },
     watch: {
 		showAnimateFlag: async function (newValue, oldValue){
-			console.log('watch: showAnimateFlag')
             console.log(newValue)
             if (newValue) {
                 this.showAnimateContainer = true

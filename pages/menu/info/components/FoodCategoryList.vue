@@ -53,9 +53,6 @@ const { minusPromotionsObject }: GetterF = mapGetter([ "minusPromotionsObject"])
 
 const { setFoodDetailFlag, setFoodInfo,setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside,  }: MutationF = mapMutation(["setFoodDetailFlag", "setFoodInfo","setSelectedCategoryID", "setCategoryIDMain", "setCategoryIDAside"]);
 const categoryItemLastPaddingBottom: string = computed((): string => (minusPromotionsObject.value.show ? footerInfoAndMinusPromotionsHeightRPX + 20 + "rpx" : footerInfoHeightRPX + 20 + "rpx"));
-const props = defineProps();
-console.log("props");
-console.log(props);
 
 function toShowFoodDetail(foodItem: FoodItemI) {
     setFoodDetailFlag(true);
@@ -81,7 +78,6 @@ const handleScroll = async (e) => {
         const categoryItem = categoryList.value[i];
         const res = await selectQuery(`#${categoryItem.categoryIDMain}`, currentInstance);
         if (topBarHeightPX <= res.top + navigationBarHeightPX || res.bottom + navigationBarHeightPX > topBarHeightPX) {
-            console.log(res)
             setSelectedCategoryID(categoryItem.categoryID);
             setCategoryIDMain("");
             setCategoryIDAside(categoryItem.categoryIDAside);

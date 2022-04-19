@@ -65,7 +65,6 @@ async function getCartImgPositionInfo(): Promise<PositionInfoI> {
 }
 watch(cartImgAnimationFlag, (newValue: boolean, oldValue: boolean) => {
     if (newValue) {
-        console.log("cartImgAnimationFlag");
         startCartImgAnimation();
     }
 });

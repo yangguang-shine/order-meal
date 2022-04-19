@@ -2,7 +2,7 @@
     <view class="menu-container">
         <TopBar></TopBar>
         <view :animation="shopInfoAnimationData" class="menu-order-box">
-            <view v-if="shopInfo.mode !== 'vertical'" class="vertical-menu-box">
+            <view v-if="shopInfo.mode === 'vertical'" class="vertical-menu-box">
                 <FoodCategoryList class="flex-item"></FoodCategoryList>
                 <CategoryAsideBar></CategoryAsideBar>
             </view>
@@ -39,7 +39,7 @@ import SearchFood from "./components/SearchFood.vue";
 import { delaySync } from "@/utils/index.js";
 import { mapState, mapMutation, mapAction, mapGetter } from "@/utils/mapVuex";
 import { defineComponent, getCurrentInstance, computed, watch, ref } from "vue";
-import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
+import { onShow, onLoad, onPageScroll, onUnload, onHide } from "@dcloudio/uni-app";
 import { ComputedActionI, ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { ShopItemI } from "@/interface/home";
 import { CategoryItemI, FoodItemI } from "@/interface/menu";
@@ -61,6 +61,7 @@ interface GetterF {
 
 interface MutationF {
     initCart: ComputedMutationI<void>;
+    handleMenuUnload: ComputedMutationI<void>;
 }
 
 interface ActionF {
@@ -71,6 +72,9 @@ interface ActionF {
 const { $showLoading, $hideLoading, $showModal } = getCurrentInstance().proxy;
 const { shopInfo, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag }: StateF = mapState(["shopInfo", "topBarInfo", "startShopInfoAnimationFlag", "shopInfoFlag", "cartDetailFlag", "foodDetailFalg", "searchFoodFlag"]);
 const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
+const { initCart, handleMenuUnload }: MutationF = mapMutation(["initCart", "handleMenuUnload"]);
+
+const { getMenuList, getOrderKeyFoodList, getShopInfo }: ActionF = mapAction(["getMenuList", "getOrderKeyFoodList", "getShopInfo"]);
 
 const shopInfoAnimationData = ref(null);
 const shopInfoAnimation = uni.createAnimation({
@@ -93,9 +97,6 @@ watch(startShopInfoAnimationFlag, (newValue: boolean, oldValue: boolean) => {
         toEndAnimation();
     }
 });
-const { initCart }: MutationF = mapMutation(["initCart"]);
-
-const { getMenuList, getOrderKeyFoodList, getShopInfo }: ActionF = mapAction(["getMenuList", "getOrderKeyFoodList", "getShopInfo"]);
 
 let orderKey: string = "";
 onLoad(async (option: { orderKey?: string }) => {
@@ -116,6 +117,14 @@ onLoad(async (option: { orderKey?: string }) => {
         $hideLoading();
     }
 });
+onHide(() => {
+    console.log("page hide >>>>>");
+});
+onUnload(() => {
+    handleMenuUnload();
+    console.log("page onUnload >>>>>");
+});
+
 async function init() {
     await getMenuList();
     // 重来一单，orderAgain 和 orderKey 缺一不可

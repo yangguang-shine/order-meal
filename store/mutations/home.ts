@@ -18,9 +18,11 @@ function changeTabItem(state: StateI, tabItem: TabItemI): void {
 }
 function saveShopInfo(state: StateI, shopInfo: ShopItemI): void {
     state.shopInfo = shopInfo;
-    // commit("setFoodCategoryList", categoryList);
-
 }
+function setSearchShopFlag(state: StateI, searchShopFlag: boolean): void {
+    state.searchShopFlag = searchShopFlag;
+}
+
 function saveBusinessType(state: StateI, type: number): void {
     state.businessType = type;
 }
@@ -31,5 +33,6 @@ export default {
     setRecommandShopList,
     changeTabItem,
     saveShopInfo,
+    setSearchShopFlag,
     saveBusinessType,
 } as MutationI;

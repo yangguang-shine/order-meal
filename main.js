@@ -57,7 +57,6 @@ export function createApp() {
 			// })
 		}
 	});
-	console.log(store)
 	app.use(store)
 	return {
 		app

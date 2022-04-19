@@ -1,6 +1,6 @@
 import { MutationI, FoodItemI,StateI , CategoryItemI, initFoodItem, PositionInfoI} from "@/interface/index";
 import { timeStampTranslate, toFixedToNumber } from "@/utils/index";
-
+import { menDefault, MenDefaultI } from "../state/menu";
 function setSelectedCategoryID (state: StateI, selectedCategoryID: number) {
     state.selectedCategoryID = selectedCategoryID;
 };
@@ -114,6 +114,38 @@ function initCart (state: StateI, payload: any) {
     });
 };
 
+
+function setShopInfoMode (state: StateI, mode: 'vertical' | 'horizontal') {
+    state.shopInfo.mode = mode;
+};
+function handleMenuUnload (state: StateI) {
+    Object.keys(menDefault).forEach((key) => {
+        state[key] = menDefault[key]
+    })
+
+
+
+    // cartCategoryList: [],
+    // categoryList: [],
+    // // asideCategoryList: [],
+    // selectedCategoryID: 0,
+    // categoryIDMain: "",
+    // categoryIDAside: '',
+    // topBarInfo: "点餐",
+    // startShopInfoAnimationFlag: false,
+    // shopInfoFlag: false,
+    // cartDetailFlag: false,
+    // foodDetailFalg: false,
+    // foodInfo:initFoodItem,
+    // cartImgPositionInfo: {
+    //     left:  0,
+    //     top : 0
+    // },
+    // cartImgAnimationFlag: false,
+    // searchFoodFlag: false
+};
+
+
 export default {
     setSelectedCategoryID,
     setCategoryIDMain,
@@ -133,4 +165,6 @@ export default {
     clearCart,
     cartChange,
     initCart,
+    setShopInfoMode,
+    handleMenuUnload
 } as MutationI;
