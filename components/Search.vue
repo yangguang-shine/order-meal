@@ -7,17 +7,17 @@
             <view class="clear-input" @click="clearInput"></view>
             <view class="search-title">{{modelValue ? resultTitle : defaultTitle}}</view>
         </view>
-        <view class="result-box" v-if="modelValue">
+        <scroll-view scroll-y class="result-box" v-if="modelValue">
             <template v-if="searchResultList.length">
                 <slot name="result"></slot>
             </template>
             <view v-else class="result-list-empty flex-col flex-ja-center">
                 <CommonError></CommonError>
             </view>
-        </view>
-        <view v-else class="default-box">
+        </scroll-view>
+        <scroll-view scroll-y v-else class="default-box">
             <slot name="default"></slot>
-        </view>
+        </scroll-view>
     </view>
 </template>
 

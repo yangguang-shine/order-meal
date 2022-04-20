@@ -28,6 +28,8 @@ export interface minusItemI {
 export interface ShopItemI extends OriginShopItemI {
     minusList: minusItemI[];
     fullImgPath: string;
+    businessTypeList: number[]
+    businessTitleList: string[]
 }
 
 export const initShopItem: ShopItemI = {
@@ -47,5 +49,7 @@ export const initShopItem: ShopItemI = {
     startTime: "00:00",
     fullImgPath: "",
     minusList: [],
-    mode: "vertical"
+    mode: "vertical",
+    businessTypeList: [],
+    businessTitleList: []
 };

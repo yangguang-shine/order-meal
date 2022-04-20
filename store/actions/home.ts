@@ -1,6 +1,7 @@
 import fetch from "@/utils/fetch";
 import { shopImgPath } from "@/config/index";
 import { ActionI, ActionContextI, OriginShopItemI, ShopItemI } from "@/interface/index";
+import getBusinessTypeInfo from "@/utils/getBusinessTypeInfo";
 
 async function getRecommandShopList({ commit, state }: ActionContextI, params = {}) {
     let data: OriginShopItemI[] = await fetch("shop/list", {
@@ -15,6 +16,7 @@ async function getRecommandShopList({ commit, state }: ActionContextI, params = 
             minusList: JSON.parse(item.minus),
             fullImgPath: `${shopImgPath}/${item.imgUrl}`,
             mode: "horizontal",
+            ...getBusinessTypeInfo(item.businessTypes)
         })
     );
     // recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList));
@@ -27,13 +29,11 @@ async function getShopList(
     { commit, state }: ActionContextI,
     params: {
         businessType: number;
-    } = {
-        businessType: 1,
+        type: string;
     }
 ) {
     let data: OriginShopItemI[] = await fetch("shop/list", {
-        businessType: 2,
-        type: state.selectedTabItem.type,
+        ...params,
         latitude: state.defaultAddress.latitude,
         longitude: state.defaultAddress.longitude,
     });
@@ -43,6 +43,7 @@ async function getShopList(
             minusList: JSON.parse(item.minus),
             fullImgPath: `${shopImgPath}/${item.imgUrl}`,
             mode: "horizontal",
+            ...getBusinessTypeInfo(item.businessTypes)
         })
     );
     // recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList));
@@ -58,6 +59,8 @@ async function getShopInfo({ state, commit }: ActionContextI, payload: { shopID:
         minusList: JSON.parse(originShopInfo.minus),
         fullImgPath: `${shopImgPath}/${originShopInfo.imgUrl}`,
         mode: "horizontal",
+        ...getBusinessTypeInfo(originShopInfo.businessTypes)
+
     };
     commit("saveShopInfo", shopInfo);
     return shopInfo;

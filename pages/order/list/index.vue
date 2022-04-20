@@ -130,6 +130,8 @@ async function orderAgain(orderItem: OrderItemI) {
             name: "menu/info",
             query: {
                 orderKey: orderItem.orderKey,
+                businessType: orderItem.businessType,
+                shopID: orderItem.shopID,
             },
         });
     } catch (e) {
@@ -138,7 +140,6 @@ async function orderAgain(orderItem: OrderItemI) {
         $hideLoading();
     }
 }
-
 </script>
 
 <style lang="scss">
@@ -150,7 +151,7 @@ page {
     font-size: 28rpx;
     color: #333;
 
-    padding: 0 20rpx ;
+    padding: 0 20rpx;
     .tab-list-box {
         position: fixed;
         top: 0;

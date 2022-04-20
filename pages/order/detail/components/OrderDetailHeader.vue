@@ -83,6 +83,8 @@ async function orderAgain() {
             name: "menu/info",
             query: {
                 orderKey: orderDetail.value.orderKey,
+                businessType: orderDetail.value.businessType,
+                shopID: orderDetail.value.shopID
             },
         });
     } catch (e) {

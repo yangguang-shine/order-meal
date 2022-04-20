@@ -6,7 +6,8 @@ import { StateOrderI } from "@/store/state/order";
 import { StateCenterI } from "@/store/state/center";
 import { GetterStateConfirmI } from '@/store/getters/confirm'
 import { GetterStateMenuI } from '@/store/getters/menu'
-export type StateI = StateAddressI & StateHomeI & StateMenuI & StateConfirmI & StateOrderI & StateCenterI;
+import { StateShopI } from "@/store/state/shop";
+export type StateI = StateAddressI & StateHomeI & StateMenuI & StateConfirmI & StateOrderI & StateCenterI & StateShopI;
 export type GetterStateI = GetterStateConfirmI & GetterStateMenuI;
 export interface MutationI {
     [index: string]: (state: StateI, payload?: any) => any;

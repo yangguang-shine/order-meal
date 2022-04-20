@@ -4,3 +4,4 @@ export const tabListTop: number = getRpxToPx(311.6 * 2)
 
 export const transitionTime100: number = 100
 export const searchShopTransitionTime: number = transitionTime100 * 2
+export const selectTypeTransitionTime: number = transitionTime100 * 2

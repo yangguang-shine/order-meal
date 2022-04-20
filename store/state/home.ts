@@ -9,7 +9,7 @@ export interface StateHomeI {
     searchShopFlag: boolean,
     businessType: number;
 }
-const tabList: TabItemI[] = [
+export const tabList: TabItemI[] = [
     {
         title: "综合排序",
         type: "comprehensive",

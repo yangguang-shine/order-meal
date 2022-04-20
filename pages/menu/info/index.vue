@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getRpxToPx, navigationBarHeightPX } from "@/utils/index";
+import { getRpxToPx, hideLoading, navigationBarHeightPX, showLoading } from "@/utils/index";
 import CategoryAsideBar from "./components/CategoryAsideBar.vue";
 import CategoryAsideBarHorizontal from "./components/CategoryAsideBarHorizontal.vue";
 import FoodCategoryList from "./components/FoodCategoryList.vue";
@@ -48,6 +48,7 @@ import { MinusPromotionsObjectI } from "@/store/getters/menu";
 
 interface StateF {
     shopInfo: ComputedStateI<ShopItemI>;
+    businessType: ComputedStateI<number>;
     topBarInfo: ComputedStateI<string>;
     startShopInfoAnimationFlag: ComputedStateI<boolean>;
     shopInfoFlag: ComputedStateI<boolean>;
@@ -62,6 +63,7 @@ interface GetterF {
 interface MutationF {
     initCart: ComputedMutationI<void>;
     handleMenuUnload: ComputedMutationI<void>;
+    optionBusinessType: ComputedMutationI<number>;
 }
 
 interface ActionF {
@@ -69,10 +71,9 @@ interface ActionF {
     getOrderKeyFoodList: ComputedActionI<{ orderKey: string }>;
     getShopInfo: ComputedMutationI<{ shopID: number }>;
 }
-const { $showLoading, $hideLoading, $showModal } = getCurrentInstance().proxy;
-const { shopInfo, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag }: StateF = mapState(["shopInfo", "topBarInfo", "startShopInfoAnimationFlag", "shopInfoFlag", "cartDetailFlag", "foodDetailFalg", "searchFoodFlag"]);
+const { shopInfo, businessType, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag }: StateF = mapState(["shopInfo", "businessType", "topBarInfo", "startShopInfoAnimationFlag", "shopInfoFlag", "cartDetailFlag", "foodDetailFalg", "searchFoodFlag"]);
 const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
-const { initCart, handleMenuUnload }: MutationF = mapMutation(["initCart", "handleMenuUnload"]);
+const { initCart, handleMenuUnload, optionBusinessType }: MutationF = mapMutation(["initCart", "handleMenuUnload", "optionBusinessType"]);
 
 const { getMenuList, getOrderKeyFoodList, getShopInfo }: ActionF = mapAction(["getMenuList", "getOrderKeyFoodList", "getShopInfo"]);
 
@@ -99,14 +100,26 @@ watch(startShopInfoAnimationFlag, (newValue: boolean, oldValue: boolean) => {
 });
 
 let orderKey: string = "";
-onLoad(async (option: { orderKey?: string }) => {
+interface OptionI {
+    shopID: string;
+    businessType: string;
+    orderKey?: string;
+}
+onLoad(async (option: OptionI) => {
     try {
         orderKey = option.orderKey || "";
-        $showLoading();
-        if (!shopInfo.value.shopID) {
+        const shopID: number = Number(option.shopID)
+        const optionBusinessType: number = Number(option.businessType)
+        // routerbusinessType = option.businessType || "";
+        // orderKey = option.orderKey || "";
+        showLoading()
+        if (shopInfo.value.shopID !== shopID) {
             await getShopInfo({
-                shopID: 100036,
+                shopID,
             });
+        }
+        if (businessType.value !== optionBusinessType) {
+            saveBusinessType(optionBusinessType)
         }
         console.log(shopInfo.value);
 
@@ -114,7 +127,7 @@ onLoad(async (option: { orderKey?: string }) => {
     } catch (e) {
         console.log(e);
     } finally {
-        $hideLoading();
+        hideLoading()
     }
 });
 onHide(() => {
