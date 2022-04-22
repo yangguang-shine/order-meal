@@ -84,7 +84,7 @@ watch(
     (newValue: number, oldValue: number) => {
         console.log("OriginFoodItem === props.foodItem");
         console.log(OriginFoodItem === props.foodItem);
-        if (newValue === 1 && oldValue === 0) {
+        if (newValue >= 1 && oldValue === 0) {
             countAnimation.opacity(1).step();
             countAnimationData.value = countAnimation.export();
             minusAnimation.right("100rpx").rotate(-180).step();

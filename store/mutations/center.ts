@@ -10,4 +10,4 @@ function setUserInfo(state: StateI, userInfo: UserInfoI): void {
 // }
 export default {
     setUserInfo,
-} as MutationI;
+};

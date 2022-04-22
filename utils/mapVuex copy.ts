@@ -36,7 +36,7 @@ function getNamespaceState(namespace: string, store: any): any {
     }, store.state);
 }
 
-export const mapGetter = function (namespace?: string): any {
+export const mapGetter = function (namespace: string | any[], states?: any[]): any {
     store || (store = useStore());
     const obj: any = {};
     if (typeof namespace === "string") {
@@ -50,6 +50,7 @@ export const mapGetter = function (namespace?: string): any {
         console.log('getter.value')
         console.log(getter)
         return toRefs(reactive(getter.value));
+
     }
 };
 

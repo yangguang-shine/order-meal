@@ -1,6 +1,7 @@
 import { MutationI, StateI } from "@/interface/index";
 
 import { ShopItemI, TabItemI } from "@/interface/index";
+import { StateOrderI } from "../state/order";
 
 function setTopAddressWidthFlag(state: StateI, topAddressWidthFlag: boolean): void {
     state.topAddressWidthFlag = topAddressWidthFlag;
@@ -27,6 +28,8 @@ function saveBusinessType(state: StateI, type: number): void {
     state.businessType = type;
 }
 
+
+
 export default {
     setTopAddressWidthFlag,
     setTabListFixedFlag,
@@ -35,4 +38,4 @@ export default {
     saveShopInfo,
     setSearchShopFlag,
     saveBusinessType,
-} as MutationI;
+};

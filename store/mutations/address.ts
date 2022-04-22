@@ -16,4 +16,4 @@ function setDefaultAddress(state: StateI, defaultAddress: AddressItemI): void {
 export default {
     setAddressList,
     setDefaultAddress,
-} as MutationI
+}

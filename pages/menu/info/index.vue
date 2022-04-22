@@ -78,11 +78,11 @@ interface ActionF {
     getOrderKeyFoodList: ComputedActionI<{ orderKey: string }>;
     getShopInfo: ComputedMutationI<{ shopID: number }>;
 }
-const { shopInfo, businessType, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag, menuPackPriceExpalinFlag }: StateF = mapState(["shopInfo", "businessType", "topBarInfo", "startShopInfoAnimationFlag", "shopInfoFlag", "cartDetailFlag", "foodDetailFalg", "searchFoodFlag", "menuPackPriceExpalinFlag"]);
-const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
-const { initCart, handleMenuUnload, saveBusinessType, setMenuPackPriceExpalinFlag }: MutationF = mapMutation(["initCart", "handleMenuUnload", "saveBusinessType", "setMenuPackPriceExpalinFlag"]);
+const { shopInfo, businessType, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag, menuPackPriceExpalinFlag }: StateF = mapState();
+const { minusPromotionsObject }: GetterF = mapGetter();
+const { initCart, handleMenuUnload, saveBusinessType, setMenuPackPriceExpalinFlag }: MutationF = mapMutation();
 
-const { getMenuList, getOrderKeyFoodList, getShopInfo }: ActionF = mapAction(["getMenuList", "getOrderKeyFoodList", "getShopInfo"]);
+const { getMenuList, getOrderKeyFoodList, getShopInfo }: ActionF = mapAction();
 
 const shopInfoAnimationData = ref(null);
 const shopInfoAnimation = uni.createAnimation({

@@ -7,7 +7,6 @@ export default function getBusinessTypeInfo(businessTypes: string): {
     try {
         businessTypeList = JSON.parse(businessTypes).map((item: string): number => {
             const type = Number(item);
-            console.log(type);
             if (type === 1) {
                 businessTitleList.push("堂食");
             } else if (type === 2) {

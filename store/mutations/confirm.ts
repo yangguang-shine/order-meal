@@ -14,4 +14,4 @@ export default {
     setTakeOutTime,
     setNoteInputFlag,
     setNoteText,
-} as MutationI;
+};
