@@ -1,11 +1,11 @@
 <template>
-    <view class="search-container-com" :animation="searchModalAnimationData" :style="{ bottom: bottom + 'px' }">
+    <view class="search-container-com" :animation="overlayAnimationData" :style="{ bottom: bottom + 'px' }">
         <view class="search-box flex-row flex-ja-center">
             <input type="text" class="search-input flex-item" placeholder="请输入搜索关键字" :value="modelValue" @input="inputChange($event)" />
             <view class="cancel" @click="clickCancel">取消</view>
             <view class="search-icon"></view>
             <view class="clear-input" @click="clearInput"></view>
-            <view class="search-title">{{modelValue ? resultTitle : defaultTitle}}</view>
+            <view class="search-title">{{ modelValue ? resultTitle : defaultTitle }}</view>
         </view>
         <scroll-view scroll-y class="result-box" v-if="modelValue">
             <template v-if="searchResultList.length">
@@ -31,6 +31,7 @@ import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
 import { ref, onMounted, computed } from "vue";
 import { ShopItemI } from "@/interface/home";
 import { searchDefaultTransitionTime } from "./config";
+import useOverlayAnimation from "@/utils/useOverlayAnimation";
 interface PropsI {
     bottom?: number;
     searchResultList: any;
@@ -51,33 +52,25 @@ const props: PropsI = withDefaults(defineProps<PropsI>(), {
     searchOriginList: [],
     modelValue: "",
     animationTime: searchDefaultTransitionTime,
-    resultTitle: '搜索结果',
-    defaultTitle: '推荐结果',
+    resultTitle: "搜索结果",
+    defaultTitle: "推荐结果",
 });
 const emit = defineEmits<EmitI>();
-
-const searchModalAnimationData: RefI<any> = ref(null);
-const searchModalAnimation = uni.createAnimation({
+const { overlayAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: props.animationTime,
-    timingFunction: "linear",
 });
 onMounted(() => {
-    showStartAnimation();
+    toStartAnimation();
 });
 function inputChange(e: any) {
     emit("update:modelValue", e.detail.value);
 }
-function showStartAnimation() {
-    searchModalAnimationData.value = searchModalAnimation.opacity(1).step().export();
-}
-function showEndAnimation() {
-    searchModalAnimationData.value = searchModalAnimation.opacity(0).step().export();
-}
+
 function clearInput() {
     emit("update:modelValue", "");
 }
 async function clickCancel() {
-    showEndAnimation();
+    toEndAnimation();
     await delaySync(props.animationTime);
     emit("clickCancel");
 }
@@ -94,8 +87,8 @@ async function clickCancel() {
     color: #999;
     opacity: 0;
     padding-top: 170rpx;
-        box-sizing: border-box;
-        background-color: #fff;
+    box-sizing: border-box;
+    background-color: #fff;
 
     .search-box {
         position: absolute;

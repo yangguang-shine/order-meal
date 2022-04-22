@@ -18,7 +18,10 @@ export interface OriginShopItemI {
     shopID: number;
     shopName: string;
     startTime: string;
-    mode: 'vertical' | 'horizontal' // 
+    mode: 'vertical' | 'horizontal'; // ,
+    deliverPrice: number,
+    startDeliverPrice: number,
+
 }
 
 export interface minusItemI {
@@ -51,5 +54,7 @@ export const initShopItem: ShopItemI = {
     minusList: [],
     mode: "vertical",
     businessTypeList: [],
-    businessTitleList: []
+    businessTitleList: [],
+    deliverPrice: 0,
+    startDeliverPrice: 0,
 };

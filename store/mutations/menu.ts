@@ -118,6 +118,11 @@ function initCart (state: StateI, payload: any) {
 function setShopInfoMode (state: StateI, mode: 'vertical' | 'horizontal') {
     state.shopInfo.mode = mode;
 };
+function setMenuPackPriceExpalinFlag (state: StateI, menuPackPriceExpalinFlag:boolean) {
+    state.menuPackPriceExpalinFlag = menuPackPriceExpalinFlag;
+};
+
+
 function handleMenuUnload (state: StateI) {
     Object.keys(menDefault).forEach((key) => {
         state[key] = menDefault[key]
@@ -166,5 +171,6 @@ export default {
     cartChange,
     initCart,
     setShopInfoMode,
+    setMenuPackPriceExpalinFlag,
     handleMenuUnload
 } as MutationI;

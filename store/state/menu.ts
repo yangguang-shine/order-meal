@@ -9,6 +9,7 @@ export interface MenDefaultI {
     topBarInfo: string;
     startShopInfoAnimationFlag: boolean;
     shopInfoFlag: boolean;
+    menuPackPriceExpalinFlag: boolean
     cartDetailFlag: boolean;
     foodDetailFalg: boolean;
     foodInfo: FoodItemI;
@@ -28,6 +29,7 @@ export const menDefault: MenDefaultI = {
     topBarInfo: "点餐",
     startShopInfoAnimationFlag: false,
     shopInfoFlag: false,
+    menuPackPriceExpalinFlag: false,
     cartDetailFlag: false,
     foodDetailFalg: false,
     foodInfo: initFoodItem,

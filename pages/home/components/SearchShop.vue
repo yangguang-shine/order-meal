@@ -10,7 +10,7 @@
         </Search>
         <view v-if="showSelectTypeFlag" class="select-type-box flex-row flex-ja-center" :style="{ bottom: tabBarHeightPX + 'px' }">
             <view class="overlay" :animation="overlayAnimationData" @click.stop="closeSlelectType"></view>
-            <view class="type-list flex-col flex-ja-center" :animation="selectTypeAnimationData">
+            <view class="type-list flex-col flex-ja-center" :animation="mainAnimationData">
                 <view class="title text-center">{{ selectedShopItem.shopName }}的业务类型的业务类型</view>
                 <view class="type-item flex-row flex-ja-center" v-for="(typeItem, index) in selectedShopItem.businessTitleList" :key="index" @click.stop="confirmType(index)">{{ typeItem }}</view>
                 <view class="close-img" @click.stop="closeSlelectType"></view>
@@ -31,6 +31,7 @@ import { ref, onMounted, computed } from "vue";
 import { initShopItem, ShopItemI } from "@/interface/home";
 import { searchShopTransitionTime, selectTypeTransitionTime } from "../homeConfig";
 import router from "@/utils/router";
+import useOverlayAnimation from "@/utils/useOverlayAnimation";
 interface StateF {
     recommandShopList: ComputedStateI<ShopItemI[]>;
 }
@@ -57,42 +58,19 @@ const searchShopList: ComputedI<ShopItemI> = computed(() => {
     return searchShopList;
 });
 
-
-const overlayAnimationData = ref(null);
-const selectTypeAnimationData = ref(null);
-const overlayAnimation = uni.createAnimation({
+const { overlayAnimationData, mainAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: selectTypeTransitionTime,
-    timingFunction: "ease-in-out",
+    type: "scale",
 });
-const selectTypeAnimation = uni.createAnimation({
-    duration: selectTypeTransitionTime,
-    timingFunction: "ease-in-out",
-});
-// onMounted(() => {
-//     toStartAnimation();
-// });
-function toStartAnimation() {
-    overlayAnimation.opacity(1).step();
-    overlayAnimationData.value = overlayAnimation.export();
-    selectTypeAnimation.scale(1).step();
-    selectTypeAnimationData.value = selectTypeAnimation.export();
-}
-function toEndAnimation() {
-    overlayAnimation.opacity(0).step();
-    overlayAnimationData.value = overlayAnimation.export();
-    selectTypeAnimation.scale(0).step();
-    selectTypeAnimationData.value = selectTypeAnimation.export();
-}
 
 function clickShopItem(shopItem: ShopItemI) {
     selectedShopItem.value = shopItem;
     showSelectTypeFlag.value = true;
     toStartAnimation();
-
 }
 async function closeSlelectType() {
-    toEndAnimation()
-    await delaySync(selectTypeTransitionTime)
+    toEndAnimation();
+    await delaySync(selectTypeTransitionTime);
     showSelectTypeFlag.value = false;
     selectedShopItem.value = initShopItem;
 }
@@ -154,7 +132,6 @@ function confirmType(index: number) {
             height: 40rpx;
             padding: 8rpx;
             background-color: red;
-            
         }
         .title {
             font-weight: bold;

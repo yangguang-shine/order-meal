@@ -11,7 +11,7 @@
                 <view class="food-price-order flex-row flex-j-between">
                     <div class="flex-row flex-a-end">
                         <div class="food-price">¥{{ foodInfo.price }}</div>
-                        <div v-if="foodInfo.unit" class="food-unit">/{{ foodInfo.unit }}</div>
+                        <div v-if="foodInfo.unit" class="food-unit">{{packPriceText}}/{{ foodInfo.unit }}</div>
                     </div>
                     <FoodAddMinusItem v-if="foodInfo.reserveCount" :foodItem="foodInfo"></FoodAddMinusItem>
                     <ReserveNotEnough v-else></ReserveNotEnough>
@@ -37,9 +37,11 @@ import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { FoodItemI, initFoodItem } from "@/interface/menu";
 import { foodDetailTransitionTime, footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX } from "../infoConfig";
 import { MinusPromotionsObjectI } from "@/store/getters/menu";
+import { ComputedI } from "@/interface/vueInterface";
 
 interface StateF {
-    foodInfo: ComputedStateI<FoodItemI[]>;
+    foodInfo: ComputedStateI<FoodItemI>;
+    businessType: ComputedStateI<number>;
 }
 interface GetterF {
     minusPromotionsObject: ComputedStateI<MinusPromotionsObjectI[]>;
@@ -48,8 +50,8 @@ interface MutationF {
     setFoodDetailFlag: ComputedMutationI<boolean>;
     setFoodInfo: ComputedMutationI<FoodItemI>;
 }
-const { foodInfo }: GetterF = mapState(["foodInfo"]);
-const { minusPromotionsObject }: StateF = mapGetter(["minusPromotionsObject"]);
+const { foodInfo, businessType }: StateF = mapState(["foodInfo", "businessType"]);
+const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
 const { setFoodDetailFlag, setFoodInfo }: MutationF = mapMutation(["setFoodDetailFlag", "setFoodInfo"]);
 const overlayAnimationData = ref(null);
 const detailAnimationData = ref(null);
@@ -65,6 +67,17 @@ const detailAnimation = uni.createAnimation({
 
 onMounted(() => {
     toStartAnimation();
+});
+
+
+const packPriceText: ComputedI<string> = computed((): string => {
+    let text = "";
+    if (foodInfo.value.packPrice > 0) {
+        if (businessType.value === 2 || businessType.value === 3) {
+            text = `包装费¥${foodInfo.value.packPrice}`;
+        }
+    }
+    return text
 });
 function toStartAnimation() {
     overlayAnimation.opacity(1).step();
@@ -158,6 +171,7 @@ async function closeFoodDetail() {
         // background-color: #fafafa;
     }
     .food-unit {
+        margin-left: 4rpx;
         color: #999;
         font-size: 24rpx;
         line-height: 28rpx;

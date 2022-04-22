@@ -3,28 +3,32 @@
         <view class="footer-cart flex-row flex-j-between flex-a-center">
             <view :animation="cartImgAnimationData" class="cart-img-box" id="cart-img-box">
                 <image class="cart-img" @click="clickCartImg" src="/static/img/cart-icon.png" mode="scaleToFill"></image>
-                <view v-if="allCartFoodCount" class="cart-all-count" :style="{ background: shopInfo.mainColor }">{{ allCartFoodCount }}</view>
+                <view v-if="cartPriceInfo.allCartFoodCount" class="cart-all-count" :style="{ background: shopInfo.mainColor }">{{ cartPriceInfo.allCartFoodCount }}</view>
             </view>
-            <view class="flex-item cart-all-amount">
-                <text class="amount-unit">¥</text>
-                <text class="discounted-price">{{ cartPriceInfo.cartAlldiscountedPrice }}</text>
-                <text v-if="cartPriceInfo.discountPrice" class="origin-price">¥{{ cartPriceInfo.cartAllOriginPrice }}</text>
+            <view class="flex-item cart-all-amount flex-col flex-j-center">
+                <div class="price-info flex-row flex-a-end">
+                    <span class="pay-price">¥{{ cartPriceInfo.cartAllPayPrice }}</span
+                    ><span v-if="cartPriceInfo.discountPrice" class="origin-price">¥{{ cartPriceInfo.cartAllOriginPrice }}</span>
+                </div>
+                <div v-if="businessType === 2" class="deliver-price">
+                    {{ shopInfo.deliverPrice > 0 ? `配送费¥${shopInfo.deliverPrice}` : "免配送费" }}
+                </div>
             </view>
-            <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAlldiscountedPrice > 0 ? shopInfo.mainColor : '' }" @click="toComfirmOrder"></view>
-            <!-- <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAlldiscountedPrice > 0 ? shopInfo.mainColor : '' }" @click="toComfirmOrder">去下单</view> -->
+            <view class="com-button confirm-order" :style="{ 'background-color': confirmButtonInfo.mainColorFlag ? shopInfo.mainColor : '' }" @click="toComfirmOrder">{{ confirmButtonInfo.text }}</view>
+            <!-- <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAllPayPrice > 0 ? shopInfo.mainColor : '' }" @click="toComfirmOrder">去下单</view> -->
         </view>
     </view>
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, onMounted, watch, ref } from "vue";
+import { getCurrentInstance, onMounted, watch, ref, computed } from "vue";
 import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI, FoodItemI, PositionInfoI } from "@/interface/menu";
 import { MinusPromotionsObjectI, AsideCategoryItemI, CartPriceInfoI } from "@/store/getters/menu";
-import { RefI } from "@/interface/vueInterface";
+import { ComputedI, RefI } from "@/interface/vueInterface";
 import { ShopItemI } from "@/interface/home";
-import { selectQuery } from "@/utils/";
+import { selectQuery, toFixedToNumber } from "@/utils/";
 import router from "@/utils/router";
 import { countAddTransitionTime } from "../infoConfig";
 const currentInstance = getCurrentInstance();
@@ -32,6 +36,7 @@ const currentInstance = getCurrentInstance();
 interface StateF {
     startShopInfoAnimationFlag: ComputedStateI<boolean>;
     shopInfoFlag: ComputedStateI<boolean>;
+    businessType: ComputedStateI<number>;
     shopInfo: ComputedStateI<ShopItemI>;
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
     cartImgPositionInfo: ComputedStateI<PositionInfoI>;
@@ -39,19 +44,48 @@ interface StateF {
 }
 interface GetterF {
     cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
-    allCartFoodCount: ComputedGetterI<number>;
 }
 interface MutationF {
     toogleCartDetailFlag: ComputedMutationI;
     setCartImgPositionInfo: ComputedMutationI<PositionInfoI>;
 }
 
-const { startShopInfoAnimationFlag, shopInfoFlag, shopInfo, cartCategoryList, cartImgPositionInfo, cartImgAnimationFlag }: StateF = mapState(["startShopInfoAnimationFlag", "shopInfoFlag", "shopInfo", "cartCategoryList", "cartImgPositionInfo", "cartImgAnimationFlag"]);
+const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCategoryList, cartImgPositionInfo, cartImgAnimationFlag }: StateF = mapState(["startShopInfoAnimationFlag", "shopInfoFlag", "businessType", "shopInfo", "cartCategoryList", "cartImgPositionInfo", "cartImgAnimationFlag"]);
 
-const { cartPriceInfo, allCartFoodCount }: GetterF = mapGetter(["cartPriceInfo", "allCartFoodCount"]);
+const { cartPriceInfo }: GetterF = mapGetter(["cartPriceInfo"]);
 
 const { toogleCartDetailFlag, setCartImgPositionInfo }: MutationF = mapMutation(["toogleCartDetailFlag", "setCartImgPositionInfo"]);
 const cartImgAnimationData = ref(null);
+
+interface ConfirmButtonInfoI {
+    text: string;
+    mainColorFlag: boolean;
+}
+const confirmButtonInfo: ComputedI<ConfirmButtonInfoI> = computed((): ConfirmButtonInfoI => {
+    let text: string = "";
+    let mainColorFlag: boolean = false;
+    const startDeliverPrice = shopInfo.value.startDeliverPrice;
+    if (startDeliverPrice === 0 && cartPriceInfo.value.cartAllOriginPrice === 0) {
+        text = "请选购商品";
+        // mainColorFlag = true;
+    } else if (cartPriceInfo.value.cartAllOriginPrice === 0) {
+        text = `¥${startDeliverPrice}起${businessType.value === 2 ? "送" : "做"}`;
+    } else if (cartPriceInfo.value.cartAllOriginPrice > startDeliverPrice) {
+        text = "去结算";
+        mainColorFlag = true;
+    } else {
+        text = `差¥${toFixedToNumber(startDeliverPrice - cartPriceInfo.value.cartAllOriginPrice)}起${businessType.value === 2 ? "送" : "做"}`;
+    }
+    if (businessType.value === 1) {
+    } else if (businessType.value === 2) {
+        businessType;
+    } else if (businessType.value === 3) {
+    }
+    return {
+        text,
+        mainColorFlag,
+    };
+});
 onMounted(async () => {
     const positionInfo = await getCartImgPositionInfo();
     setCartImgPositionInfo(positionInfo);
@@ -89,9 +123,12 @@ function startCartImgAnimation() {
     cartImgAnimationData.value = cartImgAnimation.export();
 }
 function toComfirmOrder() {
-    router.navigateTo({
-        name: "menu/confirm",
-    });
+    if (confirmButtonInfo.value.mainColorFlag) {
+        console.log(1111);
+        router.navigateTo({
+            name: "menu/confirm",
+        });
+    }
 }
 function clickCartImg() {
     if (cartCategoryList.value.length > 0) {
@@ -127,16 +164,24 @@ function clickCartImg() {
         line-height: 36rpx;
         padding-right: 6rpx;
     }
-    .discounted-price {
-        font-size: 48rpx;
-        line-height: 56rpx;
+    .pay-price {
+        padding: 0;
+        margin: 0;
+        font-size: 36rpx;
+        line-height: 40rpx;
+        height: 40rpx;
     }
     .origin-price {
         margin-left: 10rpx;
-        font-size: 24rpx;
-        line-height: 28rpx;
+        font-size: 28rpx;
+        line-height: 30rpx;
         color: #999;
         text-decoration: line-through;
+    }
+    .deliver-price {
+        margin-top: 4rpx;
+        font-size: 24rpx;
+        color: #ccc;
     }
     .cart-img-box {
         position: absolute;
@@ -164,8 +209,10 @@ function clickCartImg() {
     }
     .confirm-order {
         margin-right: 10rpx;
+        font-size: 32rpx;
+
         width: 250rpx;
-        background-color: #666;
+        background-color: #888;
     }
 }
 </style>

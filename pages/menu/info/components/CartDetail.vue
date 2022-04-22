@@ -2,9 +2,14 @@
     <view>
         <view class="cart-detail-component" @click.stop="closeCartDetail" :style="{ bottom: minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX + 'rpx' : '' }">
             <view :animation="overlayAnimationData" class="cart-detail-overlay"></view>
-            <view :animation="detailAnimationData" class="cart-detail-box" @click.stop>
+            <view :animation="mainAnimationData" class="cart-detail-box" @click.stop>
                 <view class="cart-select-box flex-row flex-j-between flex-a-center">
-                    <view class="select-goods-title">已选商品</view>
+                    <view class="select-title-box flex-row flex-a-center">
+                        <div class="select-title">已选商品</div>
+                        <div v-if="allPackPriceText" @click="setMenuPackPriceExpalinFlag(true)" class="pack-price-text">({{ allPackPriceText }}</div>
+                        <div v-if="allPackPriceText" @click="setMenuPackPriceExpalinFlag(true)" class="pack-price-tips flex-row flex-ja-center">?</div>
+                        <div v-if="allPackPriceText" @click="setMenuPackPriceExpalinFlag(true)">)</div>
+                    </view>
                     <view class="flex-row flex-a-center" @click="cartClearCart">
                         <image class="delete-all-icon" src="/static/img/shop-delete.svg"></image>
                         <text class="clear-cart-title">清空</text>
@@ -13,20 +18,6 @@
                 <scroll-view scroll-y class="cart-detail-list-box">
                     <view class="food-category-item" v-for="foodCategoryItem in cartCategoryList" :key="foodCategoryItem.categoryID">
                         <FoodItem v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID" :foodItem="cartFoodItem" mode="small" class="cart-food-item"></FoodItem>
-
-                        <!-- <view class="cart-food-item flex-row" v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID">
-                            <image v-if="cartFoodItem.orderCount" class="cart-food-img flex-shrink" :src="cartFoodItem.fullImgPath" mode="scaleToFill"></image>
-                            <view v-if="cartFoodItem.orderCount" class="cart-food-info-box flex-item flex-col flex-j-between">
-                                <view class="cart-food-name-description">
-                                    <view class="cart-food-name">{{ cartFoodItem.foodName }}</view>
-                                    <view class="cart-food-description">{{ cartFoodItem.description }}</view>
-                                </view>
-                                <view class="cart-food-price-button flex-row flex-j-between flex-a-center">
-                                    <view class="cart-food-price">¥{{ cartFoodItem.foodItemAmount }}</view>
-                                    <FoodAddMinusItem :foodItem="cartFoodItem"></FoodAddMinusItem>
-                                </view>
-                            </view>
-                        </view> -->
                     </view>
                 </scroll-view>
             </view>
@@ -47,52 +38,42 @@ const { $showLoading, $hideLoading, $showModal, $delaySync } = getCurrentInstanc
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI } from "@/interface/menu";
-import { MinusPromotionsObjectI } from "@/store/getters/menu";
-import { RefI } from "@/interface/vueInterface";
+import { CartPriceInfoI, MinusPromotionsObjectI } from "@/store/getters/menu";
+import { ComputedI, RefI } from "@/interface/vueInterface";
+import useOverlayAnimation from "@/utils/useOverlayAnimation";
 
 interface StateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
     categoryList: ComputedStateI<CategoryItemI[]>;
+    businessType: ComputedStateI<number>;
 }
 interface GetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
+    cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
 }
 interface MutationF {
     setCartDetailFlag: ComputedMutationI<boolean>;
     clearCart: ComputedMutationI;
+    setMenuPackPriceExpalinFlag: ComputedMutationI<boolean>;
 }
-const { cartCategoryList, categoryList }: StateF = mapState(["cartCategoryList", "categoryList"]);
-const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
+const { cartCategoryList, categoryList, businessType }: StateF = mapState(["cartCategoryList", "categoryList", "businessType"]);
+const { minusPromotionsObject, cartPriceInfo }: GetterF = mapGetter(["minusPromotionsObject", "cartPriceInfo"]);
 
-const { setCartDetailFlag, clearCart }: MutationF = mapMutation(["setCartDetailFlag", "clearCart"]);
-
-const overlayAnimationData = ref(null);
-const detailAnimationData = ref(null);
-const overlayAnimation = uni.createAnimation({
-    duration: cartDetailTransitionTime,
-    timingFunction: "ease-in-out",
+const { setCartDetailFlag, clearCart, setMenuPackPriceExpalinFlag }: MutationF = mapMutation(["setCartDetailFlag", "clearCart", "setMenuPackPriceExpalinFlag"]);
+const allPackPriceText: ComputedI<string> = computed((): string => {
+    let text = "";
+    if ((businessType.value === 2 || businessType.value === 3) && cartPriceInfo.value.allPackPrice) {
+        text = `包装费¥${cartPriceInfo.value.allPackPrice}`;
+    }
+    return text;
 });
 
-const detailAnimation = uni.createAnimation({
+const { overlayAnimationData, mainAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: cartDetailTransitionTime,
-    timingFunction: "ease-in-out",
 });
-
 onMounted(() => {
     toStartAnimation();
 });
-function toStartAnimation() {
-    overlayAnimation.opacity(1).step();
-    overlayAnimationData.value = overlayAnimation.export();
-    detailAnimation.translateY(0).step();
-    detailAnimationData.value = detailAnimation.export();
-}
-function toEndAnimation() {
-    overlayAnimation.opacity(0).step();
-    overlayAnimationData.value = overlayAnimation.export();
-    detailAnimation.translateY("100%").step();
-    detailAnimationData.value = detailAnimation.export();
-}
 async function closeCartDetail() {
     toEndAnimation();
     await $delaySync(cartDetailTransitionTime * 3);
@@ -118,22 +99,6 @@ async function cartClearCart() {
     font-size: 28rpx;
     -webkit-overflow-scrolling: touch;
     z-index: 600;
-    .cart-detail-overlay-enter-from,
-    .cart-detail-overlay-leave-to {
-        opacity: 0;
-    }
-    .cart-detail-overlay-enter-to,
-    .cart-detail-overlay-leave-from {
-        opacity: 1;
-    }
-    .cart-detail-box-enter-from,
-    .cart-detail-box-leave-to {
-        transform: translateY(100%);
-    }
-    .cart-detail-box-leave-from,
-    .cart-detail-box-enter-to {
-        transform: translateY(0);
-    }
 
     .cart-detail-overlay {
         position: absolute;
@@ -164,8 +129,30 @@ async function cartClearCart() {
     }
 
     .cart-select-box {
-        padding: 20rpx 30rpx;
-        font-size: 24rpx;
+        padding: 20rpx 40rpx;
+        font-size: 26rpx;
+        color: #666;
+    }
+    .select-title-box {
+        color: #999;
+    }
+    .select-title {
+        color: #666;
+        margin-left: 4rpx;
+    }
+
+    // .pack-price-text {
+    //     color: #ccc;
+    // }
+    .pack-price-tips {
+        border: 1px solid;
+        margin: 0 4rpx;
+        font-size: 20rpx;
+        height: 24rpx;
+        width: 24rpx;
+        border-radius: 50%;
+    }
+    .clear-cart-title {
         color: #999;
     }
 
@@ -195,17 +182,15 @@ async function cartClearCart() {
         background: transparent;
     }
     .food-category-ite:last-child {
-
     }
     .cart-food-item {
         // padding: 10rpx 30rpx;
         margin: 0 20rpx;
         border-bottom: 1rpx solid #eee;
     }
-        .food-category-item:last-child .cart-food-item:last-child {
-// margin-bottom: 20rpx;
+    .food-category-item:last-child .cart-food-item:last-child {
+        // margin-bottom: 20rpx;
         border-bottom: none;
-
     }
     // .cart-food-img {
     //     padding: 4rpx 0 8rpx 0;
@@ -244,7 +229,7 @@ async function cartClearCart() {
     bottom: 50rpx;
     left: 20rpx;
     background-color: transparent;
-    z-index: 800;
+    z-index: 850;
     // width: ;
 }
 </style>

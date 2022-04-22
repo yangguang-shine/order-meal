@@ -1,5 +1,5 @@
-import { GetterI, StateI, CartCategoryInfoI, FoodItemI, GetterStateI } from "@/interface/index";
-
+import { GetterI, StateI, CartCategoryInfoI, FoodItemI, GetterStateI, minusItemI } from "@/interface/index";
+import { toFixedToNumber } from "@/utils/";
 
 export interface GetterStateMenuI {
     minusPromotionsObject: MinusPromotionsObjectI;
@@ -19,17 +19,21 @@ export interface MinusPromotionsObjectI {
 /**
  * @interface CartPriceInfoI
  * @params cartAllOriginPrice - 购物车无优惠前总金额
- * @params cartAlldiscountedPrice - 购物车优惠后总金额
+ * @params cartAllPayPrice - 购物车优惠后总金额
  * @params discountPrice - 购物车优惠金额
  * @params minusIndex - 满减信息索引
  * @params noReachFirst - 是否达到首次满减门槛
+ * @params allPackPrice - 总打包费用
+ * @params allCartFoodCount - 总下单数量
  */
 export interface CartPriceInfoI {
     cartAllOriginPrice: number;
-    cartAlldiscountedPrice: number;
+    cartAllPayPrice: number;
     discountPrice: number;
     minusIndex: number | null;
     noReachFirst: boolean;
+    allPackPrice: number;
+    allCartFoodCount: number
 }
 /**
  * @interface AsideCategoryItemI
@@ -46,7 +50,6 @@ export interface AsideCategoryItemI {
     categoryIDMain: string;
     categoryIDAside: string;
 }
-
 
 function minusPromotionsObject(state: StateI, getters: GetterStateI): MinusPromotionsObjectI {
     if ((state.shopInfo.minusList || []).length === 0 || state.cartCategoryList.length === 0) {
@@ -80,23 +83,22 @@ function minusPromotionsObject(state: StateI, getters: GetterStateI): MinusPromo
     }
 }
 function cartPriceInfo(state: StateI, getters: GetterStateI): CartPriceInfoI {
-    const cartAllOriginPrice = Number(
-        state.cartCategoryList
-            .reduce((amount: number, item) => {
-                const categoryItemSum = item.foodList.reduce((all, foodItem) => {
-                    const price = foodItem.price * foodItem.orderCount;
-                    all += price;
-                    return all;
-                }, 0);
-                amount += categoryItemSum;
-                return amount;
-            }, 0)
-            .toFixed(2)
-    );
-    let discountPrice = 0;
-    let minusIndex = null;
-    let noReachFirst = true;
-    const discountItem = (state.shopInfo.minusList || []).find((item, index) => {
+    let cartAllOriginPrice: number = 0
+    let allCartFoodCount: number = 0
+    let allPackPrice: number = 0;
+    state.cartCategoryList.forEach(categoryItem => {
+        categoryItem.foodList.forEach((foodItem) => {
+            cartAllOriginPrice +=  foodItem.price * foodItem.orderCount
+            allCartFoodCount +=  foodItem.orderCount
+            if (state.businessType === 2 || state.businessType === 3) {
+                allPackPrice += foodItem.packPrice * foodItem.orderCount
+            }
+        })
+    });
+    let discountPrice: number = 0;
+    let minusIndex: number | null = null;
+    let noReachFirst: boolean = true;
+    const discountItem: minusItemI | undefined = (state.shopInfo.minusList || []).find((item, index) => {
         if (index === state.shopInfo.minusList.length - 1) {
             if (cartAllOriginPrice >= item.reach) {
                 minusIndex = index + 1;
@@ -117,13 +119,15 @@ function cartPriceInfo(state: StateI, getters: GetterStateI): CartPriceInfoI {
         discountPrice = discountItem.reduce;
         noReachFirst = false;
     }
-    const cartAlldiscountedPrice = Number((cartAllOriginPrice - discountPrice).toFixed(2));
+    const cartAllPayPrice: number = Number((cartAllOriginPrice - discountPrice).toFixed(2));
     return {
-        cartAllOriginPrice: cartAllOriginPrice,
-        cartAlldiscountedPrice: cartAlldiscountedPrice,
-        discountPrice: discountPrice,
+        cartAllOriginPrice: toFixedToNumber(cartAllOriginPrice),
+        cartAllPayPrice: toFixedToNumber(cartAllPayPrice),
+        discountPrice: toFixedToNumber(discountPrice),
         minusIndex,
         noReachFirst,
+        allPackPrice: toFixedToNumber(allPackPrice),
+        allCartFoodCount: toFixedToNumber(allCartFoodCount)
     };
 }
 function allCartFoodCount(state: StateI, getters: GetterStateI): number {

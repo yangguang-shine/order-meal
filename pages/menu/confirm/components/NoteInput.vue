@@ -1,7 +1,7 @@
 <template>
     <view class="note-input-container" @click.stop="hideNoteInput" @touchmove.stop.prevent>
         <view :animation="overlayAnimationData" class="note-input-overlay"></view>
-        <view :animation="inputAnimationData" class="note-input-box " @click.stop>
+        <view :animation="mainAnimationData" class="note-input-box" @click.stop>
             <view class="cancel-confirm flex-row flex-a-center flex-j-between">
                 <view class="cancel-button" @click="hideNoteInput">取消</view>
                 <view class="confirm-button" @click="confirmNoteInput">完成</view>
@@ -18,10 +18,11 @@
 import { mapState, mapMutation } from "@/utils/mapVuex";
 import { computed, ref } from "vue";
 import { ComputedStateI, ComputedMutationI } from "@/interface/vuex";
-import { ComputedI, RefI} from "@/interface/vueInterface";
+import { ComputedI, RefI } from "@/interface/vueInterface";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { noteInputTransionTime } from "../comfirmConfig";
 import { delaySync } from "@/utils/";
+import useOverlayAnimation from "@/utils/useOverlayAnimation";
 
 interface StateF {
     noteText: ComputedStateI<string>;
@@ -36,45 +37,23 @@ const noteInput: RefI<string> = ref(noteText.value);
 const maxlength: number = 20;
 const noteInputLength: ComputedI<number> = computed(() => noteInput.value.length);
 
-
-
-const overlayAnimationData = ref(null);
-const inputAnimationData = ref(null);
-const overlayAnimation = uni.createAnimation({
+const { overlayAnimationData, mainAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: noteInputTransionTime,
     timingFunction: "ease-in-out",
 });
-
-const inputAnimation = uni.createAnimation({
-    duration: noteInputTransionTime,
-    timingFunction: "ease-in-out",
-});
-
 
 onLoad(() => {
     toStartAnimation();
 });
-function toStartAnimation() {
-    overlayAnimation.opacity(1).step();
-    overlayAnimationData.value = overlayAnimation.export();
-    inputAnimation.translateY(0).step();
-    inputAnimationData.value = inputAnimation.export();
-}
-function toEndAnimation() {
-    overlayAnimation.opacity(0).step();
-    overlayAnimationData.value = overlayAnimation.export();
-    inputAnimation.translateY("100%").step();
-    inputAnimationData.value = inputAnimation.export();
-}
 async function hideNoteInput() {
-    toEndAnimation()
-    await delaySync(noteInputTransionTime)
+    toEndAnimation();
+    await delaySync(noteInputTransionTime);
     setNoteInputFlag(false);
 }
 async function confirmNoteInput() {
     setNoteText(noteInput.value);
-    toEndAnimation()
-    await delaySync(noteInputTransionTime)
+    toEndAnimation();
+    await delaySync(noteInputTransionTime);
     setNoteInputFlag(false);
 }
 </script>
@@ -111,7 +90,6 @@ async function confirmNoteInput() {
         background-color: #fff;
         transition: all ease-in-out 0.3s;
         transform: translateY(100%);
-
     }
     // .note-input-box-show {
     //     transform: translateY(0%);
@@ -155,5 +133,4 @@ async function confirmNoteInput() {
         color: #999;
     }
 }
-
 </style>
