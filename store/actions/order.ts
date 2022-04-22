@@ -20,7 +20,6 @@ async function getOrderList({ state, commit }: ActionContextI, payload: any) {
             ...item,
             minusList: JSON.parse(item.minus),
             fullImgPath: `${shopImgPath}/${item.imgUrl}`,
-            mode: "horizontal",
         ...getBusinessTypeInfo(item.businessTypes)
 
         };

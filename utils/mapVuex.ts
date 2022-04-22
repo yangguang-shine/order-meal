@@ -1,25 +1,47 @@
 import { computed } from "vue";
 import { useStore } from "vuex";
+let state : any= null
 // (['hahah'])  or (['hahah'])
 export const mapState = function (namespace: string | string[], states?: string[]): any {
+    console.log(state)
+    if (state) {
+        return state
+    }
     const store = useStore();
-
-    const obj: any = {};
+    // const obj: any = {};
     if (typeof namespace === "string") {
         if (states) {
-            states.forEach((key: any) => {
-                obj[key] = computed(() => getNamespaceState(namespace, store)[key]);
-            });
+          state = computed(() => getNamespaceState(namespace, store))
         }
     } else {
-        namespace.forEach((key: string) => {
-            obj[key] = computed(() => {
-                return store.state[key];
-            });
-        });
+        state = computed(() => {
+            return store.state;
+        })
     }
-    return obj;
+    console.log(state.value)
+
+    return state;
 };
+// export const mapState = function (namespace: string | string[], states?: string[]): any {
+//     const store = useStore();
+
+//     const obj: any = {};
+//     if (typeof namespace === "string") {
+//         if (states) {
+//             states.forEach((key: any) => {
+//                 obj[key] = computed(() => getNamespaceState(namespace, store)[key]);
+//             });
+//         }
+//     } else {
+//         namespace.forEach((key: string) => {
+//             obj[key] = computed(() => {
+//                 return store.state[key];
+//             });
+//         });
+//     }
+//     console.log(obj)
+//     return obj;
+// };
 
 function getNamespaceState(namespace: string, store: any): any {
     const spaceArr = namespace.split("/");

@@ -10,7 +10,7 @@
                 <view v-if="foodInfo.description" class="food-description">{{ foodInfo.description }}</view>
                 <view class="food-price-order flex-row flex-j-between">
                     <div class="flex-row flex-a-end">
-                        <div class="food-price">¥{{ foodInfo.price }}</div>
+                        <div class="food-price" :style="{'color': shopInfo.mainColor}">¥{{ foodInfo.price }}</div>
                         <div v-if="foodInfo.unit" class="food-unit">{{packPriceText}}/{{ foodInfo.unit }}</div>
                     </div>
                     <FoodAddMinusItem v-if="foodInfo.reserveCount" :foodItem="foodInfo"></FoodAddMinusItem>
@@ -38,9 +38,12 @@ import { FoodItemI, initFoodItem } from "@/interface/menu";
 import { foodDetailTransitionTime, footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX } from "../infoConfig";
 import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { ComputedI } from "@/interface/vueInterface";
+import { ShopItemI } from "@/interface/home";
 
 interface StateF {
     foodInfo: ComputedStateI<FoodItemI>;
+    shopInfo: ComputedStateI<ShopItemI>;
+    
     businessType: ComputedStateI<number>;
 }
 interface GetterF {
@@ -50,7 +53,7 @@ interface MutationF {
     setFoodDetailFlag: ComputedMutationI<boolean>;
     setFoodInfo: ComputedMutationI<FoodItemI>;
 }
-const { foodInfo, businessType }: StateF = mapState(["foodInfo", "businessType"]);
+const { foodInfo, shopInfo,businessType }: StateF = mapState(["foodInfo","shopInfo", "businessType"]);
 const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
 const { setFoodDetailFlag, setFoodInfo }: MutationF = mapMutation(["setFoodDetailFlag", "setFoodInfo"]);
 const overlayAnimationData = ref(null);

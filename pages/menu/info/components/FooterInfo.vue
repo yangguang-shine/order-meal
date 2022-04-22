@@ -7,15 +7,15 @@
             </view>
             <view class="flex-item cart-all-amount flex-col flex-j-center">
                 <div class="price-info flex-row flex-a-end">
-                    <span class="pay-price">¥{{ cartPriceInfo.cartAllPayPrice }}</span
-                    ><span v-if="cartPriceInfo.discountPrice" class="origin-price">¥{{ cartPriceInfo.cartAllOriginPrice }}</span>
+                    <span class="pay-price">¥{{ cartPriceInfo.cartAllPriceAfterDiscount }}</span
+                    ><span v-if="cartPriceInfo.minusPrice" class="origin-price">¥{{ cartPriceInfo.cartAllOriginPrice }}</span>
                 </div>
                 <div v-if="businessType === 2" class="deliver-price">
                     {{ shopInfo.deliverPrice > 0 ? `配送费¥${shopInfo.deliverPrice}` : "免配送费" }}
                 </div>
             </view>
             <view class="com-button confirm-order" :style="{ 'background-color': confirmButtonInfo.mainColorFlag ? shopInfo.mainColor : '' }" @click="toComfirmOrder">{{ confirmButtonInfo.text }}</view>
-            <!-- <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAllPayPrice > 0 ? shopInfo.mainColor : '' }" @click="toComfirmOrder">去下单</view> -->
+            <!-- <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAllPriceAfterDiscount > 0 ? shopInfo.mainColor : '' }" @click="toComfirmOrder">去下单</view> -->
         </view>
     </view>
 </template>

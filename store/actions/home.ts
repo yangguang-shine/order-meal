@@ -15,7 +15,6 @@ async function getRecommandShopList({ commit, state }: ActionContextI, params = 
             ...item,
             minusList: JSON.parse(item.minus),
             fullImgPath: `${shopImgPath}/${item.imgUrl}`,
-            mode: "horizontal",
             ...getBusinessTypeInfo(item.businessTypes)
         })
     );
@@ -42,7 +41,6 @@ async function getShopList(
             ...item,
             minusList: JSON.parse(item.minus),
             fullImgPath: `${shopImgPath}/${item.imgUrl}`,
-            mode: "horizontal",
             ...getBusinessTypeInfo(item.businessTypes)
         })
     );
@@ -58,7 +56,6 @@ async function getShopInfo({ state, commit }: ActionContextI, payload: { shopID:
         ...originShopInfo,
         minusList: JSON.parse(originShopInfo.minus),
         fullImgPath: `${shopImgPath}/${originShopInfo.imgUrl}`,
-        mode: "horizontal",
         ...getBusinessTypeInfo(originShopInfo.businessTypes)
 
     };

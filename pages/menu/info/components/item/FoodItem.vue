@@ -7,7 +7,7 @@
                 <view class="food-description">{{ foodItem.description }}</view>
             </view>
             <view class="food-price-button flex-row flex-j-between flex-a-center">
-                <view class="food-price">¥{{ foodItem.price }}</view>
+                <view class="food-price" :style="{'color': shopInfo.mainColor}">¥{{ foodItem.price }}</view>
                 <FoodAddMinusItem v-if="foodItem.reserveCount" :foodItem="foodItem"></FoodAddMinusItem>
                 <ReserveNotEnough v-else></ReserveNotEnough>
             </view>
@@ -108,7 +108,7 @@ function clickFoodItem(foodItem: FoodItemI) {
     }
     .food-price {
         // line-height: 42rpx;
-        color: $color-red;
+        // color: $color-red;
         font-size: 36rpx;
         line-height: 40rpx;
         font-weight: bold;

@@ -19,7 +19,7 @@ async function getMenuList({ commit, state }: ActionContextI) {
                     ...foodItem,
                     fullImgPath: `${foodImgPath}/${foodItem.imgUrl}`,
                     foodItemAmount: 0,
-            reserveCount: Math.random() > 0.5 ? 0 : Math.random() > 0.5 ? 12 : 1,
+            // reserveCount: Math.random() > 0.5 ? 0 : Math.random() > 0.5 ? 12 : 1,
                 })
             ),
         })

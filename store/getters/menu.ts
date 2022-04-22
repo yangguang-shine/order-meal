@@ -19,8 +19,8 @@ export interface MinusPromotionsObjectI {
 /**
  * @interface CartPriceInfoI
  * @params cartAllOriginPrice - 购物车无优惠前总金额
- * @params cartAllPayPrice - 购物车优惠后总金额
- * @params discountPrice - 购物车优惠金额
+ * @params cartAllPriceAfterDiscount - 购物车优惠后总金额
+ * @params minusPrice - 购物车优惠金额
  * @params minusIndex - 满减信息索引
  * @params noReachFirst - 是否达到首次满减门槛
  * @params allPackPrice - 总打包费用
@@ -28,8 +28,8 @@ export interface MinusPromotionsObjectI {
  */
 export interface CartPriceInfoI {
     cartAllOriginPrice: number;
-    cartAllPayPrice: number;
-    discountPrice: number;
+    cartAllPriceAfterDiscount: number;
+    minusPrice: number;
     minusIndex: number | null;
     noReachFirst: boolean;
     allPackPrice: number;
@@ -95,10 +95,10 @@ function cartPriceInfo(state: StateI, getters: GetterStateI): CartPriceInfoI {
             }
         })
     });
-    let discountPrice: number = 0;
+    let minusPrice: number = 0;
     let minusIndex: number | null = null;
     let noReachFirst: boolean = true;
-    const discountItem: minusItemI | undefined = (state.shopInfo.minusList || []).find((item, index) => {
+    const minusItem: minusItemI | undefined = (state.shopInfo.minusList || []).find((item, index) => {
         if (index === state.shopInfo.minusList.length - 1) {
             if (cartAllOriginPrice >= item.reach) {
                 minusIndex = index + 1;
@@ -115,15 +115,15 @@ function cartPriceInfo(state: StateI, getters: GetterStateI): CartPriceInfoI {
             }
         }
     });
-    if (discountItem) {
-        discountPrice = discountItem.reduce;
+    if (minusItem) {
+        minusPrice = minusItem.reduce;
         noReachFirst = false;
     }
-    const cartAllPayPrice: number = Number((cartAllOriginPrice - discountPrice).toFixed(2));
+    const cartAllPriceAfterDiscount: number = cartAllOriginPrice - minusPrice - allPackPrice
     return {
         cartAllOriginPrice: toFixedToNumber(cartAllOriginPrice),
-        cartAllPayPrice: toFixedToNumber(cartAllPayPrice),
-        discountPrice: toFixedToNumber(discountPrice),
+        cartAllPriceAfterDiscount: toFixedToNumber(cartAllPriceAfterDiscount),
+        minusPrice: toFixedToNumber(minusPrice),
         minusIndex,
         noReachFirst,
         allPackPrice: toFixedToNumber(allPackPrice),
