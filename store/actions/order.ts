@@ -4,6 +4,7 @@ import getOrderTypeTitle from "@/utils/getOrderTypeTitle";
 import { shopImgPath, foodImgPath } from "@/config/index";
 import { ActionI, ActionContextI, OrderItemI, OriginShopItemI, ShopItemI, OriginFoodItemI, FoodItemI, OrderDetailI, OrderKeyI } from "@/interface/index";
 import getBusinessTypeInfo from "@/utils/getBusinessTypeInfo";
+import getOrderBusinessTitle from "@/utils/getOrderBusinessTitle";
 
 async function getOrderList({ state, commit }: ActionContextI, payload: any) {
     let data: {
@@ -20,8 +21,7 @@ async function getOrderList({ state, commit }: ActionContextI, payload: any) {
             ...item,
             minusList: JSON.parse(item.minus),
             fullImgPath: `${shopImgPath}/${item.imgUrl}`,
-        ...getBusinessTypeInfo(item.businessTypes)
-
+            ...getBusinessTypeInfo(item.businessTypes),
         };
     });
     const orderList: OrderItemI[] = data.orderKeyList.map(
@@ -30,6 +30,7 @@ async function getOrderList({ state, commit }: ActionContextI, payload: any) {
             shopInfo: shopListMap[item.shopID],
             orderTimeDetail: timeStampTranslate(item.orderTime),
             orderTypeTitle: getOrderTypeTitle(item.orderStatus, item.businessType),
+            orderBusinessTitle: getOrderBusinessTitle(item.businessType)
         })
     );
     state.allOrderList[state.orderTabIndex] = orderList;

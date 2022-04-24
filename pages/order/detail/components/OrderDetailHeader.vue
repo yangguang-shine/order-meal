@@ -3,15 +3,15 @@
         <div class="flex-row flex-j-between flex-a-center">
             <div class="order-status flex-row flex-a-center">
                 <div class="title">订单</div>
-                <div class="detail" :style="{ color: $mainColor }">{{ orderDetail.orderTypeTitle }}</div>
+                <div class="detail" :style="{ color: orderDetailShopInfo.mainColor }">{{ orderDetail.orderTypeTitle }}</div>
             </div>
             <div class="order-time">{{ orderDetail.orderTimeDetail }}</div>
         </div>
         <div class="order-tip-title">感谢您的支持</div>
         <div class="order-button-box flex-row flex-a-center flex-j-between">
-            <div v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20" class="button-item flex-row flex-ja-center" :style="{ color: $mainColor }" @click="toCancelOrder">取消订单</div>
+            <div v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20" class="button-item flex-row flex-ja-center" :style="{ color: orderDetailShopInfo.mainColor }" @click="toCancelOrder">取消订单</div>
             <div v-else></div>
-            <div class="button-item flex-row flex-ja-center" :style="{ color: $mainColor }" @click="orderAgain()">再来一单</div>
+            <div class="button-item flex-row flex-ja-center" :style="{ color: orderDetailShopInfo.mainColor }" @click="orderAgain()">再来一单</div>
         </div>
     </div>
 </template>
@@ -22,8 +22,11 @@ import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { OrderDetailI } from "@/interface/order";
 import { ShopItemI } from "@/interface/home";
+import { hideLoading, showLoading, showModal } from "@/utils/";
+import router from "@/utils/router";
 interface StateF {
     orderDetail: ComputedStateI<OrderDetailI>;
+    orderDetailShopInfo: ComputedStateI<ShopItemI>
 }
 interface MutationF {
     saveShopInfo: ComputedMutationI<ShopItemI>;
@@ -41,25 +44,24 @@ const props = defineProps({
     },
 });
 
-const { $showLoading, $hideLoading, $myrouter, $showModal } = getCurrentInstance().proxy;
 
-const { orderDetail }: StateF = mapState(["orderDetail"]);
+const { orderDetail, orderDetailShopInfo }: StateF = mapState();
 
-const { saveShopInfo, saveBusinessType }: MutationF = mapMutation(["saveShopInfo", "saveBusinessType"]);
-const { cancelOrder, getOrderDetail, getShopInfo }: ActionF = mapAction(["cancelOrder", "getOrderDetail", "getShopInfo"]);
+const { saveShopInfo, saveBusinessType,  }: MutationF = mapMutation();
+const { cancelOrder, getOrderDetail, getShopInfo }: ActionF = mapAction();
 
 async function toCancelOrder() {
     try {
-        await $showModal({
+        await showModal({
             content: "确认取消订单",
             showCancelFlag: true,
         });
-        $showLoading();
+        showLoading();
         await cancelOrder({
             orderKey: props.orderKey,
         });
-        $hideLoading();
-        $showModal({
+        hideLoading();
+        showModal({
             content: "取消订单成功",
         });
         await getOrderDetail({
@@ -68,18 +70,18 @@ async function toCancelOrder() {
     } catch (e) {
         console.log(e);
     } finally {
-        $hideLoading();
+        hideLoading();
     }
 }
 
 async function orderAgain() {
     try {
-        $showLoading();
+        showLoading();
         await getShopInfo({
             shopID: orderDetail.value.shopID,
         });
         saveBusinessType(orderDetail.value.businessType);
-        $myrouter.navigateTo({
+        router.navigateTo({
             name: "menu/info",
             query: {
                 orderKey: orderDetail.value.orderKey,
@@ -90,7 +92,7 @@ async function orderAgain() {
     } catch (e) {
         console.log(e);
     } finally {
-        $hideLoading();
+        hideLoading();
     }
 }
 </script>

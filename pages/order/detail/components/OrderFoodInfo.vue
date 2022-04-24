@@ -4,20 +4,30 @@
         <div class="order-list-box">
             <order-food-item v-for="(orderFoodItem, index) in orderDetail.foodList" :orderFoodItem="orderFoodItem" :key="index"></order-food-item>
         </div>
+        <div class="pack-deliver-price-box" v-if="orderDetail.allPackPrice || orderDetail.businessType === 2">
+            <div v-if="orderDetail.allPackPrice" class="pack-price flex-row flex-a-center flex-j-between">
+                <div class="left">打包费</div>
+                <div class="right">¥{{ orderDetail.allPackPrice }}</div>
+            </div>
+            <div v-if="orderDetail.businessType === 2" class="deliver-price flex-row flex-a-center flex-j-between">
+                <div class="left">配送费</div>
+                <div class="right">¥{{ orderDetail.deliverPrice }}</div>
+            </div>
+        </div>
         <div class="minus-box flex-row flex-a-center" v-if="orderDetail.minusPrice">
             <image class="minus-icon" src="/static/img/orderMinus.svg"></image>
             <div class="flex-item flex-row flex-j-between">
                 <div class="minus-title">满减优惠</div>
-                <div class="minus-price">-¥{{ orderDetail.minusPrice }}</div>
+                <div class="minus-price" :style="{'color': orderDetailShopInfo.mainColor}">-¥{{ orderDetail.minusPrice }}</div>
             </div>
         </div>
         <div class="all-price-box flex-row flex-a-center flex-j-between">
             <div></div>
             <div class="all-price-info flex-row flex-a-center">
-                <div class="origin-price">共计￥{{ orderDetail.originOrderAmount }}</div>
+                <div class="origin-price">共计￥{{ orderDetail.orderOriginAmount }}</div>
                 <div class="discount-price">已优惠￥{{ orderDetail.minusPrice }}</div>
                 <div class="pay-price">
-                    小计<span class="pay-price-color">￥{{ orderDetail.orderAmount }}</span>
+                    小计<span class="pay-price-color" :style="{'color': orderDetailShopInfo.mainColor}">￥{{ orderDetail.payPrice }}</span>
                 </div>
             </div>
         </div>
@@ -34,7 +44,7 @@ interface StateF {
     orderDetail: ComputedStateI<OrderDetailI>;
     orderDetailShopInfo: ComputedStateI<ShopItemI>;
 }
-const { orderDetail, orderDetailShopInfo }: StateF = mapState(["orderDetail", "orderDetailShopInfo"]);
+const { orderDetail, orderDetailShopInfo }: StateF = mapState([]);
 </script>
 
 <style lang="scss" scoped>
@@ -69,6 +79,23 @@ const { orderDetail, orderDetailShopInfo }: StateF = mapState(["orderDetail", "o
     .food-total-price {
         flex: 3;
         text-align: right;
+    }
+
+    .pack-deliver-price-box {
+        padding: 0 20rpx 20rpx;
+    }
+    .pack-price,
+    .deliver-price {
+        padding: 20rpx 0 0;
+        font-size: 28rpx;
+        color: #666;
+    }
+    .dash-split {
+        position: relative;
+        width: 100%;
+        height: 0;
+        border-bottom: 3rpx dashed #eee;
+        margin-bottom: 10rpx;
     }
     .minus-box {
         margin-top: 10rpx;

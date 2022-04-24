@@ -11,7 +11,7 @@
         </div>
         <div class="info-item flex-row flex-a-center flex-j-between">
             <div class="left-title">订单号</div>
-            <div class="right-title" :style="{ color: $mainColor }">{{ orderDetail.orderKey }}</div>
+            <div class="right-title" :style="{ color: orderDetailShopInfo.mainColor }">{{ orderDetail.orderKey }}</div>
         </div>
 
         <div class="info-item flex-row flex-a-center flex-j-between">
@@ -32,7 +32,7 @@
             <div class="right-title flex-row flex-a-center">
                 <div class="mobile">
                     {{ orderDetail.deliverAddress.mobile }}
-                    <div class="split" :style="{ background: $mainColor }"></div>
+                    <div class="split" :style="{ background: orderDetailShopInfo.mainColor }"></div>
                 </div>
                 <div class="name">{{ orderDetail.deliverAddress.name }}</div>
             </div>
@@ -41,13 +41,16 @@
 </template>
 
 <script lang='ts' setup>
+import { ShopItemI } from '@/interface/home';
 import { OrderDetailI } from '@/interface/order';
 import { ComputedStateI } from '@/interface/vuex';
 import { mapState } from '@/utils/mapVuex';
 interface StateF {
-    orderDetail: ComputedStateI<OrderDetailI>
+    orderDetail: ComputedStateI<OrderDetailI>,
+    orderDetailShopInfo: ComputedStateI<ShopItemI>
+
 }
-const { orderDetail }:StateF  = mapState(['orderDetail'])
+const { orderDetail, orderDetailShopInfo }:StateF  = mapState([])
 
 function copyOrderKey() {
     wx.setClipboardData({

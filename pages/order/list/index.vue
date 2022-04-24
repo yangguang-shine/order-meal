@@ -19,17 +19,17 @@
                         </div>
                         <view class="flex-row flex-a-center flex-j-between">
                             <view class="minus-box flex-row">
-                                <MinusList :minusList="orderItem.shopInfo.minusList"></MinusList>
+                                <MinusList :minusList="orderItem.shopInfo.minusList" :mainColor="orderItem.shopInfo.mainColor"></MinusList>
                             </view>
                             <view class="order-status-box">
                                 <text class="order-status-title">状态：</text>
-                                <text class="order-status-info" :style="{ color: $mainColor }">{{ orderItem.orderTypeTitle }}</text>
+                                <text class="order-status-info" :style="{ color: orderItem.shopInfo.mainColor }">{{ orderItem.orderTypeTitle }}</text>
                             </view>
                         </view>
                     </div>
                 </div>
                 <div class="price-info flex-row flex-j-between flex-a-center">
-                    <div class="order-again flex-row flex-ja-center" :style="{ color: $mainColor }" @click.stop="orderAgain(orderItem)">再来一单</div>
+                    <div class="order-again flex-row flex-ja-center" :style="{ color: orderItem.shopInfo.mainColor }" @click.stop="orderAgain(orderItem)">再来一单</div>
                     <div class="price-box flex-row flex-a-end">
                         <view class="minus-info">
                             <text>已优惠：</text>
@@ -39,10 +39,11 @@
                         <view class="pay-info">
                             <span class="pay-price-title">支付：</span>
                             <span class="pay-money-unit">¥</span>
-                            <span>{{ orderItem.orderAmount }}</span>
+                            <span>{{ orderItem.payPrice }}</span>
                         </view>
                     </div>
                 </div>
+                <div class="order-business-title" :style="{'background': orderItem.shopInfo.mainColor}">{{orderItem.orderBusinessTitle}}</div>
             </div>
         </view>
         <div v-if="orderErrorListFlag[orderTabIndex]" class="common-error-box flex-row flex-ja-center">
@@ -80,11 +81,12 @@ interface MutationF {
 }
 
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
-const { allOrderList, orderTabIndex, orderErrorListFlag }: StateF = mapState(["allOrderList", "orderTabIndex", "orderErrorListFlag"]);
+const { allOrderList, orderTabIndex, orderErrorListFlag }: StateF = mapState();
+console.log(allOrderList.value)
 
-const { getOrderList, getShopInfo }: ActionF = mapAction(["getOrderList", "getShopInfo"]);
+const { getOrderList, getShopInfo }: ActionF = mapAction();
 
-const { setOrderErrorListFlag, setOrderTabIndex, saveShopInfo, saveBusinessType, setOrderDetailShopInfo }: MutationF = mapMutation(["setOrderErrorListFlag", "setOrderTabIndex", "saveShopInfo", "saveBusinessType", "setOrderDetailShopInfo"]);
+const { setOrderErrorListFlag, setOrderTabIndex, saveShopInfo, saveBusinessType, setOrderDetailShopInfo }: MutationF = mapMutation();
 onLoad(() => {
     init();
 });
@@ -182,6 +184,7 @@ page {
         padding-bottom: 40rpx;
     }
     .order-list-item {
+        position: relative;
         padding: 30rpx;
         background-color: #fff;
         border-radius: 16rpx;
@@ -256,6 +259,16 @@ page {
         width: 150rpx;
         border: 1rpx solid;
         border-radius: 8rpx;
+    }
+    .order-business-title {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 4rpx 8rpx;
+        font-size: 22rpx;
+        line-height: 24rpx;
+        background-color: red;
+        color: #fff;
     }
     .common-error-box {
         position: fixed;

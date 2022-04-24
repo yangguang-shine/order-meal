@@ -42,6 +42,7 @@ export interface OrderItemI extends OrderKeyI {
     shopInfo: ShopItemI,
     orderTimeDetail: string;
     orderTypeTitle: string;
+    orderBusinessTitle: string
 }
 
 export interface OrderDetailI extends OrderKeyI {

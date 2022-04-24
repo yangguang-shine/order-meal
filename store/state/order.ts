@@ -7,7 +7,7 @@ export interface StateOrderI {
     orderTabIndex: number, 
     orderErrorListFlag: boolean[],
     orderDetail: OrderDetailI,
-    orderDetailShopInfo: ShopItemI
+    orderDetailShopInfo: ShopItemI,
 }
 
 const state: StateOrderI = {
@@ -15,6 +15,6 @@ const state: StateOrderI = {
     orderTabIndex: 0, 
     orderErrorListFlag: [false, false, false,false],
     orderDetail: initOrderDetail,
-    orderDetailShopInfo: initShopItem
+    orderDetailShopInfo: initShopItem,
 }
 export default state

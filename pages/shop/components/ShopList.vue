@@ -25,8 +25,10 @@ interface MutationF {
     saveBusinessType: ComputedMutationI<number>
 }
 
-const { shopList, routerBusinessType }: StateF = mapState(["shopList", "routerBusinessType"]);
-const { saveShopInfo, saveBusinessType } :MutationF = mapMutation(["saveShopInfo", "saveBusinessType"])
+const { shopList, routerBusinessType }: StateF = mapState();
+console.log(shopList)
+console.log(routerBusinessType)
+const { saveShopInfo, saveBusinessType } :MutationF = mapMutation()
 function toOrder(shopItem: ShopItemI) {
     saveShopInfo(shopItem);
     saveBusinessType(routerBusinessType.value);

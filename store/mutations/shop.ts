@@ -4,6 +4,7 @@ import { ShopItemI, TabItemI } from "@/interface/index";
 
 
 function setShopList(state: StateI, shopList: ShopItemI[]): void {
+    console.log(shopList)
     state.shopList = shopList;
 }
 
