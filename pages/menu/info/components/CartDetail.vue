@@ -6,9 +6,14 @@
                 <view class="cart-select-box flex-row flex-j-between flex-a-center">
                     <view class="select-title-box flex-row flex-a-center">
                         <div class="select-title">已选商品</div>
-                        <div v-if="allPackPriceText" @click="setMenuPackPriceExpalinFlag(true)" class="pack-price-text">({{ allPackPriceText }}</div>
-                        <div v-if="allPackPriceText" @click="setMenuPackPriceExpalinFlag(true)" class="pack-price-tips flex-row flex-ja-center">?</div>
-                        <div v-if="allPackPriceText" @click="setMenuPackPriceExpalinFlag(true)">)</div>
+                        <div v-if="cartPriceInfo.allPackPrice" class="flex-row flex-ja-center" @click="setMenuPackPriceExpalinFlag(true)">
+                            <div>(包装费</div>
+                            <div :style="{'color': shopInfo.mainColor}">¥{{cartPriceInfo.allPackPrice}}</div>
+                            <div class="pack-price-tips flex-row flex-ja-center">?</div>
+                            <div>)</div>
+                        </div>
+                        <!-- <div class="pack-price-text">({{ allPackPriceText }}</div>
+                        <div v-if="allPackPriceText" @click="setMenuPackPriceExpalinFlag(true)">)</div> -->
                     </view>
                     <view class="flex-row flex-a-center" @click="cartClearCart">
                         <image class="delete-all-icon" src="/static/img/shop-delete.svg"></image>
@@ -41,11 +46,14 @@ import { CategoryItemI } from "@/interface/menu";
 import { CartPriceInfoI, MinusPromotionsObjectI } from "@/store/getters/menu";
 import { ComputedI, RefI } from "@/interface/vueInterface";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
+import { ShopItemI } from "@/interface/home";
 
 interface StateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
     categoryList: ComputedStateI<CategoryItemI[]>;
     businessType: ComputedStateI<number>;
+    shopInfo: ComputedStateI<ShopItemI>;
+    
 }
 interface GetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
@@ -56,17 +64,17 @@ interface MutationF {
     clearCart: ComputedMutationI;
     setMenuPackPriceExpalinFlag: ComputedMutationI<boolean>;
 }
-const { cartCategoryList, categoryList, businessType }: StateF = mapState(["cartCategoryList", "categoryList", "businessType"]);
-const { minusPromotionsObject, cartPriceInfo }: GetterF = mapGetter(["minusPromotionsObject", "cartPriceInfo"]);
+const { cartCategoryList, categoryList, businessType, shopInfo }: StateF = mapState();
+const { minusPromotionsObject, cartPriceInfo }: GetterF = mapGetter();
 
-const { setCartDetailFlag, clearCart, setMenuPackPriceExpalinFlag }: MutationF = mapMutation(["setCartDetailFlag", "clearCart", "setMenuPackPriceExpalinFlag"]);
-const allPackPriceText: ComputedI<string> = computed((): string => {
-    let text = "";
-    if ((businessType.value === 2 || businessType.value === 3) && cartPriceInfo.value.allPackPrice) {
-        text = `包装费¥${cartPriceInfo.value.allPackPrice}`;
-    }
-    return text;
-});
+const { setCartDetailFlag, clearCart, setMenuPackPriceExpalinFlag }: MutationF = mapMutation();
+// const allPackPriceText: ComputedI<string> = computed((): string => {
+//     let text = "";
+//     if ((businessType.value === 2 || businessType.value === 3) && cartPriceInfo.value.allPackPrice) {
+//         text = `包装费¥${cartPriceInfo.value.allPackPrice}`;
+//     }
+//     return text;
+// });
 
 const { overlayAnimationData, mainAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: cartDetailTransitionTime,

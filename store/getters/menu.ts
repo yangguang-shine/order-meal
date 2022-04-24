@@ -4,7 +4,6 @@ import { toFixedToNumber } from "@/utils/";
 export interface GetterStateMenuI {
     minusPromotionsObject: MinusPromotionsObjectI;
     cartPriceInfo: CartPriceInfoI;
-    allCartFoodCount: number;
     asideCategoryList: AsideCategoryItemI[];
 }
 /**
@@ -18,8 +17,8 @@ export interface MinusPromotionsObjectI {
 }
 /**
  * @interface CartPriceInfoI
- * @params cartAllOriginPrice - 购物车无优惠前总金额
- * @params cartAllPriceAfterDiscount - 购物车优惠后总金额
+ * @params allOriginPrice - 购物车无优惠前总金额
+ * @params allPriceAfterDiscount - 购物车优惠后总金额
  * @params minusPrice - 购物车优惠金额
  * @params minusIndex - 满减信息索引
  * @params noReachFirst - 是否达到首次满减门槛
@@ -27,13 +26,14 @@ export interface MinusPromotionsObjectI {
  * @params allCartFoodCount - 总下单数量
  */
 export interface CartPriceInfoI {
-    cartAllOriginPrice: number;
-    cartAllPriceAfterDiscount: number;
+    allFoodPrice: number,
+    allOriginPrice: number;
+    allPriceAfterDiscount: number;
+    allPackPrice: number;
+    allCartFoodCount: number
     minusPrice: number;
     minusIndex: number | null;
     noReachFirst: boolean;
-    allPackPrice: number;
-    allCartFoodCount: number
 }
 /**
  * @interface AsideCategoryItemI
@@ -61,7 +61,7 @@ function minusPromotionsObject(state: StateI, getters: GetterStateI): MinusPromo
     if (getters.cartPriceInfo.noReachFirst) {
         return {
             show: true,
-            contentList: ["再买", `${Number((state.shopInfo.minusList[0].reach - getters.cartPriceInfo.cartAllOriginPrice).toFixed(2))}元`, ",可减", `${state.shopInfo.minusList[0].reduce}元`],
+            contentList: ["再买", `${Number((state.shopInfo.minusList[0].reach - getters.cartPriceInfo.allOriginPrice).toFixed(2))}元`, ",可减", `${state.shopInfo.minusList[0].reduce}元`],
         };
     }
     if (!getters.cartPriceInfo.minusIndex) {
@@ -78,36 +78,38 @@ function minusPromotionsObject(state: StateI, getters: GetterStateI): MinusPromo
     } else {
         return {
             show: true,
-            contentList: ["已减", `${state.shopInfo.minusList[getters.cartPriceInfo.minusIndex - 1].reduce}元`, `,再买`, `${Number((state.shopInfo.minusList[getters.cartPriceInfo.minusIndex].reach - getters.cartPriceInfo.cartAllOriginPrice).toFixed(2))}元`, `可减`, `${state.shopInfo.minusList[getters.cartPriceInfo.minusIndex].reduce}`],
+            contentList: ["已减", `${state.shopInfo.minusList[getters.cartPriceInfo.minusIndex - 1].reduce}元`, `,再买`, `${Number((state.shopInfo.minusList[getters.cartPriceInfo.minusIndex].reach - getters.cartPriceInfo.allOriginPrice).toFixed(2))}元`, `可减`, `${state.shopInfo.minusList[getters.cartPriceInfo.minusIndex].reduce}`],
         };
     }
 }
+let count = 0
 function cartPriceInfo(state: StateI, getters: GetterStateI): CartPriceInfoI {
-    let cartAllOriginPrice: number = 0
     let allCartFoodCount: number = 0
     let allPackPrice: number = 0;
+    let allFoodPrice: number = 0
     state.cartCategoryList.forEach(categoryItem => {
         categoryItem.foodList.forEach((foodItem) => {
-            cartAllOriginPrice +=  foodItem.price * foodItem.orderCount
+            allFoodPrice +=  foodItem.price * foodItem.orderCount
             allCartFoodCount +=  foodItem.orderCount
             if (state.businessType === 2 || state.businessType === 3) {
                 allPackPrice += foodItem.packPrice * foodItem.orderCount
             }
         })
     });
+    let allOriginPrice: number = allFoodPrice + allPackPrice
     let minusPrice: number = 0;
     let minusIndex: number | null = null;
     let noReachFirst: boolean = true;
     const minusItem: minusItemI | undefined = (state.shopInfo.minusList || []).find((item, index) => {
         if (index === state.shopInfo.minusList.length - 1) {
-            if (cartAllOriginPrice >= item.reach) {
+            if (allOriginPrice >= item.reach) {
                 minusIndex = index + 1;
                 return true;
             } else {
                 return false;
             }
         } else {
-            if (cartAllOriginPrice >= item.reach && cartAllOriginPrice < state.shopInfo.minusList[index + 1].reach) {
+            if (allOriginPrice >= item.reach && allOriginPrice < state.shopInfo.minusList[index + 1].reach) {
                 minusIndex = index + 1;
                 return true;
             } else {
@@ -119,27 +121,19 @@ function cartPriceInfo(state: StateI, getters: GetterStateI): CartPriceInfoI {
         minusPrice = minusItem.reduce;
         noReachFirst = false;
     }
-    const cartAllPriceAfterDiscount: number = cartAllOriginPrice - minusPrice - allPackPrice
+    const allPriceAfterDiscount: number = allOriginPrice - minusPrice
     return {
-        cartAllOriginPrice: toFixedToNumber(cartAllOriginPrice),
-        cartAllPriceAfterDiscount: toFixedToNumber(cartAllPriceAfterDiscount),
+        allOriginPrice: toFixedToNumber(allOriginPrice),
+        allFoodPrice: toFixedToNumber(allCartFoodCount),
+        allPriceAfterDiscount: toFixedToNumber(allPriceAfterDiscount),
+        allPackPrice: toFixedToNumber(allPackPrice),
         minusPrice: toFixedToNumber(minusPrice),
         minusIndex,
         noReachFirst,
-        allPackPrice: toFixedToNumber(allPackPrice),
         allCartFoodCount: toFixedToNumber(allCartFoodCount)
     };
 }
-function allCartFoodCount(state: StateI, getters: GetterStateI): number {
-    return state.cartCategoryList.reduce((all: number, item) => {
-        const itemFoodAll = item.foodList.reduce((all: number, item) => {
-            all += item.orderCount;
-            return all;
-        }, 0);
-        all += itemFoodAll;
-        return all;
-    }, 0);
-}
+
 function asideCategoryList(state: StateI, getters: GetterStateI): AsideCategoryItemI[] {
     const asideCategoryList = state.categoryList.map((foodCategoryItem) => {
         const cartFind = state.cartCategoryList.find((cartFoodItem) => cartFoodItem.categoryID === foodCategoryItem.categoryID);
@@ -173,6 +167,5 @@ function asideCategoryList(state: StateI, getters: GetterStateI): AsideCategoryI
 export default {
     minusPromotionsObject,
     cartPriceInfo,
-    allCartFoodCount,
     asideCategoryList,
 } as GetterI;

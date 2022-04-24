@@ -1,7 +1,7 @@
 <template>
     <view class="food-detail-container flex-row flex-ja-center" @click.stop="closeFoodDetail" @touchmove.stop>
         <view :animation="overlayAnimationData" class="food-detail-overlay"></view>
-        <view :animation="detailAnimationData" class="food-detail-box flex-col" @click.stop :style="{ 'padding-bottom': (minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX : footerInfoHeightRPX) + 30 + 'rpx' }">
+        <view :animation="mainAnimationData" class="food-detail-box flex-col" @click.stop :style="{ 'padding-bottom': (minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX : footerInfoHeightRPX) + 30 + 'rpx' }">
             <!-- <view class="food-img"></view> -->
             <image class="food-img" :src="foodInfo.fullImgPath" alt=""></image>
             <!-- <image class="food-img" :src="foodInfo.fullImgPath" alt="" ></image> -->
@@ -10,8 +10,8 @@
                 <view v-if="foodInfo.description" class="food-description">{{ foodInfo.description }}</view>
                 <view class="food-price-order flex-row flex-j-between">
                     <div class="flex-row flex-a-end">
-                        <div class="food-price" :style="{'color': shopInfo.mainColor}">¥{{ foodInfo.price }}</div>
-                        <div v-if="foodInfo.unit" class="food-unit">{{packPriceText}}/{{ foodInfo.unit }}</div>
+                        <div class="food-price" :style="{ color: shopInfo.mainColor }">¥{{ foodInfo.price }}</div>
+                        <div v-if="foodInfo.unit" class="food-unit">{{ packPriceText }}/{{ foodInfo.unit }}</div>
                     </div>
                     <FoodAddMinusItem v-if="foodInfo.reserveCount" :foodItem="foodInfo"></FoodAddMinusItem>
                     <ReserveNotEnough v-else></ReserveNotEnough>
@@ -19,8 +19,8 @@
                 <div class="food-detail-title">菜品详情</div>
                 <div class="food-detail">哈哈哈哈哈哈哈哈哈哈或或或哈哈哈哈哈哈哈哈哈哈或或或哈哈哈哈哈哈哈哈哈哈或或或哈哈哈哈哈哈哈哈哈哈或或或</div>
             </div>
+            <image class="close-img" src="/static/img/user-menu/close-food-detail.png" mode="" @click.stop="closeFoodDetail"></image>
         </view>
-        <image class="close-img" :animation="overlayAnimationData" src="/static/img/user-menu/close-food-detail.png" mode="" @click.stop="closeFoodDetail"></image>
     </view>
 </template>
 
@@ -39,11 +39,12 @@ import { foodDetailTransitionTime, footerInfoAndMinusPromotionsHeightRPX, footer
 import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { ComputedI } from "@/interface/vueInterface";
 import { ShopItemI } from "@/interface/home";
+import useOverlayAnimation from "@/utils/useOverlayAnimation";
 
 interface StateF {
     foodInfo: ComputedStateI<FoodItemI>;
     shopInfo: ComputedStateI<ShopItemI>;
-    
+
     businessType: ComputedStateI<number>;
 }
 interface GetterF {
@@ -53,25 +54,28 @@ interface MutationF {
     setFoodDetailFlag: ComputedMutationI<boolean>;
     setFoodInfo: ComputedMutationI<FoodItemI>;
 }
-const { foodInfo, shopInfo,businessType }: StateF = mapState(["foodInfo","shopInfo", "businessType"]);
-const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
-const { setFoodDetailFlag, setFoodInfo }: MutationF = mapMutation(["setFoodDetailFlag", "setFoodInfo"]);
-const overlayAnimationData = ref(null);
-const detailAnimationData = ref(null);
-const overlayAnimation = uni.createAnimation({
-    duration: foodDetailTransitionTime * 3,
-    timingFunction: "ease-in-out",
-});
-
-const detailAnimation = uni.createAnimation({
+const { foodInfo, shopInfo, businessType }: StateF = mapState();
+const { minusPromotionsObject }: GetterF = mapGetter();
+const { setFoodDetailFlag, setFoodInfo }: MutationF = mapMutation();
+const { overlayAnimationData, mainAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: foodDetailTransitionTime,
     timingFunction: "ease-in-out",
 });
+// const overlayAnimationData = ref(null);
+// const detailAnimationData = ref(null);
+// const overlayAnimation = uni.createAnimation({
+//     duration: foodDetailTransitionTime * 3,
+//     timingFunction: "ease-in-out",
+// });
+
+// const detailAnimation = uni.createAnimation({
+//     duration: foodDetailTransitionTime,
+//     timingFunction: "ease-in-out",
+// });
 
 onMounted(() => {
     toStartAnimation();
 });
-
 
 const packPriceText: ComputedI<string> = computed((): string => {
     let text = "";
@@ -80,20 +84,20 @@ const packPriceText: ComputedI<string> = computed((): string => {
             text = `包装费¥${foodInfo.value.packPrice}`;
         }
     }
-    return text
+    return text;
 });
-function toStartAnimation() {
-    overlayAnimation.opacity(1).step();
-    overlayAnimationData.value = overlayAnimation.export();
-    detailAnimation.translateY(0).step();
-    detailAnimationData.value = detailAnimation.export();
-}
-function toEndAnimation() {
-    overlayAnimation.opacity(0).step();
-    overlayAnimationData.value = overlayAnimation.export();
-    detailAnimation.translateY("100%").step();
-    detailAnimationData.value = detailAnimation.export();
-}
+// function toStartAnimation() {
+//     overlayAnimation.opacity(1).step();
+//     overlayAnimationData.value = overlayAnimation.export();
+//     detailAnimation.translateY(0).step();
+//     detailAnimationData.value = detailAnimation.export();
+// }
+// function toEndAnimation() {
+//     overlayAnimation.opacity(0).step();
+//     overlayAnimationData.value = overlayAnimation.export();
+//     detailAnimation.translateY("100%").step();
+//     detailAnimationData.value = detailAnimation.export();
+// }
 
 async function closeFoodDetail() {
     toEndAnimation();
@@ -193,8 +197,8 @@ async function closeFoodDetail() {
     }
     .close-img {
         position: absolute;
-        top: 11%;
-        opacity: 0;
+        top: 20rpx;
+        // opacity: 0;
         right: 20rpx;
         width: 80rpx;
         height: 80rpx;

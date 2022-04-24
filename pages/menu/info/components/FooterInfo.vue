@@ -7,15 +7,15 @@
             </view>
             <view class="flex-item cart-all-amount flex-col flex-j-center">
                 <div class="price-info flex-row flex-a-end">
-                    <span class="pay-price">¥{{ cartPriceInfo.cartAllPriceAfterDiscount }}</span
-                    ><span v-if="cartPriceInfo.minusPrice" class="origin-price">¥{{ cartPriceInfo.cartAllOriginPrice }}</span>
+                    <span class="pay-price">¥{{ cartPriceInfo.allPriceAfterDiscount }}</span
+                    ><span v-if="cartPriceInfo.minusPrice" class="origin-price">¥{{ cartPriceInfo.allOriginPrice }}</span>
                 </div>
                 <div v-if="businessType === 2" class="deliver-price">
                     {{ shopInfo.deliverPrice > 0 ? `配送费¥${shopInfo.deliverPrice}` : "免配送费" }}
                 </div>
             </view>
             <view class="com-button confirm-order" :style="{ 'background-color': confirmButtonInfo.mainColorFlag ? shopInfo.mainColor : '' }" @click="toComfirmOrder">{{ confirmButtonInfo.text }}</view>
-            <!-- <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.cartAllPriceAfterDiscount > 0 ? shopInfo.mainColor : '' }" @click="toComfirmOrder">去下单</view> -->
+            <!-- <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.allPriceAfterDiscount > 0 ? shopInfo.mainColor : '' }" @click="toComfirmOrder">去下单</view> -->
         </view>
     </view>
 </template>
@@ -65,16 +65,16 @@ const confirmButtonInfo: ComputedI<ConfirmButtonInfoI> = computed((): ConfirmBut
     let text: string = "";
     let mainColorFlag: boolean = false;
     const startDeliverPrice = shopInfo.value.startDeliverPrice;
-    if (startDeliverPrice === 0 && cartPriceInfo.value.cartAllOriginPrice === 0) {
+    if (startDeliverPrice === 0 && cartPriceInfo.value.allOriginPrice === 0) {
         text = "请选购商品";
         // mainColorFlag = true;
-    } else if (cartPriceInfo.value.cartAllOriginPrice === 0) {
+    } else if (cartPriceInfo.value.allOriginPrice === 0) {
         text = `¥${startDeliverPrice}起${businessType.value === 2 ? "送" : "做"}`;
-    } else if (cartPriceInfo.value.cartAllOriginPrice > startDeliverPrice) {
+    } else if (cartPriceInfo.value.allOriginPrice > startDeliverPrice) {
         text = "去结算";
         mainColorFlag = true;
     } else {
-        text = `差¥${toFixedToNumber(startDeliverPrice - cartPriceInfo.value.cartAllOriginPrice)}起${businessType.value === 2 ? "送" : "做"}`;
+        text = `差¥${toFixedToNumber(startDeliverPrice - cartPriceInfo.value.allOriginPrice)}起${businessType.value === 2 ? "送" : "做"}`;
     }
     if (businessType.value === 1) {
     } else if (businessType.value === 2) {

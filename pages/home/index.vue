@@ -34,10 +34,10 @@ interface ActionF {
     getDefaultAddress: ComputedActionI<void, AddressItemI>;
     getRecommandShopList: ComputedActionI<void>;
 }
-const { searchShopFlag } : StateF = mapState(['searchShopFlag'])
-const { setTopAddressWidthFlag, setTabListFixedFlag }: MutationF = mapMutation(["setTopAddressWidthFlag", "setTabListFixedFlag"]);
+const { searchShopFlag } : StateF = mapState()
+const { setTopAddressWidthFlag, setTabListFixedFlag }: MutationF = mapMutation();
 
-const { getDefaultAddress, getRecommandShopList }: ActionF = mapAction(["getDefaultAddress", "getRecommandShopList"]);
+const { getDefaultAddress, getRecommandShopList }: ActionF = mapAction();
 
 // console.log(JSON.stringify(addressList.value))
 onShow(() => {

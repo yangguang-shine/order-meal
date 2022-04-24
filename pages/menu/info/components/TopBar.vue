@@ -5,7 +5,7 @@
             <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '商家' }" :style="{ color: topBarInfo === '商家' ? shopInfo.mainColor : '' }" @click="clickTopBar('商家')">商家</view>
         </view>
         <view class="select-top-bar-bottom" :style="{ background: shopInfo.mainColor, left: topBarInfo === '点餐' ? '100rpx' : '300rpx' }"></view>
-        <view class="right flex-row flex-ja-center" :animation="barSearchAnimationData">
+        <view class="right flex-row flex-ja-center" :animation="overlayAnimationData">
             <view class="search-box flex-row flex-ja-center" @click="toSearch">
                 <view class="search-img"></view>
                 <view class="search-title">想吃点什么</view>
@@ -27,6 +27,7 @@ import { ShopItemI } from "@/interface/home";
 import { ref, watch } from "vue";
 import { RefI } from "@/interface/vueInterface";
 import router from "@/utils/router";
+import useOverlayAnimation from "@/utils/useOverlayAnimation";
 
 interface StateF {
     topBarInfo: ComputedStateI<string>;
@@ -40,25 +41,21 @@ interface MutationF {
     setSearchFoodFlag: ComputedMutationI<boolean>;
     setShopInfoMode: ComputedMutationI<string>;
     setCategoryIDMain: ComputedMutationI<string>;
-
-    
-
 }
-const { topBarInfo, shopInfo, selectedCategoryID }: StateF = mapState(["topBarInfo", "shopInfo", "selectedCategoryID"]);
-const { setTopBarInfo, setShopInfoFlag, setStartShopInfoAnimationFlag, setSearchFoodFlag, setShopInfoMode, setCategoryIDMain }: MutationF = mapMutation(["setTopBarInfo", "setShopInfoFlag", "setStartShopInfoAnimationFlag", "setSearchFoodFlag", "setShopInfoMode", "setCategoryIDMain"]);
+const { topBarInfo, shopInfo, selectedCategoryID }: StateF = mapState();
+const { setTopBarInfo, setShopInfoFlag, setStartShopInfoAnimationFlag, setSearchFoodFlag, setShopInfoMode, setCategoryIDMain }: MutationF = mapMutation();
 
+const { overlayAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
+    duration: barSearchTransitionTime,
+    timingFunction: "linear",
+});
 const barSearchAnimationData: RefI<any> = ref(null);
 watch(topBarInfo, (newValue: string, oldValue: string) => {
-    const barSearchAnimation = uni.createAnimation({
-        duration: barSearchTransitionTime,
-        timingFunction: "linear",
-    });
+
     if (newValue === "点餐") {
-        barSearchAnimation.opacity(1).step();
-        barSearchAnimationData.value = barSearchAnimation.export();
+        toStartAnimation();
     } else if (newValue === "商家") {
-        barSearchAnimation.opacity(0).step();
-        barSearchAnimationData.value = barSearchAnimation.export();
+        toEndAnimation();
     }
 });
 function toSearch() {
@@ -80,7 +77,7 @@ async function clickTopBar(title: string) {
 }
 function changeShopInfoMode() {
     setShopInfoMode(shopInfo.value.mode === "vertical" ? "horizontal" : "vertical");
-    setCategoryIDMain(`main${selectedCategoryID.value}`)
+    setCategoryIDMain(`main${selectedCategoryID.value}`);
 }
 </script>
 

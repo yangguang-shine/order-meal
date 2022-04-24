@@ -94,6 +94,7 @@ async function clickCancel() {
 .search-food-container {
     .search-food-item {
         border-bottom: 1rpx solid #eee;
+        margin: 0 20rpx;
         // height: 200rpx;
         // background-color: red;
     }
