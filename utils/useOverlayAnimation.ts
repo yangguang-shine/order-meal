@@ -13,12 +13,7 @@ export interface OverlayAnimationParamsI {
 }
 
 export default function useOverlayAnimation({ duration = 300, type = "translateY", timingFunction = "ease-in-out" }: OverlayAnimationParamsI = {}): OverlayAnimationI {
-    console.log(11111231)
-    console.log({
-        duration,
-        type,
-        timingFunction,
-    })
+
     const overlayAnimationData = ref(null);
     const mainAnimationData = ref(null);
     const overlayAnimation = uni.createAnimation({

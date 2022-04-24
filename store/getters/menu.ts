@@ -17,8 +17,10 @@ export interface MinusPromotionsObjectI {
 }
 /**
  * @interface CartPriceInfoI
- * @params allOriginPrice - 购物车无优惠前总金额
+ * @params allOriginPrice - 所有商品无优惠前总金额(包含打包费、不包含配送费)
  * @params allPriceAfterDiscount - 购物车优惠后总金额
+ * 
+ * @params orderOriginAmount - 订单原价格（包含打包费和配送费）
  * @params minusPrice - 购物车优惠金额
  * @params minusIndex - 满减信息索引
  * @params noReachFirst - 是否达到首次满减门槛
@@ -31,6 +33,9 @@ export interface CartPriceInfoI {
     allPriceAfterDiscount: number;
     allPackPrice: number;
     allCartFoodCount: number
+    orderOriginAmount: number
+    payPrice: number
+    
     minusPrice: number;
     minusIndex: number | null;
     noReachFirst: boolean;
@@ -100,6 +105,7 @@ function cartPriceInfo(state: StateI, getters: GetterStateI): CartPriceInfoI {
     let minusPrice: number = 0;
     let minusIndex: number | null = null;
     let noReachFirst: boolean = true;
+
     const minusItem: minusItemI | undefined = (state.shopInfo.minusList || []).find((item, index) => {
         if (index === state.shopInfo.minusList.length - 1) {
             if (allOriginPrice >= item.reach) {
@@ -122,11 +128,19 @@ function cartPriceInfo(state: StateI, getters: GetterStateI): CartPriceInfoI {
         noReachFirst = false;
     }
     const allPriceAfterDiscount: number = allOriginPrice - minusPrice
+    let orderOriginAmount = allOriginPrice
+    let payPrice = allPriceAfterDiscount
+    if (state.businessType === 2) {
+        orderOriginAmount = allOriginPrice + state.shopInfo.deliverPrice
+        payPrice = orderOriginAmount - minusPrice
+    }
     return {
         allOriginPrice: toFixedToNumber(allOriginPrice),
         allFoodPrice: toFixedToNumber(allCartFoodCount),
         allPriceAfterDiscount: toFixedToNumber(allPriceAfterDiscount),
         allPackPrice: toFixedToNumber(allPackPrice),
+        orderOriginAmount: toFixedToNumber(orderOriginAmount),
+        payPrice: toFixedToNumber(payPrice),
         minusPrice: toFixedToNumber(minusPrice),
         minusIndex,
         noReachFirst,

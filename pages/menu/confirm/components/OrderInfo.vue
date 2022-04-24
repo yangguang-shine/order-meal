@@ -7,10 +7,10 @@
             </view>
             <view @click="continueOrder" class="continue-order flex-row flex-ja-center" :style="{ color: shopInfo.mainColor }">继续点单</view>
         </view>
-        <view class="food-list" :animation="foodListAnimationData" :style="{'max-height': foodListMaxHeihgt}">
-            <OrderFoodItem  v-for="(orderFoodItem, index) in orderFoodList" :orderFoodItem="orderFoodItem" :key="index"></OrderFoodItem>
+        <view class="food-list" :animation="foodListAnimationData" :style="{ 'max-height': foodListMaxHeihgt }">
+            <OrderFoodItem v-for="(orderFoodItem, index) in orderFoodList" :orderFoodItem="orderFoodItem" :key="index"></OrderFoodItem>
         </view>
-        <view v-if="orderFoodList.length > defaultIndex" class="display-more flex-row flex-ja-center" @click="toggleDisplay" >
+        <view v-if="orderFoodList.length > defaultIndex" class="display-more flex-row flex-ja-center" @click="toggleDisplay">
             <view v-if="displayMoreFlag" class="flex-row flex-ja-center">
                 <view class="display-more-title">点击收起</view>
                 <image class="show-more-arrow" src="/static/img/user-confirm/show-more-order.png" mode=""></image>
@@ -20,28 +20,39 @@
                 <image class="hide-more-arrow" src="/static/img/user-confirm/show-more-order.png" mode=""></image>
             </view>
         </view>
+        <div class="pack-deliver-price-box" v-if="cartPriceInfo.allPackPrice || businessType === 2">
+            <div v-if="cartPriceInfo.allPackPrice" class="pack-price flex-row flex-a-center flex-j-between">
+                <div class="left">打包费</div>
+                <div class="right">¥{{cartPriceInfo.allPackPrice}}</div>
+            </div>
+            <div v-if="businessType === 2" class="deliver-price flex-row flex-a-center flex-j-between">
+                <div class="left">配送费</div>
+                <div class="right">¥{{shopInfo.deliverPrice}}</div>
+            </div>
+        </div>
+
         <view class="dash-split">
             <view class="left-circle"></view>
             <view class="right-circle"></view>
         </view>
-        <view v-if="minusPrice" class="minus-info flex-row flex-a-center flex-j-between">
+        <view v-if="cartPriceInfo.minusPrice" class="minus-info flex-row flex-a-center flex-j-between">
             <view class="minus-left flex-row flex-a-center">
                 <view class="minus-icon">减</view>
                 <view class="minus-title">满减优惠</view>
             </view>
-            <view class="minus-price">-¥{{ minusPrice }}</view>
+            <view class="minus-price">-¥{{ cartPriceInfo.minusPrice }}</view>
         </view>
-        <view v-if="minusPrice" class="dash-split">
+        <view v-if="cartPriceInfo.minusPrice" class="dash-split">
             <view class="left-circle"></view>
             <view class="right-circle"></view>
         </view>
         <view class="all-price-box flex-row flex-a-center flex-j-between">
             <view></view>
             <view class="all-price-info flex-row flex-a-center">
-                <view class="origin-price">共计￥{{ originOrderAmount }}</view>
-                <view class="discount-price">已优惠￥{{ minusPrice }}</view>
+                <view class="origin-price">共计￥{{ cartPriceInfo.orderOriginAmount }}</view>
+                <view class="discount-price">已优惠￥{{ cartPriceInfo.minusPrice || 0 }}</view>
                 <view class="pay-price">
-                    小计<span class="pay-price-color">￥{{ payPrice }}</span>
+                    小计<span class="pay-price-color">￥{{ cartPriceInfo.payPrice }}</span>
                 </view>
             </view>
         </view>
@@ -52,28 +63,28 @@
 import { computed, ref, getCurrentInstance } from "vue";
 import OrderFoodItem from "@/components/OrderFoodItem.vue";
 import { mapState, mapGetter } from "@/utils/mapVuex";
-import { foodListTransitionTime} from "../comfirmConfig"
+import { foodListTransitionTime } from "../comfirmConfig";
 import { ComputedStateI, ComputedGetterI } from "@/interface/vuex";
 import { CategoryItemI, FoodItemI } from "@/interface/menu";
 import { ShopItemI } from "@/interface/home";
 import { ComputedI, RefI } from "@/interface/vueInterface";
+import { CartPriceInfoI } from "@/store/getters/menu";
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
 interface StateF {
     shopInfo: ComputedStateI<ShopItemI>;
+    businessType: ComputedStateI<number>;
 }
 interface GetterF {
-    payPrice: ComputedGetterI<number>;
-    originOrderAmount: ComputedGetterI<number>;
-    minusPrice: ComputedGetterI<number>;
     orderFoodList: ComputedGetterI<FoodItemI[]>;
+    cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
 }
 
-const { shopInfo }: StateF = mapState(["shopInfo"]);
-const { originOrderAmount, minusPrice, payPrice, orderFoodList }: GetterF = mapGetter(["originOrderAmount", "minusPrice", "payPrice", "orderFoodList"]);
+const { shopInfo, businessType }: StateF = mapState();
+const { orderFoodList, cartPriceInfo }: GetterF = mapGetter();
 const defaultIndex = 3;
-const defaultMaxHeight = '480rpx'
-const displayMoreMaxHeight = `${(150 + 10) * orderFoodList.value.length + 50}rpx`
-const foodListMaxHeihgt: RefI<string> = ref(defaultMaxHeight)
+const defaultMaxHeight = "480rpx";
+const displayMoreMaxHeight = `${(150 + 10) * orderFoodList.value.length + 50}rpx`;
+const foodListMaxHeihgt: RefI<string> = ref(defaultMaxHeight);
 const displayMoreFlag: RefI<boolean> = ref<boolean>(false);
 const foodListAnimationData = ref(null);
 // const foodListAnimation = uni.createAnimation({
@@ -91,10 +102,9 @@ const foodListAnimationData = ref(null);
 function toggleDisplay() {
     displayMoreFlag.value = !displayMoreFlag.value;
     if (displayMoreFlag.value) {
-        foodListMaxHeihgt.value = displayMoreMaxHeight
+        foodListMaxHeihgt.value = displayMoreMaxHeight;
     } else {
-        foodListMaxHeihgt.value = defaultMaxHeight
-
+        foodListMaxHeihgt.value = defaultMaxHeight;
     }
 }
 function continueOrder() {
@@ -134,11 +144,12 @@ function continueOrder() {
         padding: 0 20rpx 0;
         box-sizing: border-box;
         overflow: hidden;
-        max-height: 480rpx;
-        transition: all .3s ease-in-out;
+        max-height: 500rpx;
+        transition: all 0.3s ease-in-out;
+        margin-bottom: 20rpx;
     }
     .display-more {
-        margin: 10rpx auto 30rpx;
+        margin: 10rpx auto 20rpx;
         width: 150rpx;
         height: 50rpx;
         box-sizing: border-box;
@@ -159,6 +170,15 @@ function continueOrder() {
         width: 8rpx;
         height: 14rpx;
         transform: rotate(90deg);
+    }
+    .pack-deliver-price-box {
+        padding: 20rpx;
+    }
+    .pack-price,
+    .deliver-price {
+        padding: 0 20rpx 20rpx;
+        font-size: 28rpx;
+        color: #666;
     }
     .dash-split {
         position: relative;

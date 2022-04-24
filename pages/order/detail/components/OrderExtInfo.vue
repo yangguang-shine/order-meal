@@ -48,7 +48,6 @@ interface StateF {
     orderDetail: ComputedStateI<OrderDetailI>
 }
 const { orderDetail }:StateF  = mapState(['orderDetail'])
-console.log(orderDetail.value)
 
 function copyOrderKey() {
     wx.setClipboardData({

@@ -33,10 +33,10 @@ interface ActionF {
     getDefaultAddress: ComputedActionI<void, AddressItemI>;
 }
 
-const { noteInputFlag }: StateF = mapState(["noteInputFlag"]);
+const { noteInputFlag }: StateF = mapState();
 
-const { setTakeOutTime }: MutationF = mapMutation(["setTakeOutTime"]);
-const { getDefaultAddress }: ActionF = mapAction(["getDefaultAddress"]);
+const { setTakeOutTime }: MutationF = mapMutation();
+const { getDefaultAddress }: ActionF = mapAction();
 onLoad(() => {
     getCurrentTakeOutTime();
 })

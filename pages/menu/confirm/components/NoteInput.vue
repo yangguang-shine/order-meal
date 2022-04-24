@@ -31,8 +31,8 @@ interface MutationF {
     setNoteInputFlag: ComputedMutationI<boolean>;
     setNoteText: ComputedMutationI<string>;
 }
-const { noteText }: StateF = mapState(["noteText"]);
-const { setNoteInputFlag, setNoteText }: MutationF = mapMutation(["setNoteInputFlag", "setNoteText"]);
+const { noteText }: StateF = mapState();
+const { setNoteInputFlag, setNoteText }: MutationF = mapMutation();
 const noteInput: RefI<string> = ref(noteText.value);
 const maxlength: number = 20;
 const noteInputLength: ComputedI<number> = computed(() => noteInput.value.length);

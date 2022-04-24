@@ -29,11 +29,11 @@ interface MutationF {
 interface ActionF {
     submitOrder: ComputedActionI
 }
-const { cartCategoryList,shopInfo }: StateF = mapState(["cartCategoryList", "shopInfo"]);
+const { cartCategoryList,shopInfo }: StateF = mapState();
 
-const { clearCart, setNoteText }:MutationF = mapMutation(["clearCart", "setNoteText"]);
+const { clearCart, setNoteText }:MutationF = mapMutation();
 
-const { submitOrder }:ActionF = mapAction(["submitOrder"]);
+const { submitOrder }:ActionF = mapAction();
 
 const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
 

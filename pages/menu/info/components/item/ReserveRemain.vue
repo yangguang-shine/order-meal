@@ -27,9 +27,9 @@ const props: PropsI = withDefaults(defineProps<PropsI>(), {
     position: absolute;
     top: -40rpx;
     right: 0rpx;
-    height: 28rpx;
+    height: 26rpx;
     border-radius: 4rpx;
-    font-size: 22rpx;
+    font-size: 20rpx;
     color: #fff;
     // padding: 0 2rpx;
     width: 90rpx;

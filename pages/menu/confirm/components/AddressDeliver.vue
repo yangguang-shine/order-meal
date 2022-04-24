@@ -45,8 +45,8 @@ interface MutationF {
     setTakeOutTime: ComputedMutationI<string>
 }
 
-const { defaultAddress, takeOutTime }:StateF = mapState(["defaultAddress", "takeOutTime"]);
-const { setTakeOutTime }: MutationF = mapMutation(["setTakeOutTime"]);
+const { defaultAddress, takeOutTime }:StateF = mapState();
+const { setTakeOutTime }: MutationF = mapMutation();
 function toPagesAddressList() {
     $myrouter.navigateTo({
         name: "address/list",

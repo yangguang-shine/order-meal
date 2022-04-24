@@ -28,8 +28,8 @@ interface MutationF {
     setNoteInputFlag: ComputedMutationI<boolean>;
 }
 
-const { noteText }: StateF = mapState(["noteText"]);
-const { setNoteInputFlag }: MutationF = mapMutation(["setNoteInputFlag"]);
+const { noteText }: StateF = mapState();
+const { setNoteInputFlag }: MutationF = mapMutation();
 function showNoteInput() {
     setNoteInputFlag(true);
 }

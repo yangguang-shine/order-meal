@@ -47,8 +47,7 @@ export const mapGetter = function (namespace?: string): any {
         if (!getter) {
             getter = computed(() => store.getters);
         }
-        console.log('getter.value')
-        console.log(getter)
+
         return toRefs(reactive(getter.value));
     }
 };

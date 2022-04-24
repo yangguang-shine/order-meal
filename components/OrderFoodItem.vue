@@ -10,8 +10,7 @@
 		</div>
 		<div class="food-count">×{{ orderFoodItem.orderCount }}</div>
 		<div class="food-count-price">
-			<span class="money-unit">¥</span>
-			{{ orderFoodItem.foodItemAmount }}
+			<span class="money-unit">¥</span>{{ orderFoodItem.foodItemAmount }}
 		</div>
 	</div>
 </template>
@@ -27,8 +26,9 @@ defineProps({
 
 <style lang="scss" scoped>
 .order-food-item-container {
+	    margin-top: 10rpx;
+
 	    padding: 20rpx;
-	    margin-bottom: 10rpx;
 	    background-color: #f8f8f8;
 	.food-img {
 	    height: 110rpx;
