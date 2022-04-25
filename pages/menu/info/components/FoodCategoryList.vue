@@ -22,7 +22,7 @@
 
 <script lang="ts" setup>
 import FoodItem from "./item/FoodItem.vue";
-import { getRpxToPx, navigationBarHeightPX, selectQuery } from "@/utils/index";
+import { getRpxToPx, selectQuery } from "@/utils/index";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { topBarHeightPX, minusPromotionsHeightRPX, footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX } from "../infoConfig";
 import { defineComponent, getCurrentInstance, computed } from "vue";
@@ -77,7 +77,7 @@ const handleScroll = async (e) => {
     for (let i = 0; i < categoryList.value.length; i++) {
         const categoryItem = categoryList.value[i];
         const res = await selectQuery(`#${categoryItem.categoryIDMain}`, currentInstance);
-        if (topBarHeightPX <= res.top + navigationBarHeightPX || res.bottom + navigationBarHeightPX > topBarHeightPX) {
+        if (topBarHeightPX <= res.top || res.bottom  > topBarHeightPX) {
             setSelectedCategoryID(categoryItem.categoryID);
             setCategoryIDMain("");
             setCategoryIDAside(categoryItem.categoryIDAside);

@@ -20,18 +20,18 @@ interface SystemInfoI {
     windowWidth: number;
     [index: string]: any;
 }
-export let navigationBarHeightPX = 0
+export let navigationBarHeightPX = 0;
 // H5使用的是模拟导航栏 44px
 // #ifdef H5
-navigationBarHeightPX = 44
+navigationBarHeightPX = 44;
 // #endif
-// 
-export let tabBarHeightPX = 0
+//
+export let tabBarHeightPX = 0;
 // H5使用的是模拟tabBar 50px
 // #ifdef H5
-tabBarHeightPX = 50
+tabBarHeightPX = 50;
 // #endif
-// 
+//
 let systemInfo: SystemInfoI;
 
 export const getRpxToPx = (rpx: number): number => {
@@ -55,13 +55,7 @@ export const authorize = (scopeName: string): Promise<any> => {
     });
 };
 
-export const showModal = ({
-    title = "提示",
-    content = "",
-    showCancelFlag = false,
-    cancelText = "取消",
-    confirmText = "确定",
-}) : Promise<any> => {
+export const showModal = ({ title = "提示", content = "", showCancelFlag = false, cancelText = "取消", confirmText = "确定" }): Promise<any> => {
     return new Promise((resolve, reject) => {
         uni.showModal({
             title,
@@ -100,12 +94,7 @@ export const showLoading = ({ title = "加载中", mask = true } = {}): Promise<
     });
 };
 
-export const showToast = ({
-    title = "",
-    icon = "none",
-    duration = 1500,
-    mask = true,
-} = {}) : Promise<any>=> {
+export const showToast = ({ title = "", icon = "none", duration = 1500, mask = true } = {}): Promise<any> => {
     return new Promise((resolve, reject) => {
         uni.showToast({
             title,
@@ -113,11 +102,11 @@ export const showToast = ({
             duration,
             mask,
             success: async (res: any) => {
-                await delaySync(duration)
+                await delaySync(duration);
                 resolve(res);
             },
             fail: async () => {
-                await delaySync(duration)
+                await delaySync(duration);
                 reject();
             },
         });
@@ -137,7 +126,7 @@ export const hideLoading = (): Promise<any> => {
     });
 };
 
-export const hideToast = ():Promise<any> => {
+export const hideToast = (): Promise<any> => {
     return new Promise((resolve, reject) => {
         uni.hideToast({
             success: (res: any) => {
@@ -163,23 +152,21 @@ const formatTime = (unit: number): string => {
     return timeStr.length === 1 ? `0${timeStr}` : timeStr;
 };
 
-export const timeStampTranslate = (timeStame: number) : string => {
+export const timeStampTranslate = (timeStame: number): string => {
     const orderDate: Date = new Date(+timeStame);
     const year: number = orderDate.getFullYear();
     const month: number = orderDate.getMonth() + 1;
     const date: number = orderDate.getDate();
     const hour: number = orderDate.getHours();
     const minute: number = orderDate.getMinutes();
-    return `${year}-${formatTime(month)}-${formatTime(date)} ${formatTime(
-        hour
-    )}:${formatTime(minute)}`;
+    return `${year}-${formatTime(month)}-${formatTime(date)} ${formatTime(hour)}:${formatTime(minute)}`;
 };
 
 /**
  * 换算金额，接口返回的数值单位为（分）
  * @param {*} num
  */
-export function formatAmountNum(num: number) : string {
+export function formatAmountNum(num: number): string {
     const numStr: string = (num / 100).toFixed(2);
     return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -188,34 +175,58 @@ function format(number: string): string {
     return number && number.replace(/(?!^)(?=(\d{3})+\.)/g, ",");
 }
 
-export function toFixedToNumber(num: number ,remain: number = 2) {
-   return Number(num.toFixed(remain))
+export function toFixedToNumber(num: number, remain: number = 2) {
+    return Number(num.toFixed(remain));
 }
 
-export function selectQuery(id: string, currentInstance?: any) : Promise<any> {
-    if (currentInstance) {
-        return new Promise((resolve, reject) => {
-            uni.createSelectorQuery()
-                .in(currentInstance)
-                .select(id)
-                .boundingClientRect((res: any) => {
-                    resolve(res);
-                })
-                .exec();
-        });
-    } else {
-        return new Promise((resolve, reject) => {
-            uni.createSelectorQuery()
-                .select(id)
-                .boundingClientRect((res: any) => {
-                    resolve(res);
-                })
-                .exec();
-        });
-    }
+export function selectQuery(id: string, currentInstance?: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+        let query: any = uni.createSelectorQuery();
+        if (currentInstance) {
+            query = query.in(currentInstance);
+        }
+        query
+            .select(id)
+            .boundingClientRect((res: any) => {
+                console.log("navigationBarHeightPX");
+                console.log(navigationBarHeightPX);
+                res.top = res.top + navigationBarHeightPX;
+                res.bottom = res.bottom + navigationBarHeightPX;
+                resolve(res);
+            })
+            .exec();
+    });
 
+    // if (currentInstance) {
+    //     return new Promise((resolve, reject) => {
+    //         uni.createSelectorQuery()
+    //             .in(currentInstance)
+    //             .select(id)
+    //             .boundingClientRect((res: any) => {
+    //                 console.log("navigationBarHeightPX");
+    //                 console.log(navigationBarHeightPX);
+    //                 res.top = res.top + navigationBarHeightPX;
+    //                 res.bottom = res.bottom + navigationBarHeightPX;
+    //                 resolve(res);
+    //             })
+    //             .exec();
+    //     });
+    // } else {
+    //     return new Promise((resolve, reject) => {
+    //         uni.createSelectorQuery()
+    //             .select(id)
+    //             .boundingClientRect((res: any) => {
+    //                 console.log("navigationBarHeightPX");
+    //                 console.log(navigationBarHeightPX);
+    //                 res.top = res.top + navigationBarHeightPX;
+    //                 res.bottom = res.bottom + navigationBarHeightPX;
+    //                 resolve(res);
+    //             })
+    //             .exec();
+    //     });
+    // }
 }
-let offsetLeft = 0
-export function getOffsetLeft(addPositionInfo: PositionInfoI, cartImgPositionInfo:PositionInfoI): number {
-    const offsetLeft =  addPositionInfo.left-cartImgPositionInfo.left
+let offsetLeft = 0;
+export function getOffsetLeft(addPositionInfo: PositionInfoI, cartImgPositionInfo: PositionInfoI): number {
+    const offsetLeft = addPositionInfo.left - cartImgPositionInfo.left;
 }

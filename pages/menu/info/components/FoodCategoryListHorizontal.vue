@@ -17,7 +17,7 @@
 <script lang="ts" setup>
 import FoodItem from "./item/FoodItem.vue";
 import FoodItemHorizontal from "./item/FoodItemHorizontal.vue";
-import { getRpxToPx, navigationBarHeightPX, selectQuery } from "@/utils/index";
+import { getRpxToPx, selectQuery } from "@/utils/index";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { topBarHeightPX, minusPromotionsHeightRPX, footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX, categoryAsideBarHorizontalHeightRPX, categoryAsideBarHorizontalAndTopBarHeightPX } from "../infoConfig";
 import { defineComponent, getCurrentInstance, computed } from "vue";
@@ -74,7 +74,7 @@ const handleScroll = async (e) => {
     for (let i = 0; i < categoryList.value.length; i++) {
         const categoryItem = categoryList.value[i];
         const res = await selectQuery(`#${categoryItem.categoryIDMain}`, currentInstance);
-        if (categoryAsideBarHorizontalAndTopBarHeightPX <= res.top + navigationBarHeightPX || res.bottom + navigationBarHeightPX > categoryAsideBarHorizontalAndTopBarHeightPX) {
+        if (categoryAsideBarHorizontalAndTopBarHeightPX <= res.top || res.bottom > categoryAsideBarHorizontalAndTopBarHeightPX) {
             setSelectedCategoryID(categoryItem.categoryID);
             setCategoryIDMain("");
             setCategoryIDAside(categoryItem.categoryIDAside);

@@ -12,6 +12,7 @@ import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { topAddressSearchHeight } from "../homeConfig";
 import { TabItemI, ComputedStateI, ComputedMutationI, ComputedActionI } from "@/interface/index";
 import { selectQuery } from "@/utils/";
+import { ShopListParamsI } from "@/store/actions/home";
 const { $showLoading, $hideLoading, $showModal, $delaySync } = getCurrentInstance().proxy;
 
 interface StateF {
@@ -27,7 +28,7 @@ interface MutationF {
     setTabListTop: ComputedMutationI<number>;
 }
 interface ActionF {
-    getRecommandShopList: ComputedActionI<void>;
+    getRecommandShopList: ComputedActionI<ShopListParamsI>;
 }
 const { tabList, selectedTabItem, tabListFixedFlag, tabListTop }: StateF = mapState();
 const { changeTabItem, setTabListTop }: MutationF = mapMutation();
@@ -53,7 +54,10 @@ const clickTabItem = async (tabItem: TabItemI) => {
     if (selectedTabItem.value.type === tabItem.type) return;
     try {
         $showLoading();
-        await getRecommandShopList();
+        await getRecommandShopList({
+            type: tabItem.type,
+            businessType: 2
+        });
         // await $delaySync(2000)
         changeTabItem(tabItem);
         uni.pageScrollTo({

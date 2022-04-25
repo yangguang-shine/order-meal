@@ -2,11 +2,14 @@ import fetch from "@/utils/fetch";
 import { shopImgPath } from "@/config/index";
 import { ActionI, ActionContextI, OriginShopItemI, ShopItemI } from "@/interface/index";
 import getBusinessTypeInfo from "@/utils/getBusinessTypeInfo";
-
-async function getRecommandShopList({ commit, state }: ActionContextI, params = {}) {
+export interface ShopListParamsI {
+    type?: string,
+    businessType?: number
+}
+async function getRecommandShopList({ commit, state }: ActionContextI, { type = "", businessType = 2 }: ShopListParamsI = {}) {
     let data: OriginShopItemI[] = await fetch("shop/list", {
-        businessType: 2,
-        type: state.selectedTabItem.type,
+        businessType,
+        type,
         latitude: state.defaultAddress.latitude,
         longitude: state.defaultAddress.longitude,
     });
@@ -15,7 +18,7 @@ async function getRecommandShopList({ commit, state }: ActionContextI, params = 
             ...item,
             minusList: JSON.parse(item.minus),
             fullImgPath: `${shopImgPath}/${item.imgUrl}`,
-            ...getBusinessTypeInfo(item.businessTypes)
+            ...getBusinessTypeInfo(item.businessTypes),
         })
     );
     // recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList));
@@ -26,13 +29,11 @@ async function getRecommandShopList({ commit, state }: ActionContextI, params = 
 
 async function getShopList(
     { commit, state }: ActionContextI,
-    params: {
-        businessType: number;
-        type: string;
-    }
+    { type = "", businessType = 2 }: ShopListParamsI = {}
 ) {
     let data: OriginShopItemI[] = await fetch("shop/list", {
-        ...params,
+        type,
+        businessType,
         latitude: state.defaultAddress.latitude,
         longitude: state.defaultAddress.longitude,
     });
@@ -41,7 +42,7 @@ async function getShopList(
             ...item,
             minusList: JSON.parse(item.minus),
             fullImgPath: `${shopImgPath}/${item.imgUrl}`,
-            ...getBusinessTypeInfo(item.businessTypes)
+            ...getBusinessTypeInfo(item.businessTypes),
         })
     );
     // recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList));
@@ -56,8 +57,7 @@ async function getShopInfo({ state, commit }: ActionContextI, payload: { shopID:
         ...originShopInfo,
         minusList: JSON.parse(originShopInfo.minus),
         fullImgPath: `${shopImgPath}/${originShopInfo.imgUrl}`,
-        ...getBusinessTypeInfo(originShopInfo.businessTypes)
-
+        ...getBusinessTypeInfo(originShopInfo.businessTypes),
     };
     commit("saveShopInfo", shopInfo);
     return shopInfo;

@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getRpxToPx, hideLoading, navigationBarHeightPX, showLoading } from "@/utils/index";
+import { getRpxToPx, hideLoading, showLoading } from "@/utils/index";
 import CategoryAsideBar from "./components/CategoryAsideBar.vue";
 import CategoryAsideBarHorizontal from "./components/CategoryAsideBarHorizontal.vue";
 import FoodCategoryList from "./components/FoodCategoryList.vue";

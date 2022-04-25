@@ -1,5 +1,5 @@
 <template>
-    <view class="home-container">
+    <view class="home-container" id="home-container">
         <TopAddressSearch></TopAddressSearch>
         <ToolsList></ToolsList>
         <RecommandInfo></RecommandInfo>
@@ -17,16 +17,17 @@ import ToolsList from "./components/ToolsList.vue";
 import RecommandInfo from "./components/RecommandInfo.vue";
 import SearchShop from "./components/SearchShop.vue";
 import { topAddressSearchHeight } from "./homeConfig";
-import { getCurrentInstance } from "vue";
+import { getCurrentInstance, onMounted } from "vue";
 import { onShow, onLoad, onPageScroll, onHide, onUnload } from "@dcloudio/uni-app";
-import { AddressItemI, ComputedActionI, ComputedMutationI, ComputedStateI, ShopItemI } from "@/interface/index";
-import { hideLoading, showLoading, showModal, tabBarHeightPX } from "@/utils/";
+import { AddressItemI, ComputedActionI, ComputedMutationI, ComputedStateI, ShopItemI, TabItemI } from "@/interface/index";
+import { hideLoading, selectQuery, showLoading, showModal, tabBarHeightPX } from "@/utils/";
 import router from "@/utils/router";
+import { ShopListParamsI } from "@/store/actions/home";
 
 interface StateF {
     searchShopFlag: ComputedStateI<boolean>;
     tabListTop: ComputedStateI<number>;
-    
+    selectedTabItem: ComputedStateI<TabItemI>;
 }
 interface MutationF {
     setTopAddressWidthFlag: ComputedMutationI<boolean>;
@@ -34,32 +35,51 @@ interface MutationF {
 }
 interface ActionF {
     getDefaultAddress: ComputedActionI<void, AddressItemI>;
-    getRecommandShopList: ComputedActionI<void>;
+    getRecommandShopList: ComputedActionI<ShopListParamsI>;
 }
-const { searchShopFlag, tabListTop } : StateF = mapState()
+const { searchShopFlag, tabListTop, selectedTabItem }: StateF = mapState();
 const { setTopAddressWidthFlag, setTabListFixedFlag }: MutationF = mapMutation();
 
 const { getDefaultAddress, getRecommandShopList }: ActionF = mapAction();
 
 // console.log(JSON.stringify(addressList.value))
 onShow(() => {
-    uni.pageScrollTo({
-        scrollTop: 0,
-        duration: 0,
-    });
+    console.log();
+    console.log("onShow");
     init();
+    setTimeout(async () => {
+        const res = await selectQuery("#home-container");
+        console.log(res);
+        if (-res.top >= tabListTop.value - topAddressSearchHeight) {
+            setTabListFixedFlag(true);
+        } else {
+            setTabListFixedFlag(false);
+        }
+    }, 0);
+
+    // setTimeout(() => {
+    //     console.log(111)
+    //         uni.pageScrollTo({
+    //     scrollTop: 0,
+    //     duration: 200,
+    // });
+    // }, 0);
+});
+onLoad(() => {
+    console.log("onLoad");
+});
+onMounted(() => {
+    console.log("onMounted");
 });
 onHide(() => {
-    console.log('1page hide >>>>>')
-})
+    console.log("page hide");
+});
 onUnload(() => {
-    console.log('1page onUnload >>>>>')
-})
+    console.log("onUnload");
+});
 
 onPageScroll((e: any) => {
-    console.log('onPageScroll')
-    console.log(e.scrollTop)
-    console.log(topAddressSearchHeight)
+    console.log("onPageScroll");
     if (e.scrollTop > topAddressSearchHeight) {
         setTopAddressWidthFlag(true);
     } else {
@@ -90,7 +110,10 @@ async function init() {
     try {
         showLoading();
         await toGetDefaultAddress();
-        await getRecommandShopList();
+        await getRecommandShopList({
+            type: selectedTabItem.value.type,
+            businessType: 2,
+        });
     } catch (e) {
         console.log(e);
     } finally {
