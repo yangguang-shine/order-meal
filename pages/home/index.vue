@@ -2,6 +2,7 @@
     <view class="home-container" id="home-container">
         <TopAddressSearch></TopAddressSearch>
         <ToolsList></ToolsList>
+        <Banner></Banner>
         <RecommandInfo></RecommandInfo>
         <SearchShop v-if="searchShopFlag" :bottom="tabBarHeightPX"></SearchShop>
     </view>
@@ -14,6 +15,7 @@ import getShopMinusList from "@/utils/getShopMinusList";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import TopAddressSearch from "./components/TopAddressSearch.vue";
 import ToolsList from "./components/ToolsList.vue";
+import Banner from "./components/Banner.vue";
 import RecommandInfo from "./components/RecommandInfo.vue";
 import SearchShop from "./components/SearchShop.vue";
 import { topAddressSearchHeight } from "./homeConfig";
@@ -80,12 +82,13 @@ onUnload(() => {
 
 onPageScroll((e: any) => {
     console.log("onPageScroll");
+    console.log(e)
     if (e.scrollTop > topAddressSearchHeight) {
         setTopAddressWidthFlag(true);
     } else {
         setTopAddressWidthFlag(false);
     }
-    if (e.scrollTop >= tabListTop.value - topAddressSearchHeight) {
+    if (e.scrollTop > tabListTop.value - topAddressSearchHeight) {
         setTabListFixedFlag(true);
     } else {
         setTabListFixedFlag(false);

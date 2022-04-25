@@ -16,7 +16,7 @@ interface ToolItemI {
     icon: string;
     title: string;
     name?: string;
-    businessType?: string;
+    businessType?: number;
 }
 const toolsList: ToolItemI[] = reactive([
     {
@@ -36,27 +36,7 @@ const toolsList: ToolItemI[] = reactive([
         title: "自提",
         name: "shop",
         businessType: 3,
-    },
-    {
-        icon: "",
-        title: "嘻嘻嘻4",
-    },
-    {
-        icon: "",
-        title: "嘻嘻嘻5",
-    },
-    {
-        icon: "",
-        title: "嘻嘻嘻6",
-    },
-    {
-        icon: "",
-        title: "嘻嘻嘻7",
-    },
-    {
-        icon: "",
-        title: "嘻嘻嘻8",
-    },
+    }
 ] as ToolItemI[]);
 
 function toToolDetail(toolItem: ToolItemI) {
