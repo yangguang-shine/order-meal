@@ -192,16 +192,28 @@ export function toFixedToNumber(num: number ,remain: number = 2) {
    return Number(num.toFixed(remain))
 }
 
-export function selectQuery(id: string, currentInstance: any) : Promise<any> {
-    return new Promise((resolve, reject) => {
-        uni.createSelectorQuery()
-            .in(currentInstance)
-            .select(id)
-            .boundingClientRect((res: any) => {
-                resolve(res);
-            })
-            .exec();
-    });
+export function selectQuery(id: string, currentInstance?: any) : Promise<any> {
+    if (currentInstance) {
+        return new Promise((resolve, reject) => {
+            uni.createSelectorQuery()
+                .in(currentInstance)
+                .select(id)
+                .boundingClientRect((res: any) => {
+                    resolve(res);
+                })
+                .exec();
+        });
+    } else {
+        return new Promise((resolve, reject) => {
+            uni.createSelectorQuery()
+                .select(id)
+                .boundingClientRect((res: any) => {
+                    resolve(res);
+                })
+                .exec();
+        });
+    }
+
 }
 let offsetLeft = 0
 export function getOffsetLeft(addPositionInfo: PositionInfoI, cartImgPositionInfo:PositionInfoI): number {

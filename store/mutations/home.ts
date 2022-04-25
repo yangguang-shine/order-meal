@@ -1,6 +1,7 @@
 import { MutationI, StateI } from "@/interface/index";
 
 import { ShopItemI, TabItemI } from "@/interface/index";
+import { navigationBarHeightPX, tabBarHeightPX } from "@/utils/";
 import { StateOrderI } from "../state/order";
 
 function setTopAddressWidthFlag(state: StateI, topAddressWidthFlag: boolean): void {
@@ -27,6 +28,11 @@ function setSearchShopFlag(state: StateI, searchShopFlag: boolean): void {
 function saveBusinessType(state: StateI, type: number): void {
     state.businessType = type;
 }
+function setTabListTop(state: StateI, tabListTop: number): void {
+    
+    state.tabListTop = tabListTop + navigationBarHeightPX;
+}
+
 
 
 
@@ -38,4 +44,5 @@ export default {
     saveShopInfo,
     setSearchShopFlag,
     saveBusinessType,
+    setTabListTop
 };

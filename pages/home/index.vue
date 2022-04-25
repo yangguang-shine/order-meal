@@ -16,7 +16,7 @@ import TopAddressSearch from "./components/TopAddressSearch.vue";
 import ToolsList from "./components/ToolsList.vue";
 import RecommandInfo from "./components/RecommandInfo.vue";
 import SearchShop from "./components/SearchShop.vue";
-import { topAddressSearchHeight, tabListTop } from "./homeConfig";
+import { topAddressSearchHeight } from "./homeConfig";
 import { getCurrentInstance } from "vue";
 import { onShow, onLoad, onPageScroll, onHide, onUnload } from "@dcloudio/uni-app";
 import { AddressItemI, ComputedActionI, ComputedMutationI, ComputedStateI, ShopItemI } from "@/interface/index";
@@ -25,6 +25,8 @@ import router from "@/utils/router";
 
 interface StateF {
     searchShopFlag: ComputedStateI<boolean>;
+    tabListTop: ComputedStateI<number>;
+    
 }
 interface MutationF {
     setTopAddressWidthFlag: ComputedMutationI<boolean>;
@@ -34,7 +36,7 @@ interface ActionF {
     getDefaultAddress: ComputedActionI<void, AddressItemI>;
     getRecommandShopList: ComputedActionI<void>;
 }
-const { searchShopFlag } : StateF = mapState()
+const { searchShopFlag, tabListTop } : StateF = mapState()
 const { setTopAddressWidthFlag, setTabListFixedFlag }: MutationF = mapMutation();
 
 const { getDefaultAddress, getRecommandShopList }: ActionF = mapAction();
@@ -55,12 +57,15 @@ onUnload(() => {
 })
 
 onPageScroll((e: any) => {
+    console.log('onPageScroll')
+    console.log(e.scrollTop)
+    console.log(topAddressSearchHeight)
     if (e.scrollTop > topAddressSearchHeight) {
         setTopAddressWidthFlag(true);
     } else {
         setTopAddressWidthFlag(false);
     }
-    if (e.scrollTop >= tabListTop - topAddressSearchHeight) {
+    if (e.scrollTop >= tabListTop.value - topAddressSearchHeight) {
         setTabListFixedFlag(true);
     } else {
         setTabListFixedFlag(false);

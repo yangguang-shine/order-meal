@@ -7,27 +7,48 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, computed, getCurrentInstance, ref } from "vue";
+import { defineComponent, computed, getCurrentInstance, ref, onMounted } from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
-import { topAddressSearchHeight, tabListTop } from "../homeConfig";
+import { topAddressSearchHeight } from "../homeConfig";
 import { TabItemI, ComputedStateI, ComputedMutationI, ComputedActionI } from "@/interface/index";
+import { selectQuery } from "@/utils/";
 const { $showLoading, $hideLoading, $showModal, $delaySync } = getCurrentInstance().proxy;
 
 interface StateF {
     tabList: ComputedStateI<TabItemI[]>;
     selectedTabItem: ComputedStateI<TabItemI>;
     tabListFixedFlag: ComputedStateI<boolean>;
+    tabListTop: ComputedStateI<number>;
+    
 }
 
 interface MutationF {
     changeTabItem: ComputedMutationI<TabItemI>;
+    setTabListTop: ComputedMutationI<number>;
 }
 interface ActionF {
     getRecommandShopList: ComputedActionI<void>;
 }
-const { tabList, selectedTabItem, tabListFixedFlag }: StateF = mapState(["tabList", "selectedTabItem", "tabListFixedFlag"]);
-const { changeTabItem }: MutationF = mapMutation(["changeTabItem"]);
-const { getRecommandShopList }: ActionF = mapAction(["getRecommandShopList"]);
+const { tabList, selectedTabItem, tabListFixedFlag, tabListTop }: StateF = mapState();
+const { changeTabItem, setTabListTop }: MutationF = mapMutation();
+const { getRecommandShopList }: ActionF = mapAction();
+
+onMounted(() => {
+    getTabListTop();
+    //    uni.createSelectorQuery()
+    //         .select('#tab-list-fixed-id')
+    //         .boundingClientRect((res: any) => {
+    //             console.log('res>>>')
+    //             console.log(res)
+    //         })
+    //         .exec();
+});
+async function getTabListTop() {
+    const res = await selectQuery("#tab-list-fixed-id");
+    console.log(res);
+    const { top } = res;
+    setTabListTop(top);
+}
 const clickTabItem = async (tabItem: TabItemI) => {
     if (selectedTabItem.value.type === tabItem.type) return;
     try {
@@ -36,7 +57,7 @@ const clickTabItem = async (tabItem: TabItemI) => {
         // await $delaySync(2000)
         changeTabItem(tabItem);
         uni.pageScrollTo({
-            scrollTop: tabListTop - topAddressSearchHeight,
+            scrollTop: tabListTop.value - topAddressSearchHeight,
             duration: 200,
         });
     } catch (e) {

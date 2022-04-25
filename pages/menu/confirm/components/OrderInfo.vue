@@ -40,7 +40,7 @@
                 <view class="minus-icon">减</view>
                 <view class="minus-title">满减优惠</view>
             </view>
-            <view class="minus-price">-¥{{ cartPriceInfo.minusPrice }}</view>
+            <view class="minus-price" :style="{'color': shopInfo.mainColor}">-¥{{ cartPriceInfo.minusPrice }}</view>
         </view>
         <view v-if="cartPriceInfo.minusPrice" class="dash-split">
             <view class="left-circle"></view>
@@ -49,10 +49,10 @@
         <view class="all-price-box flex-row flex-a-center flex-j-between">
             <view></view>
             <view class="all-price-info flex-row flex-a-center">
-                <view class="origin-price">共计￥{{ cartPriceInfo.orderOriginAmount }}</view>
-                <view class="discount-price">已优惠￥{{ cartPriceInfo.minusPrice || 0 }}</view>
+                <view class="origin-price">共计¥{{ cartPriceInfo.orderOriginAmount }}</view>
+                <view class="discount-price">已优惠¥{{ cartPriceInfo.minusPrice || 0 }}</view>
                 <view class="pay-price">
-                    小计<span class="pay-price-color">￥{{ cartPriceInfo.payPrice }}</span>
+                    小计<span class="pay-price-color" :style="{'color': shopInfo.mainColor}">¥{{ cartPriceInfo.payPrice }}</span>
                 </view>
             </view>
         </view>

@@ -8,6 +8,7 @@ export interface StateHomeI {
     shopInfo: ShopItemI;
     searchShopFlag: boolean,
     businessType: number;
+    tabListTop: number
 }
 export const tabList: TabItemI[] = [
     {
@@ -34,6 +35,7 @@ const state: StateHomeI = {
     shopInfo: initShopItem,
     searchShopFlag: false,
     businessType: 2,
+    tabListTop: 0
 };
 
 // minusList1: []
