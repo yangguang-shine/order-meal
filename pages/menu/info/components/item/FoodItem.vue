@@ -8,7 +8,7 @@
             </view>
             <view class="food-price-button flex-row flex-j-between flex-a-center">
                 <view class="food-price" :style="{'color': shopInfo.mainColor}">¥{{ foodItem.price }}</view>
-                <FoodAddMinusItem v-if="foodItem.reserveCount" :foodItem="foodItem"></FoodAddMinusItem>
+                <FoodAddMinusItem v-if="foodItem.reserveCount > 0" :foodItem="foodItem"></FoodAddMinusItem>
                 <ReserveNotEnough v-else></ReserveNotEnough>
             </view>
         </view>

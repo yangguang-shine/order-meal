@@ -33,9 +33,9 @@ interface ActionF {
     }>;
 }
 
-const { tabList, routerBusinessType }: StateF = mapState(["tabList", "routerBusinessType"]);
-const { setSearchShopListFlag }: MutationF = mapMutation(["setSearchShopListFlag"]);
-const { getShopList }: ActionF = mapAction(["getShopList"]);
+const { tabList, routerBusinessType }: StateF = mapState();
+const { setSearchShopListFlag }: MutationF = mapMutation();
+const { getShopList }: ActionF = mapAction();
 const selectedTabItem: RefI<TabItemI> = ref(tabList.value[0]);
 onLoad(() => {
     init();

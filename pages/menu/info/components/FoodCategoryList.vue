@@ -48,10 +48,10 @@ interface MutationF {
     setCategoryIDMain: ComputedMutationI<string>;
     setCategoryIDAside: ComputedMutationI<string>;
 }
-const { categoryList, categoryIDMain }: StateF = mapState(["categoryList", "categoryIDMain"]);
-const { minusPromotionsObject }: GetterF = mapGetter([ "minusPromotionsObject"]);
+const { categoryList, categoryIDMain }: StateF = mapState();
+const { minusPromotionsObject }: GetterF = mapGetter();
 
-const { setFoodDetailFlag, setFoodInfo,setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside,  }: MutationF = mapMutation(["setFoodDetailFlag", "setFoodInfo","setSelectedCategoryID", "setCategoryIDMain", "setCategoryIDAside"]);
+const { setFoodDetailFlag, setFoodInfo,setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside,  }: MutationF = mapMutation();
 const categoryItemLastPaddingBottom: string = computed((): string => (minusPromotionsObject.value.show ? footerInfoAndMinusPromotionsHeightRPX + 20 + "rpx" : footerInfoHeightRPX + 20 + "rpx"));
 
 function toShowFoodDetail(foodItem: FoodItemI) {
@@ -60,7 +60,7 @@ function toShowFoodDetail(foodItem: FoodItemI) {
 }
 const debounce = (fn: any, delay: number) => {
     let timer: any;
-    return (e) => {
+    return (e: any) => {
         if (timer) {
             clearTimeout(timer);
         }
@@ -73,7 +73,7 @@ const debounce = (fn: any, delay: number) => {
 
 onLoad(() => {});
 
-const handleScroll = async (e) => {
+const handleScroll = async (e: any) => {
     for (let i = 0; i < categoryList.value.length; i++) {
         const categoryItem = categoryList.value[i];
         const res = await selectQuery(`#${categoryItem.categoryIDMain}`, currentInstance);

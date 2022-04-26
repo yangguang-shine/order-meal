@@ -13,7 +13,7 @@
                         <div class="food-price" :style="{ color: shopInfo.mainColor }">¥{{ foodInfo.price }}</div>
                         <div v-if="foodInfo.unit" class="food-unit">{{ packPriceText }}/{{ foodInfo.unit }}</div>
                     </div>
-                    <FoodAddMinusItem v-if="foodInfo.reserveCount" :foodItem="foodInfo"></FoodAddMinusItem>
+                    <FoodAddMinusItem v-if="foodInfo.reserveCount > 0" :foodItem="foodInfo"></FoodAddMinusItem>
                     <ReserveNotEnough v-else></ReserveNotEnough>
                 </view>
                 <div class="food-detail-title">菜品详情</div>

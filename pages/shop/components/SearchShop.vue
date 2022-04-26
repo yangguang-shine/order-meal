@@ -32,8 +32,8 @@ interface MutationF {
     setBusinessType: ComputedMutationI<number>;
 }
 
-const { tabList, shopList, routerBusinessType }: StateF = mapState(["tabList", "shopList", "routerBusinessType"]);
-const { setSearchShopListFlag, setShopInfo, setBusinessType }: MutationF = mapMutation(["setSearchShopListFlag", "setShopInfo", "setBusinessType"]);
+const { tabList, shopList, routerBusinessType }: StateF = mapState();
+const { setSearchShopListFlag, setShopInfo, setBusinessType }: MutationF = mapMutation();
 const searchValue: RefI<string> = ref("");
 const searchShopList: ComputedI<ShopItemI> = computed(() => {
     if (!searchValue.value) return [];

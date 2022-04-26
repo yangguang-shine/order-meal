@@ -28,8 +28,8 @@ interface StateU {
         value: ShopItemI[];
     };
 }
-const { setShopInfo, setBusinessType }: MutationF = mapMutation(["setShopInfo", "setBusinessType"]);
-const { recommandShopList }: StateU = mapState(["recommandShopList"]);
+const { setShopInfo, setBusinessType }: MutationF = mapMutation();
+const { recommandShopList }: StateU = mapState();
 function toOrder(shopItem: ShopItemI) {
     setShopInfo(shopItem);
     setBusinessType(2);

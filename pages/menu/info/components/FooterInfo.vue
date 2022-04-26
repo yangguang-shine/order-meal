@@ -50,11 +50,11 @@ interface MutationF {
     setCartImgPositionInfo: ComputedMutationI<PositionInfoI>;
 }
 
-const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCategoryList, cartImgPositionInfo, cartImgAnimationFlag }: StateF = mapState(["startShopInfoAnimationFlag", "shopInfoFlag", "businessType", "shopInfo", "cartCategoryList", "cartImgPositionInfo", "cartImgAnimationFlag"]);
+const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCategoryList, cartImgPositionInfo, cartImgAnimationFlag }: StateF = mapState();
 
-const { cartPriceInfo }: GetterF = mapGetter(["cartPriceInfo"]);
+const { cartPriceInfo }: GetterF = mapGetter();
 
-const { toogleCartDetailFlag, setCartImgPositionInfo }: MutationF = mapMutation(["toogleCartDetailFlag", "setCartImgPositionInfo"]);
+const { toogleCartDetailFlag, setCartImgPositionInfo }: MutationF = mapMutation();
 const cartImgAnimationData = ref(null);
 
 interface ConfirmButtonInfoI {

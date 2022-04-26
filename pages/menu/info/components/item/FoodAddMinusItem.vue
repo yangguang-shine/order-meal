@@ -5,7 +5,7 @@
         </view>
         <view v-if="foodItem.orderCount" :class="mountedTransitionFlag ? '' : 'show-food-order-count'" :animation="countAnimationData" class="food-order-count">{{ foodItem.orderCount }}</view>
         <view class="food-count-add" :id="'add' + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
-            <ReserveRemain v-if="foodItem.reserveCount < 10" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
+            <ReserveRemain v-if="foodItem.showReserveCountFlag" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
         </view>
         <view v-for="item in addList" :key="item.random" class="food-count-add-animation-x" :animation="item.animationXData">
             <view class="food-count-add-animation-y" :animation="item.animationYData">

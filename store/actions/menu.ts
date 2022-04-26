@@ -19,6 +19,7 @@ async function getMenuList({ commit, state }: ActionContextI) {
                     ...foodItem,
                     fullImgPath: `${foodImgPath}/${foodItem.imgUrl}`,
                     foodItemAmount: 0,
+                    showReserveCountFlag: foodItem.reserveCount < 9999,
                 })
             ),
         })
@@ -47,7 +48,7 @@ async function getOrderKeyFoodList({ commit, state }: ActionContextI, option: an
                         ...item,
                         fullImgPath: `${foodImgPath}/${item.imgUrl}`,
                         foodItemAmount: toFixedToNumber(item.price * item.orderCount),
-                        
+                        showReserveCountFlag: item.reserveCount < 9999,
                     },
                 ],
             });
@@ -58,6 +59,7 @@ async function getOrderKeyFoodList({ commit, state }: ActionContextI, option: an
                     ...item,
                     fullImgPath: `${foodImgPath}/${item.imgUrl}`,
                     foodItemAmount: toFixedToNumber(item.price * item.orderCount),
+                    showReserveCountFlag: item.reserveCount < 9999,
                 });
             } else {
                 list.push({
@@ -70,6 +72,7 @@ async function getOrderKeyFoodList({ commit, state }: ActionContextI, option: an
                             ...item,
                             fullImgPath: `${foodImgPath}/${item.imgUrl}`,
                             foodItemAmount: toFixedToNumber(item.price * item.orderCount),
+                            showReserveCountFlag: item.reserveCount < 9999,
                         },
                     ],
                 });

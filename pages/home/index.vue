@@ -153,8 +153,7 @@ page {
         margin: 20rpx;
         border-radius: 20rpx;
     }
-    .type-item-box {
-    }
+ 
     .type-item {
         width: 150rpx;
         height: 150rpx;

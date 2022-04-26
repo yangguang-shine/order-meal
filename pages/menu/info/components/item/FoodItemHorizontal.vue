@@ -6,8 +6,8 @@
         </view>
         <view class="food-price-add flex-row flex-a-center flex-j-between" @click.stop="addCount($event)" :style="{ color: shopInfo.mainColor }">
             <view class="food-price" :style="{'color': shopInfo.mainColor}">¥{{ foodItem.price }}</view>
-            <view v-if="foodItem.reserveCount" class="food-add" :id="'add' + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }">
-                <ReserveRemain v-if="foodItem.reserveCount < 10" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
+            <view v-if="foodItem.reserveCount > 0" class="food-add" :id="'add' + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }">
+                <ReserveRemain v-if="foodItem.showReserveCountFlag" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
             </view>
             <ReserveNotEnough v-else></ReserveNotEnough>
             <view v-for="addItem in addList" :key="addItem.random" class="food-add-x" :animation="addItem.animationXData">

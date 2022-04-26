@@ -50,7 +50,7 @@ interface StateF {
     orderDetailShopInfo: ComputedStateI<ShopItemI>
 
 }
-const { orderDetail, orderDetailShopInfo }:StateF  = mapState([])
+const { orderDetail, orderDetailShopInfo }:StateF  = mapState()
 
 function copyOrderKey() {
     wx.setClipboardData({
