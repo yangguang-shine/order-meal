@@ -68,7 +68,7 @@ interface GetterF {
 interface MutationF {
     initCart: ComputedMutationI<void>;
     handleMenuUnload: ComputedMutationI<void>;
-    saveBusinessType: ComputedMutationI<number>;
+    setBusinessType: ComputedMutationI<number>;
     setMenuPackPriceExpalinFlag: ComputedMutationI<boolean>;
     
 }
@@ -80,7 +80,7 @@ interface ActionF {
 }
 const { shopInfo, businessType, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag, menuPackPriceExpalinFlag }: StateF = mapState();
 const { minusPromotionsObject }: GetterF = mapGetter();
-const { initCart, handleMenuUnload, saveBusinessType, setMenuPackPriceExpalinFlag }: MutationF = mapMutation();
+const { initCart, handleMenuUnload, setBusinessType, setMenuPackPriceExpalinFlag }: MutationF = mapMutation();
 
 const { getMenuList, getOrderKeyFoodList, getShopInfo }: ActionF = mapAction();
 
@@ -126,7 +126,7 @@ onLoad(async (option: OptionI) => {
             });
         }
         if (businessType.value !== optionBusinessType) {
-            saveBusinessType(optionBusinessType)
+            setBusinessType(optionBusinessType)
         }
         console.log(shopInfo.value);
 

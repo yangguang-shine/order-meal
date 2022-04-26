@@ -59,7 +59,7 @@ async function getShopInfo({ state, commit }: ActionContextI, payload: { shopID:
         fullImgPath: `${shopImgPath}/${originShopInfo.imgUrl}`,
         ...getBusinessTypeInfo(originShopInfo.businessTypes),
     };
-    commit("saveShopInfo", shopInfo);
+    commit("setShopInfo", shopInfo);
     return shopInfo;
 }
 export default { getRecommandShopList, getShopList, getShopInfo } as ActionI;

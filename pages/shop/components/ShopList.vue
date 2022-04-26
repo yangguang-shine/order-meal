@@ -21,17 +21,17 @@ interface StateF {
     
 }
 interface MutationF {
-    saveShopInfo: ComputedMutationI<ShopItemI>
-    saveBusinessType: ComputedMutationI<number>
+    setShopInfo: ComputedMutationI<ShopItemI>
+    setBusinessType: ComputedMutationI<number>
 }
 
 const { shopList, routerBusinessType }: StateF = mapState();
 console.log(shopList)
 console.log(routerBusinessType)
-const { saveShopInfo, saveBusinessType } :MutationF = mapMutation()
+const { setShopInfo, setBusinessType } :MutationF = mapMutation()
 function toOrder(shopItem: ShopItemI) {
-    saveShopInfo(shopItem);
-    saveBusinessType(routerBusinessType.value);
+    setShopInfo(shopItem);
+    setBusinessType(routerBusinessType.value);
     router.navigateTo({
         name: "menu/info",
         query: {

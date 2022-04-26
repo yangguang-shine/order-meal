@@ -37,12 +37,12 @@ interface StateF {
 }
 interface MutationF {
     setSearchShopFlag: ComputedMutationI<boolean>;
-    saveShopInfo: ComputedMutationI<ShopItemI>;
-    saveBusinessType: ComputedMutationI<number>;
+    setShopInfo: ComputedMutationI<ShopItemI>;
+    setBusinessType: ComputedMutationI<number>;
 }
 
-const { recommandShopList }: StateF = mapState(["recommandShopList"]);
-const { setSearchShopFlag, saveShopInfo, saveBusinessType }: MutationF = mapMutation(["setSearchShopFlag", "saveShopInfo", "saveBusinessType"]);
+const { recommandShopList }: StateF = mapState();
+const { setSearchShopFlag, setShopInfo, setBusinessType }: MutationF = mapMutation();
 
 const showSelectTypeFlag: RefI<boolean> = ref(false);
 const selectedShopItem: RefI<ShopItemI> = ref(recommandShopList.value[0]);
@@ -79,8 +79,8 @@ async function clickCancel() {
 }
 function confirmType(index: number) {
     const businessType = selectedShopItem.value.businessTypeList[index];
-    saveShopInfo(selectedShopItem.value);
-    saveBusinessType(businessType);
+    setShopInfo(selectedShopItem.value);
+    setBusinessType(businessType);
     router.navigateTo({
         name: "menu/info",
         query: {

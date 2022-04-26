@@ -1,6 +1,9 @@
 <template>
     <div class="order-food-info-container">
-        <div class="shop-info-box line1">{{ orderDetailShopInfo.shopName }}</div>
+        <div class="shop-info-box line1 flex-row flex-a-center" @click="toOrder">
+            <div class="shop-name">{{ orderDetailShopInfo.shopName }}</div>
+            <img class="arrow-right" src="/static/img/arrow-right.png" alt="" />
+        </div>
         <div class="order-list-box">
             <order-food-item v-for="(orderFoodItem, index) in orderDetail.foodList" :orderFoodItem="orderFoodItem" :key="index"></order-food-item>
         </div>
@@ -18,7 +21,7 @@
             <image class="minus-icon" src="/static/img/orderMinus.svg"></image>
             <div class="flex-item flex-row flex-j-between">
                 <div class="minus-title">满减优惠</div>
-                <div class="minus-price" :style="{'color': orderDetailShopInfo.mainColor}">-¥{{ orderDetail.minusPrice }}</div>
+                <div class="minus-price" :style="{ color: orderDetailShopInfo.mainColor }">-¥{{ orderDetail.minusPrice }}</div>
             </div>
         </div>
         <div class="all-price-box flex-row flex-a-center flex-j-between">
@@ -27,7 +30,7 @@
                 <div class="origin-price">共计￥{{ orderDetail.orderOriginAmount }}</div>
                 <div class="discount-price">已优惠￥{{ orderDetail.minusPrice }}</div>
                 <div class="pay-price">
-                    小计<span class="pay-price-color" :style="{'color': orderDetailShopInfo.mainColor}">￥{{ orderDetail.payPrice }}</span>
+                    小计<span class="pay-price-color" :style="{ color: orderDetailShopInfo.mainColor }">￥{{ orderDetail.payPrice }}</span>
                 </div>
             </div>
         </div>
@@ -38,13 +41,37 @@
 import OrderFoodItem from "@/components/OrderFoodItem.vue";
 import { ShopItemI } from "@/interface/home";
 import { OrderDetailI } from "@/interface/order";
-import { ComputedStateI } from "@/interface/vuex";
-import { mapState } from "@/utils/mapVuex";
+import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import { mapAction, mapMutation, mapState } from "@/utils/mapVuex";
+import router from "@/utils/router";
 interface StateF {
     orderDetail: ComputedStateI<OrderDetailI>;
     orderDetailShopInfo: ComputedStateI<ShopItemI>;
 }
-const { orderDetail, orderDetailShopInfo }: StateF = mapState([]);
+interface MutationF {
+    setBusinessType: ComputedMutationI<number>
+
+}
+interface ActionF {
+    getShopInfo: ComputedActionI<{shopID: number}>
+
+}
+const { orderDetail, orderDetailShopInfo }: StateF = mapState();
+const { setBusinessType }: MutationF = mapMutation();
+const { getShopInfo }: ActionF = mapAction();
+async function toOrder() {
+    await getShopInfo({
+        shopID: orderDetail.value.shopID,
+    });
+    setBusinessType(orderDetail.value.businessType);
+    router.navigateTo({
+        name: "menu/info",
+        query: {
+            businessType: orderDetail.value.businessType,
+            shopID: orderDetail.value.shopID,
+        },
+    });
+}
 </script>
 
 <style lang="scss" scoped>
@@ -57,6 +84,12 @@ const { orderDetail, orderDetailShopInfo }: StateF = mapState([]);
         font-size: 36rpx;
         font-weight: bold;
         margin-bottom: 30rpx;
+    }
+    .arrow-right {
+        margin-left: 30rpx;
+
+        width: 12rpx;
+        height: 22rpx;
     }
     .order-list-box {
         padding: 0 0 20rpx;
@@ -82,7 +115,7 @@ const { orderDetail, orderDetailShopInfo }: StateF = mapState([]);
     }
 
     .pack-deliver-price-box {
-        padding: 0 20rpx 20rpx;
+        padding: 0 0 20rpx;
     }
     .pack-price,
     .deliver-price {

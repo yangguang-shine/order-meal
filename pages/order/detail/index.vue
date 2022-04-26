@@ -17,21 +17,36 @@ import { mapState, mapAction, mapMutation } from "@/utils/mapVuex";
 import { RefI } from "@/interface/vueInterface";
 import { ComputedActionI, ComputedStateI } from "@/interface/vuex";
 import { OrderItemI } from "@/interface/order";
+import { ShopItemI } from "@/interface/home";
 
 const { $showLoading, $hideLoading, $myrouter, $showModal } = getCurrentInstance().proxy;
-
+interface StateF {
+    orderDetailShopInfo: ComputedStateI<ShopItemI>;
+}
 interface ActionF {
-    getOrderDetail: ComputedActionI<{orderKey: string}>;
+    getOrderDetail: ComputedActionI<{ orderKey: string }>;
+    getOrderDetailShopInfo: ComputedActionI<{ shopID: number }>;
 }
 interface OptionI {
     orderKey: string;
+    shopID: string;
 }
 const showLoadingFlag: RefI<boolean> = ref(false);
 const orderKey: RefI<string> = ref("");
-const { getOrderDetail }:ActionF = mapAction(["getOrderDetail"]);
+const shopID: RefI<string> = ref("");
+const { orderDetailShopInfo }: StateF = mapState();
+
+const { getOrderDetail, getOrderDetailShopInfo }: ActionF = mapAction();
 
 onLoad(async (option: OptionI) => {
     orderKey.value = option.orderKey;
+    const shopID = Number(option.shopID);
+    console.log(shopID !== orderDetailShopInfo.value.shopID)
+    if (shopID !== orderDetailShopInfo.value.shopID) {
+        getOrderDetailShopInfo({
+            shopID,
+        });
+    }
     if (!orderKey.value) {
         await $showModal({
             content: "无订单号",
@@ -53,7 +68,6 @@ async function init() {
         showLoadingFlag.value = false;
     }
 }
-
 </script>
 
 <style lang="scss" scoped>

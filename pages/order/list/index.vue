@@ -75,8 +75,8 @@ interface ActionF {
 interface MutationF {
     setOrderErrorListFlag: ComputedMutationI<boolean>;
     setOrderTabIndex: ComputedMutationI<number>;
-    saveShopInfo: ComputedMutationI<ShopItemI>;
-    saveBusinessType: ComputedMutationI<number>;
+    setShopInfo: ComputedMutationI<ShopItemI>;
+    setBusinessType: ComputedMutationI<number>;
     setOrderDetailShopInfo: ComputedMutationI<ShopItemI>;
 }
 
@@ -86,7 +86,7 @@ console.log(allOrderList.value)
 
 const { getOrderList, getShopInfo }: ActionF = mapAction();
 
-const { setOrderErrorListFlag, setOrderTabIndex, saveShopInfo, saveBusinessType, setOrderDetailShopInfo }: MutationF = mapMutation();
+const { setOrderErrorListFlag, setOrderTabIndex, setShopInfo, setBusinessType, setOrderDetailShopInfo }: MutationF = mapMutation();
 onLoad(() => {
     init();
 });
@@ -118,6 +118,7 @@ function toOrderDetail(orderItem: OrderItemI) {
         name: "order/detail",
         query: {
             orderKey: orderItem.orderKey,
+            shopID: orderItem.shopInfo.shopID
         },
     });
 }
@@ -127,7 +128,7 @@ async function orderAgain(orderItem: OrderItemI) {
         await getShopInfo({
             shopID: orderItem.shopID,
         });
-        saveBusinessType(orderItem.businessType);
+        setBusinessType(orderItem.businessType);
         $myrouter.navigateTo({
             name: "menu/info",
             query: {

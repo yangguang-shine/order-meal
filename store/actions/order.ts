@@ -53,6 +53,7 @@ async function getOrderDetail({ state, commit }: ActionContextI, payload: { orde
                 ...foodItem,
                 foodItemAmount: toFixedToNumber(foodItem.price * foodItem.orderCount),
                 fullImgPath: `${foodImgPath}/${foodItem.imgUrl}`,
+                showReserveCountFlag: foodItem.reserveCount > 3
             })
         ),
     };
@@ -60,11 +61,25 @@ async function getOrderDetail({ state, commit }: ActionContextI, payload: { orde
     return orderDetail;
 }
 
+async function getOrderDetailShopInfo({ state, commit }: ActionContextI, payload: { shopID: number }): Promise<ShopItemI> {
+    const originShopInfo: OriginShopItemI = await fetch("shop/find", payload);
+    const orderDetailShopInfo: ShopItemI = {
+        ...originShopInfo,
+        minusList: JSON.parse(originShopInfo.minus),
+        fullImgPath: `${shopImgPath}/${originShopInfo.imgUrl}`,
+        ...getBusinessTypeInfo(originShopInfo.businessTypes),
+    };
+    commit("setOrderDetailShopInfo", orderDetailShopInfo);
+    return orderDetailShopInfo;
+}
+
+
 async function cancelOrder({ state, commit }: ActionContextI, payload: { orderKey: string }) {
     await fetch("order/cancel", payload);
 }
 export default {
     getOrderList,
     getOrderDetail,
+    getOrderDetailShopInfo,
     cancelOrder,
 } as ActionI;

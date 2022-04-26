@@ -20,19 +20,19 @@ import { ShopItemI } from "@/interface/index";
 import router from "@/utils/router";
 // import { AddressItemI, ShopItemI } from '@/interface/index'
 interface MutationF {
-    saveShopInfo: (shopItem: ShopItemI) => void;
-    saveBusinessType: (type: number) => void;
+    setShopInfo: (shopItem: ShopItemI) => void;
+    setBusinessType: (type: number) => void;
 }
 interface StateU {
     recommandShopList: {
         value: ShopItemI[];
     };
 }
-const { saveShopInfo, saveBusinessType }: MutationF = mapMutation(["saveShopInfo", "saveBusinessType"]);
+const { setShopInfo, setBusinessType }: MutationF = mapMutation(["setShopInfo", "setBusinessType"]);
 const { recommandShopList }: StateU = mapState(["recommandShopList"]);
 function toOrder(shopItem: ShopItemI) {
-    saveShopInfo(shopItem);
-    saveBusinessType(2);
+    setShopInfo(shopItem);
+    setBusinessType(2);
     router.navigateTo({
         name: "menu/info",
         query: {

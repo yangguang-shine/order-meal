@@ -19,7 +19,6 @@ async function getMenuList({ commit, state }: ActionContextI) {
                     ...foodItem,
                     fullImgPath: `${foodImgPath}/${foodItem.imgUrl}`,
                     foodItemAmount: 0,
-            // reserveCount: Math.random() > 0.5 ? 0 : Math.random() > 0.5 ? 12 : 1,
                 })
             ),
         })
@@ -48,6 +47,7 @@ async function getOrderKeyFoodList({ commit, state }: ActionContextI, option: an
                         ...item,
                         fullImgPath: `${foodImgPath}/${item.imgUrl}`,
                         foodItemAmount: toFixedToNumber(item.price * item.orderCount),
+                        
                     },
                 ],
             });

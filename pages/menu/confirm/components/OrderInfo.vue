@@ -172,7 +172,7 @@ function continueOrder() {
         transform: rotate(90deg);
     }
     .pack-deliver-price-box {
-        padding: 20rpx;
+        padding: 20rpx 0;
     }
     .pack-price,
     .deliver-price {

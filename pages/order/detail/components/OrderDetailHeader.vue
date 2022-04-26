@@ -29,8 +29,8 @@ interface StateF {
     orderDetailShopInfo: ComputedStateI<ShopItemI>
 }
 interface MutationF {
-    saveShopInfo: ComputedMutationI<ShopItemI>;
-    saveBusinessType: ComputedMutationI<number>;
+    setShopInfo: ComputedMutationI<ShopItemI>;
+    setBusinessType: ComputedMutationI<number>;
 }
 interface ActionF {
     cancelOrder: ComputedActionI<{orderKey: string}>;
@@ -47,7 +47,7 @@ const props = defineProps({
 
 const { orderDetail, orderDetailShopInfo }: StateF = mapState();
 
-const { saveShopInfo, saveBusinessType,  }: MutationF = mapMutation();
+const { setShopInfo, setBusinessType,  }: MutationF = mapMutation();
 const { cancelOrder, getOrderDetail, getShopInfo }: ActionF = mapAction();
 
 async function toCancelOrder() {
@@ -80,7 +80,7 @@ async function orderAgain() {
         await getShopInfo({
             shopID: orderDetail.value.shopID,
         });
-        saveBusinessType(orderDetail.value.businessType);
+        setBusinessType(orderDetail.value.businessType);
         router.navigateTo({
             name: "menu/info",
             query: {

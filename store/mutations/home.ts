@@ -18,14 +18,14 @@ function setRecommandShopList(state: StateI, recommandShopList: ShopItemI[]): vo
 function changeTabItem(state: StateI, tabItem: TabItemI): void {
     state.selectedTabItem = tabItem;
 }
-function saveShopInfo(state: StateI, shopInfo: ShopItemI): void {
+function setShopInfo(state: StateI, shopInfo: ShopItemI): void {
     state.shopInfo = shopInfo;
 }
 function setSearchShopFlag(state: StateI, searchShopFlag: boolean): void {
     state.searchShopFlag = searchShopFlag;
 }
 
-function saveBusinessType(state: StateI, type: number): void {
+function setBusinessType(state: StateI, type: number): void {
     state.businessType = type;
 }
 function setTabListTop(state: StateI, tabListTop: number): void {
@@ -41,8 +41,8 @@ export default {
     setTabListFixedFlag,
     setRecommandShopList,
     changeTabItem,
-    saveShopInfo,
+    setShopInfo,
     setSearchShopFlag,
-    saveBusinessType,
+    setBusinessType,
     setTabListTop
 };

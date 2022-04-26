@@ -28,12 +28,12 @@ interface StateF {
 }
 interface MutationF {
     setSearchShopListFlag: ComputedMutationI<boolean>;
-    saveShopInfo: ComputedMutationI<ShopItemI>;
-    saveBusinessType: ComputedMutationI<number>;
+    setShopInfo: ComputedMutationI<ShopItemI>;
+    setBusinessType: ComputedMutationI<number>;
 }
 
 const { tabList, shopList, routerBusinessType }: StateF = mapState(["tabList", "shopList", "routerBusinessType"]);
-const { setSearchShopListFlag, saveShopInfo, saveBusinessType }: MutationF = mapMutation(["setSearchShopListFlag", "saveShopInfo", "saveBusinessType"]);
+const { setSearchShopListFlag, setShopInfo, setBusinessType }: MutationF = mapMutation(["setSearchShopListFlag", "setShopInfo", "setBusinessType"]);
 const searchValue: RefI<string> = ref("");
 const searchShopList: ComputedI<ShopItemI> = computed(() => {
     if (!searchValue.value) return [];
@@ -46,8 +46,8 @@ const searchShopList: ComputedI<ShopItemI> = computed(() => {
     return searchShopList;
 });
 function clickShopItem(shopItem: ShopItemI) {
-    saveShopInfo(shopItem);
-    saveBusinessType(routerBusinessType.value);
+    setShopInfo(shopItem);
+    setBusinessType(routerBusinessType.value);
     router.navigateTo({
         name: "menu/info",
         query: {

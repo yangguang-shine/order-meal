@@ -226,7 +226,4 @@ export function selectQuery(id: string, currentInstance?: any): Promise<any> {
     //     });
     // }
 }
-let offsetLeft = 0;
-export function getOffsetLeft(addPositionInfo: PositionInfoI, cartImgPositionInfo: PositionInfoI): number {
-    const offsetLeft = addPositionInfo.left - cartImgPositionInfo.left;
-}
+

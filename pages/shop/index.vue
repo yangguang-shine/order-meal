@@ -24,14 +24,14 @@ interface StateF {
     searchShopListFlag: ComputedStateI<boolean>
 }
 interface MutationF {
-    saveRouterBusinessType: ComputedMutationI<number>;
+    setRouterBusinessType: ComputedMutationI<number>;
 }
-const { searchShopListFlag }: StateF = mapState(['searchShopListFlag'])
-const { saveRouterBusinessType }: MutationF = mapMutation(["saveRouterBusinessType"]);
+const { searchShopListFlag }: StateF = mapState()
+const { setRouterBusinessType }: MutationF = mapMutation();
 
 onLoad((option: { businessType: string }) => {
     const routerBusinessType: number = Number(option.businessType);
-    saveRouterBusinessType(routerBusinessType)
+    setRouterBusinessType(routerBusinessType)
 });
 </script>
 <style lang="scss">

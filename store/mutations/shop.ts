@@ -8,7 +8,7 @@ function setShopList(state: StateI, shopList: ShopItemI[]): void {
     state.shopList = shopList;
 }
 
-function saveRouterBusinessType(state: StateI, routerBusinessType: number): void {
+function setRouterBusinessType(state: StateI, routerBusinessType: number): void {
     state.routerBusinessType = routerBusinessType;
 }
 function setSearchShopListFlag(state: StateI, searchShopListFlag: boolean): void {
@@ -17,6 +17,6 @@ function setSearchShopListFlag(state: StateI, searchShopListFlag: boolean): void
 
 export default {
     setShopList,
-    saveRouterBusinessType,
+    setRouterBusinessType,
     setSearchShopListFlag
 } as MutationI;
