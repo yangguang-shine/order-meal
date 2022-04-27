@@ -19,6 +19,15 @@ export interface OriginFoodItemI {
     packPrice: number
 }
 
+export interface CategoryListMapI {
+    // [index: number]: CategoryItemI
+    [index: string]: CategoryItemI
+}
+export interface FoodListMapI {
+    [index: string]: FoodItemI
+
+}
+
 export interface OriginCategoryItemI {
     categoryID: number;
     categoryName: string;
@@ -34,6 +43,7 @@ export interface CategoryItemI extends OriginCategoryItemI {
     categoryIDMain: string;
     categoryIDAside: string;
     foodList: FoodItemI[];
+    foodListMap: FoodListMapI
 }
 // export interface CartCategoryInfoI extends OriginCategoryItemI {
 //     foodList: FoodItemI[];

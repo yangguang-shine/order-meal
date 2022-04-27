@@ -1,7 +1,8 @@
-import { ShopItemI, CategoryItemI, FoodItemI, AsideCategoryItemI, initFoodItem, PositionInfoI } from "@/interface/index";
+import { ShopItemI, CategoryItemI, FoodItemI, AsideCategoryItemI, initFoodItem, PositionInfoI, CategoryListMapI, FoodListMapI } from "@/interface/index";
 
 export interface MenDefaultI {
     categoryList: CategoryItemI[];
+    categoryListMap: CategoryListMapI,
     // asideCategoryList: AsideCategoryItemI[]
     selectedCategoryID: number;
     categoryIDMain: string;
@@ -16,13 +17,17 @@ export interface MenDefaultI {
     cartImgPositionInfo: PositionInfoI;
     cartImgAnimationFlag: boolean;
     searchFoodFlag: boolean;
-    [key: string]: any
+    overReserveFoodList: FoodItemI[],
+    overReserveFoodListMap: FoodListMapI,
+    cartCategoryListMap: CategoryListMapI
+    // [key: string]: any
 }
 export interface StateMenuI extends MenDefaultI {
     cartCategoryList: CategoryItemI[];
 }
 export const menDefault: MenDefaultI = {
     categoryList: [],
+    categoryListMap: {},
     selectedCategoryID: 0,
     categoryIDMain: "",
     categoryIDAside: "",
@@ -39,11 +44,14 @@ export const menDefault: MenDefaultI = {
     },
     cartImgAnimationFlag: false,
     searchFoodFlag: false,
+    overReserveFoodList: [],
+    overReserveFoodListMap: {},
+    cartCategoryListMap: {},
+
 };
 
 const state: StateMenuI = {
     ...menDefault,
     cartCategoryList: [],
-
 };
 export default state;
