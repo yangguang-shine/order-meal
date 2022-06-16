@@ -19,30 +19,41 @@ import Banner from "./components/Banner.vue";
 import RecommandInfo from "./components/RecommandInfo.vue";
 import SearchShop from "./components/SearchShop.vue";
 import { topAddressSearchHeight } from "./homeConfig";
-import { getCurrentInstance, onMounted } from "vue";
+import { getCurrentInstance, onMounted, toRefs } from "vue";
 import { onShow, onLoad, onPageScroll, onHide, onUnload } from "@dcloudio/uni-app";
 import { AddressItemI, ComputedActionI, ComputedMutationI, ComputedStateI, ShopItemI, TabItemI } from "@/interface/index";
 import { hideLoading, selectQuery, showLoading, showModal, tabBarHeightPX } from "@/utils/";
 import router from "@/utils/router";
 import { ShopListParamsI } from "@/store/actions/home";
+import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
+import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
+
+
+
 
 interface StateF {
     searchShopFlag: ComputedStateI<boolean>;
     tabListTop: ComputedStateI<number>;
     selectedTabItem: ComputedStateI<TabItemI>;
 }
-interface MutationF {
-    setTopAddressWidthFlag: ComputedMutationI<boolean>;
-    setTabListFixedFlag: ComputedMutationI<boolean>;
-}
+
 interface ActionF {
     getDefaultAddress: ComputedActionI<void, AddressItemI>;
     getRecommandShopList: ComputedActionI<ShopListParamsI>;
+        setTopAddressWidthFlag: ComputedMutationI<boolean>;
+    setTabListFixedFlag: ComputedMutationI<boolean>;
 }
-const { searchShopFlag, tabListTop, selectedTabItem }: StateF = mapState();
-const { setTopAddressWidthFlag, setTabListFixedFlag }: MutationF = mapMutation();
 
-const { getDefaultAddress, getRecommandShopList }: ActionF = mapAction();
+const homeStore: HomeStoreI = useHomeStore()
+const addressStore: AddressStoreI = useAddressStore()
+const { searchShopFlag, tabListTop, selectedTabItem } : StateF = toRefs(homeStore.homeState)
+const { getRecommandShopList,setTopAddressWidthFlag, setTabListFixedFlag} = homeStore
+const { getDefaultAddress } = addressStore
+
+// const { searchShopFlag, tabListTop, selectedTabItem }: StateF = mapState();
+// const { setTopAddressWidthFlag, setTabListFixedFlag }: MutationF = mapMutation();
+
+// const { getDefaultAddress, getRecommandShopList }: ActionF = mapAction();
 
 // console.log(JSON.stringify(addressList.value))
 onShow(() => {

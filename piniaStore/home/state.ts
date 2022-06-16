@@ -1,4 +1,6 @@
 import { TabItemI, ShopItemI, initShopItem } from "@/interface/index";
+import { ref, reactive } from "vue";
+
 export interface HomeStateI {
     topAddressWidthFlag: boolean;
     tabListFixedFlag: boolean;
@@ -26,7 +28,7 @@ export const tabList: TabItemI[] = [
 ];
 
 
-const state: HomeStateI = {
+const homeState: HomeStateI = reactive({
     topAddressWidthFlag: false,
     tabListFixedFlag: false,
     recommandShopList: [],
@@ -36,7 +38,7 @@ const state: HomeStateI = {
     searchShopFlag: false,
     businessType: 2,
     tabListTop: 0
-};
+});
 
-// minusList1: []
-export default state;
+export default homeState
+

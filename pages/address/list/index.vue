@@ -18,28 +18,29 @@
     </view>
 </template>
 <script lang="ts" setup>
-import { defineComponent, computed, getCurrentInstance, ref, onMounted } from "vue";
+import { defineComponent, computed, getCurrentInstance, ref, onMounted, toRefs } from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { onShow, onLoad } from "@dcloudio/uni-app";
 import { AddressItemI, ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/index";
-
-const { $showLoading, $hideLoading, $showModal, $delaySync, $myrouter } = getCurrentInstance().proxy;
+import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
+import { delaySync, hideLoading, showLoading, showModal } from "@/utils/";
+import router from "@/utils/router";
+import { storeToRefs } from 'pinia'
 interface StateF {
     addressList: ComputedStateI<AddressItemI[]>;
     defaultAddress: ComputedStateI<AddressItemI>;
-}
-interface MutationF {
-    setDefaultAddress: ComputedMutationI<AddressItemI>;
 }
 interface ActionF {
     getAddressList: ComputedActionI<void>;
     deleteAddress: ComputedActionI<number>;
     setDefaultAddressFetch: ComputedActionI<number>;
+    setDefaultAddress: ComputedMutationI<AddressItemI>;
 }
-const { addressList, defaultAddress }: StateF = mapState(["addressList", "defaultAddress"]);
-const { setDefaultAddress }: MutationF = mapMutation(["setDefaultAddress"]);
-
-const { getAddressList, deleteAddress, setDefaultAddressFetch }: ActionF = mapAction(["getAddressList", "deleteAddress", "setDefaultAddressFetch"]);
+console.log(getCurrentInstance())
+const addressStore: AddressStoreI = useAddressStore()
+console.log(addressStore)
+const { getAddressList, deleteAddress, setDefaultAddressFetch, setDefaultAddress}: ActionF = addressStore
+const {addressList, defaultAddress } = toRefs(addressStore.addressState)
 
 interface OptionI {
     fromPage?: string;
@@ -53,7 +54,7 @@ onLoad((option: OptionI) => {
 });
 async function init() {
     try {
-        $showLoading();
+        showLoading();
         await getAddressList();
         if (addressList.value.length) {
             setDefaultAddress(addressList.value[0]);
@@ -61,12 +62,12 @@ async function init() {
     } catch (e) {
         console.log(e);
     } finally {
-        $hideLoading();
+        hideLoading();
     }
 }
 async function toDeleteAddress(addressID: number) {
     try {
-        await $showModal({
+        await showModal({
             content: "确认删除该地址吗？",
             showCancelFlag: true,
         });
@@ -75,24 +76,24 @@ async function toDeleteAddress(addressID: number) {
         return;
     }
     try {
-        $showLoading();
+        showLoading();
         await deleteAddress(addressID);
-        $hideLoading();
-        await $showModal({
+        hideLoading();
+        await showModal({
             content: "删除成功",
         });
     } catch (e) {
         console.log(e);
         return;
     } finally {
-        $hideLoading();
+        hideLoading();
     }
     init();
 }
 async function toSetDefaultAddress(addressItem: AddressItemI) {
     if (defaultAddress.value.addressID === addressItem.addressID || !addressItem.addressID) return;
     try {
-        await $showModal({
+        await showModal({
             content: "确认设置为默认地址吗？",
             showCancelFlag: true,
         });
@@ -101,24 +102,24 @@ async function toSetDefaultAddress(addressItem: AddressItemI) {
         return;
     }
     try {
-        $showLoading();
+        showLoading();
         await setDefaultAddressFetch(addressItem.addressID);
         setDefaultAddress(addressItem);
         // await $fetch("address/setDefault", { addressID });
         if (routerOptions.fromPage) {
-            $myrouter.back();
+            router.back();
             return;
         }
     } catch (e) {
         console.log(e);
     } finally {
-        $hideLoading();
+        hideLoading();
     }
     init();
 }
 
 function toEditAddress(addressID: number) {
-    $myrouter.navigateTo({
+    router.navigateTo({
         name: "address/edit",
         query: {
             addressID,
@@ -127,7 +128,7 @@ function toEditAddress(addressID: number) {
 }
 
 function toAddAddress() {
-    $myrouter.navigateTo({
+    router.navigateTo({
         name: "address/edit",
     });
 }

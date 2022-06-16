@@ -7,8 +7,6 @@ function setAddressList(state:StateI, addressList: AddressItemI[]): void {
 };
 
 function setDefaultAddress(state: StateI, defaultAddress: AddressItemI): void {
-    console.log('vuex setDefaultAddress')
-    console.log(defaultAddress)
     state.defaultAddress = defaultAddress;
 };
 

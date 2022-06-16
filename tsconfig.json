@@ -16,6 +16,8 @@
         "@/interface/*": ["./interface/*"],
         "@/style/*": ["./style/*"],
         "@/store/*": ["./store/*"],
+        "@/piniaStore/*": ["./piniaStore/*"],
+        "@/piniaStore/": ["./piniaStore/"],
       }
     }
 }

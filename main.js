@@ -22,6 +22,7 @@ import '@/style/common.css'
 import getShopMinusList from '@/utils/getShopMinusList';
 
 import { createSSRApp } from 'vue'
+import * as Pinia from 'pinia';
 export function createApp() {
 	const app = createSSRApp(App)
 	app.config.globalProperties.$myrouter = router
@@ -59,8 +60,10 @@ export function createApp() {
 		}
 	});
 	app.use(store)
+	app.use(Pinia.createPinia());
 	return {
-		app
+		app,
+		Pinia
 	}
 }
 

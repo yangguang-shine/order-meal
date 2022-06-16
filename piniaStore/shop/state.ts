@@ -1,5 +1,5 @@
-import { TabItemI, ShopItemI, initShopItem } from "@/interface/index";
-import { tabList } from "./home";
+import {  ShopItemI } from "@/interface/index";
+import { ref, reactive } from "vue";
  
 export interface ShopStateI {
     shopList: ShopItemI[];
@@ -7,11 +7,14 @@ export interface ShopStateI {
     searchShopListFlag: boolean
 }
 
-const state: ShopStateI = {
+const shopState: ShopStateI = reactive({
     shopList: [],
     routerBusinessType: 0,
     searchShopListFlag: false
-};
+});
 
-// minusList1: []
-export default state;
+export default shopState;
+
+
+
+

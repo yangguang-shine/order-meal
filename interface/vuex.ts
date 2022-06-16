@@ -1,13 +1,13 @@
-import { StateAddressI } from "@/store/state/address";
-import { StateHomeI } from "@/store/state/home";
+import { AddressStateI } from "@/store/state/address";
+import { HomeStateI } from "@/store/state/home";
 import { StateMenuI } from "@/store/state/menu";
 import { StateConfirmI } from "@/store/state/confirm";
 import { StateOrderI } from "@/store/state/order";
 import { StateCenterI } from "@/store/state/center";
 import { GetterStateConfirmI } from '@/store/getters/confirm'
 import { GetterStateMenuI } from '@/store/getters/menu'
-import { StateShopI } from "@/store/state/shop";
-export type StateI = StateAddressI & StateHomeI & StateMenuI & StateConfirmI & StateOrderI & StateCenterI & StateShopI;
+import { ShopStateI } from "@/store/state/shop";
+export type StateI = AddressStateI & HomeStateI & StateMenuI & StateConfirmI & StateOrderI & StateCenterI & ShopStateI;
 export type GetterStateI = GetterStateConfirmI & GetterStateMenuI;
 export interface MutationI {
     [index: string]: (state: StateI, payload?: any) => any;

@@ -17,6 +17,10 @@ import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { defineComponent, computed, getCurrentInstance } from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import router from "@/utils/router";
+import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
+import { onShow, onLoad, onPageScroll, onHide, onUnload } from "@dcloudio/uni-app";
+
+
 interface StateF {
     topAddressWidthFlag: ComputedStateI<boolean>,
     defaultAddress: ComputedStateI<AddressItemI>,
@@ -31,6 +35,14 @@ const { topAddressWidthFlag, defaultAddress }:StateF = mapState([
 const { setSearchShopFlag }:MutationF = mapMutation([
     "setSearchShopFlag",
 ]);
+const  addressStore: AddressStoreI = useAddressStore()
+onShow(() => {
+console.log('addressStore.addressState.defaultAddress === defaultAddress')
+console.log(addressStore.addressState.defaultAddress)
+console.log(defaultAddress.value)
+console.log(addressStore.addressState.defaultAddress === defaultAddress.value)
+
+})
 
 function toSelectAddress() {
     router.navigateTo({
