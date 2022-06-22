@@ -33,13 +33,11 @@
 </template>
 
 <script lang="ts" setup>
-import { delaySync } from "@/utils/index.js";
+import { delaySync, showModal } from "@/utils/index";
 import FoodAddMinusItem from "./item/FoodAddMinusItem.vue";
 import FoodItem from "./item/FoodItem.vue";
-import { getCurrentInstance, computed, onMounted, ref } from "vue";
+import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
 import { footerInfoAndMinusPromotionsHeightRPX, cartDetailTransitionTime } from "../infoConfig";
-
-const { $showLoading, $hideLoading, $showModal, $delaySync } = getCurrentInstance().proxy;
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI } from "@/interface/menu";
@@ -47,35 +45,29 @@ import { CartPriceInfoI, MinusPromotionsObjectI } from "@/store/getters/menu";
 import { ComputedI, RefI } from "@/interface/vueInterface";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
 import { ShopItemI } from "@/interface/home";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import {storeToRefs} from 'pinia'
 
-interface StateF {
+interface MenuStateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
     categoryList: ComputedStateI<CategoryItemI[]>;
     businessType: ComputedStateI<number>;
     shopInfo: ComputedStateI<ShopItemI>;
     
 }
-interface GetterF {
+interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
     cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
 }
-interface MutationF {
-    setCartDetailFlag: ComputedMutationI<boolean>;
-    clearCart: ComputedMutationI;
-    setMenuPackPriceExpalinFlag: ComputedMutationI<boolean>;
-}
-const { cartCategoryList, categoryList, businessType, shopInfo }: StateF = mapState();
-const { minusPromotionsObject, cartPriceInfo }: GetterF = mapGetter();
-
-const { setCartDetailFlag, clearCart, setMenuPackPriceExpalinFlag }: MutationF = mapMutation();
-// const allPackPriceText: ComputedI<string> = computed((): string => {
-//     let text = "";
-//     if ((businessType.value === 2 || businessType.value === 3) && cartPriceInfo.value.allPackPrice) {
-//         text = `包装费¥${cartPriceInfo.value.allPackPrice}`;
-//     }
-//     return text;
-// });
-
+// menu store
+const menuStore: MenuStoreI = useMenuStore()
+// menu state
+const { cartCategoryList, categoryList, businessType, shopInfo }: MenuStateF = toRefs(menuStore.menuState);
+// menu getter
+const { minusPromotionsObject, cartPriceInfo }: MenuGetterF = storeToRefs(menuStore);
+// menu action
+const { setCartDetailFlag, clearCart, setMenuPackPriceExpalinFlag } = menuStore;
+// animation
 const { overlayAnimationData, mainAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: cartDetailTransitionTime,
 });
@@ -84,11 +76,11 @@ onMounted(() => {
 });
 async function closeCartDetail() {
     toEndAnimation();
-    await $delaySync(cartDetailTransitionTime * 3);
+    await delaySync(cartDetailTransitionTime * 3);
     setCartDetailFlag(false);
 }
 async function cartClearCart() {
-    await $showModal({
+    await showModal({
         content: "确认清空购物车吗？",
         showCancelFlag: true,
     });

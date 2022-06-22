@@ -15,28 +15,29 @@ import OtherInfo from "./components/OtherInfo.vue";
 import FooterButton from "./components/FooterButton.vue";
 import NoteInput from "./components/NoteInput.vue";
 import { mapMutation, mapState, mapAction } from "@/utils/mapVuex";
-import { getCurrentInstance } from "vue";
+import { getCurrentInstance, toRefs } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { AddressItemI } from "@/interface/address";
 import { footerButtonHeightRPX } from "./comfirmConfig";
-
-const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
-
-interface StateF {
+import { hideLoading, showLoading, showToast } from "@/utils/";
+import router from "@/utils/router";
+import {useConfirmStore, ConfirmStoreI} from '@/piniaStore/confirm'
+import {storeToRefs } from 'pinia'
+import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
+interface ConfirmStateF {
     noteInputFlag: ComputedStateI<boolean>;
 }
-interface MutationF {
-    setTakeOutTime: ComputedMutationI<string>;
-}
-interface ActionF {
-    getDefaultAddress: ComputedActionI<void, AddressItemI>;
-}
-
-const { noteInputFlag }: StateF = mapState();
-
-const { setTakeOutTime }: MutationF = mapMutation();
-const { getDefaultAddress }: ActionF = mapAction();
+// confirm store
+const confirmStore: ConfirmStoreI = useConfirmStore()
+// confirm state
+const { noteInputFlag }: ConfirmStateF = toRefs(confirmStore.confirmState)
+// confirm action
+const { setTakeOutTime } = confirmStore
+// address store
+const addressStore: AddressStoreI = useAddressStore()
+// address action
+const { getDefaultAddress } = addressStore
 onLoad(() => {
     getCurrentTakeOutTime();
 })
@@ -54,16 +55,16 @@ onShow(() => {
 
 async function toGetDefaultAddress() {
     try {
-        $showLoading();
+        showLoading();
 
         const defaultAddress: AddressItemI = await getDefaultAddress();
         if (!defaultAddress.addressID) {
-            $hideLoading();
-            await $showModal({
+            hideLoading();
+            await showModal({
                 content: "为提供更好服务，请先选择地址",
                 confirmText: "去选择地址",
             });
-            $myrouter.navigateTo({
+            myrouter.navigateTo({
                 name: "address/list",
                 query: {
                     fromPage: "userHome",
@@ -73,7 +74,7 @@ async function toGetDefaultAddress() {
     } catch (e) {
         console.log(e);
     } finally {
-        $hideLoading();
+        hideLoading();
     }
 }
 </script>

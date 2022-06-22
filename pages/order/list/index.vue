@@ -43,7 +43,7 @@
                         </view>
                     </div>
                 </div>
-                <div class="order-business-title" :style="{'background': orderItem.shopInfo.mainColor}">{{orderItem.orderBusinessTitle}}</div>
+                <div class="order-business-title" :style="{ background: orderItem.shopInfo.mainColor }">{{ orderItem.orderBusinessTitle }}</div>
             </div>
         </view>
         <div v-if="orderErrorListFlag[orderTabIndex]" class="common-error-box flex-row flex-ja-center">
@@ -54,59 +54,74 @@
 
 <script lang="ts" setup>
 import getShopMinusList from "@/utils/getShopMinusList";
-import { timeStampTranslate } from "@/utils/index.js";
+import { hideLoading, showLoading, showModal, timeStampTranslate } from "@/utils/index";
 import MinusList from "@/components/MinusList.vue";
-import { getCurrentInstance } from "vue";
+import { toRefs } from "vue";
 import { mapState, mapAction, mapMutation } from "@/utils/mapVuex";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { OrderItemI } from "@/interface/order";
 import { ShopItemI } from "@/interface/home";
 
-interface StateF {
+import { OrderStoreI, useOrderStore } from "@/piniaStore/order";
+import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
+import router from "@/utils/router";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+interface OrderStateF {
     allOrderList: ComputedStateI<OrderItemI[][]>;
     orderTabIndex: ComputedStateI<number>;
     orderErrorListFlag: ComputedStateI<boolean>;
 }
-interface ActionF {
-    getOrderList: ComputedActionI<void, OrderItemI[]>;
-    getShopInfo: ComputedActionI<{ shopID: number }, ShopItemI>;
-}
-interface MutationF {
-    setOrderErrorListFlag: ComputedMutationI<boolean>;
-    setOrderTabIndex: ComputedMutationI<number>;
-    setShopInfo: ComputedMutationI<ShopItemI>;
-    setBusinessType: ComputedMutationI<number>;
-    setOrderDetailShopInfo: ComputedMutationI<ShopItemI>;
-}
+// interface HomeStateF {
+//     allOrderList: ComputedStateI<OrderItemI[][]>;
+//     orderTabIndex: ComputedStateI<number>;
+//     orderErrorListFlag: ComputedStateI<boolean>;
+// }
+// interface ActionF {
+//     getOrderList: ComputedActionI<void, OrderItemI[]>;
+//     getShopInfo: ComputedActionI<{ shopID: number }, ShopItemI>;
+// }
+// interface MutationF {
+//     setOrderErrorListFlag: ComputedMutationI<boolean>;
+//     setOrderTabIndex: ComputedMutationI<number>;
+//     setShopInfo: ComputedMutationI<ShopItemI>;
+//     setBusinessType: ComputedMutationI<number>;
+//     setOrderDetailShopInfo: ComputedMutationI<ShopItemI>;
+// }
+// order store
+const orderStore: OrderStoreI = useOrderStore();
+// order state
+const { allOrderList, orderTabIndex, orderErrorListFlag }: OrderStateF = toRefs(orderStore.orderState);
+// order action
+const { getOrderList , setOrderErrorListFlag, setOrderTabIndex , setOrderDetailShopInfo } = orderStore;
+// menu store
+const MenuStore: MenuStoreI = useMenuStore();
+// menu action
+const { getShopInfo, setBusinessType } = MenuStore;
 
-const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
-const { allOrderList, orderTabIndex, orderErrorListFlag }: StateF = mapState();
-console.log(allOrderList.value)
+// const { getOrderList, getShopInfo }: ActionF = mapAction();
 
-const { getOrderList, getShopInfo }: ActionF = mapAction();
-
-const { setOrderErrorListFlag, setOrderTabIndex, setShopInfo, setBusinessType, setOrderDetailShopInfo }: MutationF = mapMutation();
-onLoad(() => {
+// const { setOrderErrorListFlag, setOrderTabIndex, setShopInfo, setBusinessType, setOrderDetailShopInfo }: MutationF = mapMutation();
+onShow(() => {
     init();
 });
 async function init() {
     try {
-        $showLoading();
+        showLoading();
         const orderList = await getOrderList();
         setOrderErrorListFlag(orderList.length === 0);
     } catch (e) {
         setOrderErrorListFlag(true);
         console.log(e);
     } finally {
-        $hideLoading();
+        hideLoading();
     }
 }
 async function toChangeTabIndex(index: number) {
     try {
         if (index === orderTabIndex.value) return;
         setOrderTabIndex(index);
-        $showLoading();
+        showLoading();
         await init();
     } catch (e) {
         console.log(e);
@@ -114,22 +129,22 @@ async function toChangeTabIndex(index: number) {
 }
 function toOrderDetail(orderItem: OrderItemI) {
     setOrderDetailShopInfo(orderItem.shopInfo);
-    $myrouter.navigateTo({
+    router.navigateTo({
         name: "order/detail",
         query: {
             orderKey: orderItem.orderKey,
-            shopID: orderItem.shopInfo.shopID
+            shopID: orderItem.shopInfo.shopID,
         },
     });
 }
 async function orderAgain(orderItem: OrderItemI) {
     try {
-        $showLoading();
+        showLoading();
         await getShopInfo({
             shopID: orderItem.shopID,
         });
         setBusinessType(orderItem.businessType);
-        $myrouter.navigateTo({
+        router.navigateTo({
             name: "menu/info",
             query: {
                 orderKey: orderItem.orderKey,
@@ -140,7 +155,7 @@ async function orderAgain(orderItem: OrderItemI) {
     } catch (e) {
         console.log(e);
     } finally {
-        $hideLoading();
+        hideLoading();
     }
 }
 </script>

@@ -9,4 +9,6 @@ const store: any = createStore( {
     mutations,
     actions,
 })
+console.log('>>>>>>>')
+console.log(store)
 export default store

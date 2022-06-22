@@ -20,25 +20,29 @@ import { CategoryItemI } from "@/interface/menu";
 import { MinusPromotionsObjectI, AsideCategoryItemI } from "@/store/getters/menu";
 import { RefI } from "@/interface/vueInterface";
 import { ShopItemI } from "@/interface/home";
+import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { storeToRefs} from 'pinia'
 
-interface StateF {
+interface MenuStateF {
     selectedCategoryID: ComputedStateI<number>;
     shopInfo: ComputedStateI<ShopItemI>;
     categoryIDAside: ComputedStateI<string>;
 }
-interface GetterF {
+interface MenuGetterF {
     asideCategoryList: ComputedGetterI<AsideCategoryItemI>;
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
 }
-interface MutationF {
-    setSelectedCategoryID: ComputedMutationI<number>;
-    setCategoryIDMain: ComputedMutationI<string>;
-    setCategoryIDAside: ComputedMutationI<string>;
-}
-const { selectedCategoryID, shopInfo, categoryIDAside } = mapState(["selectedCategoryID", "shopInfo", "categoryIDAside"]);
-const { asideCategoryList, minusPromotionsObject }: GetterF = mapGetter(["asideCategoryList", "minusPromotionsObject"]);
 
-const { setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside }: MutationF = mapMutation(["setSelectedCategoryID", "setCategoryIDMain", "setCategoryIDAside"]);
+// store
+const menuStore: MenuStoreI = useMenuStore()
+// state
+const { selectedCategoryID, shopInfo, categoryIDAside }:MenuStateF =toRefs(menuStore.menuState) 
+// getter
+const { asideCategoryList, minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore) 
+// action
+const { setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside } = menuStore
+//
 function changeCategoryTab(asideCategoryItem: CategoryItemI) {
     setSelectedCategoryID(asideCategoryItem.categoryID);
     setCategoryIDMain(asideCategoryItem.categoryIDMain);

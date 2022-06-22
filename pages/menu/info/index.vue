@@ -41,15 +41,16 @@ import { delaySync } from "@/utils/index.js";
 import PackPriceExplain from '@/components/PackPriceExplain.vue'
 
 import { mapState, mapMutation, mapAction, mapGetter } from "@/utils/mapVuex";
-import { defineComponent, getCurrentInstance, computed, watch, ref } from "vue";
+import { defineComponent, getCurrentInstance, computed, watch, ref, toRefs } from "vue";
 import { onShow, onLoad, onPageScroll, onUnload, onHide } from "@dcloudio/uni-app";
 import { ComputedActionI, ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { ShopItemI } from "@/interface/home";
 import { CategoryItemI, FoodItemI } from "@/interface/menu";
 import { footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX, shopInfoTransitionTime } from "./infoConfig";
 import { MinusPromotionsObjectI } from "@/store/getters/menu";
-
-interface StateF {
+import { MenuStoreI, useMenuStore,  } from "@/piniaStore/menu";
+import {storeToRefs} from 'pinia'
+interface MenuStateF {
     shopInfo: ComputedStateI<ShopItemI>;
     businessType: ComputedStateI<number>;
     topBarInfo: ComputedStateI<string>;
@@ -61,28 +62,18 @@ interface StateF {
     menuPackPriceExpalinFlag: ComputedStateI<boolean>;
     
 }
-interface GetterF {
+interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
 }
 
-interface MutationF {
-    initCart: ComputedMutationI<void>;
-    handleMenuUnload: ComputedMutationI<void>;
-    setBusinessType: ComputedMutationI<number>;
-    setMenuPackPriceExpalinFlag: ComputedMutationI<boolean>;
-    
-}
-
-interface ActionF {
-    getMenuList: ComputedActionI<void>;
-    getOrderKeyFoodList: ComputedActionI<{ orderKey: string }>;
-    getShopInfo: ComputedMutationI<{ shopID: number }>;
-}
-const { shopInfo, businessType, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag, menuPackPriceExpalinFlag }: StateF = mapState();
-const { minusPromotionsObject }: GetterF = mapGetter();
-const { initCart, handleMenuUnload, setBusinessType, setMenuPackPriceExpalinFlag }: MutationF = mapMutation();
-
-const { getMenuList, getOrderKeyFoodList, getShopInfo }: ActionF = mapAction();
+// menu store
+const menuStore: MenuStoreI = useMenuStore()
+// menu state
+const { shopInfo, businessType, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag, menuPackPriceExpalinFlag }: MenuStateF = toRefs(menuStore.menuState);
+// menu getter
+const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
+// menu action
+const { getMenuList, getOrderKeyFoodList, getShopInfo, initCart, handleMenuUnload, setBusinessType, setMenuPackPriceExpalinFlag } = menuStore;
 
 const shopInfoAnimationData = ref(null);
 const shopInfoAnimation = uni.createAnimation({
@@ -128,7 +119,6 @@ onLoad(async (option: OptionI) => {
         if (businessType.value !== optionBusinessType) {
             setBusinessType(optionBusinessType)
         }
-        console.log(shopInfo.value);
 
         await init();
     } catch (e) {

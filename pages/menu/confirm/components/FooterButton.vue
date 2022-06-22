@@ -15,10 +15,14 @@ import { AddressItemI } from "@/interface/address";
 import { ShopItemI } from "@/interface/home";
 import { CategoryItemI, FoodItemI } from "@/interface/menu";
 import { ComputedActionI, ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
-import { getCurrentInstance } from "vue";
+import { getCurrentInstance, toRefs } from "vue";
 import { mapMutation, mapAction, mapState, mapGetter } from "@/utils/mapVuex";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { hideLoading, showLoading } from "@/utils/";
+import router from "@/utils/router";
+import { ConfirmStoreI, useConfirmStore } from "@/piniaStore/confirm";
 
-interface StateF {
+interface MenuStateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
     shopInfo: ComputedStateI<ShopItemI>;
 }
@@ -29,28 +33,32 @@ interface MutationF {
 interface ActionF {
     submitOrder: ComputedActionI
 }
-const { cartCategoryList,shopInfo }: StateF = mapState();
 
-const { clearCart, setNoteText }:MutationF = mapMutation();
-
-const { submitOrder }:ActionF = mapAction();
-
-const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
+// menu store
+const menuStore: MenuStoreI = useMenuStore()
+// menu state
+const { cartCategoryList,shopInfo }: MenuStateF = toRefs(menuStore.menuState);
+// menu action
+const { clearCart } = menuStore
+// confirm store
+const confirmStore: ConfirmStoreI = useConfirmStore();
+// confirm action
+const { setNoteText,submitOrder } = confirmStore
 
 async function toSubmitOrder() {
     try {
         if (!cartCategoryList.value.length) return;
-        $showLoading();
+        showLoading();
         await submitOrder();
         clearCart();
         setNoteText("");
-        $myrouter.reLaunchTo({
+        router.reLaunchTo({
             name: "order/list",
         });
     } catch (e) {
         console.log(e);
     } finally {
-        $hideLoading();
+        hideLoading();
     }
 }
 </script>

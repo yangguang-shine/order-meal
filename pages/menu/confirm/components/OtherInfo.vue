@@ -21,15 +21,23 @@
 import { mapState, mapMutation } from "@/utils/mapVuex";
 import { ComputedStateI, ComputedMutationI } from "@/interface/vuex";
 import { ComputedI, RefI } from "@/interface/vueInterface";
-interface StateF {
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import {toRefs} from 'vue'
+import { ConfirmStoreI, useConfirmStore } from "@/piniaStore/confirm";
+interface ConfirmStateF {
     noteText: ComputedStateI<string>;
 }
 interface MutationF {
     setNoteInputFlag: ComputedMutationI<boolean>;
 }
+// menu store
+const confirmStore: ConfirmStoreI = useConfirmStore();
+// menu state
+const { noteText }: ConfirmStateF = toRefs(confirmStore.confirmState)
+// menu action
+const { setNoteInputFlag } = confirmStore
 
-const { noteText }: StateF = mapState();
-const { setNoteInputFlag }: MutationF = mapMutation();
+
 function showNoteInput() {
     setNoteInputFlag(true);
 }

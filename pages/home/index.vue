@@ -5,6 +5,7 @@
         <Banner></Banner>
         <RecommandInfo></RecommandInfo>
         <SearchShop v-if="searchShopFlag" :bottom="tabBarHeightPX"></SearchShop>
+        <FixedImg></FixedImg>
     </view>
 </template>
 
@@ -16,6 +17,7 @@ import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import TopAddressSearch from "./components/TopAddressSearch.vue";
 import ToolsList from "./components/ToolsList.vue";
 import Banner from "./components/Banner.vue";
+import FixedImg from "./components/FixedImg.vue";
 import RecommandInfo from "./components/RecommandInfo.vue";
 import SearchShop from "./components/SearchShop.vue";
 import { topAddressSearchHeight } from "./homeConfig";
@@ -27,48 +29,46 @@ import router from "@/utils/router";
 import { ShopListParamsI } from "@/store/actions/home";
 import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
 import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
+import { HomeStateI } from "@/store/state/home";
+import { storeToRefs} from 'pinia'
 
-
-
-
-interface StateF {
+interface HomeStateF {
     searchShopFlag: ComputedStateI<boolean>;
     tabListTop: ComputedStateI<number>;
     selectedTabItem: ComputedStateI<TabItemI>;
 }
 
-interface ActionF {
-    getDefaultAddress: ComputedActionI<void, AddressItemI>;
-    getRecommandShopList: ComputedActionI<ShopListParamsI>;
-        setTopAddressWidthFlag: ComputedMutationI<boolean>;
-    setTabListFixedFlag: ComputedMutationI<boolean>;
-}
+// home store
+const homeStore: HomeStoreI = useHomeStore();
+// home state
+const { searchShopFlag, tabListTop, selectedTabItem }: HomeStateF = toRefs(homeStore.homeState);
+// home action
+const { getRecommandShopList, setTopAddressWidthFlag, setTabListFixedFlag } = homeStore;
+console.log('homeStore')
+console.log(homeStore)
 
-const homeStore: HomeStoreI = useHomeStore()
-const addressStore: AddressStoreI = useAddressStore()
-const { searchShopFlag, tabListTop, selectedTabItem } : StateF = toRefs(homeStore.homeState)
-const { getRecommandShopList,setTopAddressWidthFlag, setTabListFixedFlag} = homeStore
-const { getDefaultAddress } = addressStore
+// address store
+const addressStore: AddressStoreI = useAddressStore();
+// address action
+const { getDefaultAddress } = addressStore;
 
-// const { searchShopFlag, tabListTop, selectedTabItem }: StateF = mapState();
-// const { setTopAddressWidthFlag, setTabListFixedFlag }: MutationF = mapMutation();
-
-// const { getDefaultAddress, getRecommandShopList }: ActionF = mapAction();
-
-// console.log(JSON.stringify(addressList.value))
-onShow(() => {
-    console.log();
+onShow(async () => {
     console.log("onShow");
     init();
     setTimeout(async () => {
-        const res = await selectQuery("#home-container");
-        console.log(res);
-        if (-res.top >= tabListTop.value - topAddressSearchHeight) {
-            setTabListFixedFlag(true);
-        } else {
-            setTabListFixedFlag(false);
+        try {
+            const res = await selectQuery("#home-container");
+            console.log(res);
+            if (-res.top >= tabListTop.value - topAddressSearchHeight) {
+                setTabListFixedFlag(true);
+            } else {
+                setTabListFixedFlag(false);
+            }
+        } catch (e) {
+            console.log(e);
+        } finally {
         }
-    }, 0);
+    }, 100);
 
     // setTimeout(() => {
     //     console.log(111)
@@ -92,8 +92,6 @@ onUnload(() => {
 });
 
 onPageScroll((e: any) => {
-    console.log("onPageScroll");
-    console.log(e)
     if (e.scrollTop > topAddressSearchHeight) {
         setTopAddressWidthFlag(true);
     } else {
@@ -164,7 +162,7 @@ page {
         margin: 20rpx;
         border-radius: 20rpx;
     }
- 
+
     .type-item {
         width: 150rpx;
         height: 150rpx;

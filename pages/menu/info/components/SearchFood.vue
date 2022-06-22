@@ -36,15 +36,17 @@ import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/
 import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { delaySync } from "@/utils/";
 import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, toRefs } from "vue";
 import { footerInfoAndMinusPromotionsHeightPX, footerInfoHeightPX, searchModalTransitionTime } from "../infoConfig";
 import FoodItem from "./item/FoodItem.vue";
 import Search from "@/components/Search.vue";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { storeToRefs} from 'pinia'
 
-interface StateF {
+interface MenuStateF {
     categoryList: ComputedStateI<CategoryItemI[]>;
 }
-interface GetterF {
+interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
 }
 interface MutationF {
@@ -52,9 +54,14 @@ interface MutationF {
     setFoodDetailFlag: ComputedMutationI<boolean>;
     setFoodInfo: ComputedMutationI<FoodItemI>;
 }
-const { categoryList }: StateF = mapState(["categoryList"]);
-const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
-const { setSearchFoodFlag, setFoodDetailFlag, setFoodInfo }: MutationF = mapMutation(["setSearchFoodFlag", "setFoodDetailFlag", "setFoodInfo"]);
+// store
+const menuStore: MenuStoreI = useMenuStore();
+// state
+const { categoryList }: MenuStateF = toRefs(menuStore.menuState);
+// getter
+const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
+// action
+const { setSearchFoodFlag, setFoodDetailFlag, setFoodInfo } = menuStore;
 
 const searchValue: RefI<string> = ref("");
 const categoryFoodList: ComputedI<FoodItemI[]> = computed(() => {
@@ -62,22 +69,18 @@ const categoryFoodList: ComputedI<FoodItemI[]> = computed(() => {
     categoryList.value.forEach((categoryItem) => {
         categoryFoodList.push(...categoryItem.foodList);
     });
-    return categoryFoodList
+    return categoryFoodList;
 });
 const searchFoodList: ComputedI<FoodItemI> = computed(() => {
-    console.log(1111);
-    console.log(searchValue.value);
     if (!searchValue.value) return [];
     const searchFoodList: FoodItemI[] = [];
     categoryList.value.forEach((categoryItem) => {
         categoryItem.foodList.forEach((foodItem) => {
-            console.log(foodItem);
             if (foodItem.foodName.includes(searchValue.value)) {
                 searchFoodList.push(foodItem);
             }
         });
     });
-    console.log();
     return searchFoodList;
 });
 

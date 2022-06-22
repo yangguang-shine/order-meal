@@ -1,11 +1,11 @@
 import { initUserInfo, UserInfoI } from "@/interface/center"
 
 
-export interface StateCenterI {
+export interface CenterStateI {
     userInfo: UserInfoI
 
 }
- const state: StateCenterI = {
+ const state: CenterStateI = {
     userInfo: initUserInfo,
 }
 export default state

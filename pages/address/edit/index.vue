@@ -36,15 +36,18 @@ import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { onShow, onLoad } from "@dcloudio/uni-app";
 import { AddressItemI, ComputedActionI, ComputedStateI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
-const { $showLoading: showLoading, $hideLoading: hideLoading, $showModal: showModal, $delaySync: delaySync, $myrouter: myrouter } = getCurrentInstance().proxy;
-
+import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
+import { hideLoading, showLoading, showModal, showToast } from "@/utils/";
+import router from "@/utils/router";
 interface ActionF {
     addAddress: ComputedActionI<AddressItemI>;
     findAddress: ComputedActionI<number, AddressItemI>;
     editAddress: ComputedActionI<AddressItemI>;
 }
-const { addAddress, findAddress, editAddress }: ActionF = mapAction(["addAddress", "findAddress", "editAddress"]);
-
+// address store
+const addressStore: AddressStoreI = useAddressStore()
+// address action
+const { addAddress, findAddress, editAddress } = addressStore
 let routerAddressID: RefI<number> = ref("");
 interface OptionI {
     addressID: string
@@ -86,7 +89,7 @@ async function toAddAddress() {
         await showModal({
             content: "添加成功",
         });
-        myrouter.back(1);
+        router.back(1);
     } catch (e) {
         console.log(e);
     } finally {
@@ -104,7 +107,7 @@ async function toEditAddress() {
         await showModal({
             content: "修改成功",
         });
-        myrouter.back(1);
+        router.back(1);
     } catch (e) {
         console.log(e);
     } finally {

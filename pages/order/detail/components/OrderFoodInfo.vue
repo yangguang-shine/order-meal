@@ -42,9 +42,13 @@ import OrderFoodItem from "@/components/OrderFoodItem.vue";
 import { ShopItemI } from "@/interface/home";
 import { OrderDetailI } from "@/interface/order";
 import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { OrderStoreI, useOrderStore } from "@/piniaStore/order";
 import { mapAction, mapMutation, mapState } from "@/utils/mapVuex";
 import router from "@/utils/router";
-interface StateF {
+import {toRefs} from 'vue'
+interface OrderStateF {
     orderDetail: ComputedStateI<OrderDetailI>;
     orderDetailShopInfo: ComputedStateI<ShopItemI>;
 }
@@ -56,9 +60,16 @@ interface ActionF {
     getShopInfo: ComputedActionI<{shopID: number}>
 
 }
-const { orderDetail, orderDetailShopInfo }: StateF = mapState();
-const { setBusinessType }: MutationF = mapMutation();
-const { getShopInfo }: ActionF = mapAction();
+// order store
+const orderStore: OrderStoreI = useOrderStore();
+const { orderDetail, orderDetailShopInfo }: OrderStateF = toRefs(orderStore.orderState);
+
+// home store
+const MenuStore: MenuStoreI = useMenuStore()
+// home action
+const { setBusinessType, getShopInfo} = MenuStore
+
+
 async function toOrder() {
     await getShopInfo({
         shopID: orderDetail.value.shopID,

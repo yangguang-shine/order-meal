@@ -42,9 +42,10 @@ export interface ShopActionI {
     setRouterBusinessType: (routerBusinessType: number) => void 
     setSearchShopListFlag: (searchShopListFlag: boolean) => void
 }
-export default {
+const shopAction: ShopActionI = {
     getShopList,
     setShopList,
     setRouterBusinessType, 
     setSearchShopListFlag,
-} as ShopActionI
+}
+export default shopAction

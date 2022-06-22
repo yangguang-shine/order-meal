@@ -13,7 +13,7 @@
                         <div class="food-price" :style="{ color: shopInfo.mainColor }">¥{{ foodInfo.price }}</div>
                         <div v-if="foodInfo.unit" class="food-unit">{{ packPriceText }}/{{ foodInfo.unit }}</div>
                     </div>
-                    <FoodAddMinusItem v-if="foodInfo.reserveCount > 0" :foodItem="foodInfo"></FoodAddMinusItem>
+                    <FoodAddMinusItem v-if="foodInfo.reserveCount > 0" :foodItem="foodInfo" type="modal" ></FoodAddMinusItem>
                     <ReserveNotEnough v-else></ReserveNotEnough>
                 </view>
                 <div class="food-detail-title">菜品详情</div>
@@ -29,7 +29,6 @@ import FoodAddMinusItem from "./item/FoodAddMinusItem.vue";
 import ReserveNotEnough from "./item/ReserveNotEnough.vue";
 import { delaySync } from "@/utils/index";
 import { mapState, mapMutation, mapGetter } from "@/utils/mapVuex";
-import { getCurrentInstance, computed, onMounted, ref } from "vue";
 
 const showComponents = false;
 
@@ -40,39 +39,33 @@ import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { ComputedI } from "@/interface/vueInterface";
 import { ShopItemI } from "@/interface/home";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
+import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { storeToRefs} from 'pinia'
 
-interface StateF {
+
+interface MenuStateF {
     foodInfo: ComputedStateI<FoodItemI>;
     shopInfo: ComputedStateI<ShopItemI>;
 
     businessType: ComputedStateI<number>;
 }
-interface GetterF {
+interface MenuGetterF {
     minusPromotionsObject: ComputedStateI<MinusPromotionsObjectI[]>;
 }
-interface MutationF {
-    setFoodDetailFlag: ComputedMutationI<boolean>;
-    setFoodInfo: ComputedMutationI<FoodItemI>;
-}
-const { foodInfo, shopInfo, businessType }: StateF = mapState();
-const { minusPromotionsObject }: GetterF = mapGetter();
-const { setFoodDetailFlag, setFoodInfo }: MutationF = mapMutation();
+// store
+const menuStore: MenuStoreI = useMenuStore()
+// state
+const { foodInfo, shopInfo, businessType }: MenuStateF = toRefs(menuStore.menuState);
+// getter
+const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore)
+// action
+const { setFoodDetailFlag, setFoodInfo } = menuStore
+// animation
 const { overlayAnimationData, mainAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: foodDetailTransitionTime,
     timingFunction: "ease-in-out",
 });
-// const overlayAnimationData = ref(null);
-// const detailAnimationData = ref(null);
-// const overlayAnimation = uni.createAnimation({
-//     duration: foodDetailTransitionTime * 3,
-//     timingFunction: "ease-in-out",
-// });
-
-// const detailAnimation = uni.createAnimation({
-//     duration: foodDetailTransitionTime,
-//     timingFunction: "ease-in-out",
-// });
-
 onMounted(() => {
     toStartAnimation();
 });

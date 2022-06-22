@@ -5,7 +5,7 @@ import { GetterI, StateI, FoodItemI, GetterStateI } from "@/interface/index";
  * @params payPrice - 订单实际支付金额
  * @params orderFoodList - 订单菜品列表
  */
-export interface GetterStateConfirmI {
+export interface ConfirmGetterI {
     // originOrderAmount: number;
     // minusPrice: number;
     // payPrice: number;

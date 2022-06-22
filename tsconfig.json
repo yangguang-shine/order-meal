@@ -5,6 +5,7 @@
       "strict": true,
       "jsx": "preserve",
       "moduleResolution": "node",
+      "noImplicitThis": false,
       "paths": {
         "@/components/*": ["./components/*"],
         "@/config/*": ["./config/*"],
@@ -16,8 +17,8 @@
         "@/interface/*": ["./interface/*"],
         "@/style/*": ["./style/*"],
         "@/store/*": ["./store/*"],
-        "@/piniaStore/*": ["./piniaStore/*"],
-        "@/piniaStore/": ["./piniaStore/"],
+        "@/piniaStore/*": ["piniaStore/*"],
+        "@/piniaStore/": ["piniaStore"],
       }
     }
 }

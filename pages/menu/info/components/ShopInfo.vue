@@ -52,14 +52,18 @@ import MinusList from "@/components/MinusList.vue";
 import { ShopItemI } from "@/interface/home";
 import { ComputedStateI } from "@/interface/vuex";
 import { mapState } from "@/utils/mapVuex";
-import { defineComponent, getCurrentInstance, computed, watch, ref } from "vue";
+import { defineComponent, getCurrentInstance, computed, watch, ref, toRefs } from "vue";
 import { shopInfoTransitionTime } from "../infoConfig";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 
-interface StateF {
+interface MenuStateF {
     shopInfo: ComputedStateI<ShopItemI>,
     startShopInfoAnimationFlag: ComputedStateI<boolean>,
 }
-const { shopInfo, startShopInfoAnimationFlag }: StateF = mapState(["shopInfo", 'startShopInfoAnimationFlag']);
+// store
+const menuStore: MenuStoreI = useMenuStore();
+// state
+const { shopInfo, startShopInfoAnimationFlag }: MenuStateF = toRefs(menuStore.menuState)
 
 const shopInfoAnimationData = ref(null);
 const shopInfoAnimation = uni.createAnimation({

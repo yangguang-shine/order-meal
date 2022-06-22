@@ -2,7 +2,7 @@ import { MutationI, StateI } from "@/interface/index";
 
 import { ShopItemI, TabItemI } from "@/interface/index";
 import { tabBarHeightPX } from "@/utils/";
-import { StateOrderI } from "../state/order";
+import { OrderStateI } from "../state/order";
 
 function setTopAddressWidthFlag(state: StateI, topAddressWidthFlag: boolean): void {
     state.topAddressWidthFlag = topAddressWidthFlag;

@@ -53,17 +53,7 @@ async function getRecommandShopList( { type = "", businessType = 2 }: ShopListPa
 //     shopState.shopList = shopList
 //     return shopList || [];
 // }
-async function getShopInfo(payload: { shopID: number}): Promise<ShopItemI> {
-    const originShopInfo: OriginShopItemI = await fetch("shop/find", payload);
-    const shopInfo: ShopItemI = {
-        ...originShopInfo,
-        minusList: JSON.parse(originShopInfo.minus),
-        fullImgPath: `${shopImgPath}/${originShopInfo.imgUrl}`,
-        ...getBusinessTypeInfo(originShopInfo.businessTypes),
-    };
-    homeState.shopInfo = shopInfo
-    return shopInfo;
-}
+
 function setTopAddressWidthFlag(topAddressWidthFlag: boolean): void {
     homeState.topAddressWidthFlag = topAddressWidthFlag;
 }
@@ -78,41 +68,30 @@ function setRecommandShopList( recommandShopList: ShopItemI[]): void {
 function changeTabItem( tabItem: TabItemI): void {
     homeState.selectedTabItem = tabItem;
 }
-function setShopInfo( shopInfo: ShopItemI): void {
-    homeState.shopInfo = shopInfo;
-}
 function setSearchShopFlag( searchShopFlag: boolean): void {
     homeState.searchShopFlag = searchShopFlag;
 }
 
-function setBusinessType( type: number): void {
-    homeState.businessType = type;
-}
 function setTabListTop( tabListTop: number): void {
     homeState.tabListTop = tabListTop;
 }
 
 export interface HomeActionI {
     getRecommandShopList: (payload: ShopListParamsI) => Promise<ShopItemI[]>;
-    getShopInfo: (payload: { shopID: number}) => Promise<ShopItemI>;
     setTopAddressWidthFlag: (topAddressWidthFlag: boolean) => void;
     setTabListFixedFlag: (tabListFixedFlag: boolean) => void;
     setRecommandShopList: (recommandShopList: ShopItemI[]) => void;
     changeTabItem: (tabItem: TabItemI) => void;
-    setShopInfo: (shopInfo: ShopItemI) => void;
     setSearchShopFlag: (searchShopFlag: boolean) => void;
-    setBusinessType: (type: number) => void;
     setTabListTop: (tabListTop: number) => void;
 }
-export default {
+const homeAction: HomeActionI = {
     getRecommandShopList,
-    getShopInfo,
     setTopAddressWidthFlag,
     setTabListFixedFlag,
     setRecommandShopList,
     changeTabItem,
-    setShopInfo,
     setSearchShopFlag,
-    setBusinessType,
     setTabListTop,
-} as HomeActionI;
+} 
+export default homeAction

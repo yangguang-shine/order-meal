@@ -27,12 +27,17 @@ import { delaySync, tabBarHeightPX } from "@/utils/";
 import Shop from "@/components/Shop.vue";
 import Search from "@/components/Search.vue";
 import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, toRefs } from "vue";
 import { initShopItem, ShopItemI } from "@/interface/home";
 import { searchShopTransitionTime, selectTypeTransitionTime } from "../homeConfig";
 import router from "@/utils/router";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
-interface StateF {
+import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
+
+import { storeToRefs} from 'pinia'
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+
+interface HomeStateF {
     recommandShopList: ComputedStateI<ShopItemI[]>;
 }
 interface MutationF {
@@ -40,9 +45,16 @@ interface MutationF {
     setShopInfo: ComputedMutationI<ShopItemI>;
     setBusinessType: ComputedMutationI<number>;
 }
-
-const { recommandShopList }: StateF = mapState();
-const { setSearchShopFlag, setShopInfo, setBusinessType }: MutationF = mapMutation();
+// home store
+const homeStore: HomeStoreI = useHomeStore()
+// home state
+const { recommandShopList }: HomeStateF = toRefs(homeStore.homeState);
+// home action
+const { setSearchShopFlag } = homeStore
+// menu store
+const menuStore: MenuStoreI = useMenuStore()
+// menu action
+const { setShopInfo, setBusinessType } = menuStore
 
 const showSelectTypeFlag: RefI<boolean> = ref(false);
 const selectedShopItem: RefI<ShopItemI> = ref(recommandShopList.value[0]);

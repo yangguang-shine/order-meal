@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
 import { delaySync, selectQuery } from "@/utils/index";
-import { watch, reactive, ref, getCurrentInstance, onMounted } from "vue";
+import { watch, reactive, ref, getCurrentInstance, onMounted, toRefs } from "vue";
 import { mapMutation, mapState } from "@/utils/mapVuex";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import FoodAddMinusItem from "./FoodAddMinusItem.vue";
@@ -25,6 +25,7 @@ import ReserveNotEnough from "./ReserveNotEnough.vue";
 import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI, PositionInfoI, ShopItemI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
 import { cartImgWidthHeightPX, countAddTransitionTime, foodAddMinusTransitionTime } from "../../infoConfig";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 
 interface PropsI {
     foodItem: FoodItemI;
@@ -44,16 +45,12 @@ interface CartChangeParamI {
 }
 const showInfoFlag: RefI<boolean> = ref(false);
 
-interface StateF {
-    cartCategoryList: ComputedStateI<CategoryItemI[]>;
-    cartDetailFlag: ComputedStateI<boolean>;
+interface MenuStateF {
     shopInfo: ComputedStateI<ShopItemI>;
-    cartImgPositionInfo: ComputedStateI<PositionInfoI>;
-}
-interface MutationF {
-    cartChange: ComputedMutationI<CartChangeParamI>;
-    setCartDetailFlag: ComputedMutationI<boolean>;
-    setCartImgAnimationFlag: ComputedMutationI<boolean>;
+
+    // cartCategoryList: ComputedStateI<CategoryItemI[]>;
+    // cartDetailFlag: ComputedStateI<boolean>;
+    // cartImgPositionInfo: ComputedStateI<PositionInfoI>;
 }
 interface RandomStyleI {
     random: number;
@@ -62,8 +59,10 @@ interface RandomStyleI {
         right: number;
     };
 }
-const { cartChange, setCartDetailFlag, setCartImgAnimationFlag }: MutationF = mapMutation(["cartChange", "setCartDetailFlag", "setCartImgAnimationFlag"]);
-const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPositionInfo }: StateF = mapState(["cartCategoryList", "cartDetailFlag", "shopInfo", "cartImgPositionInfo"]);
+// store
+const menuStore: MenuStoreI = useMenuStore();
+// state
+const { shopInfo  }: MenuStateF = toRefs(menuStore.menuState)
 
 onMounted(async () => {
     if (props.foodItem.orderCount > 0) {

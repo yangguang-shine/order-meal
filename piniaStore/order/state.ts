@@ -1,8 +1,10 @@
+import { ref, reactive } from "vue";
+
 import { initShopItem, ShopItemI } from "@/interface/home"
 import { initOrderDetail, OrderDetailI, OrderItemI } from "@/interface/order"
 
 
-export interface StateOrderI {
+export interface OrderStateI {
     allOrderList: OrderItemI[][], 
     orderTabIndex: number, 
     orderErrorListFlag: boolean[],
@@ -10,11 +12,14 @@ export interface StateOrderI {
     orderDetailShopInfo: ShopItemI,
 }
 
-const state: StateOrderI = {
+const orderState: OrderStateI = reactive({
     allOrderList: [[], [], [], []], 
     orderTabIndex: 0, 
     orderErrorListFlag: [false, false, false,false],
     orderDetail: initOrderDetail,
     orderDetailShopInfo: initShopItem,
-}
-export default state
+})
+
+
+export default orderState
+

@@ -11,31 +11,33 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, computed, getCurrentInstance, ref } from "vue";
+import { defineComponent, computed, getCurrentInstance, ref, toRefs } from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { topAddressSearchHeight } from "../homeConfig";
 import { TabItemI, ComputedStateI, ComputedMutationI, ComputedActionI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { delaySync, hideLoading, showLoading } from "@/utils/";
-
-interface StateF {
-    tabList: ComputedStateI<TabItemI[]>;
+import { ShopStoreI, useShopStore } from "@/piniaStore/shop";
+import { storeToRefs} from 'pinia'
+import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
+interface ShopStateF {
     routerBusinessType: ComputedStateI<number>;
 }
-interface MutationF {
-    setSearchShopListFlag: ComputedMutationI<boolean>;
+interface HomeStateF {
+    tabList: ComputedStateI<TabItemI[]>;
 }
-interface ActionF {
-    getShopList: ComputedActionI<{
-        businessType: number;
-        type: string;
-    }>;
-}
-
-const { tabList, routerBusinessType }: StateF = mapState();
-const { setSearchShopListFlag }: MutationF = mapMutation();
-const { getShopList }: ActionF = mapAction();
+// shop store
+const shopStore: ShopStoreI = useShopStore()
+// shop state
+const { routerBusinessType }: ShopStateF = toRefs(shopStore.shopState);
+// shop action
+const { setSearchShopListFlag, getShopList } = shopStore;
+// home store
+const homeStore: HomeStoreI = useHomeStore()
+// home state
+const { tabList }: HomeStateF = toRefs(homeStore.homeState);
+// self state
 const selectedTabItem: RefI<TabItemI> = ref(tabList.value[0]);
 onLoad(() => {
     init();

@@ -9,11 +9,16 @@
 import { ShopItemI } from "@/interface/home";
 import { ComputedStateI } from "@/interface/vuex";
 import { mapState } from "@/utils/mapVuex";
+import {toRefs} from 'vue'
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 
-interface StateF {
+interface MenuStateF {
     shopInfo: ComputedStateI<ShopItemI>
 }
-const { shopInfo }: StateF = mapState(['shopInfo'])
+// store
+const menuStore: MenuStoreI = useMenuStore();
+// state
+const { shopInfo }: MenuStateF = toRefs(menuStore.menuState)
 interface PropsI {
     reserveRemain?: number;
 }

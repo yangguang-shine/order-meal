@@ -24,12 +24,13 @@ import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { delaySync } from "@/utils/";
 import { barSearchTransitionTime, shopInfoTransitionTime } from "../infoConfig";
 import { ShopItemI } from "@/interface/home";
-import { ref, watch } from "vue";
+import { ref, watch, toRefs } from "vue";
 import { RefI } from "@/interface/vueInterface";
 import router from "@/utils/router";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 
-interface StateF {
+interface MenuStateF {
     topBarInfo: ComputedStateI<string>;
     shopInfo: ComputedStateI<ShopItemI>;
     selectedCategoryID: ComputedStateI<number>;
@@ -42,8 +43,12 @@ interface MutationF {
     setShopInfoMode: ComputedMutationI<string>;
     setCategoryIDMain: ComputedMutationI<string>;
 }
-const { topBarInfo, shopInfo, selectedCategoryID }: StateF = mapState();
-const { setTopBarInfo, setShopInfoFlag, setStartShopInfoAnimationFlag, setSearchFoodFlag, setShopInfoMode, setCategoryIDMain }: MutationF = mapMutation();
+// store
+const menuStore: MenuStoreI = useMenuStore();
+// state
+const { topBarInfo, shopInfo, selectedCategoryID }: MenuStateF = toRefs(menuStore.menuState);
+// action
+const { setTopBarInfo, setShopInfoFlag, setStartShopInfoAnimationFlag, setSearchFoodFlag, setShopInfoMode, setCategoryIDMain } = menuStore;
 
 const { overlayAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: barSearchTransitionTime,
@@ -51,7 +56,6 @@ const { overlayAnimationData, toStartAnimation, toEndAnimation } = useOverlayAni
 });
 const barSearchAnimationData: RefI<any> = ref(null);
 watch(topBarInfo, (newValue: string, oldValue: string) => {
-
     if (newValue === "点餐") {
         toStartAnimation();
     } else if (newValue === "商家") {

@@ -18,7 +18,7 @@ async function addAddress(addressInfo: AddressItemI) {
     await fetch("address/add", addressInfo);
 }
 async function findAddress(addressID: number) {
-    const addressInfo = await fetch("address/find", { addressID });
+    const addressInfo: AddressItemI = await fetch("address/find", { addressID });
     return addressInfo;
 }
 async function editAddress(addressInfo: AddressItemI) {
@@ -45,13 +45,13 @@ export interface AddressActionI {
     deleteAddress: (addressID: number) => void;
     setDefaultAddressFetch: (addressID: number) => void;
     addAddress: (addressInfo: AddressItemI) => void;
-    findAddress: (addressID: number) => void;
+    findAddress: (addressID: number) => Promise<AddressItemI>;
     editAddress: (addressInfo: AddressItemI) => void;
     getDefaultAddress: () => Promise<AddressItemI>;
     setAddressList: (addressList: AddressItemI[]) => void;
     setDefaultAddress: (defaultAddress: AddressItemI) => void;
 }
-export default {
+const addressAction: AddressActionI = {
     getAddressList,
     deleteAddress,
     setDefaultAddressFetch,
@@ -61,4 +61,5 @@ export default {
     getDefaultAddress,
     setAddressList,
     setDefaultAddress,
-} as AddressActionI;
+} 
+export default addressAction

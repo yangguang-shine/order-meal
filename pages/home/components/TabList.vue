@@ -7,32 +7,25 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, computed, getCurrentInstance, ref, onMounted } from "vue";
+import { defineComponent, computed, getCurrentInstance, ref, onMounted,toRefs } from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { topAddressSearchHeight } from "../homeConfig";
 import { TabItemI, ComputedStateI, ComputedMutationI, ComputedActionI } from "@/interface/index";
-import { selectQuery } from "@/utils/";
+import { hideLoading, selectQuery, showLoading } from "@/utils/";
 import { ShopListParamsI } from "@/store/actions/home";
-const { $showLoading, $hideLoading, $showModal, $delaySync } = getCurrentInstance().proxy;
-
-interface StateF {
+import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
+import { storeToRefs} from 'pinia'
+interface HomeStateF {
     tabList: ComputedStateI<TabItemI[]>;
     selectedTabItem: ComputedStateI<TabItemI>;
     tabListFixedFlag: ComputedStateI<boolean>;
     tabListTop: ComputedStateI<number>;
-    
 }
-
-interface MutationF {
-    changeTabItem: ComputedMutationI<TabItemI>;
-    setTabListTop: ComputedMutationI<number>;
-}
-interface ActionF {
-    getRecommandShopList: ComputedActionI<ShopListParamsI>;
-}
-const { tabList, selectedTabItem, tabListFixedFlag, tabListTop }: StateF = mapState();
-const { changeTabItem, setTabListTop }: MutationF = mapMutation();
-const { getRecommandShopList }: ActionF = mapAction();
+// home store
+const homeStore: HomeStoreI = useHomeStore()
+// home state
+const { tabList, selectedTabItem, tabListFixedFlag, tabListTop }: HomeStateF = toRefs(homeStore.homeState);
+const { changeTabItem, setTabListTop , getRecommandShopList} = homeStore;
 
 onMounted(() => {
     getTabListTop();
@@ -53,7 +46,7 @@ async function getTabListTop() {
 const clickTabItem = async (tabItem: TabItemI) => {
     if (selectedTabItem.value.type === tabItem.type) return;
     try {
-        $showLoading();
+        showLoading();
         await getRecommandShopList({
             type: tabItem.type,
             businessType: 2
@@ -67,7 +60,7 @@ const clickTabItem = async (tabItem: TabItemI) => {
     } catch (e) {
         console.log(e);
     } finally {
-        $hideLoading();
+        hideLoading();
     }
 };
 </script>

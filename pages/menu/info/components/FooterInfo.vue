@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, onMounted, watch, ref, computed } from "vue";
+import { getCurrentInstance, onMounted, watch, ref, computed, toRefs } from "vue";
 import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI, FoodItemI, PositionInfoI } from "@/interface/menu";
@@ -31,9 +31,9 @@ import { ShopItemI } from "@/interface/home";
 import { selectQuery, toFixedToNumber } from "@/utils/";
 import router from "@/utils/router";
 import { countAddTransitionTime } from "../infoConfig";
-const currentInstance = getCurrentInstance();
-
-interface StateF {
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import {storeToRefs} from 'pinia'
+interface MenuStateF {
     startShopInfoAnimationFlag: ComputedStateI<boolean>;
     shopInfoFlag: ComputedStateI<boolean>;
     businessType: ComputedStateI<number>;
@@ -42,19 +42,21 @@ interface StateF {
     cartImgPositionInfo: ComputedStateI<PositionInfoI>;
     cartImgAnimationFlag: ComputedStateI<boolean>;
 }
-interface GetterF {
+interface MenuGetterF {
     cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
 }
 interface MutationF {
     toogleCartDetailFlag: ComputedMutationI;
     setCartImgPositionInfo: ComputedMutationI<PositionInfoI>;
 }
-
-const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCategoryList, cartImgPositionInfo, cartImgAnimationFlag }: StateF = mapState();
-
-const { cartPriceInfo }: GetterF = mapGetter();
-
-const { toogleCartDetailFlag, setCartImgPositionInfo }: MutationF = mapMutation();
+// store
+const menuStore: MenuStoreI = useMenuStore();
+// state
+const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCategoryList, cartImgPositionInfo, cartImgAnimationFlag }: MenuStateF = toRefs(menuStore.menuState);
+// getter
+const { cartPriceInfo }: MenuGetterF = storeToRefs(menuStore);
+// action
+const { toogleCartDetailFlag, setCartImgPositionInfo } = menuStore;
 const cartImgAnimationData = ref(null);
 
 interface ConfirmButtonInfoI {
@@ -91,6 +93,7 @@ onMounted(async () => {
     setCartImgPositionInfo(positionInfo);
 });
 async function getCartImgPositionInfo(): Promise<PositionInfoI> {
+    const currentInstance = getCurrentInstance();
     const res = await selectQuery("#cart-img-box", currentInstance);
     return {
         left: res.left,
@@ -124,7 +127,6 @@ function startCartImgAnimation() {
 }
 function toComfirmOrder() {
     if (confirmButtonInfo.value.mainColorFlag) {
-        console.log(1111);
         router.navigateTo({
             name: "menu/confirm",
         });

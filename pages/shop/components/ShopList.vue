@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, computed, getCurrentInstance, ref } from "vue";
+import { defineComponent, computed, getCurrentInstance, ref, toRefs } from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { topAddressSearchHeight } from "../homeConfig";
 import { TabItemI, ComputedStateI, ComputedMutationI, ComputedActionI, ShopItemI } from "@/interface/index";
@@ -14,22 +14,25 @@ import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { delaySync, hideLoading, showLoading } from "@/utils/";
 import router from "@/utils/router";
 import Shop from '@/components/Shop.vue'
-
-interface StateF {
+import { ShopStoreI, useShopStore } from "@/piniaStore/shop";
+import { storeToRefs} from 'pinia'
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+interface ShopStateF {
     shopList: ComputedStateI<ShopItemI[]>;
     routerBusinessType: ComputedStateI<number>;
     
 }
-interface MutationF {
-    setShopInfo: ComputedMutationI<ShopItemI>
-    setBusinessType: ComputedMutationI<number>
-}
-
-const { shopList, routerBusinessType }: StateF = mapState();
-console.log(shopList)
-console.log(routerBusinessType)
-const { setShopInfo, setBusinessType } :MutationF = mapMutation()
+// shop store
+const shopStore: ShopStoreI = useShopStore()
+// shop state
+const { shopList, routerBusinessType }: ShopStateF = toRefs(shopStore.shopState);
+// menu store
+const menuStore: MenuStoreI = useMenuStore()
+// menu action
+const { setShopInfo, setBusinessType } = menuStore
 function toOrder(shopItem: ShopItemI) {
+    console.log('setShopInfo')
+    console.log(setShopInfo)
     setShopInfo(shopItem);
     setBusinessType(routerBusinessType.value);
     router.navigateTo({

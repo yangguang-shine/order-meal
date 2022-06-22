@@ -1,3 +1,4 @@
+
 import fetch from "@/utils/fetch";
 import { timeStampTranslate, toFixedToNumber } from "@/utils/index";
 import getOrderTypeTitle from "@/utils/getOrderTypeTitle";
@@ -5,13 +6,13 @@ import { shopImgPath, foodImgPath } from "@/config/index";
 import { ActionI, ActionContextI, OrderItemI, OriginShopItemI, ShopItemI, OriginFoodItemI, FoodItemI, OrderDetailI, OrderKeyI } from "@/interface/index";
 import getBusinessTypeInfo from "@/utils/getBusinessTypeInfo";
 import getOrderBusinessTitle from "@/utils/getOrderBusinessTitle";
-
-async function getOrderList({ state, commit }: ActionContextI, payload: any) {
+import orderState from "./state";
+async function getOrderList() {
     let data: {
         orderKeyList: OrderKeyI[];
         shopInfoList: OriginShopItemI[];
     } = await fetch("order/orderList", {
-        status: state.orderTabIndex,
+        status: orderState.orderTabIndex,
     });
     const shopListMap: {
         [index: number]: ShopItemI;
@@ -33,11 +34,11 @@ async function getOrderList({ state, commit }: ActionContextI, payload: any) {
             orderBusinessTitle: getOrderBusinessTitle(item.businessType)
         })
     );
-    state.allOrderList[state.orderTabIndex] = orderList;
+    orderState.allOrderList[orderState.orderTabIndex] = orderList;
     return orderList;
 }
 
-async function getOrderDetail({ state, commit }: ActionContextI, payload: { orderKey: string }): Promise<OrderDetailI> {
+async function getOrderDetail(payload: { orderKey: string }): Promise<OrderDetailI> {
     const originOrderDetail: {
         orderInfo: OrderKeyI;
         foodList: OriginFoodItemI[];
@@ -57,11 +58,11 @@ async function getOrderDetail({ state, commit }: ActionContextI, payload: { orde
             })
         ),
     };
-    commit("setOrderDetail", orderDetail);
+    orderState.orderDetail = orderDetail
     return orderDetail;
 }
 
-async function getOrderDetailShopInfo({ state, commit }: ActionContextI, payload: { shopID: number }): Promise<ShopItemI> {
+async function getOrderDetailShopInfo(payload: { shopID: number }): Promise<ShopItemI> {
     const originShopInfo: OriginShopItemI = await fetch("shop/find", payload);
     const orderDetailShopInfo: ShopItemI = {
         ...originShopInfo,
@@ -69,17 +70,45 @@ async function getOrderDetailShopInfo({ state, commit }: ActionContextI, payload
         fullImgPath: `${shopImgPath}/${originShopInfo.imgUrl}`,
         ...getBusinessTypeInfo(originShopInfo.businessTypes),
     };
-    commit("setOrderDetailShopInfo", orderDetailShopInfo);
+    orderState.orderDetailShopInfo = orderDetailShopInfo
     return orderDetailShopInfo;
 }
 
 
-async function cancelOrder({ state, commit }: ActionContextI, payload: { orderKey: string }) {
+async function cancelOrder(payload: { orderKey: string }) {
     await fetch("order/cancel", payload);
+}
+function setOrderTabIndex (orderTabIndex: number): void  {
+    orderState.orderTabIndex = orderTabIndex;
+};
+
+function setOrderErrorListFlag (flag: boolean): void  {
+    orderState.orderErrorListFlag[orderState.orderTabIndex] = flag;
+};
+function setOrderDetail (orderDetail: OrderDetailI): void  {
+    orderState.orderDetail = orderDetail;
+};
+function setOrderDetailShopInfo (shopInfo: ShopItemI): void  {
+    orderState.orderDetailShopInfo = shopInfo;
+};
+
+export interface OrderActionI {
+    getOrderList:() => Promise<OrderItemI[]>,
+    getOrderDetail:(payload: { orderKey: string }) =>  Promise<OrderDetailI>,
+    getOrderDetailShopInfo:(payload: { shopID: number }) => Promise<ShopItemI>,
+    cancelOrder : (payload: { orderKey: string }) => void,
+    setOrderTabIndex:(orderTabIndex: number) => void,
+    setOrderErrorListFlag:(flag: boolean)=> void,
+    setOrderDetail:(orderDetail: OrderDetailI) => void,
+    setOrderDetailShopInfo:(shopInfo: ShopItemI)=> void,
 }
 export default {
     getOrderList,
     getOrderDetail,
     getOrderDetailShopInfo,
     cancelOrder,
-} as ActionI;
+    setOrderTabIndex,
+    setOrderErrorListFlag,
+    setOrderDetail,
+    setOrderDetailShopInfo,
+} as OrderActionI;

@@ -17,26 +17,32 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance } from "vue";
+import { getCurrentInstance, toRefs } from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { OrderDetailI } from "@/interface/order";
 import { ShopItemI } from "@/interface/home";
 import { hideLoading, showLoading, showModal } from "@/utils/";
 import router from "@/utils/router";
-interface StateF {
+import { OrderStoreI, useOrderStore } from "@/piniaStore/order";
+import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+interface OrderStateF {
     orderDetail: ComputedStateI<OrderDetailI>;
     orderDetailShopInfo: ComputedStateI<ShopItemI>
 }
-interface MutationF {
-    setShopInfo: ComputedMutationI<ShopItemI>;
-    setBusinessType: ComputedMutationI<number>;
-}
-interface ActionF {
-    cancelOrder: ComputedActionI<{orderKey: string}>;
-    getOrderDetail: ComputedActionI<{ orderKey: string }>;
-    getShopInfo: ComputedActionI<{ shopID: number }>;
-}
+
+// order store
+const orderStore: OrderStoreI = useOrderStore()
+// order state
+const { orderDetail,orderDetailShopInfo }: OrderStateF = toRefs(orderStore.orderState);
+// order action
+const { getOrderDetail, cancelOrder } = orderStore;
+// home store
+const menuStore: MenuStoreI = useMenuStore()
+// home action
+const { setBusinessType, getShopInfo} = menuStore
+// props
 const props = defineProps({
     orderKey: {
         type: String,
@@ -44,11 +50,6 @@ const props = defineProps({
     },
 });
 
-
-const { orderDetail, orderDetailShopInfo }: StateF = mapState();
-
-const { setShopInfo, setBusinessType,  }: MutationF = mapMutation();
-const { cancelOrder, getOrderDetail, getShopInfo }: ActionF = mapAction();
 
 async function toCancelOrder() {
     try {

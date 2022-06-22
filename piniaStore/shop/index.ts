@@ -3,13 +3,13 @@ import { ref, reactive } from "vue";
 import shopAction, {  ShopActionI} from './actions'
 import shopState, { ShopStateI }  from "./state";
 // import shopState from "./state";
-// interface ShopoStoreI {
+// interface ShopStoreI {
 //     homeState: HomeStateI,
 // }
-export type ShopoStoreI = {
+export type ShopStoreI = {
     shopState: ShopStateI
 } & ShopActionI
 
-export const useShopStore = defineStore("address", () => {
-    return { shopState, ...shopAction } as ShopoStoreI ;
+export const useShopStore = defineStore("shop", () => {
+    return { shopState, ...shopAction } as ShopStoreI ;
 });

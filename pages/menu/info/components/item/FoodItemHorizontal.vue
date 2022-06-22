@@ -6,7 +6,7 @@
         </view>
         <view class="food-price-add flex-row flex-a-center flex-j-between" @click.stop="addCount($event)" :style="{ color: shopInfo.mainColor }">
             <view class="food-price" :style="{'color': shopInfo.mainColor}">¥{{ foodItem.price }}</view>
-            <view v-if="foodItem.reserveCount > 0" class="food-add" :id="'add' + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }">
+            <view v-if="foodItem.reserveCount > 0" class="food-add" :id="type + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }">
                 <ReserveRemain v-if="foodItem.showReserveCountFlag" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
             </view>
             <ReserveNotEnough v-else></ReserveNotEnough>
@@ -22,7 +22,7 @@
 
 <script lang="ts" setup>
 import { delaySync, selectQuery } from "@/utils/index";
-import { watch, reactive, ref, getCurrentInstance, onMounted } from "vue";
+import { watch, reactive, ref, getCurrentInstance, onMounted, toRefs } from "vue";
 import { mapMutation, mapState } from "@/utils/mapVuex";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import FoodAddMinusItem from "./FoodAddMinusItem.vue";
@@ -34,10 +34,12 @@ import { RefI } from "@/interface/vueInterface";
 import { cartImgWidthHeightPX, countAddTransitionTime, foodAddMinusTransitionTime, foodAddWidthHeightPX } from "../../infoConfig";
 import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { AddItemI } from "./interface";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 
 const currentInstance = getCurrentInstance();
 interface PropsI {
     foodItem: FoodItemI;
+    type?: string
 }
 interface EmitI {
     (e: "clickFoodItem", id: number): void;
@@ -45,6 +47,7 @@ interface EmitI {
 
 const props: PropsI = withDefaults(defineProps<PropsI>(), {
     foodItem: {},
+    type: 'main'
 });
 const emit = defineEmits<EmitI>();
 interface CartChangeParamI {
@@ -52,16 +55,16 @@ interface CartChangeParamI {
     count: number;
 }
 
-interface StateF {
+interface MenuStateF {
     shopInfo: ComputedStateI<ShopItemI>;
     cartImgPositionInfo: ComputedStateI<PositionInfoI>;
 }
-interface MutationF {
-    cartChange: ComputedMutationI<CartChangeParamI>;
-    setCartImgAnimationFlag: ComputedMutationI<boolean>;
-}
-const { cartChange, setCartImgAnimationFlag }: MutationF = mapMutation(["cartChange", "setCartImgAnimationFlag"]);
-const { shopInfo, cartImgPositionInfo }: StateF = mapState(["shopInfo", "cartImgPositionInfo"]);
+// store
+const menuStore: MenuStoreI = useMenuStore();
+// state
+const { shopInfo, cartImgPositionInfo }: MenuStateF = toRefs(menuStore.menuState)
+// action
+const { cartChange, setCartImgAnimationFlag } = menuStore
 
 onMounted(async () => {
     // if (props.foodItem.orderCount > 0) {
@@ -96,7 +99,7 @@ async function addCount() {
     });
 }
 async function getPositionInfo(): Promise<PositionInfoI> {
-    const res = await selectQuery(`#add${props.foodItem.foodID}`, currentInstance);
+    const res = await selectQuery(`#${props.type}${props.foodItem.foodID}`, currentInstance);
     return {
         left: res.left,
         top: res.top,

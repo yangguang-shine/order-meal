@@ -10,5 +10,5 @@ export type AddressStoreI = {
 } & AddressActionI
 
 export const useAddressStore = defineStore("address", () => {
-    return { addressState, ...addressAction } as AddressStoreI;
+    return { addressState, ...addressAction };
 });

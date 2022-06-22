@@ -7,9 +7,9 @@ export interface HomeStateI {
     recommandShopList: ShopItemI[];
     tabList: TabItemI[];
     selectedTabItem: TabItemI;
-    shopInfo: ShopItemI;
+    // shopInfo: ShopItemI;
     searchShopFlag: boolean,
-    businessType: number;
+    // businessType: number;
     tabListTop: number
 }
 export const tabList: TabItemI[] = [
@@ -34,9 +34,9 @@ const homeState: HomeStateI = reactive({
     recommandShopList: [],
     tabList,
     selectedTabItem: tabList[0],
-    shopInfo: initShopItem,
+    // shopInfo: initShopItem,
     searchShopFlag: false,
-    businessType: 2,
+    // businessType: 2,
     tabListTop: 0
 });
 

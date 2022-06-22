@@ -14,34 +14,40 @@
 <script lang="ts" setup>
 import { AddressItemI } from "@/interface/address";
 import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
-import { defineComponent, computed, getCurrentInstance } from "vue";
+import { defineComponent, computed, getCurrentInstance , toRefs} from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import router from "@/utils/router";
 import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
 import { onShow, onLoad, onPageScroll, onHide, onUnload } from "@dcloudio/uni-app";
+import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
+import { storeToRefs} from 'pinia'
 
 
-interface StateF {
+
+interface HomeStateF {
     topAddressWidthFlag: ComputedStateI<boolean>,
-    defaultAddress: ComputedStateI<AddressItemI>,
 }
+interface AddressStateF {
+    defaultAddress: ComputedStateI<AddressItemI>,
+
+}
+
+
 interface MutationF {
     setSearchShopFlag: ComputedMutationI<boolean>
 }
-const { topAddressWidthFlag, defaultAddress }:StateF = mapState([
-    "topAddressWidthFlag",
-    "defaultAddress"
-]);
-const { setSearchShopFlag }:MutationF = mapMutation([
-    "setSearchShopFlag",
-]);
-const  addressStore: AddressStoreI = useAddressStore()
-onShow(() => {
-console.log('addressStore.addressState.defaultAddress === defaultAddress')
-console.log(addressStore.addressState.defaultAddress)
-console.log(defaultAddress.value)
-console.log(addressStore.addressState.defaultAddress === defaultAddress.value)
+// home store
+const homeStore: HomeStoreI = useHomeStore()
+// home state
+const { topAddressWidthFlag }: HomeStateF = toRefs(homeStore.homeState)
+// home action
+const { setSearchShopFlag } = homeStore
+// address store
+const addressStore: AddressStoreI  = useAddressStore()
+// address state
+const { defaultAddress }: AddressStateF = toRefs(addressStore.addressState)
 
+onShow(() => {
 })
 
 function toSelectAddress() {
@@ -54,6 +60,7 @@ function toSelectAddress() {
 }
 
 const toSearchShop = () => {
+    console.log(112131321)
     setSearchShopFlag(true)
 };
 </script>

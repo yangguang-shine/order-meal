@@ -1,6 +1,6 @@
 import { MutationI, FoodItemI, StateI, CategoryItemI, initFoodItem, PositionInfoI, CategoryListMapI, FoodListMapI } from "@/interface/index";
 import { timeStampTranslate, toFixedToNumber } from "@/utils/index";
-import { menDefault, MenDefaultI } from "../state/menu";
+import { menDefault, MenuDefaultI } from "../state/menu";
 function setSelectedCategoryID(state: StateI, selectedCategoryID: number) {
     state.selectedCategoryID = selectedCategoryID;
 }

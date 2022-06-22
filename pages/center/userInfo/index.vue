@@ -40,25 +40,25 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, reactive } from "vue";
+import { getCurrentInstance, reactive, toRefs } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { UserInfoI } from "@/interface/center";
 import { ComputedActionI, ComputedStateI } from "@/interface/vuex";
 import { mapAction, mapState } from "@/utils/mapVuex";
-import { hideLoading, showLoading, showModal } from "@/utils/index";
+import { hideLoading, showLoading, showModal, showToast } from "@/utils/index";
 import router from "@/utils/router";
-const { $showLoading, $hideLoading, $showModal, $myrouter, $showToast } = getCurrentInstance().proxy;
-
-interface StateF {
+import { CenterStoreI, useCenterStore } from "@/piniaStore/center";
+import { storeToRefs} from 'pinia'
+interface CenterStateF {
     userInfo: ComputedStateI<UserInfoI>;
 }
-interface ActionF {
-    logout: ComputedActionI
-}
-const { userInfo }: StateF = mapState(["userInfo"]);
-const { logout }: ActionF = mapAction(["logout"]);
+// center store
+const centerStore: CenterStoreI = useCenterStore()
+const { userInfo }: CenterStateF = toRefs(centerStore.centerState);
+const { logout } = centerStore;
+
 function toEditInfo(key: string) {
-    $myrouter.navigateTo({
+    router.navigateTo({
         name: "center/userInfo/edit",
         query: {
             key,

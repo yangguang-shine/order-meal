@@ -25,8 +25,8 @@ import { AddressItemI, ComputedActionI, ComputedMutationI, ComputedStateI } from
 import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
 import { delaySync, hideLoading, showLoading, showModal } from "@/utils/";
 import router from "@/utils/router";
-import { storeToRefs } from 'pinia'
-interface StateF {
+import  { storeToRefs} from 'pinia'
+interface AddressStateF {
     addressList: ComputedStateI<AddressItemI[]>;
     defaultAddress: ComputedStateI<AddressItemI>;
 }
@@ -36,11 +36,12 @@ interface ActionF {
     setDefaultAddressFetch: ComputedActionI<number>;
     setDefaultAddress: ComputedMutationI<AddressItemI>;
 }
-console.log(getCurrentInstance())
+// address store
 const addressStore: AddressStoreI = useAddressStore()
-console.log(addressStore)
-const { getAddressList, deleteAddress, setDefaultAddressFetch, setDefaultAddress}: ActionF = addressStore
-const {addressList, defaultAddress } = toRefs(addressStore.addressState)
+// address state
+const {addressList , defaultAddress }: AddressStateF = toRefs(addressStore.addressState)
+// address action
+const { getAddressList, deleteAddress, setDefaultAddressFetch, setDefaultAddress} = addressStore
 
 interface OptionI {
     fromPage?: string;

@@ -12,40 +12,38 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, reactive, ref } from "vue";
+import { getCurrentInstance, reactive, ref, toRefs } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { UserInfoI } from "@/interface/center";
 import { ComputedActionI, ComputedStateI } from "@/interface/vuex";
 import { mapAction, mapState } from "@/utils/mapVuex";
 import { RefI } from "@/interface/vueInterface";
-import { showModal } from "@/utils/";
-import { hideLoading } from "@/utils/";
+import { showLoading, showModal, showToast, hideLoading } from "@/utils/";
 import { InputEventI } from "@/interface/input";
-import { showToast } from "@/utils/";
-const { $showLoading, $hideLoading, $showModal, $myrouter, $showToast } = getCurrentInstance().proxy;
+import { CenterStoreI, useCenterStore } from "@/piniaStore/center";
+import router from "@/utils/router";
+import { storeToRefs} from 'pinia'
 
 interface OptionI {
     key: string;
 }
-interface StateF {
+interface CenterStateF {
     userInfo: ComputedStateI<UserInfoI>;
 }
-interface ActionF {
-    changeUserInfo: ComputedActionI<{ key: string; value: string }>;
-    getUserInfo: ComputedActionI;
-}
-const { userInfo }: StateF = mapState(["userInfo"]);
-const { changeUserInfo, getUserInfo }: ActionF = mapAction(["changeUserInfo", "getUserInfo"]);
+// center store
+const centerStore: CenterStoreI = useCenterStore()
+const { userInfo }: CenterStateF = toRefs(centerStore.centerState);
+const { changeUserInfo,getUserInfo } = centerStore;
 const key: RefI<string> = ref("");
 const nicknameInput: RefI<string> = ref(userInfo.value.nickname);
 const keyList = ["nickname"];
 onLoad(async (option: OptionI) => {
     key.value = option.key;
     if (!keyList.find((item) => item === key.value)) {
-        await $showModal({
+        await showModal({
             content: "链接错误",
         });
-        $myrouter.back();
+        router.back();
     }
 });
 
@@ -64,7 +62,7 @@ function getByteLen(val: string): number {
 async function toShowConfrimModal() {
     const len = getByteLen(nicknameInput.value);
     if (len < 4 || len > 16) {
-        $showToast({
+        showToast({
             title: "请输入符合要求长度的字符",
         });
         return;
@@ -74,17 +72,18 @@ async function toShowConfrimModal() {
             content: "确认使用修改吗",
             showCancelFlag: true,
         });
-        $showLoading();
+        showLoading();
         await changeUserInfo({
             key: key.value,
             value: nicknameInput.value,
         });
         getUserInfo();
-        $myrouter.back();
+        router.back();
     } catch (e) {
         console.log(e);
     } finally {
-        $hideLoading();
+        hideLoading();
+
     }
 }
 </script>

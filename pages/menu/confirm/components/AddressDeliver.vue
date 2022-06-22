@@ -32,23 +32,38 @@
 
 <script lang="ts" setup>
 import { mapState, mapMutation, mapAction, mapGetter } from "@/utils/mapVuex";
-import { computed, ref, getCurrentInstance } from "vue";
+import { computed, ref, getCurrentInstance, toRefs } from "vue";
 import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { AddressItemI } from "@/interface/address";
 import { InputEventI } from "@/interface/input";
-const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
-interface StateF {
-    defaultAddress: ComputedStateI<AddressItemI>, 
-    takeOutTime: ComputedStateI<string>, 
+
+import { useConfirmStore, ConfirmStoreI } from "@/piniaStore/confirm";
+import { storeToRefs } from "pinia";
+import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
+import router from "@/utils/router";
+
+interface ConfirmStateF {
+    takeOutTime: ComputedStateI<string>;
+}
+interface AddressStateF {
+    defaultAddress: ComputedStateI<AddressItemI>;
 }
 interface MutationF {
-    setTakeOutTime: ComputedMutationI<string>
+    setTakeOutTime: ComputedMutationI<string>;
 }
+// confirm store
+const confirmStore: ConfirmStoreI = useConfirmStore();
+// confirm state
+const { takeOutTime }: ConfirmStateF = toRefs(confirmStore.confirmState);
+// confirm action
+const { setTakeOutTime } = confirmStore;
+// address store
+const addressStore: AddressStoreI = useAddressStore();
+// address state
+const { defaultAddress }: AddressStateF = toRefs(addressStore.addressState);
 
-const { defaultAddress, takeOutTime }:StateF = mapState();
-const { setTakeOutTime }: MutationF = mapMutation();
 function toPagesAddressList() {
-    $myrouter.navigateTo({
+    router.navigateTo({
         name: "address/list",
         query: {
             fromPage: "userMenuConfirm",
@@ -58,8 +73,6 @@ function toPagesAddressList() {
 function takeOutTimeChange(e: InputEventI) {
     setTakeOutTime(e.detail.value);
 }
-
-
 </script>
 
 <style lang="scss" scoped>

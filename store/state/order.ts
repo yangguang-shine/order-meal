@@ -2,7 +2,7 @@ import { initShopItem, ShopItemI } from "@/interface/home"
 import { initOrderDetail, OrderDetailI, OrderItemI } from "@/interface/order"
 
 
-export interface StateOrderI {
+export interface OrderStateI {
     allOrderList: OrderItemI[][], 
     orderTabIndex: number, 
     orderErrorListFlag: boolean[],
@@ -10,7 +10,7 @@ export interface StateOrderI {
     orderDetailShopInfo: ShopItemI,
 }
 
-const state: StateOrderI = {
+const state: OrderStateI = {
     allOrderList: [[], [], [], []], 
     orderTabIndex: 0, 
     orderErrorListFlag: [false, false, false,false],

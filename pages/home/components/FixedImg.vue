@@ -1,5 +1,5 @@
 <template>
-    <view class="fixed-img-container">
+    <view class="fixed-img-container" @click="clickImg">
 
     </view>
 </template>
@@ -8,47 +8,20 @@
 import router from "@/utils/router";
 import { reactive } from "vue";
 
-interface SwiperItemI {
-    img: string;
-    title: string;
-    name: string;
-    businessType: number;
-}
-const swiperList: SwiperItemI[] = reactive([
-    {
-        img: "",
-        title: "堂食",
-        name: "shop",
-        businessType: 1,
-    },
-    {
-        img: "",
-        title: "外卖",
-        name: "shop",
-        businessType: 2,
-    },
-    {
-        img: "",
-        title: "自提",
-        name: "shop",
-        businessType: 3,
-    },
-] as SwiperItemI[]);
-function clickSwiperItem(swiperItem: SwiperItemI) {
-    router.navigateTo({
-        name: swiperItem.name,
-        query: {
-            businessType:swiperItem.businessType
-        }
-    })
+function clickImg() {
+    console.log('clickImg')
 }
 </script>
 
 <style lang="scss" scoped>
 .fixed-img-container {
     position: fixed;
-    right: 0;
+    width: 50rpx;
+    height: 50rpx;
+    right: 50rpx;
     bottom: 300rpx;
+    background-color: red;
+    // z-index: 300;
     
 }
 </style>

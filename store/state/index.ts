@@ -1,9 +1,9 @@
 import address, { AddressStateI } from "./address";
 import home, { HomeStateI } from "./home";
-import menu, { StateMenuI } from "./menu";
+import menu, { MenuStateI } from "./menu";
 import confirm, { StateConfirmI } from "./confirm";
-import order, { StateOrderI } from "./order";
-import center, { StateCenterI } from "./center";
+import order, { OrderStateI } from "./order";
+import center, { CenterStateI } from "./center";
 import shop, { ShopStateI } from "./shop";
 import { StateI } from "@/interface/index";
 

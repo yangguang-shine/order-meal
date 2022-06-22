@@ -26,23 +26,26 @@
 import FoodAddMinusItem from "./item/FoodAddMinusItem.vue";
 import { delaySync } from "@/utils/index";
 import { mapState, mapMutation } from "@/utils/mapVuex";
-import { getCurrentInstance, computed, onMounted, ref } from "vue";
-
-const showComponents = false;
-
 import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { FoodItemI, initFoodItem } from "@/interface/menu";
 import { foodDetailTransitionTime } from "../infoConfig";
+import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 
-interface StateF {
+
+interface MenuStateF {
     foodInfo: ComputedStateI<FoodItemI[]>;
 }
 interface MutationF {
     setFoodDetailFlag: ComputedMutationI<boolean>;
     setFoodInfo: ComputedMutationI<FoodItemI>;
 }
-const { foodInfo }: StateF = mapState(["foodInfo"]);
-const { setFoodDetailFlag, setFoodInfo }: MutationF = mapMutation(["setFoodDetailFlag", "setFoodInfo"]);
+// store
+const menuStore: MenuStoreI = useMenuStore()
+// state
+const { foodInfo }: MenuStateF = toRefs(menuStore.menuState)
+// action
+const { setFoodDetailFlag, setFoodInfo } = menuStore
 const overlayAnimationData = ref(null);
 const detailAnimationData = ref(null);
 const overlayAnimation = uni.createAnimation({

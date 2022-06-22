@@ -21,27 +21,34 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, reactive } from "vue";
+import { getCurrentInstance, reactive, toRefs } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { mapAction, mapState } from "@/utils/mapVuex";
 import { ComputedActionI, ComputedStateI } from "@/interface/vuex";
 import { UserInfoI } from "@/interface/center";
-const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
+import { storeToRefs} from 'pinia'
+
+import { CenterStoreI, useCenterStore } from "@/piniaStore/center";
+import router from "@/utils/router";
 interface ToolItemI {
     img: string;
     title: string;
     name: string;
 }
-
-interface StateF {
+interface CenterStateF {
     userInfo: ComputedStateI<UserInfoI>;
 }
-interface ActionF {
-    getUserInfo: ComputedActionI;
-}
+// center store
+const centerStore: CenterStoreI = useCenterStore();
+const { userInfo }: CenterStateF = toRefs(centerStore.centerState)
+const { getUserInfo } = centerStore;
 
-const { userInfo }: StateF = mapState(["userInfo"]);
-const { getUserInfo }: ActionF = mapAction(["getUserInfo"]);
+
+// interface ActionF {
+//     getUserInfo: ComputedActionI;
+// }
+
+// const { userInfo }: StateF = mapState(["userInfo"]);
 
 onShow(() => {
     init();
@@ -75,14 +82,14 @@ const toolsList: ToolItemI[] = reactive([
         title: "个人信息",
         name: "center/userInfo",
     },
-]);
+] as ToolItemI[]);
 function clickToolItem(toolItem: ToolItemI) {
-    $myrouter.navigateTo({
+    router.navigateTo({
         name: toolItem.name,
     });
 }
 function toPageUserInfo() {
-    $myrouter.navigateTo({
+    router.navigateTo({
         name: "center/userInfo",
     });
 }

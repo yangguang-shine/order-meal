@@ -14,22 +14,27 @@
 
 <script lang="ts" setup>
 import Shop from "@/components/Shop.vue";
-import { defineComponent, computed, getCurrentInstance } from "vue";
-import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
-import { ShopItemI } from "@/interface/index";
+import { defineComponent, computed, getCurrentInstance, toRefs } from "vue";
+import { ComputedStateI, ShopItemI } from "@/interface/index";
 import router from "@/utils/router";
-// import { AddressItemI, ShopItemI } from '@/interface/index'
-interface MutationF {
-    setShopInfo: (shopItem: ShopItemI) => void;
-    setBusinessType: (type: number) => void;
+import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { storeToRefs} from 'pinia'
+
+interface HomeStateF {
+    recommandShopList: ComputedStateI<ShopItemI[]>;
 }
-interface StateU {
-    recommandShopList: {
-        value: ShopItemI[];
-    };
-}
-const { setShopInfo, setBusinessType }: MutationF = mapMutation();
-const { recommandShopList }: StateU = mapState();
+// home store
+const homeStore: HomeStoreI = useHomeStore()
+// home state
+const { recommandShopList }: HomeStateF = toRefs(homeStore.homeState);
+// menu store
+const menuStore: MenuStoreI = useMenuStore()
+// menu action
+const { setShopInfo, setBusinessType } = menuStore;
+// 下单
+console.log('recommandShopList')
+console.log(recommandShopList)
 function toOrder(shopItem: ShopItemI) {
     setShopInfo(shopItem);
     setBusinessType(2);

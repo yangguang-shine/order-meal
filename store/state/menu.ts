@@ -1,6 +1,6 @@
 import { ShopItemI, CategoryItemI, FoodItemI, AsideCategoryItemI, initFoodItem, PositionInfoI, CategoryListMapI, FoodListMapI } from "@/interface/index";
 
-export interface MenDefaultI {
+export interface MenuDefaultI {
     categoryList: CategoryItemI[];
     categoryListMap: CategoryListMapI,
     // asideCategoryList: AsideCategoryItemI[]
@@ -22,10 +22,10 @@ export interface MenDefaultI {
     cartCategoryListMap: CategoryListMapI
     // [key: string]: any
 }
-export interface StateMenuI extends MenDefaultI {
+export interface MenuStateI extends MenuDefaultI {
     cartCategoryList: CategoryItemI[];
 }
-export const menDefault: MenDefaultI = {
+export const menDefault: MenuDefaultI = {
     categoryList: [],
     categoryListMap: {},
     selectedCategoryID: 0,
@@ -50,7 +50,7 @@ export const menDefault: MenDefaultI = {
 
 };
 
-const state: StateMenuI = {
+const state: MenuStateI = {
     ...menDefault,
     cartCategoryList: [],
 };

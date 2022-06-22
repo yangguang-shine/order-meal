@@ -9,16 +9,23 @@ import { mapGetter, mapState } from "@/utils/mapVuex";
 
 import { ComputedGetterI, ComputedStateI } from "@/interface/vuex";
 import { MinusPromotionsObjectI } from "@/store/getters/menu";
+import { toRefs } from "vue";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { storeToRefs} from 'pinia'
 
-interface StateF {
+interface MenuStateF {
     startShopInfoAnimationFlag: ComputedStateI<boolean>;
     shopInfoFlag: ComputedStateI<boolean>;
 }
-interface GetterF {
+interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
 }
-const { startShopInfoAnimationFlag, shopInfoFlag }: StateF = mapState(["startShopInfoAnimationFlag", "shopInfoFlag"]);
-const { minusPromotionsObject }: GetterF = mapGetter(["minusPromotionsObject"]);
+// store
+const menuStore: MenuStoreI = useMenuStore();
+// state
+const { startShopInfoAnimationFlag, shopInfoFlag }: MenuStateF = toRefs(menuStore.menuState);
+// getter
+const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
 </script>
 
 <style lang="scss">

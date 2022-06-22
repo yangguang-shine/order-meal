@@ -1,8 +1,10 @@
-import { ShopItemI, CategoryItemI, FoodItemI, AsideCategoryItemI, initFoodItem, PositionInfoI, CategoryListMapI, FoodListMapI } from "@/interface/index";
+import { ref, reactive } from "vue";
 
-export interface MenDefaultI {
+import { ShopItemI, CategoryItemI, FoodItemI, AsideCategoryItemI, initFoodItem, PositionInfoI, CategoryListMapI, FoodListMapI, initShopItem } from "@/interface/index";
+
+export interface MenuDefaultI {
     categoryList: CategoryItemI[];
-    categoryListMap: CategoryListMapI,
+    categoryListMap: CategoryListMapI;
     // asideCategoryList: AsideCategoryItemI[]
     selectedCategoryID: number;
     categoryIDMain: string;
@@ -10,22 +12,23 @@ export interface MenDefaultI {
     topBarInfo: string;
     startShopInfoAnimationFlag: boolean;
     shopInfoFlag: boolean;
-    menuPackPriceExpalinFlag: boolean
+    menuPackPriceExpalinFlag: boolean;
     cartDetailFlag: boolean;
     foodDetailFalg: boolean;
     foodInfo: FoodItemI;
     cartImgPositionInfo: PositionInfoI;
     cartImgAnimationFlag: boolean;
     searchFoodFlag: boolean;
-    overReserveFoodList: FoodItemI[],
-    overReserveFoodListMap: FoodListMapI,
-    cartCategoryListMap: CategoryListMapI
-    // [key: string]: any
+    overReserveFoodList: FoodItemI[];
+    overReserveFoodListMap: FoodListMapI;
+    cartCategoryListMap: CategoryListMapI;
+    shopInfo: ShopItemI;
+    businessType: number;
 }
-export interface StateMenuI extends MenDefaultI {
+export interface MenuStateI extends MenuDefaultI {
     cartCategoryList: CategoryItemI[];
 }
-export const menDefault: MenDefaultI = {
+export const menuDefault: MenuDefaultI = {
     categoryList: [],
     categoryListMap: {},
     selectedCategoryID: 0,
@@ -47,11 +50,13 @@ export const menDefault: MenDefaultI = {
     overReserveFoodList: [],
     overReserveFoodListMap: {},
     cartCategoryListMap: {},
-
+    shopInfo: initShopItem,
+    businessType: 2,
 };
 
-const state: StateMenuI = {
-    ...menDefault,
+const menuState: MenuStateI = reactive({
+    ...menuDefault,
     cartCategoryList: [],
-};
-export default state;
+});
+
+export default menuState;

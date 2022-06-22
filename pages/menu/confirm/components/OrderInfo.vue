@@ -23,11 +23,11 @@
         <div class="pack-deliver-price-box" v-if="cartPriceInfo.allPackPrice || businessType === 2">
             <div v-if="cartPriceInfo.allPackPrice" class="pack-price flex-row flex-a-center flex-j-between">
                 <div class="left">打包费</div>
-                <div class="right">¥{{cartPriceInfo.allPackPrice}}</div>
+                <div class="right">¥{{ cartPriceInfo.allPackPrice }}</div>
             </div>
             <div v-if="businessType === 2" class="deliver-price flex-row flex-a-center flex-j-between">
                 <div class="left">配送费</div>
-                <div class="right">¥{{shopInfo.deliverPrice}}</div>
+                <div class="right">¥{{ shopInfo.deliverPrice }}</div>
             </div>
         </div>
 
@@ -40,7 +40,7 @@
                 <view class="minus-icon">减</view>
                 <view class="minus-title">满减优惠</view>
             </view>
-            <view class="minus-price" :style="{'color': shopInfo.mainColor}">-¥{{ cartPriceInfo.minusPrice }}</view>
+            <view class="minus-price" :style="{ color: shopInfo.mainColor }">-¥{{ cartPriceInfo.minusPrice }}</view>
         </view>
         <view v-if="cartPriceInfo.minusPrice" class="dash-split">
             <view class="left-circle"></view>
@@ -52,7 +52,7 @@
                 <view class="origin-price">共计¥{{ cartPriceInfo.orderOriginAmount }}</view>
                 <view class="discount-price">已优惠¥{{ cartPriceInfo.minusPrice || 0 }}</view>
                 <view class="pay-price">
-                    小计<span class="pay-price-color" :style="{'color': shopInfo.mainColor}">¥{{ cartPriceInfo.payPrice }}</span>
+                    小计<span class="pay-price-color" :style="{ color: shopInfo.mainColor }">¥{{ cartPriceInfo.payPrice }}</span>
                 </view>
             </view>
         </view>
@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, getCurrentInstance } from "vue";
+import { computed, ref, getCurrentInstance, toRefs } from "vue";
 import OrderFoodItem from "@/components/OrderFoodItem.vue";
 import { mapState, mapGetter } from "@/utils/mapVuex";
 import { foodListTransitionTime } from "../comfirmConfig";
@@ -69,18 +69,25 @@ import { CategoryItemI, FoodItemI } from "@/interface/menu";
 import { ShopItemI } from "@/interface/home";
 import { ComputedI, RefI } from "@/interface/vueInterface";
 import { CartPriceInfoI } from "@/store/getters/menu";
-const { $showLoading, $hideLoading, $myrouter } = getCurrentInstance().proxy;
-interface StateF {
+import router from "@/utils/router";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { storeToRefs } from "pinia";
+interface MenuStateF {
     shopInfo: ComputedStateI<ShopItemI>;
     businessType: ComputedStateI<number>;
 }
-interface GetterF {
+interface MenuGetterF {
     orderFoodList: ComputedGetterI<FoodItemI[]>;
     cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
 }
 
-const { shopInfo, businessType }: StateF = mapState();
-const { orderFoodList, cartPriceInfo }: GetterF = mapGetter();
+// menu store
+const menuStore: MenuStoreI = useMenuStore();
+// menu state
+const { shopInfo, businessType }: MenuStateF = toRefs(menuStore.menuState);
+// menu getter
+const { orderFoodList, cartPriceInfo }: MenuGetterF = storeToRefs(menuStore);
+
 const defaultIndex = 3;
 const defaultMaxHeight = "480rpx";
 const displayMoreMaxHeight = `${(150 + 10) * orderFoodList.value.length + 50}rpx`;
@@ -108,7 +115,7 @@ function toggleDisplay() {
     }
 }
 function continueOrder() {
-    $myrouter.back();
+    router.back();
 }
 </script>
 

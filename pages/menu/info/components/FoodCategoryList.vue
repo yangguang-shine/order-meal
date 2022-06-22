@@ -25,7 +25,6 @@ import FoodItem from "./item/FoodItem.vue";
 import { getRpxToPx, selectQuery } from "@/utils/index";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { topBarHeightPX, minusPromotionsHeightRPX, footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX } from "../infoConfig";
-import { defineComponent, getCurrentInstance, computed } from "vue";
 const currentInstance = getCurrentInstance();
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
 
@@ -33,12 +32,15 @@ import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/
 import { CategoryItemI, FoodItemI } from "@/interface/menu";
 import { MinusPromotionsObjectI, AsideCategoryItemI } from "@/store/getters/menu";
 import { RefI } from "@/interface/vueInterface";
+import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { storeToRefs} from 'pinia'
 
-interface StateF {
+interface MenuStateF {
     categoryList: ComputedStateI<CategoryItemI[]>;
     categoryIDMain: ComputedStateI<string>;
 }
-interface GetterF {
+interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
 }
 interface MutationF {
@@ -48,10 +50,15 @@ interface MutationF {
     setCategoryIDMain: ComputedMutationI<string>;
     setCategoryIDAside: ComputedMutationI<string>;
 }
-const { categoryList, categoryIDMain }: StateF = mapState();
-const { minusPromotionsObject }: GetterF = mapGetter();
+// store
+const menuStore: MenuStoreI = useMenuStore()
+// state
+const { categoryList, categoryIDMain }: MenuStateF = toRefs(menuStore.menuState);
+// getter
+const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore)
+// action
+const { setFoodDetailFlag, setFoodInfo,setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside,  } = menuStore
 
-const { setFoodDetailFlag, setFoodInfo,setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside,  }: MutationF = mapMutation();
 const categoryItemLastPaddingBottom: string = computed((): string => (minusPromotionsObject.value.show ? footerInfoAndMinusPromotionsHeightRPX + 20 + "rpx" : footerInfoHeightRPX + 20 + "rpx"));
 
 function toShowFoodDetail(foodItem: FoodItemI) {

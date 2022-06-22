@@ -4,7 +4,7 @@
             <view class="reduce-icon-css" :style="{ 'background-color': shopInfo.mainColor }"></view>
         </view>
         <view v-if="foodItem.orderCount" :class="mountedTransitionFlag ? '' : 'show-food-order-count'" :animation="countAnimationData" class="food-order-count">{{ foodItem.orderCount }}</view>
-        <view class="food-count-add" :id="'add' + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
+        <view class="food-count-add" :id="type + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
             <ReserveRemain v-if="foodItem.showReserveCountFlag" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
         </view>
         <view v-for="item in addList" :key="item.random" class="food-count-add-animation-x" :animation="item.animationXData">
@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
 import { delaySync, selectQuery } from "@/utils/index";
-import { watch, reactive, ref, getCurrentInstance, onMounted } from "vue";
+import { watch, reactive, ref, getCurrentInstance, onMounted , toRefs} from "vue";
 import { mapMutation, mapState } from "@/utils/mapVuex";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
@@ -25,16 +25,41 @@ import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI, PositionIn
 import { RefI } from "@/interface/vueInterface";
 import { cartImgWidthHeightPX, countAddTransitionTime, foodAddMinusTransitionTime, foodAddWidthHeightPX } from "../../infoConfig";
 import ReserveRemain from "./ReserveRemain.vue";
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 
 import { AddItemI } from "./interface";
-const currentInstance = getCurrentInstance();
 interface PropsI {
     foodItem: FoodItemI;
+    type?: string
 }
 interface CartChangeParamI {
     foodItem: FoodItemI;
     count: number;
 }
+
+interface MenuStateF {
+    cartCategoryList: ComputedStateI<CategoryItemI[]>;
+    cartDetailFlag: ComputedStateI<boolean>;
+    shopInfo: ComputedStateI<ShopItemI>;
+    cartImgPositionInfo: ComputedStateI<PositionInfoI>;
+}
+interface MutationF {
+    cartChange: ComputedMutationI<CartChangeParamI>;
+    setCartDetailFlag: ComputedMutationI<boolean>;
+    setCartImgAnimationFlag: ComputedMutationI<boolean>;
+}
+// store
+const menuStore: MenuStoreI = useMenuStore();
+// state
+const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPositionInfo }: MenuStateF = toRefs(menuStore.menuState)
+// action
+const { cartChange, setCartDetailFlag, setCartImgAnimationFlag } = menuStore
+
+const props: PropsI = withDefaults(defineProps<PropsI>(), {
+    foodItem: {},
+    type: 'main'
+
+});
 const addList: AddItemI[] = reactive([]);
 const OriginFoodItem = props.foodItem;
 const mountedTransitionFlag: RefI<boolean> = ref(true);
@@ -51,22 +76,7 @@ const minusAnimation = uni.createAnimation({
 const countAnimationData = ref(null);
 const minusAnimationData = ref(null);
 
-interface StateF {
-    cartCategoryList: ComputedStateI<CategoryItemI[]>;
-    cartDetailFlag: ComputedStateI<boolean>;
-    shopInfo: ComputedStateI<ShopItemI>;
-    cartImgPositionInfo: ComputedStateI<PositionInfoI>;
-}
-interface MutationF {
-    cartChange: ComputedMutationI<CartChangeParamI>;
-    setCartDetailFlag: ComputedMutationI<boolean>;
-    setCartImgAnimationFlag: ComputedMutationI<boolean>;
-}
-const { cartChange, setCartDetailFlag, setCartImgAnimationFlag }: MutationF = mapMutation(["cartChange", "setCartDetailFlag", "setCartImgAnimationFlag"]);
-const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPositionInfo }: StateF = mapState(["cartCategoryList", "cartDetailFlag", "shopInfo", "cartImgPositionInfo"]);
-const props: PropsI = withDefaults(defineProps<PropsI>(), {
-    foodItem: {},
-});
+
 const addPositionInfo: RefI<PositionInfoI> = ref({
     left: 0,
     top: 0,
@@ -82,14 +92,13 @@ onMounted(async () => {
 watch(
     () => props.foodItem.orderCount,
     (newValue: number, oldValue: number) => {
-        console.log("OriginFoodItem === props.foodItem");
-        console.log(OriginFoodItem === props.foodItem);
         if (newValue >= 1 && oldValue === 0) {
             countAnimation.opacity(1).step();
             countAnimationData.value = countAnimation.export();
             minusAnimation.right("100rpx").rotate(-180).step();
             minusAnimationData.value = minusAnimation.export();
         } else if (newValue === 0) {
+            console.log(1111)
             countAnimation.opacity(0).step();
             countAnimationData.value = countAnimation.export();
             minusAnimation.right(0).rotate(0).step();
@@ -98,7 +107,9 @@ watch(
     }
 );
 async function getPositionInfo(): Promise<PositionInfoI> {
-    const res = await selectQuery(`#add${props.foodItem.foodID}`, currentInstance);
+    const currentInstance = getCurrentInstance();
+    const res = await selectQuery(`#${props.type}${props.foodItem.foodID}`, currentInstance);
+    console.log(res)
     return {
         left: res.left,
         top: res.top,
@@ -106,6 +117,9 @@ async function getPositionInfo(): Promise<PositionInfoI> {
 }
 async function addCount(e: any) {
     const addPositionInfo: PositionInfoI = await getPositionInfo();
+    console.log('addPositionInfo')
+    console.log(addPositionInfo)
+    console.log(cartImgPositionInfo)
     const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.value.left;
     const offsetTop: number = cartImgPositionInfo.value.top - addPositionInfo.top;
     if (offsetLeft) {
@@ -139,6 +153,10 @@ async function minusCount() {
         setCartDetailFlag(false);
     }
 }
+function deleteItem(addItem: AddItemI) {
+    const findIndex = addList.findIndex((item) => item.random === addItem.random);
+    addList.splice(findIndex, 1);
+}
 interface OffsetInfoI {
     offsetTop: number;
     offsetLeft: number;
@@ -151,10 +169,7 @@ async function startAddTransition(addItem: AddItemI) {
     setCartImgAnimationFlag(false);
     deleteItem(addItem);
 }
-function deleteItem(addItem: AddItemI) {
-    const findIndex = addList.findIndex((item) => item.random === addItem.random);
-    addList.splice(findIndex, 1);
-}
+
 function startAnimationX(addItem: AddItemI) {
     const animationX = uni.createAnimation({
         // duration: countAddTransitionTime,
@@ -266,7 +281,7 @@ function startAnimationY(addItem: AddItemI) {
     }
     .show-food-count-minus {
         right: 100rpx;
-        transform: rotate(0);
+        transform: rotate(-180deg);
     }
     .food-count-minus-enter-from,
     .food-count-minus-leave-to {

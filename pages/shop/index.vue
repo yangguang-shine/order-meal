@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCurrentInstance, reactive, computed, ref } from "vue";
+import { getCurrentInstance, reactive, computed, ref, toRefs } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { mapAction, mapMutation, mapState } from "@/utils/mapVuex";
 import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
@@ -19,15 +19,19 @@ import router from "@/utils/router";
 import TabList from './components/TabList.vue'
 import ShopList from './components/ShopList.vue'
 import SearchShop from './components/SearchShop.vue'
-const { $showLoading, $hideLoading, $showModal, $myrouter } = getCurrentInstance().proxy;
-interface StateF {
+import { ShopStoreI, useShopStore } from "@/piniaStore/shop";
+
+import { storeToRefs} from 'pinia'
+
+interface ShopStateF {
     searchShopListFlag: ComputedStateI<boolean>
 }
-interface MutationF {
-    setRouterBusinessType: ComputedMutationI<number>;
-}
-const { searchShopListFlag }: StateF = mapState()
-const { setRouterBusinessType }: MutationF = mapMutation();
+// shop store
+const shopStore: ShopStoreI = useShopStore()
+// shop state
+const { searchShopListFlag }: ShopStateF = toRefs(shopStore.shopState)
+// shop action
+const { setRouterBusinessType } = shopStore;
 
 onLoad((option: { businessType: string }) => {
     const routerBusinessType: number = Number(option.businessType);

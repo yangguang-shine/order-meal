@@ -1,7 +1,7 @@
 import { GetterI, StateI, CartCategoryInfoI, FoodItemI, GetterStateI, minusItemI } from "@/interface/index";
 import { toFixedToNumber } from "@/utils/";
 
-export interface GetterStateMenuI {
+export interface MenuGetterI {
     minusPromotionsObject: MinusPromotionsObjectI;
     cartPriceInfo: CartPriceInfoI;
     asideCategoryList: AsideCategoryItemI[];
@@ -151,11 +151,11 @@ function cartPriceInfo(state: StateI, getters: GetterStateI): CartPriceInfoI {
 function asideCategoryList(state: StateI, getters: GetterStateI): AsideCategoryItemI[] {
     const asideCategoryList = state.categoryList.map((categotyItem) => {
         // const stateCartCartgoryItem = state.cartCategoryList.find((cartFoodItem) => cartFoodItem.categoryID === categotyItem.categoryID);
-        console.log('>>>>')
-        console.log(categotyItem)
-        console.log(state.cartCategoryListMap)
+        // console.log('>>>>')
+        // console.log(categotyItem)
+        // console.log(state.cartCategoryListMap)
         const stateCartCartgoryItem = state.cartCategoryListMap[`${categotyItem.categoryID}`]
-        console.log(stateCartCartgoryItem)
+        // console.log(stateCartCartgoryItem)
         if (stateCartCartgoryItem) {
             const categoryOrderCount = stateCartCartgoryItem.foodList.reduce((all: number, item): number => {
                 all += item.orderCount;

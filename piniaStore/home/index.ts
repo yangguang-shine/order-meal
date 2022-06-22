@@ -9,6 +9,6 @@ export type HomeStoreI = {
     homeState: HomeStateI
 } & HomeActionI
 
-export const useHomeStore = defineStore("address", () => {
-    return { homeState, ...homeAction } as HomeStoreI;
+export const useHomeStore = defineStore("home", () => {
+    return { homeState, ...homeAction, }
 });

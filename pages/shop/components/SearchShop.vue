@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, computed, getCurrentInstance, ref } from "vue";
+import { defineComponent, computed, getCurrentInstance, ref, toRefs } from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { topAddressSearchHeight } from "../homeConfig";
 import { TabItemI, ComputedStateI, ComputedMutationI, ComputedActionI, ShopItemI } from "@/interface/index";
@@ -20,20 +20,26 @@ import { delaySync, hideLoading, showLoading } from "@/utils/";
 import Search from "@/components/Search.vue";
 import Shop from "@/components/Shop.vue";
 import router from "@/utils/router";
+import { ShopStoreI, useShopStore } from "@/piniaStore/shop";
+import { storeToRefs} from 'pinia'
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 
-interface StateF {
+interface ShopStateF {
     tabList: ComputedStateI<TabItemI[]>;
     shopList: ComputedStateI<ShopItemI[]>;
     routerBusinessType: ComputedStateI<number>;
 }
-interface MutationF {
-    setSearchShopListFlag: ComputedMutationI<boolean>;
-    setShopInfo: ComputedMutationI<ShopItemI>;
-    setBusinessType: ComputedMutationI<number>;
-}
+// shop store
+const shopStore: ShopStoreI = useShopStore()
+// shop state
+const { tabList, shopList, routerBusinessType }: ShopStateF = toRefs(shopStore.shopState);
+// shop action
+const { setSearchShopListFlag } = shopStore;
+// menu store
+const menuStore: MenuStoreI = useMenuStore()
+// menu action
+const {  setShopInfo, setBusinessType } = menuStore;
 
-const { tabList, shopList, routerBusinessType }: StateF = mapState();
-const { setSearchShopListFlag, setShopInfo, setBusinessType }: MutationF = mapMutation();
 const searchValue: RefI<string> = ref("");
 const searchShopList: ComputedI<ShopItemI> = computed(() => {
     if (!searchValue.value) return [];

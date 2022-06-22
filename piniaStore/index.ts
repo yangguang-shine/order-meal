@@ -1,2 +1,6 @@
 // export * from './home'
 export * from './address'
+export * from './center'
+export * from './home'
+export * from './order'
+export * from './shop'
