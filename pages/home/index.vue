@@ -58,7 +58,6 @@ onShow(async () => {
     setTimeout(async () => {
         try {
             const res = await selectQuery("#home-container");
-            console.log(res);
             if (-res.top >= tabListTop.value - topAddressSearchHeight) {
                 setTabListFixedFlag(true);
             } else {

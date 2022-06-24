@@ -27,6 +27,17 @@ export interface FoodListMapI {
     [index: string]: FoodItemI
 
 }
+export interface CollectFoodListMapI {
+    [index: string]: FoodItemI[]
+
+}
+export interface CollectFoodKeyObjI {
+    key: string,
+    title: string
+}
+export interface CollectFoodListItemI extends CollectFoodKeyObjI{
+    foodList: FoodItemI[]
+}
 
 export interface OriginCategoryItemI {
     categoryID: number;
@@ -73,3 +84,4 @@ export const initFoodItem: FoodItemI = {
     foodItemAmount: 0,
     showReserveCountFlag: false
 };
+

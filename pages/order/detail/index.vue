@@ -45,7 +45,6 @@ const shopID: RefI<string> = ref("");
 onLoad(async (option: OptionI) => {
     orderKey.value = option.orderKey;
     const shopID = Number(option.shopID);
-    console.log(shopID !== orderDetailShopInfo.value.shopID)
     if (shopID !== orderDetailShopInfo.value.shopID) {
         getOrderDetailShopInfo({
             shopID,

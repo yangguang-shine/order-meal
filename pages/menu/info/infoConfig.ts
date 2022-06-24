@@ -34,6 +34,8 @@ export const shopInfoTransitionTime: number = transitionTime100 * 2
 export const countAddTransitionTime: number = transitionTime100 * 3
 export const barSearchTransitionTime: number = transitionTime100 * 2
 export const searchModalTransitionTime: number = transitionTime100 * 2
+export const collectTransitionTime: number = transitionTime100 * 2
+
 
  
 

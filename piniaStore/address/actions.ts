@@ -36,8 +36,6 @@ function setAddressList(addressList: AddressItemI[]): void {
 }
 
 function setDefaultAddress(defaultAddress: AddressItemI): void {
-    console.log('pinia setDefaultAddress')
-    console.log(defaultAddress)
     addressState.defaultAddress = defaultAddress;
 }
 export interface AddressActionI {

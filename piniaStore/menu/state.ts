@@ -1,6 +1,6 @@
 import { ref, reactive } from "vue";
 
-import { ShopItemI, CategoryItemI, FoodItemI, AsideCategoryItemI, initFoodItem, PositionInfoI, CategoryListMapI, FoodListMapI, initShopItem } from "@/interface/index";
+import { ShopItemI, CategoryItemI, FoodItemI, AsideCategoryItemI, initFoodItem, PositionInfoI, CategoryListMapI, FoodListMapI, initShopItem, CollectFoodListMapI, CollectFoodKeyObjI, CollectFoodListItemI } from "@/interface/index";
 
 export interface MenuDefaultI {
     categoryList: CategoryItemI[];
@@ -24,6 +24,16 @@ export interface MenuDefaultI {
     cartCategoryListMap: CategoryListMapI;
     shopInfo: ShopItemI;
     businessType: number;
+    // 凑单
+    collectFoodFlag: Boolean;
+    collectFoodListMap: CollectFoodListMapI;
+    collectFoodList: CollectFoodListItemI[];
+    collectFoodListKeys: CollectFoodKeyObjI[];
+    collectTabIndex: number;
+    // 购物车详情时，点击购物车按钮
+    showCartClickCartImgFlag: boolean;
+    // 凑单弹框时，点击购物车按钮
+    showCollectClickCartImgFlag: boolean;
 }
 export interface MenuStateI extends MenuDefaultI {
     cartCategoryList: CategoryItemI[];
@@ -52,6 +62,15 @@ export const menuDefault: MenuDefaultI = {
     cartCategoryListMap: {},
     shopInfo: initShopItem,
     businessType: 2,
+    collectFoodFlag: false,
+    collectFoodListMap: {},
+    collectFoodList: [],
+    collectFoodListKeys: [],
+    collectTabIndex: 0,
+    // 购物车详情时，点击购物车按钮
+    showCartClickCartImgFlag: false,
+    // 凑单弹框时，点击购物车按钮
+    showCollectClickCartImgFlag: false,
 };
 
 const menuState: MenuStateI = reactive({

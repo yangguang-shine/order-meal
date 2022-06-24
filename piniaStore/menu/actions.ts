@@ -1,11 +1,12 @@
 import fetch from "@/utils/fetch";
 import { foodImgPath, shopImgPath } from "@/config/index";
-import { OriginCategoryItemI, CategoryItemI, FoodItemI, OriginFoodItemI, FoodListMapI, CategoryListMapI, StateI, initFoodItem, PositionInfoI, ShopItemI } from "@/interface/index";
+import { OriginCategoryItemI, CategoryItemI, FoodItemI, OriginFoodItemI, FoodListMapI, CategoryListMapI, StateI, initFoodItem, PositionInfoI, ShopItemI, CollectFoodListMapI, CollectFoodKeyObjI, OriginShopItemI } from "@/interface/index";
 
 import { toFixedToNumber } from "@/utils/index";
 import { menuDefault, MenuDefaultI } from "./state";
 import menuState from "./state";
 import getBusinessTypeInfo from "@/utils/getBusinessTypeInfo";
+import { getCollectFoodList } from "./handle";
 
 function setShopInfo(shopInfo: ShopItemI): void {
     menuState.shopInfo = shopInfo;
@@ -60,11 +61,28 @@ function setCartImgPositionInfo(positionInfo: PositionInfoI) {
     menuState.cartImgPositionInfo = positionInfo;
 }
 function toogleCartDetailFlag() {
-    menuState.cartDetailFlag = !menuState.cartDetailFlag;
+    if (menuState.collectFoodFlag) {
+        menuState.showCollectClickCartImgFlag = true;
+        return;
+    }
+    if (menuState.cartDetailFlag) {
+        menuState.showCartClickCartImgFlag = true;
+        return;
+    }
+    if (menuState.cartCategoryList.length > 0) {
+        menuState.cartDetailFlag = !menuState.cartDetailFlag;
+    } else {
+        menuState.cartDetailFlag = false;
+    }
 }
 function setCartDetailFlag(cartDetailFlag: boolean) {
     menuState.cartDetailFlag = cartDetailFlag;
 }
+function setCollectFoodFlag(collectFoodFlag: boolean) {
+    getCollectFoodList();
+    menuState.collectFoodFlag = collectFoodFlag;
+}
+
 function setCartCategoryList(cartCategoryList: CategoryItemI[]) {
     menuState.cartCategoryList = cartCategoryList;
 }
@@ -137,7 +155,6 @@ function cartChange({ foodItem, count = 0 }: { foodItem: FoodItemI; count: numbe
             }
             // return menuState.cartCategoryListMap[categoryID]
         });
-    console.log(cartCategoryList);
     menuState.cartCategoryList = cartCategoryList;
 }
 
@@ -177,13 +194,13 @@ function setMenuPackPriceExpalinFlag(menuPackPriceExpalinFlag: boolean) {
     menuState.menuPackPriceExpalinFlag = menuPackPriceExpalinFlag;
 }
 
-function handleMenuUnload() {
+function setMenuDefault() {
     Object.keys(menuDefault).forEach((key) => {
         menuState[key] = menuDefault[key];
     });
 }
 
-async function getShopInfo(payload: { shopID: number}): Promise<ShopItemI> {
+async function getShopInfo(payload: { shopID: number }): Promise<ShopItemI> {
     const originShopInfo: OriginShopItemI = await fetch("shop/find", payload);
     const shopInfo: ShopItemI = {
         ...originShopInfo,
@@ -191,7 +208,7 @@ async function getShopInfo(payload: { shopID: number}): Promise<ShopItemI> {
         fullImgPath: `${shopImgPath}/${originShopInfo.imgUrl}`,
         ...getBusinessTypeInfo(originShopInfo.businessTypes),
     };
-    menuState.shopInfo = shopInfo
+    menuState.shopInfo = shopInfo;
     return shopInfo;
 }
 
@@ -201,7 +218,9 @@ async function getMenuList() {
     const originCategoryItem: OriginCategoryItemI[] = await fetch("shop/menu", {
         shopID: menuState.shopInfo.shopID,
     });
+    // 菜品分类map
     const categoryListMap: CategoryListMapI = {};
+    // 菜品分类list
     const categoryList: CategoryItemI[] = [];
     (originCategoryItem || []).forEach((originCategoryItem: OriginCategoryItemI) => {
         const foodListMap: FoodListMapI = {};
@@ -226,6 +245,7 @@ async function getMenuList() {
         categoryListMap[`${categoryItem.categoryID}`] = categoryItem;
         categoryList.push(categoryItem);
     });
+    // 菜品分类排序
     categoryList.sort((a, b) => a.categoryID - b.categoryID);
     if (categoryList.length) {
         menuState.selectedCategoryID = categoryList[0].categoryID;
@@ -297,6 +317,17 @@ async function getOrderKeyFoodList(option: { orderKey: String } = { orderKey: ""
     return cartCategoryList;
 }
 
+function setCollectTabIndex(collectTabIndex: number) {
+    menuState.collectTabIndex = collectTabIndex;
+}
+function setShowCartClickCartImgFlag(showCartClickCartImgFlag: boolean) {
+    menuState.showCartClickCartImgFlag = showCartClickCartImgFlag;
+}
+
+function setShowCollectClickCartImgFlag(showCollectClickCartImgFlag: boolean) {
+    menuState.showCollectClickCartImgFlag = showCollectClickCartImgFlag;
+}
+
 export interface MenuActionI {
     setShopInfo: (shopInfo: ShopItemI) => void;
     setBusinessType: (type: number) => void;
@@ -315,6 +346,7 @@ export interface MenuActionI {
     setCartImgPositionInfo: (positionInfo: PositionInfoI) => void;
     toogleCartDetailFlag: () => void;
     setCartDetailFlag: (cartDetailFlag: boolean) => void;
+    setCollectFoodFlag: (collectFoodFlag: boolean) => void;
     setCartCategoryList: (cartCategoryList: CategoryItemI[]) => void;
     setCartCategoryListMap: (cartCategoryListMap: CategoryListMapI) => void;
     setOverReserveFoodList: (overReserveFoodList: FoodItemI[]) => void;
@@ -324,10 +356,13 @@ export interface MenuActionI {
     initCart: () => void;
     setShopInfoMode: (mode: "vertical" | "horizontal") => void;
     setMenuPackPriceExpalinFlag: (menuPackPriceExpalinFlag: boolean) => void;
-    handleMenuUnload: () => void;
-    getShopInfo: (payload: { shopID: number}) => Promise<ShopItemI>,
+    setMenuDefault: () => void;
+    getShopInfo: (payload: { shopID: number }) => Promise<ShopItemI>;
     getMenuList: () => void;
     getOrderKeyFoodList: (option: { orderKey: String }) => void;
+    setCollectTabIndex: (collectTabIndex: number) => void;
+    setShowCartClickCartImgFlag: (showCartClickCartImgFlag: boolean) => void;
+    setShowCollectClickCartImgFlag: (showCollectClickCartImgFlag: boolean) => void;
 }
 const meunAction: MenuActionI = {
     setShopInfo,
@@ -347,6 +382,7 @@ const meunAction: MenuActionI = {
     setCartImgPositionInfo,
     toogleCartDetailFlag,
     setCartDetailFlag,
+    setCollectFoodFlag,
     setCartCategoryList,
     setCartCategoryListMap,
     setOverReserveFoodList,
@@ -356,9 +392,12 @@ const meunAction: MenuActionI = {
     initCart,
     setShopInfoMode,
     setMenuPackPriceExpalinFlag,
-    handleMenuUnload,
+    setMenuDefault,
     getShopInfo,
     getMenuList,
     getOrderKeyFoodList,
+    setCollectTabIndex,
+    setShowCartClickCartImgFlag,
+    setShowCollectClickCartImgFlag,
 };
 export default meunAction;

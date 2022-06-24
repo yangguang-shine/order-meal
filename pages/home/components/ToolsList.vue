@@ -48,7 +48,6 @@ function toToolDetail(toolItem: ToolItemI) {
             },
         });
     }
-    console.log("toToolDetail");
 }
 </script>
 

@@ -133,9 +133,7 @@ function toComfirmOrder() {
     }
 }
 function clickCartImg() {
-    if (cartCategoryList.value.length > 0) {
         toogleCartDetailFlag();
-    }
 }
 </script>
 

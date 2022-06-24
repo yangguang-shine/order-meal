@@ -1,12 +1,17 @@
 .flex-row {
     display: flex;
-    flex-direction: row
+    flex-direction: row;
 }
 .flex-col {
     display: flex;
-    flex-direction: column
+    flex-direction: column;
 }
-
+.flex-center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 .flex-item {
     flex: 1;
     box-sizing: border-box

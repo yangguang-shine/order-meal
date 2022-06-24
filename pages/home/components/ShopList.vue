@@ -33,8 +33,6 @@ const menuStore: MenuStoreI = useMenuStore()
 // menu action
 const { setShopInfo, setBusinessType } = menuStore;
 // 下单
-console.log('recommandShopList')
-console.log(recommandShopList)
 function toOrder(shopItem: ShopItemI) {
     setShopInfo(shopItem);
     setBusinessType(2);

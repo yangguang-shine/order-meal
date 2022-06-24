@@ -60,7 +60,6 @@ function toSelectAddress() {
 }
 
 const toSearchShop = () => {
-    console.log(112131321)
     setSearchShopFlag(true)
 };
 </script>

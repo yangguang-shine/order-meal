@@ -30,12 +30,13 @@ import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { AddItemI } from "./interface";
 interface PropsI {
     foodItem: FoodItemI;
-    type?: string
+    type?: string // cart search collect main modal
 }
 interface CartChangeParamI {
     foodItem: FoodItemI;
     count: number;
 }
+
 
 interface MenuStateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
@@ -98,7 +99,6 @@ watch(
             minusAnimation.right("100rpx").rotate(-180).step();
             minusAnimationData.value = minusAnimation.export();
         } else if (newValue === 0) {
-            console.log(1111)
             countAnimation.opacity(0).step();
             countAnimationData.value = countAnimation.export();
             minusAnimation.right(0).rotate(0).step();
@@ -109,7 +109,6 @@ watch(
 async function getPositionInfo(): Promise<PositionInfoI> {
     const currentInstance = getCurrentInstance();
     const res = await selectQuery(`#${props.type}${props.foodItem.foodID}`, currentInstance);
-    console.log(res)
     return {
         left: res.left,
         top: res.top,
@@ -117,9 +116,6 @@ async function getPositionInfo(): Promise<PositionInfoI> {
 }
 async function addCount(e: any) {
     const addPositionInfo: PositionInfoI = await getPositionInfo();
-    console.log('addPositionInfo')
-    console.log(addPositionInfo)
-    console.log(cartImgPositionInfo)
     const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.value.left;
     const offsetTop: number = cartImgPositionInfo.value.top - addPositionInfo.top;
     if (offsetLeft) {

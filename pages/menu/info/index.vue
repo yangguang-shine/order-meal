@@ -11,6 +11,7 @@
                 <CategoryAsideBarHorizontal></CategoryAsideBarHorizontal>
             </view>
             <CartDetail v-if="cartDetailFlag"></CartDetail>
+            <CollectFood v-if="collectFoodFlag"></CollectFood>
             <MinusPromotions v-if="minusPromotionsObject.show"></MinusPromotions>
             <FooterInfo></FooterInfo>
             <FoodDetail v-if="foodDetailFalg"></FoodDetail>
@@ -33,12 +34,13 @@ import MinusPromotionsBlock from "./components/MinusPromotionsBlock.vue";
 import FooterInfo from "./components/FooterInfo.vue";
 import FooterCartBlock from "./components/FooterCartBlock.vue";
 import CartDetail from "./components/CartDetail.vue";
+import CollectFood from "./components/CollectFood.vue";
 import FoodDetail from "./components/FoodDetail.vue";
 import TopBar from "./components/TopBar.vue";
 import ShopInfo from "./components/ShopInfo.vue";
 import SearchFood from "./components/SearchFood.vue";
 import { delaySync } from "@/utils/index.js";
-import PackPriceExplain from '@/components/PackPriceExplain.vue'
+import PackPriceExplain from "@/components/PackPriceExplain.vue";
 
 import { mapState, mapMutation, mapAction, mapGetter } from "@/utils/mapVuex";
 import { defineComponent, getCurrentInstance, computed, watch, ref, toRefs } from "vue";
@@ -48,8 +50,8 @@ import { ShopItemI } from "@/interface/home";
 import { CategoryItemI, FoodItemI } from "@/interface/menu";
 import { footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX, shopInfoTransitionTime } from "./infoConfig";
 import { MinusPromotionsObjectI } from "@/store/getters/menu";
-import { MenuStoreI, useMenuStore,  } from "@/piniaStore/menu";
-import {storeToRefs} from 'pinia'
+import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { storeToRefs } from "pinia";
 interface MenuStateF {
     shopInfo: ComputedStateI<ShopItemI>;
     businessType: ComputedStateI<number>;
@@ -58,22 +60,22 @@ interface MenuStateF {
     shopInfoFlag: ComputedStateI<boolean>;
     cartDetailFlag: ComputedStateI<boolean>;
     foodDetailFalg: ComputedStateI<boolean>;
+    collectFoodFlag: ComputedStateI<boolean>;
     searchFoodFlag: ComputedStateI<boolean>;
     menuPackPriceExpalinFlag: ComputedStateI<boolean>;
-    
 }
 interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
 }
 
 // menu store
-const menuStore: MenuStoreI = useMenuStore()
+const menuStore: MenuStoreI = useMenuStore();
 // menu state
-const { shopInfo, businessType, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag, menuPackPriceExpalinFlag }: MenuStateF = toRefs(menuStore.menuState);
+const { shopInfo, businessType, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag, menuPackPriceExpalinFlag, collectFoodFlag }: MenuStateF = toRefs(menuStore.menuState);
 // menu getter
 const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
 // menu action
-const { getMenuList, getOrderKeyFoodList, getShopInfo, initCart, handleMenuUnload, setBusinessType, setMenuPackPriceExpalinFlag } = menuStore;
+const { getMenuList, getOrderKeyFoodList, getShopInfo, initCart, setMenuDefault, setBusinessType, setMenuPackPriceExpalinFlag } = menuStore;
 
 const shopInfoAnimationData = ref(null);
 const shopInfoAnimation = uni.createAnimation({
@@ -105,36 +107,36 @@ interface OptionI {
 }
 onLoad(async (option: OptionI) => {
     try {
+        setMenuDefault();
         orderKey = option.orderKey || "";
-        const shopID: number = Number(option.shopID)
-        const optionBusinessType: number = Number(option.businessType)
+        const shopID: number = Number(option.shopID);
+        const optionBusinessType: number = Number(option.businessType);
         // routerbusinessType = option.businessType || "";
         // orderKey = option.orderKey || "";
-        showLoading()
+        showLoading();
+
         if (shopInfo.value.shopID !== shopID) {
             await getShopInfo({
                 shopID,
             });
         }
         if (businessType.value !== optionBusinessType) {
-            setBusinessType(optionBusinessType)
+            setBusinessType(optionBusinessType);
         }
-
         await init();
     } catch (e) {
         console.log(e);
     } finally {
-        hideLoading()
+        hideLoading();
     }
 });
 onHide(() => {
     console.log("page hide >>>>>");
 });
 onUnload(() => {
-    handleMenuUnload();
+    setMenuDefault();
     console.log("page onUnload >>>>>");
 });
-
 
 async function init() {
     await getMenuList();

@@ -4,10 +4,10 @@
             <!-- <FoodItem v-for="searchFoodItem in searchFoodList" :key="searchFoodItem.foodID" class="search-food-item" :foodItem="searchFoodItem" @clickFoodItem="toShowFoodDetail"></FoodItem> -->
 
             <template #result>
-                <FoodItem v-for="searchFoodItem in searchFoodList" :key="searchFoodItem.foodID" class="search-food-item" :foodItem="searchFoodItem" @clickFoodItem="toShowFoodDetail"></FoodItem>
+                <FoodItem v-for="searchFoodItem in searchFoodList" :key="searchFoodItem.foodID" class="search-food-item" :foodItem="searchFoodItem" type="search"  @clickFoodItem="toShowFoodDetail"></FoodItem>
             </template>
             <template #default>
-                <FoodItem v-for="searchFoodItem in categoryFoodList" :key="searchFoodItem.foodID" class="search-food-item" :foodItem="searchFoodItem" @clickFoodItem="toShowFoodDetail"></FoodItem>
+                <FoodItem v-for="searchFoodItem in categoryFoodList" :key="searchFoodItem.foodID" class="search-food-item" :foodItem="searchFoodItem" type="search" @clickFoodItem="toShowFoodDetail"></FoodItem>
             </template>
         </Search>
     </div>

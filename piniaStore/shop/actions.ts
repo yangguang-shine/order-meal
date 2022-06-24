@@ -26,7 +26,6 @@ async function getShopList(payload: { businessType: number; type: string }) {
     // return shopList || [];
 }
 function setShopList(shopList: ShopItemI[]): void {
-    console.log(shopList);
     shopState.shopList = shopList;
 }
 function setRouterBusinessType(routerBusinessType: number): void {

@@ -151,9 +151,6 @@ function cartPriceInfo(state: StateI, getters: GetterStateI): CartPriceInfoI {
 function asideCategoryList(state: StateI, getters: GetterStateI): AsideCategoryItemI[] {
     const asideCategoryList = state.categoryList.map((categotyItem) => {
         // const stateCartCartgoryItem = state.cartCategoryList.find((cartFoodItem) => cartFoodItem.categoryID === categotyItem.categoryID);
-        console.log('>>>>')
-        console.log(categotyItem)
-        console.log(state.cartCategoryListMap)
         const stateCartCartgoryItem = state.cartCategoryListMap[`${categotyItem.categoryID}`]
         if (stateCartCartgoryItem) {
             const categoryOrderCount = stateCartCartgoryItem.foodList.reduce((all: number, item): number => {

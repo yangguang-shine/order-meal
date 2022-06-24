@@ -92,7 +92,7 @@ const handleScroll = async (e: any) => {
         }
     }
 };
-const foodScrollHandle = debounce(handleScroll, 30);
+const foodScrollHandle = debounce(handleScroll, 100);
 
 const throttle = (() => {
     let timer: null | number = null;

@@ -31,8 +31,6 @@ const menuStore: MenuStoreI = useMenuStore()
 // menu action
 const { setShopInfo, setBusinessType } = menuStore
 function toOrder(shopItem: ShopItemI) {
-    console.log('setShopInfo')
-    console.log(setShopInfo)
     setShopInfo(shopItem);
     setBusinessType(routerBusinessType.value);
     router.navigateTo({

@@ -164,7 +164,7 @@ function setMenuPackPriceExpalinFlag(state: StateI, menuPackPriceExpalinFlag: bo
     state.menuPackPriceExpalinFlag = menuPackPriceExpalinFlag;
 }
 
-function handleMenuUnload(state: StateI) {
+function setMenuDefault(state: StateI) {
     Object.keys(menDefault).forEach((key) => {
         state[key] = menDefault[key];
     });
@@ -214,5 +214,5 @@ export default {
     initCart,
     setShopInfoMode,
     setMenuPackPriceExpalinFlag,
-    handleMenuUnload,
+    setMenuDefault,
 } as MutationI;

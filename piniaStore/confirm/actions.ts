@@ -26,8 +26,6 @@ async function submitOrder (payload?: any = {}) {
     const menuStore: MenuStoreI = useMenuStore()
     // 不需要进行响应式
     const { cartPriceInfo, orderFoodList }: CartPriceInfoGetterF = storeToRefs(menuStore)
-    console.log(menuStore.orderFoodList)
-    console.log(orderFoodList)
     await fetch('order/submit', {
         foodList: orderFoodList.value,
         shopID: menuStore.menuState.shopInfo.shopID,

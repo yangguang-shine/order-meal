@@ -72,7 +72,6 @@ async function toGetShopList(tabItem: TabItemI) {
     });
 }
 function toSearch() {
-    console.log("toSearch");
     setSearchShopListFlag(true);
 
 }

@@ -1,34 +1,39 @@
 <template>
-    <view>
-        <view class="cart-detail-component" @click.stop="closeCartDetail" :style="{ bottom: minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX + 'rpx' : '' }">
-            <view :animation="overlayAnimationData" class="cart-detail-overlay"></view>
-            <view :animation="mainAnimationData" class="cart-detail-box" @click.stop>
-                <view class="cart-select-box flex-row flex-j-between flex-a-center">
-                    <view class="select-title-box flex-row flex-a-center">
-                        <div class="select-title">已选商品</div>
-                        <div v-if="cartPriceInfo.allPackPrice" class="flex-row flex-ja-center" @click="setMenuPackPriceExpalinFlag(true)">
+    <view class="cart-detail-component" @click.stop="closeCartDetail" :style="{ bottom: minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX + 'rpx' : '' }">
+        <view :animation="overlayAnimationData" class="cart-detail-overlay"></view>
+        <view :animation="mainAnimationData" class="cart-detail-box" @click.stop>
+            <view class="cart-select-box flex-row flex-j-between flex-a-center">
+                <view class="select-title-box flex-row flex-a-center">
+                    <div class="select-title">已选商品</div>
+                    <!-- <div v-if="cartPriceInfo.allPackPrice" class=" flex-row flex-ja-center" @click="setMenuPackPriceExpalinFlag(true)">
                             <div>(包装费</div>
-                            <div :style="{'color': shopInfo.mainColor}">¥{{cartPriceInfo.allPackPrice}}</div>
+                            <div :style="{ color: shopInfo.mainColor }">¥{{ cartPriceInfo.allPackPrice }}</div>
                             <div class="pack-price-tips flex-row flex-ja-center">?</div>
                             <div>)</div>
-                        </div>
-                        <!-- <div class="pack-price-text">({{ allPackPriceText }}</div>
+                        </div> -->
+                    <!-- <div class="pack-price-text">({{ allPackPriceText }}</div>
                         <div v-if="allPackPriceText" @click="setMenuPackPriceExpalinFlag(true)">)</div> -->
-                    </view>
-                    <view class="flex-row flex-a-center" @click="cartClearCart">
-                        <image class="delete-all-icon" src="/static/img/shop-delete.svg"></image>
-                        <text class="clear-cart-title">清空</text>
+                </view>
+                <view class="flex-row flex-a-center" @click="cartClearCart">
+                    <image class="delete-all-icon" src="/static/img/shop-delete.svg"></image>
+                    <text class="clear-cart-title">清空</text>
+                </view>
+            </view>
+            <scroll-view scroll-y class="cart-detail-list-box">
+                <view class="cart-food-list">
+                    <view class="food-category-item" v-for="foodCategoryItem in cartCategoryList" :key="foodCategoryItem.categoryID">
+                        <FoodItem v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID" :foodItem="cartFoodItem" mode="small" type="cart" class="cart-food-item"></FoodItem>
                     </view>
                 </view>
-                <scroll-view scroll-y class="cart-detail-list-box">
-                    <view class="food-category-item" v-for="foodCategoryItem in cartCategoryList" :key="foodCategoryItem.categoryID">
-                        <FoodItem v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID" :foodItem="cartFoodItem" mode="small" class="cart-food-item"></FoodItem>
-                    </view>
-                </scroll-view>
-            </view>
+                <div v-if="cartPriceInfo.allPackPrice" class="all-pack-price-split"></div>
+                <div v-if="cartPriceInfo.allPackPrice" class="all-pack-price flex-row flex-a-center" @click="setMenuPackPriceExpalinFlag(true)">
+                    <div>包装费</div>
+                    <div :style="{ color: shopInfo.mainColor }">¥{{ cartPriceInfo.allPackPrice }}</div>
+                    <div class="pack-price-tips flex-row flex-ja-center">?</div>
+                </div>
+                <div class="bottom-block-20rpx"></div>
+            </scroll-view>
         </view>
-        <!-- 下面用来解决点击购物车图片无动效的问题 -->
-        <view class="cart-img-transparent" @click="closeCartDetail"></view>
     </view>
 </template>
 
@@ -36,7 +41,7 @@
 import { delaySync, showModal } from "@/utils/index";
 import FoodAddMinusItem from "./item/FoodAddMinusItem.vue";
 import FoodItem from "./item/FoodItem.vue";
-import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
+import { getCurrentInstance, computed, onMounted, ref, toRefs, watch } from "vue";
 import { footerInfoAndMinusPromotionsHeightRPX, cartDetailTransitionTime } from "../infoConfig";
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
@@ -46,27 +51,27 @@ import { ComputedI, RefI } from "@/interface/vueInterface";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
 import { ShopItemI } from "@/interface/home";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
-import {storeToRefs} from 'pinia'
+import { storeToRefs } from "pinia";
 
 interface MenuStateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
     categoryList: ComputedStateI<CategoryItemI[]>;
     businessType: ComputedStateI<number>;
     shopInfo: ComputedStateI<ShopItemI>;
-    
+    showCartClickCartImgFlag: ComputedStateI<boolean>;
 }
 interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
     cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
 }
 // menu store
-const menuStore: MenuStoreI = useMenuStore()
+const menuStore: MenuStoreI = useMenuStore();
 // menu state
-const { cartCategoryList, categoryList, businessType, shopInfo }: MenuStateF = toRefs(menuStore.menuState);
+const { cartCategoryList, categoryList, businessType, shopInfo, showCartClickCartImgFlag }: MenuStateF = toRefs(menuStore.menuState);
 // menu getter
 const { minusPromotionsObject, cartPriceInfo }: MenuGetterF = storeToRefs(menuStore);
 // menu action
-const { setCartDetailFlag, clearCart, setMenuPackPriceExpalinFlag } = menuStore;
+const { setCartDetailFlag, clearCart, setMenuPackPriceExpalinFlag, setShowCartClickCartImgFlag } = menuStore;
 // animation
 const { overlayAnimationData, mainAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: cartDetailTransitionTime,
@@ -74,9 +79,20 @@ const { overlayAnimationData, mainAnimationData, toStartAnimation, toEndAnimatio
 onMounted(() => {
     toStartAnimation();
 });
+
+watch(
+    () => showCartClickCartImgFlag.value,
+    async (newValue: boolean, oldValue: boolean) => {
+        if (newValue === true && oldValue === false) {
+            await closeCartDetail();
+            setShowCartClickCartImgFlag(false);
+        }
+    }
+);
+
 async function closeCartDetail() {
     toEndAnimation();
-    await delaySync(cartDetailTransitionTime * 3);
+    await delaySync(cartDetailTransitionTime);
     setCartDetailFlag(false);
 }
 async function cartClearCart() {
@@ -144,14 +160,7 @@ async function cartClearCart() {
     // .pack-price-text {
     //     color: #ccc;
     // }
-    .pack-price-tips {
-        border: 1px solid;
-        margin: 0 4rpx;
-        font-size: 20rpx;
-        height: 24rpx;
-        width: 24rpx;
-        border-radius: 50%;
-    }
+
     .clear-cart-title {
         color: #999;
     }
@@ -163,7 +172,7 @@ async function cartClearCart() {
     }
 
     .cart-detail-list-box {
-        max-height: 650rpx;
+        max-height: 680rpx;
         // padding-bottom: 20rpx;
         overflow-y: auto;
         ::-webkit-scrollbar {
@@ -191,6 +200,28 @@ async function cartClearCart() {
     .food-category-item:last-child .cart-food-item:last-child {
         // margin-bottom: 20rpx;
         border-bottom: none;
+        margin-bottom: 40rpx;
+    }
+    .all-pack-price-split {
+        width: 100%;
+        height: 16rpx;
+        background-color: #f5f5f5;
+    }
+    .all-pack-price {
+        padding: 20rpx 0 0 30rpx;
+        color: #333;
+    }
+    .pack-price-tips {
+        border: 1px solid;
+        margin: 0 8rpx;
+        font-size: 20rpx;
+        height: 24rpx;
+        width: 24rpx;
+        border-radius: 50%;
+    }
+    .bottom-block-20rpx {
+        height: 100%;
+        height: 20rpx;
     }
     // .cart-food-img {
     //     padding: 4rpx 0 8rpx 0;
