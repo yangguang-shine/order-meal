@@ -1,9 +1,9 @@
 <template>
     <view class="promotion-title flex-row flex-ja-center" :style="{ position: startShopInfoAnimationFlag || shopInfoFlag ? 'absolute' : 'fixed' }">
         <view class="minus-info flex-item flex-row flex-ja-center">
-            <text v-for="(contentItem, index) in minusPromotionsObject.contentList" :key="index" :class="{ 'content-red': index % 2 !== 0 }">{{ contentItem }}</text>
+            <text v-for="(contentItem, index) in minusPromotionsObject.contentList" :key="index" :class="{ 'content-red': index % 2 !== 0 }" :style="{'color': index % 2 !== 0 ? $mainColor : ''}">{{ contentItem }}</text>
         </view>
-        <view class="collect-to-want flex-center content-red" @click="toCollect">去凑单</view>
+        <view class="collect-to-want flex-center content-red" :style="{'color': $mainColor}" @click="toCollect">去凑单</view>
     </view>
 </template>
 
@@ -50,11 +50,12 @@ function toCollect() {
     color: #333;
     z-index: 700;
     .content-red {
-        color: #e23232;
+        // color: #e23232;
+        // color: #ff4b33;
     }
     .collect-to-want {
         margin-right: 60rpx;
-        border: 1rpx solid red;
+        border: 1rpx solid;
         width: 100rpx;
         height: 30rpx;
         border-radius: 15rpx;

@@ -81,9 +81,11 @@ const debounce = (fn: any, delay: number) => {
 onLoad(() => {});
 
 const handleScroll = async (e: any) => {
+    console.log(11111)
     for (let i = 0; i < categoryList.value.length; i++) {
         const categoryItem = categoryList.value[i];
         const res = await selectQuery(`#${categoryItem.categoryIDMain}`, currentInstance);
+        console.log(res)
         if (topBarHeightPX <= res.top || res.bottom  > topBarHeightPX) {
             setSelectedCategoryID(categoryItem.categoryID);
             setCategoryIDMain("");
@@ -92,7 +94,7 @@ const handleScroll = async (e: any) => {
         }
     }
 };
-const foodScrollHandle = debounce(handleScroll, 100);
+const foodScrollHandle = debounce(handleScroll, 50);
 
 const throttle = (() => {
     let timer: null | number = null;
@@ -116,6 +118,7 @@ const throttle = (() => {
     // width: 590rpx;
     box-sizing: border-box;
     background-color: #f5f5f5;
+    background-color: #fff;
     // padding-top: 80rpx;
     ::-webkit-scrollbar {
         display: none;

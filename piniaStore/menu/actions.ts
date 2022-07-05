@@ -1,5 +1,5 @@
 import fetch from "@/utils/fetch";
-import { foodImgPath, shopImgPath } from "@/config/index";
+import { defaultFoodImg, foodImgPath, shopImgPath } from "@/config/index";
 import { OriginCategoryItemI, CategoryItemI, FoodItemI, OriginFoodItemI, FoodListMapI, CategoryListMapI, StateI, initFoodItem, PositionInfoI, ShopItemI, CollectFoodListMapI, CollectFoodKeyObjI, OriginShopItemI } from "@/interface/index";
 
 import { toFixedToNumber } from "@/utils/index";
@@ -230,11 +230,12 @@ async function getMenuList() {
             categoryIDAside: `aside${originCategoryItem.categoryID}`,
             foodList: (originCategoryItem.foodList || [])
                 .map((originFoodItem): FoodItemI => {
-                    const foodItem = {
+                    const foodItem: FoodItemI = {
                         ...originFoodItem,
-                        fullImgPath: `${foodImgPath}/${originFoodItem.imgUrl}`,
+                        fullImgPath: `${foodImgPath}/${menuState.shopInfo.shopID}/${originFoodItem.imgUrl}`,
                         foodItemAmount: 0,
-                        showReserveCountFlag: originFoodItem.reserveCount < 9999,
+                        defaultImg: defaultFoodImg,
+                        showReserveCountFlag: originFoodItem.reserveCount < 10,
                     };
                     foodListMap[`${foodItem.foodID}`] = foodItem;
                     return foodItem;
@@ -266,9 +267,10 @@ async function getOrderKeyFoodList(option: { orderKey: String } = { orderKey: ""
     originFoodList.forEach((originFoodItem: OriginFoodItemI): void => {
         const foodItem: FoodItemI = {
             ...originFoodItem,
-            fullImgPath: `${foodImgPath}/${originFoodItem.imgUrl}`,
+            fullImgPath: `${foodImgPath}/${menuState.shopInfo.shopID}/${originFoodItem.imgUrl}`,
+            defaultImg: defaultFoodImg,
             foodItemAmount: toFixedToNumber(originFoodItem.price * originFoodItem.orderCount),
-            showReserveCountFlag: originFoodItem.reserveCount < 9999,
+            showReserveCountFlag: originFoodItem.reserveCount < 10,
         };
         const stateCategoryItem: CategoryItemI = menuState.categoryListMap[`${foodItem.categoryID}`];
         if (stateCategoryItem) {

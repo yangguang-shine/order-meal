@@ -103,7 +103,7 @@ async function clickCancel() {
     }
     .search-food-item:last-child {
         border-bottom: none;
-        margin-bottom: 30rpx;
+        padding-bottom: 40rpx;
     }
 }
 </style>

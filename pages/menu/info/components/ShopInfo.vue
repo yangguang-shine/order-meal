@@ -41,7 +41,7 @@
                 <image class="item-icon" src="/static/img/shop/shop-minus-icon.png" mode=""></image>
                 <view class="item-title">商家满减</view>
             </view>
-            <MinusList :minusList="shopInfo.minusList" :mainColor="shopInfo.mainColor"></MinusList>
+            <MinusList :minusList="shopInfo.minusList.length > 6 ? shopInfo.minusList.slice(0, 6) : shopInfo.minusList" :mainColor="shopInfo.mainColor"></MinusList>
             <!-- <view class="item-right">洁柔</view> -->
         </view>
     </view>

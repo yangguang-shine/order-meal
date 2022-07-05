@@ -2,8 +2,8 @@
     <scroll-view scroll-x="true" scroll-with-animation class="category-aside-bar-horizontal-container" :scroll-into-view="categoryIDAside">
         <div class="category-list flex-row flex-a-center">
             <view class="category-item flex-shrink flex-row flex-ja-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'categroy-item-active': selectedCategoryID === asideCategoryItem.categoryID }" @click="changeCategoryTab(asideCategoryItem)" :style="{ color: selectedCategoryID === asideCategoryItem.categoryID ? shopInfo.mainColor : '' }" :id="asideCategoryItem.categoryIDAside">
-                {{ asideCategoryItem.categoryName }}哦哦哦哦哦哦
-                <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count flex-row flex-ja-center" :style="{ background: shopInfo.mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
+                {{ asideCategoryItem.categoryName }}
+                <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count flex-row flex-ja-center" :style="{ background: $mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
             </view>
         </div>
     </scroll-view>
@@ -110,6 +110,7 @@ function changeCategoryTab(asideCategoryItem: CategoryItemI) {
         color: #fff;
         text-align: center;
         box-sizing: border-box;
+        // background-color: #ff4b33;
     }
 }
 </style>

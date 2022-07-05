@@ -53,7 +53,7 @@ async function getOrderDetail({ state, commit }: ActionContextI, payload: { orde
                 ...foodItem,
                 foodItemAmount: toFixedToNumber(foodItem.price * foodItem.orderCount),
                 fullImgPath: `${foodImgPath}/${foodItem.imgUrl}`,
-                showReserveCountFlag: foodItem.reserveCount < 9999
+                showReserveCountFlag: foodItem.reserveCount < 10
             })
         ),
     };

@@ -10,7 +10,7 @@
                 <view v-if="foodInfo.description" class="food-description">{{ foodInfo.description }}</view>
                 <view class="food-price-order flex-row flex-j-between">
                     <div class="flex-row flex-a-end">
-                        <div class="food-price" :style="{ color: shopInfo.mainColor }">¥{{ foodInfo.price }}</div>
+                        <div class="food-price" :style="{ color: $mainColor }">¥{{ foodInfo.price }}</div>
                         <div v-if="foodInfo.unit" class="food-unit">{{ packPriceText }}/{{ foodInfo.unit }}</div>
                     </div>
                     <FoodAddMinusItem v-if="foodInfo.reserveCount > 0" :foodItem="foodInfo" type="modal" ></FoodAddMinusItem>
@@ -160,6 +160,7 @@ async function closeFoodDetail() {
         font-size: 22rpx;
         color: #666;
         line-height: 30rpx;
+        padding-right: 120rpx;
     }
     .food-price-order {
         padding-top: 20rpx;
@@ -168,6 +169,8 @@ async function closeFoodDetail() {
         font-size: 48rpx;
         vertical-align: top;
         line-height: 56rpx;
+        // color: #ff4b33;
+
         // background-color: #fafafa;
     }
     .food-unit {

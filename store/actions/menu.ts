@@ -30,7 +30,7 @@ async function getMenuList({ commit, state }: ActionContextI) {
                         ...originFoodItem,
                         fullImgPath: `${foodImgPath}/${originFoodItem.imgUrl}`,
                         foodItemAmount: 0,
-                        showReserveCountFlag: originFoodItem.reserveCount < 9999,
+                        showReserveCountFlag: originFoodItem.reserveCount < 10,
                     }
                     foodListMap[`${foodItem.foodID}`] = foodItem
                     return foodItem
@@ -63,7 +63,7 @@ async function getOrderKeyFoodList({ commit, state }: ActionContextI, option: an
             ...originFoodItem,
             fullImgPath: `${foodImgPath}/${originFoodItem.imgUrl}`,
             foodItemAmount: toFixedToNumber(originFoodItem.price * originFoodItem.orderCount),
-            showReserveCountFlag: originFoodItem.reserveCount < 9999,
+            showReserveCountFlag: originFoodItem.reserveCount < 10,
         };
         const stateCategoryItem: CategoryItemI = state.categoryListMap[`${foodItem.categoryID}`];
         if (stateCategoryItem) {

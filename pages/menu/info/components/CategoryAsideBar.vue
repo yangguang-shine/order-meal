@@ -2,7 +2,7 @@
     <scroll-view scroll-y scroll-with-animation class="category-aside-bar-container" :scroll-into-view="categoryIDAside" :style="{ 'padding-bottom': minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX + 'rpx' : footerInfoHeightRPX + 'rpx' }">
         <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'aside-categroy-item-active': selectedCategoryID === asideCategoryItem.categoryID }" @click="changeCategoryTab(asideCategoryItem)" :style="{ color: selectedCategoryID === asideCategoryItem.categoryID ? shopInfo.mainColor : '' }" :id="asideCategoryItem.categoryIDAside">
             {{ asideCategoryItem.categoryName }}
-            <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count" :style="{ background: shopInfo.mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
+            <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count" :style="{ background: $mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
         </view>
     </scroll-view>
 </template>
@@ -54,7 +54,8 @@ function changeCategoryTab(asideCategoryItem: AsideCategoryItemI) {
     left: 0;
     width: 160rpx;
     height: 100%;
-    background-color: #fff;
+    // background-color: #fff;
+    background-color: #f5f5f5;
     flex-shrink: 0;
     box-sizing: border-box;
     // padding-bottom: 50rpx;
@@ -79,7 +80,7 @@ function changeCategoryTab(asideCategoryItem: AsideCategoryItemI) {
     .aside-categroy-item-active {
         color: #333;
         font-weight: bold;
-        // background-color: #fff;
+        background-color: #fff;
         // background-color: #f5f5f5;
     }
     .category-order-count {
@@ -96,6 +97,8 @@ function changeCategoryTab(asideCategoryItem: AsideCategoryItemI) {
         color: #fff;
         text-align: center;
         box-sizing: border-box;
+        //  color: ;
+// background-color: #ff4b33;
     }
 }
 </style>

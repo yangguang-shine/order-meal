@@ -112,6 +112,7 @@ async function toOrder() {
         height: 80rpx;
         width: 80rpx;
         margin-right: 20rpx;
+        border-radius: 8rpx;
     }
     .food-info {
         height: 80rpx;

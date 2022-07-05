@@ -1,8 +1,8 @@
 <template>
     <view class="com-top-bar-container flex-row flex-a-center flex-j-between">
         <view class="left flex-row flex--ja-center">
-            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '点餐' }" @click="clickTopBar('点餐')" :style="{ color: topBarInfo === '点餐' ? shopInfo.mainColor : '' }">点餐</view>
-            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '商家' }" :style="{ color: topBarInfo === '商家' ? shopInfo.mainColor : '' }" @click="clickTopBar('商家')">商家</view>
+            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '点餐' }" @click="clickTopBar('点餐')" >点餐</view>
+            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '商家' }"  @click="clickTopBar('商家')">商家</view>
         </view>
         <view class="select-top-bar-bottom" :style="{ background: shopInfo.mainColor, left: topBarInfo === '点餐' ? '100rpx' : '300rpx' }"></view>
         <view class="right flex-row flex-ja-center" :animation="overlayAnimationData">
@@ -100,7 +100,7 @@ function changeShopInfoMode() {
     box-sizing: border-box;
     border-bottom: 1rpx solid #e4e4e4;
     background-color: #ffffff;
-
+color: #666;
     z-index: 200;
     .left,
     .right {
@@ -113,6 +113,7 @@ function changeShopInfoMode() {
     }
     .select-top-item {
         font-weight: bold;
+        color: #333;
     }
     .select-top-bar-bottom {
         position: absolute;

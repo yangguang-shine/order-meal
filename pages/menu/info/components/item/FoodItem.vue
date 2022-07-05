@@ -3,11 +3,11 @@
         <image class="food-img flex-shrink" :src="foodItem.fullImgPath" mode="scaleToFill"></image>
         <view class="food-info-box flex-item flex-col flex-j-between">
             <view class="food-name-description">
-                <view class="food-name">{{ foodItem.foodName }}</view>
-                <view class="food-description">{{ foodItem.description }}</view>
+                <view class="food-name line1">{{ foodItem.foodName }}</view>
+                <view class="food-description line1">{{ foodItem.description }}</view>
             </view>
             <view class="food-price-button flex-row flex-j-between flex-a-center">
-                <view class="food-price" :style="{'color': shopInfo.mainColor}">¥{{ foodItem.price }}</view>
+                <view class="food-price" :style="{'color': $mainColor}">¥{{ foodItem.price }}</view>
                 <FoodAddMinusItem v-if="foodItem.reserveCount > 0" :foodItem="foodItem" :type="type"></FoodAddMinusItem>
                 <ReserveNotEnough v-else></ReserveNotEnough>
             </view>
@@ -88,9 +88,15 @@ function clickFoodItem(foodItem: FoodItemI) {
         // padding: 6rpx 0;
         height: 150rpx;
         width: 150rpx;
+        border-radius: 8rpx;
     }
     .food-info-box {
         padding-left: 20rpx;
+        width: 340rpx;
+        // overflow: hidden;
+    }
+    .food-name-description {
+        width: 100%;
     }
     .food-name {
         font-weight: bold;
@@ -113,6 +119,7 @@ function clickFoodItem(foodItem: FoodItemI) {
         font-size: 36rpx;
         line-height: 40rpx;
         font-weight: bold;
+        // color: #ff4b33;
     }
 }
 .food-item-container-small {
@@ -147,6 +154,7 @@ function clickFoodItem(foodItem: FoodItemI) {
         // color: $color-red;
         font-size: 34rpx;
         line-height: 38rpx;
+        // color: #ff4b33;
 
         // font-weight: bold;
     }

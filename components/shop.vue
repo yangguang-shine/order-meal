@@ -9,10 +9,10 @@
                     <div class="start-delever-price">配送费:¥{{ shopItem.startDeliverPrice }}</div>
                 </div>
                 <div class="shop-business-type flex-row">
-                    <div class="business-item flex-row flex-ja-center" :style="{'color': shopItem.mainColor}" v-for="(businessTitleItem, index) in shopItem.businessTitleList" :key="index">{{ businessTitleItem }}</div>
+                    <div class="business-item flex-row flex-ja-center" :style="{'color': $mainColor}" v-for="(businessTitleItem, index) in shopItem.businessTitleList" :key="index">{{ businessTitleItem }}</div>
                 </div>
                 <div class="flex-row">
-                    <MinusList :minusList="shopItem.minusList" :mainColor="shopItem.mainColor"></MinusList>
+                    <MinusList :minusList="shopItem.minusList.length > 6 ? shopItem.minusList.slice(0, 6) : shopItem.minusList" :mainColor="shopItem.mainColor"></MinusList>
                 </div>
             </div>
             <image class="arrow-right-icon" src="/static/img/shop/arrow-right.png"></image>
@@ -105,6 +105,7 @@ function toClickShopItem() {
         border: 1rpx solid;
         margin-right: 8rpx;
         border-radius: 4rpx;
+        //  color: #ff4b33;
     }
     .shop-extra-price {
         font-size: 22rpx;

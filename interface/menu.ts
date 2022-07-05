@@ -46,6 +46,7 @@ export interface OriginCategoryItemI {
 }
 export interface FoodItemI extends OriginFoodItemI {
     fullImgPath: string;
+    defaultImg: string;
     foodItemAmount: number;
     showReserveCountFlag: boolean
 }
@@ -81,6 +82,7 @@ export const initFoodItem: FoodItemI = {
     reserveCount: 0,
     packPrice: 0,
     fullImgPath: "",
+    defaultImg: '',
     foodItemAmount: 0,
     showReserveCountFlag: false
 };

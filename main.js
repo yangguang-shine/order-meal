@@ -40,7 +40,8 @@ export function createApp() {
 	app.component('CommonLoading', CommonLoading)
 	// app.component('BottomButton', BottomButton)
 	// const $mainColor = "#0096ff"
-	const $mainColor = "#ff2525"
+	const $mainColor = "#ff4b33"
+	// const $mainColor = "orange"
 	const $mainColor2 = "#58a3dd"
 
 	const appMainColor = ''

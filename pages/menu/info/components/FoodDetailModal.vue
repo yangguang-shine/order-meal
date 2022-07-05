@@ -149,6 +149,8 @@ async function closeFoodDetail() {
         font-size: 48rpx;
         vertical-align: top;
         line-height: 56rpx;
+        // color: #ff4b33;
+
         // background-color: #fafafa;
     }
     .food-unit {

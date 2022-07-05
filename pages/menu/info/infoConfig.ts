@@ -28,13 +28,13 @@ export const categoryAsideBarHorizontalAndTopBarHeightPX = getRpxToPx(categoryAs
 
 export const transitionTime100: number = 100
 export const foodAddMinusTransitionTime: number = transitionTime100 * 5
-export const cartDetailTransitionTime: number = transitionTime100 * 2
+export const cartDetailTransitionTime: number = transitionTime100 * 3
 export const foodDetailTransitionTime: number = transitionTime100 * 2
 export const shopInfoTransitionTime: number = transitionTime100 * 2
 export const countAddTransitionTime: number = transitionTime100 * 3
 export const barSearchTransitionTime: number = transitionTime100 * 2
 export const searchModalTransitionTime: number = transitionTime100 * 2
-export const collectTransitionTime: number = transitionTime100 * 2
+export const collectTransitionTime: number = transitionTime100 * 3
 
 
  

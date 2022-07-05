@@ -8,7 +8,7 @@
             <div class="order-list-item" v-for="(orderItem, index) in orderList" :key="index" @click="toOrderDetail(orderItem)">
                 <div class="flex-row">
                     <image class="shop-img" :src="orderItem.shopInfo.fullImgPath" mode="scaleToFill"></image>
-                    <div class="flex-item flex-col flex-j-between">
+                    <div class="shop-info-right flex-item flex-col flex-j-between">
                         <div class="flex-row flex-a-center flex-j-between">
                             <!-- <div class="shop-name line1">{{orderItem.shopName}}</div> -->
                             <view class="flex-row flex-a-center">
@@ -18,10 +18,10 @@
                             <div class="order-time">{{ orderItem.orderTimeDetail }}</div>
                         </div>
                         <view class="flex-row flex-a-center flex-j-between">
-                            <view class="minus-box flex-row">
-                                <MinusList :minusList="orderItem.shopInfo.minusList" :mainColor="orderItem.shopInfo.mainColor"></MinusList>
+                            <view class="minus-box flex-row ">
+                                <MinusList class="order-shop-minus flex-item flex-shrink" :minusList="orderItem.shopInfo.minusList.length > 4 ? orderItem.shopInfo.minusList.slice(0, 4) : orderItem.shopInfo.minusList" :mainColor="orderItem.shopInfo.mainColor"></MinusList>
                             </view>
-                            <view class="order-status-box">
+                            <view class="order-status-box flex-shrink">
                                 <text class="order-status-title">状态：</text>
                                 <text class="order-status-info" :style="{ color: orderItem.shopInfo.mainColor }">{{ orderItem.orderTypeTitle }}</text>
                             </view>
@@ -212,8 +212,12 @@ page {
         margin-right: 20rpx;
         border-radius: 8rpx;
     }
+    .shop-info-right {
+        width: 530rpx;
+    }
     .shop-name {
-        font-size: 34rpx;
+        font-size: 32rpx;
+        max-width: 230rpx;
     }
     .arrow-left {
         padding-left: 20rpx;

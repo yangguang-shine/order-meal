@@ -146,6 +146,7 @@ function changeTabItem(index: number) {
     .tab-item-selected {
         border: 1rpx solid;
         background-color: #fff;
+        font-weight:  bold;
     }
     .collect-food-list-box {
         // max-height: 680rpx;

@@ -31,7 +31,6 @@
                     <div :style="{ color: shopInfo.mainColor }">¥{{ cartPriceInfo.allPackPrice }}</div>
                     <div class="pack-price-tips flex-row flex-ja-center">?</div>
                 </div>
-                <div class="bottom-block-20rpx"></div>
             </scroll-view>
         </view>
     </view>
@@ -200,7 +199,7 @@ async function cartClearCart() {
     .food-category-item:last-child .cart-food-item:last-child {
         // margin-bottom: 20rpx;
         border-bottom: none;
-        margin-bottom: 40rpx;
+        margin-bottom: 30rpx;
     }
     .all-pack-price-split {
         width: 100%;
@@ -208,7 +207,7 @@ async function cartClearCart() {
         background-color: #f5f5f5;
     }
     .all-pack-price {
-        padding: 20rpx 0 0 30rpx;
+        padding: 20rpx 0 20rpx 30rpx;
         color: #333;
     }
     .pack-price-tips {

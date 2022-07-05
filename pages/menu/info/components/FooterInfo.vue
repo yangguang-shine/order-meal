@@ -2,8 +2,9 @@
     <view class="footer-cart-container" :style="{ position: startShopInfoAnimationFlag || shopInfoFlag ? 'absolute' : 'fixed' }">
         <view class="footer-cart flex-row flex-j-between flex-a-center">
             <view :animation="cartImgAnimationData" class="cart-img-box" id="cart-img-box">
-                <image class="cart-img" @click="clickCartImg" src="/static/img/cart-icon.png" mode="scaleToFill"></image>
-                <view v-if="cartPriceInfo.allCartFoodCount" class="cart-all-count" :style="{ background: shopInfo.mainColor }">{{ cartPriceInfo.allCartFoodCount }}</view>
+                <CartImg @click="clickCartImg"></CartImg>
+                <!-- <image class="cart-img" @click="clickCartImg" src="/static/img/cart-icon.png" mode="scaleToFill"></image> -->
+                <view v-if="cartPriceInfo.allCartFoodCount" class="cart-all-count" :style="{ background: $mainColor }">{{ cartPriceInfo.allCartFoodCount }}</view>
             </view>
             <view class="flex-item cart-all-amount flex-col flex-j-center">
                 <div class="price-info flex-row flex-a-end">
@@ -22,6 +23,8 @@
 
 <script lang="ts" setup>
 import { getCurrentInstance, onMounted, watch, ref, computed, toRefs } from "vue";
+import CartImg from "./CartImg.vue";
+
 import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI, FoodItemI, PositionInfoI } from "@/interface/menu";
@@ -32,7 +35,7 @@ import { selectQuery, toFixedToNumber } from "@/utils/";
 import router from "@/utils/router";
 import { countAddTransitionTime } from "../infoConfig";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
-import {storeToRefs} from 'pinia'
+import { storeToRefs } from "pinia";
 interface MenuStateF {
     startShopInfoAnimationFlag: ComputedStateI<boolean>;
     shopInfoFlag: ComputedStateI<boolean>;
@@ -133,7 +136,7 @@ function toComfirmOrder() {
     }
 }
 function clickCartImg() {
-        toogleCartDetailFlag();
+    toogleCartDetailFlag();
 }
 </script>
 
@@ -185,27 +188,33 @@ function clickCartImg() {
     }
     .cart-img-box {
         position: absolute;
-        bottom: 50rpx;
+        bottom: 25rpx;
         left: 20rpx;
-        height: 120rpx;
-        width: 120rpx;
+        // transform: scale(0.95);
+
+        // height: 120rpx;
+        // width: 120rpx;
         // z-index: 600;
     }
-    .cart-img {
-        height: 120rpx;
-        width: 120rpx;
-    }
+    // .cart-img {
+    //     height: 120rpx;
+    //     width: 120rpx;
+    // }
 
     .cart-all-count {
         position: absolute;
-        right: -20rpx;
-        top: 10rpx;
+        right: 16rpx;
+        top: 6rpx;
         height: 32rpx;
-        width: 32rpx;
+        min-width: 32rpx;
+        padding: 0 6rpx;
         font-size: 22rpx;
         line-height: 32rpx;
-        border-radius: 50%;
+        border-radius: 16rpx;
+        box-sizing: border-box;
         text-align: center;
+        // background-color: #fff;
+        // background-color: #ff4b33;
     }
     .confirm-order {
         margin-right: 10rpx;

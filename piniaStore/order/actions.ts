@@ -2,7 +2,7 @@
 import fetch from "@/utils/fetch";
 import { timeStampTranslate, toFixedToNumber } from "@/utils/index";
 import getOrderTypeTitle from "@/utils/getOrderTypeTitle";
-import { shopImgPath, foodImgPath } from "@/config/index";
+import { shopImgPath, foodImgPath, defaultFoodImg } from "@/config/index";
 import { ActionI, ActionContextI, OrderItemI, OriginShopItemI, ShopItemI, OriginFoodItemI, FoodItemI, OrderDetailI, OrderKeyI } from "@/interface/index";
 import getBusinessTypeInfo from "@/utils/getBusinessTypeInfo";
 import getOrderBusinessTitle from "@/utils/getOrderBusinessTitle";
@@ -53,8 +53,9 @@ async function getOrderDetail(payload: { orderKey: string }): Promise<OrderDetai
             (foodItem): FoodItemI => ({
                 ...foodItem,
                 foodItemAmount: toFixedToNumber(foodItem.price * foodItem.orderCount),
-                fullImgPath: `${foodImgPath}/${foodItem.imgUrl}`,
-                showReserveCountFlag: foodItem.reserveCount < 9999
+                fullImgPath: `${foodImgPath}/${orderState.orderDetailShopInfo.shopID}/${foodItem.imgUrl}`,
+                defaultImg: defaultFoodImg,
+                showReserveCountFlag: foodItem.reserveCount < 10
             })
         ),
     };

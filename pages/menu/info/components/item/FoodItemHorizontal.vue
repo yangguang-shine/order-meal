@@ -4,8 +4,8 @@
         <view class="food-name line2">
             {{ foodItem.foodName }}<span class="food-unit">/{{ foodItem.unit }}</span>
         </view>
-        <view class="food-price-add flex-row flex-a-center flex-j-between" @click.stop="addCount($event)" :style="{ color: shopInfo.mainColor }">
-            <view class="food-price" :style="{'color': shopInfo.mainColor}">¥{{ foodItem.price }}</view>
+        <view class="food-price-add flex-row flex-a-center flex-j-between" @click.stop="addCount($event)" :style="{ color: $mainColor }">
+            <view class="food-price" :style="{'color': $mainColor}">¥{{ foodItem.price }}</view>
             <view v-if="foodItem.reserveCount > 0" class="food-add" :id="type + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }">
                 <ReserveRemain v-if="foodItem.showReserveCountFlag" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
             </view>
@@ -16,7 +16,7 @@
                 </view>
             </view>
         </view>
-        <view v-if="foodItem.orderCount" class="food-order-count flex-row flex-ja-center" :style="{ 'background-color': shopInfo.mainColor }">{{ foodItem.orderCount }}</view>
+        <view v-if="foodItem.orderCount" class="food-order-count flex-row flex-ja-center" :style="{ 'background-color': $mainColor }">{{ foodItem.orderCount }}</view>
     </view>
 </template>
 
@@ -156,25 +156,31 @@ function clickFoodItem(foodItem: FoodItemI) {
     background-color: #fff;
     border-radius: 12rpx;
     .food-img {
+    border-top-left-radius: 12rpx;
+    border-top-right-radius: 12rpx;
         width: 230rpx;
         height: 230rpx;
     }
     .food-name {
         padding: 12rpx 20rpx 0;
         font-weight: bold;
-        font-size: 32rpx;
-        line-height: 34rpx;
-        height: 80rpx;
+        font-size: 30rpx;
+        line-height: 32rpx;
+        // height: 80rpx;
     }
     .food-unit {
         font-weight: normal;
-        font-size: 24rpx;
+        font-size: 22rpx;
         color: #999;
     }
     .food-price-add {
+        // padding-top: 30rpx;
+
         position: relative;
-        padding: 10rpx 20rpx;
+        padding: 20rpx 20rpx 10rpx;
         font-size: 32rpx;
+        // color: #ff4b33;
+
     }
     // .food-add-box {
     //     position: relative;
@@ -244,6 +250,8 @@ function clickFoodItem(foodItem: FoodItemI) {
         font-size: 22rpx;
         padding: 0 8rpx;
         box-sizing: border-box;
+        // background-color: #ff4b33;
+
     }
 }
 </style>
