@@ -1,6 +1,6 @@
 <template>
     <scroll-view scroll-y scroll-with-animation :scroll-into-view="categoryIDMain" class="food-category-list-container" id="food-category-list-container" @scroll="foodScrollHandle">
-        <view class="food-category-list-item" v-for="(foodCategoryItem, index) in categoryList" :key="index" :id="foodCategoryItem.categoryIDMain" :style="{ 'padding-bottom': index === categoryList.length - 1 ? categoryItemLastPaddingBottom : ''}">
+        <view class="food-category-list-item" v-for="(foodCategoryItem, index) in categoryList" :key="index" :id="foodCategoryItem.categoryIDMain" :style="{ 'padding-bottom': index === categoryList.length - 1 ? categoryItemLastPaddingBottom : '' }">
             <view class="food-category-name">{{ foodCategoryItem.categoryName }}</view>
             <FoodItem class="food-item" v-for="foodItem in foodCategoryItem.foodList" :key="foodItem.foodID" :foodItem="foodItem" @clickFoodItem="toShowFoodDetail"></FoodItem>
             <!-- <view class="food-item flex-item flex-row" v-for="(foodItem, foodIndex) in foodCategoryItem.foodList" :key="foodIndex" @click="toShowFoodDetail(foodItem)">
@@ -22,7 +22,7 @@
 
 <script lang="ts" setup>
 import FoodItem from "./item/FoodItem.vue";
-import { getRpxToPx, selectQuery } from "@/utils/index";
+import { getRpxToPx, selectQuery, systemInfo } from "@/utils/index";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { topBarHeightPX, minusPromotionsHeightRPX, footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX } from "../infoConfig";
 const currentInstance = getCurrentInstance();
@@ -34,7 +34,8 @@ import { MinusPromotionsObjectI, AsideCategoryItemI } from "@/store/getters/menu
 import { RefI } from "@/interface/vueInterface";
 import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
-import { storeToRefs} from 'pinia'
+import { storeToRefs } from "pinia";
+import { foodImgPath } from "@/config/";
 
 interface MenuStateF {
     categoryList: ComputedStateI<CategoryItemI[]>;
@@ -51,13 +52,13 @@ interface MutationF {
     setCategoryIDAside: ComputedMutationI<string>;
 }
 // store
-const menuStore: MenuStoreI = useMenuStore()
+const menuStore: MenuStoreI = useMenuStore();
 // state
 const { categoryList, categoryIDMain }: MenuStateF = toRefs(menuStore.menuState);
 // getter
-const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore)
+const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
 // action
-const { setFoodDetailFlag, setFoodInfo,setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside,  } = menuStore
+const { setFoodDetailFlag, setFoodInfo, setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside } = menuStore;
 
 const categoryItemLastPaddingBottom: string = computed((): string => (minusPromotionsObject.value.show ? footerInfoAndMinusPromotionsHeightRPX + 20 + "rpx" : footerInfoHeightRPX + 20 + "rpx"));
 
@@ -78,23 +79,51 @@ const debounce = (fn: any, delay: number) => {
     };
 };
 
-onLoad(() => {});
+onMounted(() => {
+    // handleLazyImg(0)
+});
 
 const handleScroll = async (e: any) => {
-    console.log(11111)
+    let count = 0;
     for (let i = 0; i < categoryList.value.length; i++) {
-        const categoryItem = categoryList.value[i];
+        const categoryItem: CategoryItemI = categoryList.value[i];
         const res = await selectQuery(`#${categoryItem.categoryIDMain}`, currentInstance);
-        console.log(res)
-        if (topBarHeightPX <= res.top || res.bottom  > topBarHeightPX) {
+        console.log(res);
+        if (topBarHeightPX <= res.top || res.bottom > topBarHeightPX) {
             setSelectedCategoryID(categoryItem.categoryID);
             setCategoryIDMain("");
             setCategoryIDAside(categoryItem.categoryIDAside);
+            await handleLazyImg(i);
             break;
         }
     }
 };
-const foodScrollHandle = debounce(handleScroll, 50);
+defineExpose({
+    handleLazyImg
+})
+async function handleLazyImg(index: number) {
+
+    const categoryItem: CategoryItemI = categoryList.value[index];
+    console.log(categoryList.value[index])
+    console.log(categoryItem)
+    console.log(systemInfo.windowHeight);
+    let lastCategoryFlag: boolean = true;
+    for (let i = 0; i < categoryItem.foodList.length; i++) {
+        const foodItem = categoryItem.foodList[i];
+        const res1 = await selectQuery(`#foodID${foodItem.foodID}`, currentInstance);
+        if (res1.top > systemInfo.windowHeight) {
+            lastCategoryFlag = false;
+            break;
+        }
+        if ((0 <= res1.top && res1.top <= systemInfo.windowHeight) || (0 <= res1.bottom && res1.bottom < systemInfo.windowHeight)) {
+            foodItem.currentImg = foodItem.fullImgPath;
+        }
+    }
+    if (lastCategoryFlag && index + 1 < categoryList.value.length) {
+        await handleLazyImg(index + 1)
+    }
+}
+const foodScrollHandle = debounce(handleScroll, 70);
 
 const throttle = (() => {
     let timer: null | number = null;
@@ -147,6 +176,5 @@ const throttle = (() => {
     .food-item {
         margin: 20rpx 20rpx 0;
     }
-
 }
 </style>

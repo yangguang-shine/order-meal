@@ -53,6 +53,7 @@ async function getOrderDetail(payload: { orderKey: string }): Promise<OrderDetai
             (foodItem): FoodItemI => ({
                 ...foodItem,
                 foodItemAmount: toFixedToNumber(foodItem.price * foodItem.orderCount),
+                currentImg: defaultFoodImg,
                 fullImgPath: `${foodImgPath}/${orderState.orderDetailShopInfo.shopID}/${foodItem.imgUrl}`,
                 defaultImg: defaultFoodImg,
                 showReserveCountFlag: foodItem.reserveCount < 10

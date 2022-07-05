@@ -45,6 +45,7 @@ export interface OriginCategoryItemI {
     foodList: OriginFoodItemI[];
 }
 export interface FoodItemI extends OriginFoodItemI {
+    currentImg: string
     fullImgPath: string;
     defaultImg: string;
     foodItemAmount: number;
@@ -81,6 +82,7 @@ export const initFoodItem: FoodItemI = {
     unit: "",
     reserveCount: 0,
     packPrice: 0,
+    currentImg: '',
     fullImgPath: "",
     defaultImg: '',
     foodItemAmount: 0,

@@ -32,7 +32,7 @@ export let tabBarHeightPX = 0;
 tabBarHeightPX = 50;
 // #endif
 //
-let systemInfo: SystemInfoI;
+export let systemInfo: SystemInfoI = uni.getSystemInfoSync();
 
 export const getRpxToPx = (rpx: number): number => {
     if (!systemInfo) {
@@ -187,7 +187,7 @@ export function selectQuery(id: string, currentInstance?: any): Promise<any> {
         }
         query
             .select(id)
-            .boundingClientRect((res: any) => {
+            .boundingClientRect((res: any = {}) => {
                 res.top = res.top + navigationBarHeightPX;
                 res.bottom = res.bottom + navigationBarHeightPX;
                 resolve(res);

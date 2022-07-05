@@ -2,8 +2,8 @@
     <view class="menu-container">
         <TopBar></TopBar>
         <view :animation="shopInfoAnimationData" class="menu-order-box">
-            <view v-if="shopInfo.mode === 'vertical'" class="vertical-menu-box">
-                <FoodCategoryList class="flex-item"></FoodCategoryList>
+            <view v-if="shopInfo.mode === 'vertical'" class="vertical-menu-box" >
+                <FoodCategoryList ref="refFoodCategoryList" class="flex-item"></FoodCategoryList>
                 <CategoryAsideBar></CategoryAsideBar>
             </view>
             <view v-else-if="shopInfo.mode === 'horizontal'" class="horizontal-menu-box">
@@ -52,6 +52,7 @@ import { footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX, shopInfoTra
 import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
+import { RefI } from "@/interface/vueInterface";
 interface MenuStateF {
     shopInfo: ComputedStateI<ShopItemI>;
     businessType: ComputedStateI<number>;
@@ -105,6 +106,7 @@ interface OptionI {
     businessType: string;
     orderKey?: string;
 }
+const refFoodCategoryList = ref(null)
 onLoad(async (option: OptionI) => {
     try {
         setMenuDefault();
@@ -137,9 +139,10 @@ onUnload(() => {
     setMenuDefault();
     console.log("page onUnload >>>>>");
 });
-
+const currentInstance =  getCurrentInstance()
 async function init() {
     await getMenuList();
+    refFoodCategoryList.value.handleLazyImg(0)
     // 重来一单，orderAgain 和 orderKey 缺一不可
     if (orderKey) {
         await getOrderKeyFoodList({

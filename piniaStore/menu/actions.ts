@@ -232,9 +232,10 @@ async function getMenuList() {
                 .map((originFoodItem): FoodItemI => {
                     const foodItem: FoodItemI = {
                         ...originFoodItem,
+                        currentImg: defaultFoodImg,
                         fullImgPath: `${foodImgPath}/${menuState.shopInfo.shopID}/${originFoodItem.imgUrl}`,
-                        foodItemAmount: 0,
                         defaultImg: defaultFoodImg,
+                        foodItemAmount: 0,
                         showReserveCountFlag: originFoodItem.reserveCount < 10,
                     };
                     foodListMap[`${foodItem.foodID}`] = foodItem;
@@ -267,6 +268,7 @@ async function getOrderKeyFoodList(option: { orderKey: String } = { orderKey: ""
     originFoodList.forEach((originFoodItem: OriginFoodItemI): void => {
         const foodItem: FoodItemI = {
             ...originFoodItem,
+            currentImg: defaultFoodImg,
             fullImgPath: `${foodImgPath}/${menuState.shopInfo.shopID}/${originFoodItem.imgUrl}`,
             defaultImg: defaultFoodImg,
             foodItemAmount: toFixedToNumber(originFoodItem.price * originFoodItem.orderCount),

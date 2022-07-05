@@ -1,6 +1,6 @@
 <template>
     <view class="food-item-container flex-item flex-row" :class="'food-item-container-' + mode" @click="clickFoodItem(foodItem)">
-        <image class="food-img flex-shrink" :src="foodItem.fullImgPath" mode="scaleToFill"></image>
+        <image :id="`foodID${foodItem.foodID}`" class="food-img flex-shrink" :src="foodItem.currentImg" mode="scaleToFill"></image>
         <view class="food-info-box flex-item flex-col flex-j-between">
             <view class="food-name-description">
                 <view class="food-name line1">{{ foodItem.foodName }}</view>
