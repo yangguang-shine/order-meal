@@ -33,7 +33,8 @@ async function getOrderList() {
             orderTypeTitle: getOrderTypeTitle(item.orderStatus, item.businessType),
             orderBusinessTitle: getOrderBusinessTitle(item.businessType)
         })
-    );
+    ).filter(orderItem => orderItem.shopInfo);
+
     orderState.allOrderList[orderState.orderTabIndex] = orderList;
     return orderList;
 }

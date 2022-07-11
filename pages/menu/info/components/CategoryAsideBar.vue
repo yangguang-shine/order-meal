@@ -1,6 +1,6 @@
 <template>
     <scroll-view scroll-y scroll-with-animation class="category-aside-bar-container" :scroll-into-view="categoryIDAside" :style="{ 'padding-bottom': minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX + 'rpx' : footerInfoHeightRPX + 'rpx' }">
-        <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'aside-categroy-item-active': selectedCategoryID === asideCategoryItem.categoryID }" @click="changeCategoryTab(asideCategoryItem)" :style="{ color: selectedCategoryID === asideCategoryItem.categoryID ? shopInfo.mainColor : '' }" :id="asideCategoryItem.categoryIDAside">
+        <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryInfo.asideCategoryList" :key="index" :class="{ 'aside-categroy-item-active': selectedCategoryID === asideCategoryItem.categoryID }" @click="changeCategoryTab(asideCategoryItem)" :style="{ color: selectedCategoryID === asideCategoryItem.categoryID ? shopInfo.mainColor : '' }" :id="asideCategoryItem.categoryIDAside">
             {{ asideCategoryItem.categoryName }}
             <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count" :style="{ background: $mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
         </view>
@@ -15,7 +15,7 @@ import { footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX, minusPromot
 
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI } from "@/interface/menu";
-import { MinusPromotionsObjectI, AsideCategoryItemI } from "@/store/getters/menu";
+import { MinusPromotionsObjectI, AsideCategoryItemI, AsideCategoryInfoI } from "@/piniaStore/menu/getter";
 import { RefI } from "@/interface/vueInterface";
 import { ShopItemI } from "@/interface/home";
 import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
@@ -27,7 +27,7 @@ interface MenuStateF {
     shopInfo: ComputedStateI<ShopItemI>;
 }
 interface MenuGetterF {
-    asideCategoryList: ComputedGetterI<AsideCategoryItemI>;
+    asideCategoryInfo: ComputedGetterI<AsideCategoryInfoI>;
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
 }
 
@@ -36,11 +36,13 @@ const menuStore: MenuStoreI = useMenuStore()
 // state
 const { selectedCategoryID,categoryIDAside, shopInfo }: MenuStateF = toRefs(menuStore.menuState)
 // getter
-const { asideCategoryList, minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore) 
+const { asideCategoryInfo, minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore) 
 // action
 const { setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside } = menuStore;
 // 选择 tab
 function changeCategoryTab(asideCategoryItem: AsideCategoryItemI) {
+    console.log(111111)
+    console.log(asideCategoryItem.categoryIDMain)
     setSelectedCategoryID(asideCategoryItem.categoryID);
     setCategoryIDMain(asideCategoryItem.categoryIDMain);
     setCategoryIDAside(asideCategoryItem.categoryIDAside);

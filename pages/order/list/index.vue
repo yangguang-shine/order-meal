@@ -19,17 +19,17 @@
                         </div>
                         <view class="flex-row flex-a-center flex-j-between">
                             <view class="minus-box flex-row ">
-                                <MinusList class="order-shop-minus flex-item flex-shrink" :minusList="orderItem.shopInfo.minusList.length > 4 ? orderItem.shopInfo.minusList.slice(0, 4) : orderItem.shopInfo.minusList" :mainColor="orderItem.shopInfo.mainColor"></MinusList>
+                                <MinusList class="order-shop-minus flex-item flex-shrink" :minusList="orderItem.shopInfo.minusList.length > 4 ? orderItem.shopInfo.minusList.slice(0, 4) : orderItem.shopInfo.minusList" :mainColor="$mainColor"></MinusList>
                             </view>
                             <view class="order-status-box flex-shrink">
                                 <text class="order-status-title">状态：</text>
-                                <text class="order-status-info" :style="{ color: orderItem.shopInfo.mainColor }">{{ orderItem.orderTypeTitle }}</text>
+                                <text class="order-status-info" :style="{ color: $mainColor }">{{ orderItem.orderTypeTitle }}</text>
                             </view>
                         </view>
                     </div>
                 </div>
                 <div class="price-info flex-row flex-j-between flex-a-center">
-                    <div class="order-again flex-row flex-ja-center" :style="{ color: orderItem.shopInfo.mainColor }" @click.stop="orderAgain(orderItem)">再来一单</div>
+                    <div class="order-again flex-row flex-ja-center" :style="{ color: $mainColor }" @click.stop="orderAgain(orderItem)">再来一单</div>
                     <div class="price-box flex-row flex-a-end">
                         <view class="minus-info">
                             <text>已优惠：</text>
@@ -43,7 +43,7 @@
                         </view>
                     </div>
                 </div>
-                <div class="order-business-title" :style="{ background: orderItem.shopInfo.mainColor }">{{ orderItem.orderBusinessTitle }}</div>
+                <div class="order-business-title" :style="{ background: $mainColor }">{{ orderItem.orderBusinessTitle }}</div>
             </div>
         </view>
         <div v-if="orderErrorListFlag[orderTabIndex]" class="common-error-box flex-row flex-ja-center">

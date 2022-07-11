@@ -79,7 +79,7 @@ page {
     background-color: #f4f4f4;
 }
 .order-detail-container {
-    height: 100vh;
+    min-height: 100vh;
 
     padding: 20rpx 20rpx 40rpx;
     font-size: 28rpx;

@@ -1,4 +1,4 @@
-import { GetterI, StateI,  FoodItemI, GetterStateI, minusItemI, ComputedStateI } from "@/interface/index";
+import { GetterI, StateI, FoodItemI, GetterStateI, minusItemI, ComputedStateI } from "@/interface/index";
 import { toFixedToNumber } from "@/utils/";
 import { computed } from "vue";
 import homeState from "../home/state";
@@ -35,6 +35,13 @@ export interface CartPriceInfoI {
     minusPrice: number;
     minusIndex: number | null;
     noReachFirst: boolean;
+}
+export interface AsideCategoryInfoI {
+    asideCategoryList: AsideCategoryItemI[];
+    asideCategoryItemOrderCountMap: AsideCategoryItemOrderCountMapI;
+}
+interface AsideCategoryItemOrderCountMapI {
+    [index: string]: number;
 }
 /**
  * @interface AsideCategoryItemI
@@ -141,36 +148,31 @@ const minusPromotionsObject: ComputedStateI<MinusPromotionsObjectI> = computed((
             contentList: ["已减", `${menuState.shopInfo.minusList[cartPriceInfo.value.minusIndex - 1].reduce}元`, `,再买`, `${Number((menuState.shopInfo.minusList[cartPriceInfo.value.minusIndex].reach - cartPriceInfo.value.allOriginPrice).toFixed(2))}元`, `可减`, `${menuState.shopInfo.minusList[cartPriceInfo.value.minusIndex].reduce}`],
         };
     }
-})
+});
 
-const asideCategoryList: ComputedStateI<AsideCategoryItemI> = computed(() => {
+const asideCategoryInfo: ComputedStateI<AsideCategoryInfoI> = computed(() => {
+    const asideCategoryItemOrderCountMap: A = {};
     const asideCategoryList = menuState.categoryList.map((categotyItem) => {
         // const stateCartCartgoryItem = menuState.cartCategoryList.find((cartFoodItem) => cartFoodItem.categoryID === categotyItem.categoryID);
         const stateCartCartgoryItem = menuState.cartCategoryListMap[`${categotyItem.categoryID}`];
-        if (stateCartCartgoryItem) {
-            const categoryOrderCount = stateCartCartgoryItem.foodList.reduce((all: number, item): number => {
-                all += item.orderCount;
-                return all;
-            }, 0);
-            return {
-                categoryName: categotyItem.categoryName,
-                categoryID: categotyItem.categoryID,
-                categoryOrderCount,
-                categoryIDMain: `main${categotyItem.categoryID}`,
-                categoryIDAside: `aside${categotyItem.categoryID}`,
-            };
-        } else {
-            return {
-                categoryName: categotyItem.categoryName,
-                categoryID: categotyItem.categoryID,
-                categoryOrderCount: 0,
-                categoryIDMain: `main${categotyItem.categoryID}`,
-                categoryIDAside: `aside${categotyItem.categoryID}`,
-            };
-        }
+        const categoryOrderCount = stateCartCartgoryItem ? stateCartCartgoryItem.foodList.reduce((all: number, item): number => {
+            all += item.orderCount;
+            return all;
+        }, 0) : 0;
+        asideCategoryItemOrderCountMap[`${categotyItem.categoryID}`] = categoryOrderCount
+        return {
+            categoryName: categotyItem.categoryName,
+            categoryID: categotyItem.categoryID,
+            categoryOrderCount,
+            categoryIDMain: `main${categotyItem.categoryID}`,
+            categoryIDAside: `aside${categotyItem.categoryID}`,
+        };
     });
-    return asideCategoryList;
-})
+    return {
+        asideCategoryList,
+        asideCategoryItemOrderCountMap
+    };
+});
 
 const orderFoodList: ComputedStateI<FoodItemI[]> = computed((): FoodItemI[] => {
     const orderFoodList = menuState.cartCategoryList.reduce((list: any[], item) => {
@@ -179,16 +181,16 @@ const orderFoodList: ComputedStateI<FoodItemI[]> = computed((): FoodItemI[] => {
     return orderFoodList;
 });
 export interface MenuGetterI {
-    minusPromotionsObject: ComputedStateI<MinusPromotionsObjectI>,
-    cartPriceInfo: ComputedStateI<CartPriceInfoI>,
-    asideCategoryList: ComputedStateI<AsideCategoryItemI>,
-    orderFoodList: ComputedStateI<FoodItemI[]>,
+    minusPromotionsObject: ComputedStateI<MinusPromotionsObjectI>;
+    cartPriceInfo: ComputedStateI<CartPriceInfoI>;
+    asideCategoryInfo: ComputedStateI<AsideCategoryInfoI>;
+    orderFoodList: ComputedStateI<FoodItemI[]>;
 }
 const menuGetter: MenuGetterI = {
     minusPromotionsObject,
     cartPriceInfo,
-    asideCategoryList,
-    orderFoodList
-} 
+    asideCategoryInfo,
+    orderFoodList,
+};
 
-export default menuGetter
+export default menuGetter;

@@ -25,7 +25,6 @@ import FoodItem from "./item/FoodItem.vue";
 import { getRpxToPx, selectQuery, systemInfo } from "@/utils/index";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { topBarHeightPX, minusPromotionsHeightRPX, footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX } from "../infoConfig";
-const currentInstance = getCurrentInstance();
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
 
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
@@ -36,7 +35,7 @@ import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
 import { foodImgPath } from "@/config/";
-
+import { debounce, handleFoodCategoryListScroll } from "./common";
 interface MenuStateF {
     categoryList: ComputedStateI<CategoryItemI[]>;
     categoryIDMain: ComputedStateI<string>;
@@ -61,81 +60,26 @@ const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
 const { setFoodDetailFlag, setFoodInfo, setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside } = menuStore;
 
 const categoryItemLastPaddingBottom: string = computed((): string => (minusPromotionsObject.value.show ? footerInfoAndMinusPromotionsHeightRPX + 20 + "rpx" : footerInfoHeightRPX + 20 + "rpx"));
+const currentInstance = getCurrentInstance();
 
 function toShowFoodDetail(foodItem: FoodItemI) {
     setFoodDetailFlag(true);
     setFoodInfo(foodItem);
 }
-const debounce = (fn: any, delay: number) => {
-    let timer: any;
-    return (e: any) => {
-        if (timer) {
-            clearTimeout(timer);
-        }
-        timer = setTimeout(() => {
-            fn(e);
-            clearTimeout(timer);
-        }, delay);
-    };
-};
-
-onMounted(() => {
-    // handleLazyImg(0)
-});
-
-const handleScroll = async (e: any) => {
-    let count = 0;
-    for (let i = 0; i < categoryList.value.length; i++) {
-        const categoryItem: CategoryItemI = categoryList.value[i];
-        const res = await selectQuery(`#${categoryItem.categoryIDMain}`, currentInstance);
-        console.log(res);
-        if (topBarHeightPX <= res.top || res.bottom > topBarHeightPX) {
-            setSelectedCategoryID(categoryItem.categoryID);
-            setCategoryIDMain("");
-            setCategoryIDAside(categoryItem.categoryIDAside);
-            await handleLazyImg(i);
-            break;
-        }
-    }
-};
-defineExpose({
-    handleLazyImg
-})
-async function handleLazyImg(index: number) {
-
-    const categoryItem: CategoryItemI = categoryList.value[index];
-    console.log(categoryList.value[index])
-    console.log(categoryItem)
-    console.log(systemInfo.windowHeight);
-    let lastCategoryFlag: boolean = true;
-    for (let i = 0; i < categoryItem.foodList.length; i++) {
-        const foodItem = categoryItem.foodList[i];
-        const res1 = await selectQuery(`#foodID${foodItem.foodID}`, currentInstance);
-        if (res1.top > systemInfo.windowHeight) {
-            lastCategoryFlag = false;
-            break;
-        }
-        if ((0 <= res1.top && res1.top <= systemInfo.windowHeight) || (0 <= res1.bottom && res1.bottom < systemInfo.windowHeight)) {
-            foodItem.currentImg = foodItem.fullImgPath;
-        }
-    }
-    if (lastCategoryFlag && index + 1 < categoryList.value.length) {
-        await handleLazyImg(index + 1)
-    }
-}
 const foodScrollHandle = debounce(handleScroll, 70);
 
-const throttle = (() => {
-    let timer: null | number = null;
-    return (fn: Function, delay: number) => {
-        if (!timer) {
-            timer = setTimeout(() => {
-                fn();
-                timer = null;
-            }, delay);
-        }
-    };
-})();
+async function handleScroll(e: any) {
+    handleFoodCategoryListScroll({
+        categoryList,
+        currentInstance,
+        setSelectedCategoryID,
+        setCategoryIDMain,
+        setCategoryIDAside,
+    });
+}
+defineExpose({
+    foodScrollHandle,
+});
 </script>
 
 <style lang="scss">

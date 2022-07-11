@@ -15,7 +15,14 @@
                     {{ shopInfo.deliverPrice > 0 ? `配送费¥${shopInfo.deliverPrice}` : "免配送费" }}
                 </div>
             </view>
-            <view class="com-button confirm-order" :style="{ 'background-color': confirmButtonInfo.mainColorFlag ? shopInfo.mainColor : '' }" @click="toComfirmOrder">{{ confirmButtonInfo.text }}</view>
+            <view v-if="confirmButtonInfo.hasOrderRequiredFlag" class="confirm-order flex-center" :style="{ 'background-color': shopInfo.mainColor }" @click="toComfirmOrder">{{ confirmButtonInfo.text }}</view>
+            <view v-else-if="confirmButtonInfo.text" class="confirm-order flex-col flex-ja-center" :style="{ 'background-color': shopInfo.mainColor }" @click="toComfirmOrder">
+                <div class="button-text-top">{{ confirmButtonInfo.text }}</div>
+                <div class="button-text-bottom">{{ confirmButtonInfo.requireText }}</div>
+            </view>
+            <view v-else class="confirm-order flex-center" :style="{ 'background-color': shopInfo.mainColor }" @click="toComfirmOrder">
+                {{ confirmButtonInfo.requireText }}
+            </view>
             <!-- <view class="com-button confirm-order" :style="{ 'background-color': +cartPriceInfo.allPriceAfterDiscount > 0 ? shopInfo.mainColor : '' }" @click="toComfirmOrder">去下单</view> -->
         </view>
     </view>
@@ -36,6 +43,7 @@ import router from "@/utils/router";
 import { countAddTransitionTime } from "../infoConfig";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
+import { AsideCategoryInfoI } from "@/piniaStore/menu/getter";
 interface MenuStateF {
     startShopInfoAnimationFlag: ComputedStateI<boolean>;
     shopInfoFlag: ComputedStateI<boolean>;
@@ -44,9 +52,11 @@ interface MenuStateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
     cartImgPositionInfo: ComputedStateI<PositionInfoI>;
     cartImgAnimationFlag: ComputedStateI<boolean>;
+    requiredCategoryIDList: ComputedStateI<number[]>;
 }
 interface MenuGetterF {
     cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
+    asideCategoryInfo: ComputedGetterI<AsideCategoryInfoI>;
 }
 interface MutationF {
     toogleCartDetailFlag: ComputedMutationI;
@@ -55,40 +65,81 @@ interface MutationF {
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCategoryList, cartImgPositionInfo, cartImgAnimationFlag }: MenuStateF = toRefs(menuStore.menuState);
+const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCategoryList, cartImgPositionInfo, cartImgAnimationFlag, requiredCategoryIDList }: MenuStateF = toRefs(menuStore.menuState);
 // getter
-const { cartPriceInfo }: MenuGetterF = storeToRefs(menuStore);
+const { cartPriceInfo, asideCategoryInfo }: MenuGetterF = storeToRefs(menuStore);
 // action
-const { toogleCartDetailFlag, setCartImgPositionInfo } = menuStore;
+const { toogleCartDetailFlag, setCartImgPositionInfo, setScrollToViewCategory } = menuStore;
 const cartImgAnimationData = ref(null);
-
+const hasOrderRequiredListFlag = computed(() => {
+    let hasOrderRequiredFlag: boolean = true;
+    for (let i = 0; i < requiredCategoryIDList.value.length; i++) {
+        const categoryID = requiredCategoryIDList.value[i];
+        const categoryitemOrderCount = asideCategoryInfo.value.asideCategoryItemOrderCountMap[`${categoryID}`];
+        if (categoryitemOrderCount === 0) {
+            hasOrderRequiredFlag = false;
+            break;
+        } else {
+            continue;
+        }
+    }
+});
 interface ConfirmButtonInfoI {
     text: string;
-    mainColorFlag: boolean;
+    canOrderFlag: boolean;
+    hasOrderRequiredFlag: boolean;
+    requiredCategoryID: number;
+    requireText: string;
 }
 const confirmButtonInfo: ComputedI<ConfirmButtonInfoI> = computed((): ConfirmButtonInfoI => {
+    let hasOrderRequiredFlag: boolean = true;
+    let requiredCategoryID: number = 0;
+    for (let i = 0; i < requiredCategoryIDList.value.length; i++) {
+        const categoryID = requiredCategoryIDList.value[i];
+        const categoryitemOrderCount = asideCategoryInfo.value.asideCategoryItemOrderCountMap[`${categoryID}`];
+        if (categoryitemOrderCount === 0) {
+            hasOrderRequiredFlag = false;
+            requiredCategoryID = categoryID;
+            break;
+        } else {
+            continue;
+        }
+    }
+
     let text: string = "";
-    let mainColorFlag: boolean = false;
+    let canOrderFlag: boolean = false;
+    let requireText = "";
     const startDeliverPrice = shopInfo.value.startDeliverPrice;
     if (startDeliverPrice === 0 && cartPriceInfo.value.allOriginPrice === 0) {
         text = "请选购商品";
-        // mainColorFlag = true;
+        if (!hasOrderRequiredFlag) {
+            text = "";
+        }
     } else if (cartPriceInfo.value.allOriginPrice === 0) {
         text = `¥${startDeliverPrice}起${businessType.value === 2 ? "送" : "做"}`;
+        if (!hasOrderRequiredFlag) {
+            requireText = "未点必选品";
+        }
     } else if (cartPriceInfo.value.allOriginPrice > startDeliverPrice) {
         text = "去结算";
-        mainColorFlag = true;
+        canOrderFlag = true;
+        if (!hasOrderRequiredFlag) {
+            text = "";
+        }
     } else {
         text = `差¥${toFixedToNumber(startDeliverPrice - cartPriceInfo.value.allOriginPrice)}起${businessType.value === 2 ? "送" : "做"}`;
     }
-    if (businessType.value === 1) {
-    } else if (businessType.value === 2) {
-        businessType;
-    } else if (businessType.value === 3) {
+
+    if (!hasOrderRequiredFlag) {
+        requireText = "未点必选品";
+        canOrderFlag = false;
     }
     return {
         text,
-        mainColorFlag,
+        canOrderFlag,
+        hasOrderRequiredFlag,
+        requiredCategoryID,
+        requireText,
     };
 });
 onMounted(async () => {
@@ -129,10 +180,12 @@ function startCartImgAnimation() {
     cartImgAnimationData.value = cartImgAnimation.export();
 }
 function toComfirmOrder() {
-    if (confirmButtonInfo.value.mainColorFlag) {
+    if (confirmButtonInfo.value.canOrderFlag) {
         router.navigateTo({
             name: "menu/confirm",
         });
+    } else if(!confirmButtonInfo.value.hasOrderRequiredFlag) {
+        setScrollToViewCategory(confirmButtonInfo.value.requiredCategoryID)
     }
 }
 function clickCartImg() {
@@ -222,6 +275,16 @@ function clickCartImg() {
 
         width: 250rpx;
         background-color: #888;
+
+        height: 80rpx;
+        border-radius: 40rpx;
+        color: #fff;
+        .button-text-top {
+            font-size: 22rpx;
+        }
+        .button-text-bottom {
+            font-size: 24rpx;
+        }
     }
 }
 </style>

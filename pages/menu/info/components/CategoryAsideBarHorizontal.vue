@@ -1,7 +1,7 @@
 <template>
     <scroll-view scroll-x="true" scroll-with-animation class="category-aside-bar-horizontal-container" :scroll-into-view="categoryIDAside">
         <div class="category-list flex-row flex-a-center">
-            <view class="category-item flex-shrink flex-row flex-ja-center" v-for="(asideCategoryItem, index) in asideCategoryList" :key="index" :class="{ 'categroy-item-active': selectedCategoryID === asideCategoryItem.categoryID }" @click="changeCategoryTab(asideCategoryItem)" :style="{ color: selectedCategoryID === asideCategoryItem.categoryID ? shopInfo.mainColor : '' }" :id="asideCategoryItem.categoryIDAside">
+            <view class="category-item flex-shrink flex-row flex-ja-center" v-for="(asideCategoryItem, index) in asideCategoryInfo.asideCategoryList" :key="index" :class="{ 'categroy-item-active': selectedCategoryID === asideCategoryItem.categoryID }" @click="changeCategoryTab(asideCategoryItem)" :style="{ color: selectedCategoryID === asideCategoryItem.categoryID ? shopInfo.mainColor : '' }" :id="asideCategoryItem.categoryIDAside">
                 {{ asideCategoryItem.categoryName }}
                 <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count flex-row flex-ja-center" :style="{ background: $mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
             </view>
@@ -17,12 +17,12 @@ import { footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX, minusPromot
 
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI } from "@/interface/menu";
-import { MinusPromotionsObjectI, AsideCategoryItemI } from "@/store/getters/menu";
 import { RefI } from "@/interface/vueInterface";
 import { ShopItemI } from "@/interface/home";
 import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs} from 'pinia'
+import { AsideCategoryInfoI, MinusPromotionsObjectI, AsideCategoryItemI } from "@/piniaStore/menu/getter";
 
 interface MenuStateF {
     selectedCategoryID: ComputedStateI<number>;
@@ -30,7 +30,7 @@ interface MenuStateF {
     categoryIDAside: ComputedStateI<string>;
 }
 interface MenuGetterF {
-    asideCategoryList: ComputedGetterI<AsideCategoryItemI>;
+    asideCategoryInfo: ComputedGetterI<AsideCategoryInfoI>;
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
 }
 
@@ -39,7 +39,7 @@ const menuStore: MenuStoreI = useMenuStore()
 // state
 const { selectedCategoryID, shopInfo, categoryIDAside }:MenuStateF =toRefs(menuStore.menuState) 
 // getter
-const { asideCategoryList, minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore) 
+const { asideCategoryInfo, minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore) 
 // action
 const { setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside } = menuStore
 //

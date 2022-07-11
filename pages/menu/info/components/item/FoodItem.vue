@@ -1,6 +1,6 @@
 <template>
     <view class="food-item-container flex-item flex-row" :class="'food-item-container-' + mode" @click="clickFoodItem(foodItem)">
-        <image :id="`foodID${foodItem.foodID}`" class="food-img flex-shrink" :src="foodItem.currentImg" mode="scaleToFill"></image>
+        <image :id="`${idPre}-${foodItem.foodID}`" class="food-img flex-shrink" :src="foodItem.currentImg" mode="scaleToFill"></image>
         <view class="food-info-box flex-item flex-col flex-j-between">
             <view class="food-name-description">
                 <view class="food-name line1">{{ foodItem.foodName }}</view>
@@ -30,7 +30,8 @@ import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 interface PropsI {
     foodItem: FoodItemI;
     mode?: string; // large | midden | small
-    type?: string
+    type?: string,
+    idPre?: string
 }
 interface EmitI {
   (e: 'clickFoodItem', id: number): void
@@ -38,7 +39,8 @@ interface EmitI {
 const props: PropsI = withDefaults(defineProps<PropsI>(), {
     foodItem: {},
     mode: "midden",
-    type: 'main'
+    type: 'main',
+    idPre: 'img'
 });
 const emit = defineEmits<EmitI>()
 interface CartChangeParamI {

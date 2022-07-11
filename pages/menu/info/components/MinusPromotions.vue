@@ -21,6 +21,7 @@ interface MenuStateF {
     startShopInfoAnimationFlag: ComputedStateI<boolean>;
     shopInfoFlag: ComputedStateI<boolean>;
     shopInfo: ComputedStateI<ShopItemI>;
+    collectFoodFlag: ComputedStateI<boolean>
 }
 interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
@@ -28,12 +29,14 @@ interface MenuGetterF {
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { startShopInfoAnimationFlag, shopInfoFlag, shopInfo }: MenuStateF = toRefs(menuStore.menuState);
+const { startShopInfoAnimationFlag, shopInfoFlag, shopInfo, collectFoodFlag }: MenuStateF = toRefs(menuStore.menuState);
 // getter
 const { minusPromotionsObject,  }: MenuGetterF = storeToRefs(menuStore);
 const { setCollectFoodFlag } = menuStore
 function toCollect() {
-    setCollectFoodFlag(true)
+    if (!collectFoodFlag.value) {
+        setCollectFoodFlag(true)
+    }
 }
 </script>
 

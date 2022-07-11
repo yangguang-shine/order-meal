@@ -116,6 +116,8 @@ async function getPositionInfo(): Promise<PositionInfoI> {
 }
 async function addCount(e: any) {
     const addPositionInfo: PositionInfoI = await getPositionInfo();
+    console.log('cartImgPositionInfo')
+    console.log(cartImgPositionInfo)
     const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.value.left;
     const offsetTop: number = cartImgPositionInfo.value.top - addPositionInfo.top;
     if (offsetLeft) {

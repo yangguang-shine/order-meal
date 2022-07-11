@@ -134,6 +134,7 @@ function cartChange({ foodItem, count = 0 }: { foodItem: FoodItemI; count: numbe
             foodListMap: {
                 [foodItem.foodID]: foodItem,
             },
+            required: menuState.categoryListMap[`${foodItem.categoryID}`].required
         };
         menuState.cartCategoryListMap[`${foodItem.categoryID}`] = cartCategoryItem;
     }
@@ -215,40 +216,124 @@ async function getShopInfo(payload: { shopID: number }): Promise<ShopItemI> {
 async function getMenuList() {
     // 初始化会出现页面返回再次进入数据混乱问题
     menuState.categoryList = [];
-    const originCategoryItem: OriginCategoryItemI[] = await fetch("shop/menu", {
+    const resMenu: {
+        categoryList: OriginCategoryItemI[];
+        foodList: OriginFoodItemI[];
+    } = await fetch("shop/menu", {
         shopID: menuState.shopInfo.shopID,
     });
     // 菜品分类map
     const categoryListMap: CategoryListMapI = {};
-    // 菜品分类list
-    const categoryList: CategoryItemI[] = [];
-    (originCategoryItem || []).forEach((originCategoryItem: OriginCategoryItemI) => {
-        const foodListMap: FoodListMapI = {};
-        const categoryItem: CategoryItemI = {
-            ...originCategoryItem,
-            categoryIDMain: `main${originCategoryItem.categoryID}`,
-            categoryIDAside: `aside${originCategoryItem.categoryID}`,
-            foodList: (originCategoryItem.foodList || [])
-                .map((originFoodItem): FoodItemI => {
-                    const foodItem: FoodItemI = {
-                        ...originFoodItem,
-                        currentImg: defaultFoodImg,
-                        fullImgPath: `${foodImgPath}/${menuState.shopInfo.shopID}/${originFoodItem.imgUrl}`,
-                        defaultImg: defaultFoodImg,
-                        foodItemAmount: 0,
-                        showReserveCountFlag: originFoodItem.reserveCount < 10,
-                    };
-                    foodListMap[`${foodItem.foodID}`] = foodItem;
-                    return foodItem;
-                })
-                .sort((a, b) => a.foodID - b.foodID),
-            foodListMap,
-        };
-        categoryListMap[`${categoryItem.categoryID}`] = categoryItem;
-        categoryList.push(categoryItem);
+    const originCategoryMap: {
+        [index: string]: OriginCategoryItemI;
+    } = {};
+    resMenu.categoryList.forEach((originCategoryItem) => {
+        originCategoryMap[`${originCategoryItem.categoryID}`] = originCategoryItem;
     });
+    const categoryList = (resMenu.foodList || []).reduce((list: CategoryItemI[], item) => {
+        const foodItem: FoodItemI = {
+            ...item,
+            currentImg: defaultFoodImg,
+            fullImgPath: `${foodImgPath}/${menuState.shopInfo.shopID}/${item.imgUrl}`,
+            defaultImg: defaultFoodImg,
+            foodItemAmount: 0,
+            showReserveCountFlag: item.reserveCount < 10,
+            orderCount: 0,
+        };
+        if (!list.length) {
+            const categoryItem: CategoryItemI = {
+                categoryID: foodItem.categoryID,
+                categoryName: foodItem.categoryName,
+                required: originCategoryMap[`${foodItem.categoryID}`].required,
+                categoryIDMain: `main${foodItem.categoryID}`,
+                categoryIDAside: `aside${foodItem.categoryID}`,
+                foodList: [foodItem],
+                foodListMap: {
+                    [`${foodItem.foodID}`]: foodItem,
+                },
+            };
+            list.push(categoryItem);
+            categoryListMap[`${foodItem.categoryID}`] = categoryItem;
+        } else {
+            const findCategoryItem = categoryListMap[`${foodItem.categoryID}`];
+            if (findCategoryItem) {
+                findCategoryItem.foodList.push(foodItem);
+                findCategoryItem.foodListMap[`${foodItem.foodID}`] = foodItem;
+            } else {
+                const categoryItem: CategoryItemI = {
+                    categoryID: foodItem.categoryID,
+                    categoryName: foodItem.categoryName,
+                    required: originCategoryMap[`${foodItem.categoryID}`].required,
+                    categoryIDMain: `main${foodItem.categoryID}`,
+                    categoryIDAside: `aside${foodItem.categoryID}`,
+                    foodList: [foodItem],
+                    foodListMap: {
+                        [`${foodItem.foodID}`]: foodItem,
+                    },
+                };
+                list.push(categoryItem);
+                categoryListMap[`${foodItem.categoryID}`] = categoryItem;
+            }
+        }
+        return list;
+    }, []);
+
+    // resMenu.foodList.forEach((originFoodItem: OriginFoodItemI) => {
+    //     const foodItem: FoodItemI = {
+    //         ...originFoodItem,
+    //         currentImg: defaultFoodImg,
+    //         fullImgPath: `${foodImgPath}/${menuState.shopInfo.shopID}/${originFoodItem.imgUrl}`,
+    //         defaultImg: defaultFoodImg,
+    //         foodItemAmount: 0,
+    //         showReserveCountFlag: originFoodItem.reserveCount < 10,
+    //         orderCount: 0,
+    //     };
+    //     foodListMap[`${foodItem.foodID}`] = foodItem;
+    //     const categoryItem: CategoryItemI = {
+    //         ...originCategoryMap[`${originFoodItem.categoryID}`],
+    //         categoryIDMain: `main${originFoodItem.categoryID}`,
+    //         categoryIDAside: `aside${originFoodItem.categoryID}`,
+    //         foodList: [],
+    //         foodListMap,
+    //     };
+    // });
+    // 菜品分类list
+    // const categoryList: CategoryItemI[] = [];
+    // (originCategoryItem || []).forEach((originCategoryItem: OriginCategoryItemI) => {
+    //     const foodListMap: FoodListMapI = {};
+    //     const categoryItem: CategoryItemI = {
+    //         ...originCategoryItem,
+    //         categoryIDMain: `main${originCategoryItem.categoryID}`,
+    //         categoryIDAside: `aside${originCategoryItem.categoryID}`,
+    //         foodList: (originCategoryItem.foodList || [])
+    //             .map((originFoodItem): FoodItemI => {
+    //                 const foodItem: FoodItemI = {
+    //                     ...originFoodItem,
+    //                     currentImg: defaultFoodImg,
+    //                     fullImgPath: `${foodImgPath}/${menuState.shopInfo.shopID}/${originFoodItem.imgUrl}`,
+    //                     defaultImg: defaultFoodImg,
+    //                     foodItemAmount: 0,
+    //                     showReserveCountFlag: originFoodItem.reserveCount < 10,
+    //                 };
+    //                 foodListMap[`${foodItem.foodID}`] = foodItem;
+    //                 return foodItem;
+    //             })
+    //             .sort((a, b) => a.foodID - b.foodID),
+    //         foodListMap,
+    //     };
+    //     categoryListMap[`${categoryItem.categoryID}`] = categoryItem;
+    //     categoryList.push(categoryItem);
+    // });
     // 菜品分类排序
     categoryList.sort((a, b) => a.categoryID - b.categoryID);
+    // 菜品排序以及获取必点项
+    const requiredCategoryIDList: number[] = []
+    categoryList.forEach((categoryItem) => {
+        if (categoryItem.required) {
+            requiredCategoryIDList.push(categoryItem.categoryID)
+        }
+        categoryItem.foodList.sort((a, b) => a.foodID - b.foodID)
+    })
     if (categoryList.length) {
         menuState.selectedCategoryID = categoryList[0].categoryID;
         menuState.categoryIDMain = "";
@@ -256,6 +341,10 @@ async function getMenuList() {
     }
     menuState.categoryList = categoryList;
     menuState.categoryListMap = categoryListMap;
+    menuState.requiredCategoryIDList = requiredCategoryIDList;
+    console.log(categoryList)
+    console.log(categoryListMap)
+    console.log(requiredCategoryIDList)
 }
 
 async function getOrderKeyFoodList(option: { orderKey: String } = { orderKey: "" }) {
@@ -299,6 +388,7 @@ async function getOrderKeyFoodList(option: { orderKey: String } = { orderKey: ""
                             foodListMap: {
                                 [foodItem.foodID]: foodItem,
                             },
+                            required: menuState.categoryListMap[`${foodItem.categoryID}`].required
                         };
                         cartCategoryListMap[`${foodItem.categoryID}`] = categoryItem;
                     }
@@ -321,9 +411,6 @@ async function getOrderKeyFoodList(option: { orderKey: String } = { orderKey: ""
     return cartCategoryList;
 }
 
-function setCollectTabIndex(collectTabIndex: number) {
-    menuState.collectTabIndex = collectTabIndex;
-}
 function setShowCartClickCartImgFlag(showCartClickCartImgFlag: boolean) {
     menuState.showCartClickCartImgFlag = showCartClickCartImgFlag;
 }
@@ -331,6 +418,13 @@ function setShowCartClickCartImgFlag(showCartClickCartImgFlag: boolean) {
 function setShowCollectClickCartImgFlag(showCollectClickCartImgFlag: boolean) {
     menuState.showCollectClickCartImgFlag = showCollectClickCartImgFlag;
 }
+function setScrollToViewCategory(categoryID: number) {
+    console.log(menuState.categoryIDMain)
+    menuState.categoryIDMain = `main${categoryID}`;
+    console.log(menuState.categoryIDMain)
+
+}
+
 
 export interface MenuActionI {
     setShopInfo: (shopInfo: ShopItemI) => void;
@@ -364,9 +458,10 @@ export interface MenuActionI {
     getShopInfo: (payload: { shopID: number }) => Promise<ShopItemI>;
     getMenuList: () => void;
     getOrderKeyFoodList: (option: { orderKey: String }) => void;
-    setCollectTabIndex: (collectTabIndex: number) => void;
     setShowCartClickCartImgFlag: (showCartClickCartImgFlag: boolean) => void;
     setShowCollectClickCartImgFlag: (showCollectClickCartImgFlag: boolean) => void;
+    setScrollToViewCategory: (categoryID: number) => void;
+    
 }
 const meunAction: MenuActionI = {
     setShopInfo,
@@ -400,8 +495,8 @@ const meunAction: MenuActionI = {
     getShopInfo,
     getMenuList,
     getOrderKeyFoodList,
-    setCollectTabIndex,
     setShowCartClickCartImgFlag,
     setShowCollectClickCartImgFlag,
+    setScrollToViewCategory,
 };
 export default meunAction;

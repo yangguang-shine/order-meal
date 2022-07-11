@@ -63,11 +63,7 @@
             "es6" : true
         },
         "usingComponents" : true,
-        "permission" : {
-            "scope.userLocation" : {
-                "desc" : "根据你的地理位置为你推荐附近门店进行点餐服务"
-            }
-        }
+        "permission" : {}
     },
     "mp-alipay" : {
         "usingComponents" : true
@@ -89,7 +85,7 @@
         // },
         "devServer" : {
             "open" : false,
-            "port" : 8889, // 自定义修改8080端口
+            "port" : 8899, // 自定义修改8080端口
             "host" : "dev.jr.jd.com",
             // 代理跨域
             "proxy" : {

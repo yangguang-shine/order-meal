@@ -11,7 +11,7 @@
         </div>
         <div class="info-item flex-row flex-a-center flex-j-between">
             <div class="left-title">订单号</div>
-            <div class="right-title" :style="{ color: orderDetailShopInfo.mainColor }">{{ orderDetail.orderKey }}</div>
+            <div class="right-title" :style="{ color: $mainColor }">{{ orderDetail.orderKey }}</div>
         </div>
 
         <div class="info-item flex-row flex-a-center flex-j-between">
@@ -32,7 +32,7 @@
             <div class="right-title flex-row flex-a-center">
                 <div class="mobile">
                     {{ orderDetail.deliverAddress.mobile }}
-                    <div class="split" :style="{ background: orderDetailShopInfo.mainColor }"></div>
+                    <div class="split" :style="{ background: $mainColor }"></div>
                 </div>
                 <div class="name">{{ orderDetail.deliverAddress.name }}</div>
             </div>

@@ -2,6 +2,10 @@ import { CollectFoodListMapI, CollectFoodKeyObjI, FoodItemI, CollectFoodListItem
 import menuState from "./state";
 
 export function getCollectFoodList() {
+    // 计算一次之后缓存，不在计算
+    if (menuState.collectFoodList.length) {
+        return;
+    } 
     const categoryList = menuState.categoryList;
     const collectFoodListKeys: CollectFoodKeyObjI[] = [
         {
@@ -37,9 +41,11 @@ export function getCollectFoodList() {
     // 菜品价格排序后的总列表
     const collectFoodList: CollectFoodListItemI[] = getSortCollectFoodList(collectFoodListMap, collectFoodListKeys);
     // 凑单弹框使用使用
+    console.log(menuState.collectFoodList)
     menuState.collectFoodListMap = collectFoodListMap;
     menuState.collectFoodList = collectFoodList;
     menuState.collectFoodListKeys = collectFoodListKeys;
+
 }
 function getCollectFoodListMapDefault(collectFoodListKeys: CollectFoodKeyObjI[]): CollectFoodListMapI {
     const collectFoodListMap: CollectFoodListMapI = {};

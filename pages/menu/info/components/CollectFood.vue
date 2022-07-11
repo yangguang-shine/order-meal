@@ -6,9 +6,9 @@
             <view class="tab-list flex-row flex-a-center flex-no-wrap">
                 <view v-for="(collectFoodListItem, index) in collectFoodList" :key="index" class="tab-item flex-center flex-shrink" :class="collectTabIndex === index ? 'tab-item-selected' : ''" :style="{ color: collectTabIndex === index ? shopInfo.mainColor : '' }" @click="changeTabItem(index)">{{ collectFoodListItem.title }}</view>
             </view>
-            <scroll-view scroll-y class="collect-food-list-box flex-item">
+            <scroll-view scroll-y class="collect-food-list-box flex-item" id="collect-food-list-box" @scroll="foodScrollHandle" :scroll-top="scrollTopNum">
                 <view class="tab-food-list">
-                    <FoodItem v-for="foodItem in collectFoodList[collectTabIndex].foodList" :key="foodItem.foodID" class="collect-food-item" :foodItem="foodItem" type="collect"></FoodItem>
+                    <FoodItem v-for="foodItem in collectFoodList[collectTabIndex].foodList" :key="foodItem.foodID" class="collect-food-item" :idPre="idPre" :foodItem="foodItem" type="collect"></FoodItem>
                 </view>
             </scroll-view>
         </view>
@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { delaySync, showModal } from "@/utils/index";
+import { delaySync, selectQuery, showModal, systemInfo } from "@/utils/index";
 import FoodAddMinusItem from "./item/FoodAddMinusItem.vue";
 import FoodItem from "./item/FoodItem.vue";
 import { getCurrentInstance, computed, onMounted, ref, toRefs, watch } from "vue";
@@ -30,6 +30,8 @@ import useOverlayAnimation from "@/utils/useOverlayAnimation";
 import { ShopItemI } from "@/interface/home";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
+import { debounce } from "./common";
+import { onShow, onLoad, onPageScroll, onUnload, onHide, onReady } from "@dcloudio/uni-app";
 
 interface MenuStateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
@@ -37,7 +39,6 @@ interface MenuStateF {
     businessType: ComputedStateI<number>;
     shopInfo: ComputedStateI<ShopItemI>;
     collectFoodList: ComputedStateI<CollectFoodListItemI[]>;
-    collectTabIndex: ComputedStateI<number>;
     showCollectClickCartImgFlag: ComputedStateI<boolean>;
 }
 interface MenuGetterF {
@@ -47,7 +48,7 @@ interface MenuGetterF {
 // menu store
 const menuStore: MenuStoreI = useMenuStore();
 // menu state
-const { cartCategoryList, categoryList, businessType, shopInfo, collectFoodList, collectTabIndex, showCollectClickCartImgFlag }: MenuStateF = toRefs(menuStore.menuState);
+const { cartCategoryList, categoryList, businessType, shopInfo, collectFoodList, showCollectClickCartImgFlag }: MenuStateF = toRefs(menuStore.menuState);
 // menu getter
 const { minusPromotionsObject, cartPriceInfo }: MenuGetterF = storeToRefs(menuStore);
 // menu action
@@ -56,8 +57,17 @@ const { setCollectFoodFlag, setCollectTabIndex, setShowCollectClickCartImgFlag, 
 const { overlayAnimationData, mainAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: collectTransitionTime,
 });
-onMounted(() => {
+const scrollTopNum = ref(0);
+const collectTabIndex: RefI<number> = ref(0);
+onMounted(async () => {
     toStartAnimation();
+    console.log("onMounted");
+    // 获取动画前需要加载的图片
+    getCollectFoodListBoxPositionInfo("#collect-food-list-box");
+    foodScrollHandle();
+    // 动画完成后才能获取位置准确信息
+    await delaySync(500);
+    getCollectFoodListBoxPositionInfo("#collect-food-list-box");
 });
 
 watch(
@@ -66,17 +76,55 @@ watch(
         if (newValue === true && oldValue === false) {
             await closeCartDetail();
             setShowCollectClickCartImgFlag(false);
-            setCartDetailFlag(true)
+            setCartDetailFlag(true);
         }
     }
 );
+const currentInstance = getCurrentInstance();
+const idPre = "img-collect";
+
+const foodScrollHandle = debounce(handleScroll, 70);
+async function handleScroll(e: any) {
+    const currentCollectFoodList = collectFoodList.value[collectTabIndex.value].foodList;
+    console.log(currentCollectFoodList);
+    const { top, bottom } = collectFoodListBoxPositionInfo;
+    for (let i = 0; i < currentCollectFoodList.length; i++) {
+        const foodItem = currentCollectFoodList[i];
+        const imgPositionInfo = await selectQuery(`#${idPre}-${foodItem.foodID}`, currentInstance);
+        if ((top <= imgPositionInfo.top && imgPositionInfo.top <= bottom) || (top <= imgPositionInfo.bottom && imgPositionInfo.bottom < bottom)) {
+            foodItem.currentImg = foodItem.fullImgPath;
+        }
+        if (imgPositionInfo.top > bottom) {
+            break;
+        }
+    }
+}
+let collectFoodListBoxPositionInfo: {
+    top: number;
+    bottom: number;
+} = {
+    top: 0,
+    bottom: 0,
+};
+async function getCollectFoodListBoxPositionInfo(id: string) {
+    const res = await selectQuery(id, currentInstance);
+    collectFoodListBoxPositionInfo = {
+        top: res.top,
+        bottom: res.bottom,
+    };
+    console.log(collectFoodListBoxPositionInfo);
+}
 async function closeCartDetail() {
     toEndAnimation();
     await delaySync(collectTransitionTime);
     setCollectFoodFlag(false);
 }
 function changeTabItem(index: number) {
-    setCollectTabIndex(index);
+    // setCollectTabIndex(index);
+    collectTabIndex.value = index;
+    foodScrollHandle();
+    // 切换tab 回滚到最初位置
+    scrollTopNum.value = scrollTopNum.value + 0.00001;
 }
 </script>
 
@@ -146,7 +194,7 @@ function changeTabItem(index: number) {
     .tab-item-selected {
         border: 1rpx solid;
         background-color: #fff;
-        font-weight:  bold;
+        font-weight: bold;
     }
     .collect-food-list-box {
         // max-height: 680rpx;

@@ -5,7 +5,7 @@
                 <image class="shop-img"></image>
                 <view class="shop-name">{{ shopInfo.shopName }}</view>
             </view>
-            <view @click="continueOrder" class="continue-order flex-row flex-ja-center" :style="{ color: shopInfo.mainColor }">继续点单</view>
+            <view @click="continueOrder" class="continue-order flex-row flex-ja-center" :style="{ color: $mainColor }">继续点单</view>
         </view>
         <view class="food-list" :animation="foodListAnimationData" :style="{ 'max-height': foodListMaxHeihgt }">
             <OrderFoodItem v-for="(orderFoodItem, index) in orderFoodList" :orderFoodItem="orderFoodItem" :key="index"></OrderFoodItem>
@@ -40,7 +40,7 @@
                 <view class="minus-icon">减</view>
                 <view class="minus-title">满减优惠</view>
             </view>
-            <view class="minus-price" :style="{ color: shopInfo.mainColor }">-¥{{ cartPriceInfo.minusPrice }}</view>
+            <view class="minus-price" :style="{ color: $mainColor }">-¥{{ cartPriceInfo.minusPrice }}</view>
         </view>
         <view v-if="cartPriceInfo.minusPrice" class="dash-split">
             <view class="left-circle"></view>
@@ -52,7 +52,7 @@
                 <view class="origin-price">共计¥{{ cartPriceInfo.orderOriginAmount }}</view>
                 <view class="discount-price">已优惠¥{{ cartPriceInfo.minusPrice || 0 }}</view>
                 <view class="pay-price">
-                    小计<span class="pay-price-color" :style="{ color: shopInfo.mainColor }">¥{{ cartPriceInfo.payPrice }}</span>
+                    小计<span class="pay-price-color" :style="{ color: $mainColor }">¥{{ cartPriceInfo.payPrice }}</span>
                 </view>
             </view>
         </view>

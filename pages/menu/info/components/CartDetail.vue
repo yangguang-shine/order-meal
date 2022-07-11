@@ -5,14 +5,14 @@
             <view class="cart-select-box flex-row flex-j-between flex-a-center">
                 <view class="select-title-box flex-row flex-a-center">
                     <div class="select-title">已选商品</div>
-                    <!-- <div v-if="cartPriceInfo.allPackPrice" class=" flex-row flex-ja-center" @click="setMenuPackPriceExpalinFlag(true)">
-                            <div>(包装费</div>
-                            <div :style="{ color: shopInfo.mainColor }">¥{{ cartPriceInfo.allPackPrice }}</div>
-                            <div class="pack-price-tips flex-row flex-ja-center">?</div>
-                            <div>)</div>
-                        </div> -->
+                    <div v-if="cartPriceInfo.allPackPrice" class="flex-row flex-ja-center" @click="setMenuPackPriceExpalinFlag(true)">
+                        <div>(包装费</div>
+                        <div :style="{ color: $mainColor }">¥{{ cartPriceInfo.allPackPrice }}</div>
+                        <div class="pack-price-tips flex-row flex-ja-center">?</div>
+                        <div>)</div>
+                    </div>
                     <!-- <div class="pack-price-text">({{ allPackPriceText }}</div>
-                        <div v-if="allPackPriceText" @click="setMenuPackPriceExpalinFlag(true)">)</div> -->
+                        <div v-if="allPackPriceText" @click="setMenuPackPriceExpalinFlag(true)"></div> -->
                 </view>
                 <view class="flex-row flex-a-center" @click="cartClearCart">
                     <image class="delete-all-icon" src="/static/img/shop-delete.svg"></image>
@@ -25,12 +25,12 @@
                         <FoodItem v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID" :foodItem="cartFoodItem" mode="small" type="cart" class="cart-food-item"></FoodItem>
                     </view>
                 </view>
-                <div v-if="cartPriceInfo.allPackPrice" class="all-pack-price-split"></div>
+                <!-- <div v-if="cartPriceInfo.allPackPrice" class="all-pack-price-split"></div>
                 <div v-if="cartPriceInfo.allPackPrice" class="all-pack-price flex-row flex-a-center" @click="setMenuPackPriceExpalinFlag(true)">
                     <div>包装费</div>
-                    <div :style="{ color: shopInfo.mainColor }">¥{{ cartPriceInfo.allPackPrice }}</div>
+                    <div :style="{ color: $mainColor }">¥{{ cartPriceInfo.allPackPrice }}</div>
                     <div class="pack-price-tips flex-row flex-ja-center">?</div>
-                </div>
+                </div> -->
             </scroll-view>
         </view>
     </view>

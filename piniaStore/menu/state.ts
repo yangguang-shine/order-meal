@@ -29,11 +29,12 @@ export interface MenuDefaultI {
     collectFoodListMap: CollectFoodListMapI;
     collectFoodList: CollectFoodListItemI[];
     collectFoodListKeys: CollectFoodKeyObjI[];
-    collectTabIndex: number;
     // 购物车详情时，点击购物车按钮
     showCartClickCartImgFlag: boolean;
     // 凑单弹框时，点击购物车按钮
     showCollectClickCartImgFlag: boolean;
+    requiredCategoryIDList: number[],
+
 }
 export interface MenuStateI extends MenuDefaultI {
     cartCategoryList: CategoryItemI[];
@@ -66,11 +67,12 @@ export const menuDefault: MenuDefaultI = {
     collectFoodListMap: {},
     collectFoodList: [],
     collectFoodListKeys: [],
-    collectTabIndex: 0,
     // 购物车详情时，点击购物车按钮
     showCartClickCartImgFlag: false,
     // 凑单弹框时，点击购物车按钮
     showCollectClickCartImgFlag: false,
+    requiredCategoryIDList: [],
+
 };
 
 const menuState: MenuStateI = reactive({

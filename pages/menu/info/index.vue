@@ -2,12 +2,12 @@
     <view class="menu-container">
         <TopBar></TopBar>
         <view :animation="shopInfoAnimationData" class="menu-order-box">
-            <view v-if="shopInfo.mode === 'vertical'" class="vertical-menu-box" >
+            <view v-if="shopInfo.mode === 'vertical'" class="vertical-menu-box">
                 <FoodCategoryList ref="refFoodCategoryList" class="flex-item"></FoodCategoryList>
                 <CategoryAsideBar></CategoryAsideBar>
             </view>
             <view v-else-if="shopInfo.mode === 'horizontal'" class="horizontal-menu-box">
-                <FoodCategoryListHorizontal></FoodCategoryListHorizontal>
+                <FoodCategoryListHorizontal ref="refFoodCategoryListHorizontal"></FoodCategoryListHorizontal>
                 <CategoryAsideBarHorizontal></CategoryAsideBarHorizontal>
             </view>
             <CartDetail v-if="cartDetailFlag"></CartDetail>
@@ -43,8 +43,8 @@ import { delaySync } from "@/utils/index.js";
 import PackPriceExplain from "@/components/PackPriceExplain.vue";
 
 import { mapState, mapMutation, mapAction, mapGetter } from "@/utils/mapVuex";
-import { defineComponent, getCurrentInstance, computed, watch, ref, toRefs } from "vue";
-import { onShow, onLoad, onPageScroll, onUnload, onHide } from "@dcloudio/uni-app";
+import { defineComponent, getCurrentInstance, computed, watch, ref, toRefs, onMounted } from "vue";
+import { onShow, onLoad, onPageScroll, onUnload, onHide, onReady } from "@dcloudio/uni-app";
 import { ComputedActionI, ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { ShopItemI } from "@/interface/home";
 import { CategoryItemI, FoodItemI } from "@/interface/menu";
@@ -73,6 +73,8 @@ interface MenuGetterF {
 const menuStore: MenuStoreI = useMenuStore();
 // menu state
 const { shopInfo, businessType, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag, menuPackPriceExpalinFlag, collectFoodFlag }: MenuStateF = toRefs(menuStore.menuState);
+console.log(shopInfo)
+// debugger
 // menu getter
 const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
 // menu action
@@ -106,17 +108,20 @@ interface OptionI {
     businessType: string;
     orderKey?: string;
 }
-const refFoodCategoryList = ref(null)
+
+const refFoodCategoryList = ref(null);
+const refFoodCategoryListHorizontal = ref(null);
+
+
 onLoad(async (option: OptionI) => {
     try {
-        setMenuDefault();
+        // setMenuDefault();
         orderKey = option.orderKey || "";
         const shopID: number = Number(option.shopID);
         const optionBusinessType: number = Number(option.businessType);
         // routerbusinessType = option.businessType || "";
         // orderKey = option.orderKey || "";
         showLoading();
-
         if (shopInfo.value.shopID !== shopID) {
             await getShopInfo({
                 shopID,
@@ -132,6 +137,22 @@ onLoad(async (option: OptionI) => {
         hideLoading();
     }
 });
+watch(
+    () => shopInfo.value.mode,
+    (newValue: string, oldValue: string) => {
+        console.log("newValue, oldValue");
+        console.log(newValue, oldValue);
+        handleCurrentLazyImg(newValue);
+    }
+);
+// watch(
+//     () => menuStore.menuState.shopInfo,
+//     (newValue: string, oldValue: string) => {
+//         console.log("newValue, oldValue");
+//         console.log(newValue, oldValue);
+//         // handleCurrentLazyImg(newValue);
+//     }
+// );
 onHide(() => {
     console.log("page hide >>>>>");
 });
@@ -139,10 +160,19 @@ onUnload(() => {
     setMenuDefault();
     console.log("page onUnload >>>>>");
 });
-const currentInstance =  getCurrentInstance()
+onReady(() => {
+    console.log("page onReady >>>>>");
+});
+onMounted(() => {
+    console.log("page onMounted >>>>>");
+    
+})
+
+
+const currentInstance = getCurrentInstance();
 async function init() {
     await getMenuList();
-    refFoodCategoryList.value.handleLazyImg(0)
+    handleCurrentLazyImg(shopInfo.value.mode);
     // 重来一单，orderAgain 和 orderKey 缺一不可
     if (orderKey) {
         await getOrderKeyFoodList({
@@ -150,6 +180,15 @@ async function init() {
         });
     }
     initCart();
+}
+function handleCurrentLazyImg(mode: string) {
+    setTimeout(() => {
+        if (mode === "vertical") {
+           refFoodCategoryList.value && refFoodCategoryList.value.foodScrollHandle();
+        } else {
+           refFoodCategoryListHorizontal.value && refFoodCategoryListHorizontal.value.foodScrollHandle();
+        }
+    }, 50);
 }
 
 function getStorageCart() {}

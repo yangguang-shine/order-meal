@@ -21,7 +21,7 @@
             <image class="minus-icon" src="/static/img/orderMinus.svg"></image>
             <div class="flex-item flex-row flex-j-between">
                 <div class="minus-title">满减优惠</div>
-                <div class="minus-price" :style="{ color: orderDetailShopInfo.mainColor }">-¥{{ orderDetail.minusPrice }}</div>
+                <div class="minus-price" :style="{ color: $mainColor }">-¥{{ orderDetail.minusPrice }}</div>
             </div>
         </div>
         <div class="all-price-box flex-row flex-a-center flex-j-between">
@@ -30,7 +30,7 @@
                 <div class="origin-price">共计￥{{ orderDetail.orderOriginAmount }}</div>
                 <div class="discount-price">已优惠￥{{ orderDetail.minusPrice }}</div>
                 <div class="pay-price">
-                    小计<span class="pay-price-color" :style="{ color: orderDetailShopInfo.mainColor }">￥{{ orderDetail.payPrice }}</span>
+                    小计<span class="pay-price-color" :style="{ color: $mainColor }">￥{{ orderDetail.payPrice }}</span>
                 </div>
             </div>
         </div>

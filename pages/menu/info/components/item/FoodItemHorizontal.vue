@@ -1,6 +1,6 @@
 <template>
     <view class="food-item-horizontal-container flex-col" @click.stop="clickFoodItem(foodItem)">
-        <image :src="foodItem.fullImgPath" alt="" class="food-img"></image>
+        <image :id="`img-${foodItem.foodID}`" :src="foodItem.currentImg" alt="" class="food-img"></image>
         <view class="food-name line2">
             {{ foodItem.foodName }}<span class="food-unit">/{{ foodItem.unit }}</span>
         </view>
@@ -166,6 +166,7 @@ function clickFoodItem(foodItem: FoodItemI) {
         font-weight: bold;
         font-size: 30rpx;
         line-height: 32rpx;
+        height: 64rpx;
         // height: 80rpx;
     }
     .food-unit {

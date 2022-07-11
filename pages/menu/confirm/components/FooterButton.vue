@@ -4,7 +4,7 @@
             <div class="footer-box">
                 <div class="footer-discount-price"></div>
                 <div class="footer-pay-price"></div>
-                <div class="submit-order-button flex-row flex-ja-center" :style="{ background: shopInfo.mainColor }" @click="toSubmitOrder">提交订单</div>
+                <div class="submit-order-button flex-row flex-ja-center" :style="{ background: $mainColor }" @click="toSubmitOrder">提交订单</div>
             </div>
         </div>
     </div>

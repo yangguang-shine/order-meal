@@ -3,15 +3,15 @@
         <div class="flex-row flex-j-between flex-a-center">
             <div class="order-status flex-row flex-a-center">
                 <div class="title">订单</div>
-                <div class="detail" :style="{ color: orderDetailShopInfo.mainColor }">{{ orderDetail.orderTypeTitle }}</div>
+                <div class="detail" :style="{ color: $mainColor }">{{ orderDetail.orderTypeTitle }}</div>
             </div>
             <div class="order-time">{{ orderDetail.orderTimeDetail }}</div>
         </div>
         <div class="order-tip-title">感谢您的支持</div>
         <div class="order-button-box flex-row flex-a-center flex-j-between">
-            <div v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20" class="button-item flex-row flex-ja-center" :style="{ color: orderDetailShopInfo.mainColor }" @click="toCancelOrder">取消订单</div>
+            <div v-if="orderDetail.orderStatus === 10 || orderDetail.orderStatus === 20" class="button-item flex-row flex-ja-center" :style="{ color: $mainColor }" @click="toCancelOrder">取消订单</div>
             <div v-else></div>
-            <div class="button-item flex-row flex-ja-center" :style="{ color: orderDetailShopInfo.mainColor }" @click="orderAgain()">再来一单</div>
+            <div class="button-item flex-row flex-ja-center" :style="{ color: $mainColor }" @click="orderAgain()">再来一单</div>
         </div>
     </div>
 </template>
