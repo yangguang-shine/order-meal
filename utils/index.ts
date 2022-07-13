@@ -188,6 +188,7 @@ export function selectQuery(id: string, currentInstance?: any): Promise<any> {
         query
             .select(id)
             .boundingClientRect((res: any = {}) => {
+                console.log(id)
                 res.top = res.top + navigationBarHeightPX;
                 res.bottom = res.bottom + navigationBarHeightPX;
                 resolve(res);

@@ -15,6 +15,7 @@
             <MinusPromotions v-if="minusPromotionsObject.show"></MinusPromotions>
             <FooterInfo></FooterInfo>
             <FoodDetail v-if="foodDetailFalg"></FoodDetail>
+            <FoodSpecification v-if="foodSpecificationFlag"></FoodSpecification>
         </view>
         <ShopInfo v-show="startShopInfoAnimationFlag || shopInfoFlag"></ShopInfo>
         <SearchFood v-if="searchFoodFlag"></SearchFood>
@@ -36,6 +37,7 @@ import FooterCartBlock from "./components/FooterCartBlock.vue";
 import CartDetail from "./components/CartDetail.vue";
 import CollectFood from "./components/CollectFood.vue";
 import FoodDetail from "./components/FoodDetail.vue";
+import FoodSpecification from "./components/FoodSpecification.vue";
 import TopBar from "./components/TopBar.vue";
 import ShopInfo from "./components/ShopInfo.vue";
 import SearchFood from "./components/SearchFood.vue";
@@ -64,6 +66,8 @@ interface MenuStateF {
     collectFoodFlag: ComputedStateI<boolean>;
     searchFoodFlag: ComputedStateI<boolean>;
     menuPackPriceExpalinFlag: ComputedStateI<boolean>;
+    foodSpecificationFlag: ComputedStateI<boolean>;
+    
 }
 interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
@@ -72,7 +76,7 @@ interface MenuGetterF {
 // menu store
 const menuStore: MenuStoreI = useMenuStore();
 // menu state
-const { shopInfo, businessType, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag, menuPackPriceExpalinFlag, collectFoodFlag }: MenuStateF = toRefs(menuStore.menuState);
+const { shopInfo, businessType, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag, menuPackPriceExpalinFlag, collectFoodFlag, foodSpecificationFlag }: MenuStateF = toRefs(menuStore.menuState);
 console.log(shopInfo)
 // debugger
 // menu getter

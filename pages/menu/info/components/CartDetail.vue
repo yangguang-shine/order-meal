@@ -22,7 +22,7 @@
             <scroll-view scroll-y class="cart-detail-list-box">
                 <view class="cart-food-list">
                     <view class="food-category-item" v-for="foodCategoryItem in cartCategoryList" :key="foodCategoryItem.categoryID">
-                        <FoodItem v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID" :foodItem="cartFoodItem" mode="small" type="cart" class="cart-food-item"></FoodItem>
+                        <FoodItem v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID" :foodItem="cartFoodItem" mode="small" type="cartDetail" class="cart-food-item"></FoodItem>
                     </view>
                 </view>
                 <!-- <div v-if="cartPriceInfo.allPackPrice" class="all-pack-price-split"></div>

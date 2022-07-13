@@ -1,13 +1,13 @@
 <template>
     <div class="search-food-container">
-        <Search :searchResultList="searchFoodList" v-model="searchValue" :bottom="minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightPX : footerInfoHeightPX" @clickCancel="clickCancel">
+        <Search :searchResultList="searchFoodList" :defaultList="categoryFoodList" v-model="searchValue" :bottom="minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightPX : footerInfoHeightPX" @clickCancel="clickCancel">
             <!-- <FoodItem v-for="searchFoodItem in searchFoodList" :key="searchFoodItem.foodID" class="search-food-item" :foodItem="searchFoodItem" @clickFoodItem="toShowFoodDetail"></FoodItem> -->
 
             <template #result>
-                <FoodItem v-for="searchFoodItem in searchFoodList" :key="searchFoodItem.foodID" class="search-food-item" :foodItem="searchFoodItem" type="search"  @clickFoodItem="toShowFoodDetail"></FoodItem>
+                <FoodItem v-for="searchFoodItem in searchFoodList" :key="searchFoodItem.foodID" class="search-food-item" :foodItem="searchFoodItem" type="searchFood" :idPre="idPre" @clickFoodItem="toShowFoodDetail"></FoodItem>
             </template>
             <template #default>
-                <FoodItem v-for="searchFoodItem in categoryFoodList" :key="searchFoodItem.foodID" class="search-food-item" :foodItem="searchFoodItem" type="search" @clickFoodItem="toShowFoodDetail"></FoodItem>
+                <FoodItem v-for="searchFoodItem in categoryFoodList" :key="searchFoodItem.foodID" :idPre="idPre" class="search-food-item" :foodItem="searchFoodItem" type="searchFood" @clickFoodItem="toShowFoodDetail"></FoodItem>
             </template>
         </Search>
     </div>
@@ -62,7 +62,7 @@ const { categoryList }: MenuStateF = toRefs(menuStore.menuState);
 const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
 // action
 const { setSearchFoodFlag, setFoodDetailFlag, setFoodInfo } = menuStore;
-
+const idPre = 'img-search'
 const searchValue: RefI<string> = ref("");
 const categoryFoodList: ComputedI<FoodItemI[]> = computed(() => {
     const categoryFoodList: FoodItemI[] = [];

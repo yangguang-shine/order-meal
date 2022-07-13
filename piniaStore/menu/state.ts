@@ -16,6 +16,7 @@ export interface MenuDefaultI {
     cartDetailFlag: boolean;
     foodDetailFalg: boolean;
     foodInfo: FoodItemI;
+    foodSpecificationInfo: FoodItemI;
     cartImgPositionInfo: PositionInfoI;
     cartImgAnimationFlag: boolean;
     searchFoodFlag: boolean;
@@ -34,6 +35,7 @@ export interface MenuDefaultI {
     // 凑单弹框时，点击购物车按钮
     showCollectClickCartImgFlag: boolean;
     requiredCategoryIDList: number[],
+    foodSpecificationFlag: boolean
 
 }
 export interface MenuStateI extends MenuDefaultI {
@@ -52,6 +54,7 @@ export const menuDefault: MenuDefaultI = {
     cartDetailFlag: false,
     foodDetailFalg: false,
     foodInfo: initFoodItem,
+    foodSpecificationInfo: initFoodItem,
     cartImgPositionInfo: {
         left: 0,
         top: 0,
@@ -72,6 +75,7 @@ export const menuDefault: MenuDefaultI = {
     // 凑单弹框时，点击购物车按钮
     showCollectClickCartImgFlag: false,
     requiredCategoryIDList: [],
+    foodSpecificationFlag: false
 
 };
 

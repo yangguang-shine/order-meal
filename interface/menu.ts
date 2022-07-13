@@ -1,9 +1,8 @@
 import { OriginShopItemI } from "./home";
 export interface PositionInfoI {
-    left: number,
-    top: number
+    left: number;
+    top: number;
 }
-
 
 // categoryID: 1287
 // categoryName: "用餐需知注意事项"
@@ -22,39 +21,37 @@ export interface OriginFoodItemI {
     foodID: number;
     foodName: string;
     imgUrl: string;
-    orderCount: number
+    orderCount: number;
     price: number;
     shopID: number;
     unit: string;
-    reserveCount: number,
-    packPrice: number
+    reserveCount: number;
+    packPrice: number;
+    specification: string;
 }
-
 
 export interface CategoryListMapI {
     // [index: number]: CategoryItemI
-    [index: string]: CategoryItemI
+    [index: string]: CategoryItemI;
 }
 export interface FoodListMapI {
-    [index: string]: FoodItemI
-
+    [index: string]: FoodItemI;
 }
 export interface CollectFoodListMapI {
-    [index: string]: FoodItemI[]
-
+    [index: string]: FoodItemI[];
 }
 export interface CollectFoodKeyObjI {
-    key: string,
-    title: string
+    key: string;
+    title: string;
 }
-export interface CollectFoodListItemI extends CollectFoodKeyObjI{
-    foodList: FoodItemI[]
+export interface CollectFoodListItemI extends CollectFoodKeyObjI {
+    foodList: FoodItemI[];
 }
 
 export interface OriginCategoryItemI {
-    categoryID: number
-    categoryName: string
-    required: number
+    categoryID: number;
+    categoryName: string;
+    required: number;
 }
 
 // export interface OriginCategoryItemI1 {
@@ -62,13 +59,41 @@ export interface OriginCategoryItemI {
 //     categoryName: string;
 //     foodList: OriginFoodItemI[];
 // }
+export interface specificationItemI {
+    name: string;
+    categoryList: {
+        specificationDetail: string;
+        specificationPrice: number;
+    }[];
+}
 export interface FoodItemI extends OriginFoodItemI {
-    currentImg: string
+    currentImg: string;
     fullImgPath: string;
     defaultImg: string;
     foodItemAmount: number;
-    showReserveCountFlag: boolean
-    orderCount: number
+    showReserveCountFlag: boolean;
+    orderCount: number;
+    specificationList: specificationItemI[];
+    orderSpecifaList: {
+            specifa: {
+                index: number,
+                specificationDetail: string,
+                specificationPrice: number
+            }[],
+            key: string,
+            orderCount: number
+    }[]
+    orderSpecifaListMap: {
+        [index: string]: {
+            specifa: [{
+                index: number,
+                specificationDetail: string,
+                specificationPrice: string
+            }],
+            orderCount: number
+        }
+    },
+    specificationSlectedIndexList: number[]
 }
 
 export interface CategoryItemI extends OriginCategoryItemI {
@@ -100,10 +125,14 @@ export const initFoodItem: FoodItemI = {
     unit: "",
     reserveCount: 0,
     packPrice: 0,
-    currentImg: '',
+    currentImg: "",
     fullImgPath: "",
-    defaultImg: '',
+    defaultImg: "",
     foodItemAmount: 0,
-    showReserveCountFlag: false
+    showReserveCountFlag: false,
+    specificationList: [],
+    orderSpecifaList: [],
+    orderSpecifaListMap: {},
+    specification: '[]',
+    specificationSlectedIndexList: []
 };
-

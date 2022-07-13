@@ -8,7 +8,7 @@
             </view>
             <scroll-view scroll-y class="collect-food-list-box flex-item" id="collect-food-list-box" @scroll="foodScrollHandle" :scroll-top="scrollTopNum">
                 <view class="tab-food-list">
-                    <FoodItem v-for="foodItem in collectFoodList[collectTabIndex].foodList" :key="foodItem.foodID" class="collect-food-item" :idPre="idPre" :foodItem="foodItem" type="collect"></FoodItem>
+                    <FoodItem v-for="foodItem in collectFoodList[collectTabIndex].foodList" :key="foodItem.foodID" class="collect-food-item" :idPre="idPre" :foodItem="foodItem" type="collectFood"></FoodItem>
                 </view>
             </scroll-view>
         </view>

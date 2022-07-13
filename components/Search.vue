@@ -7,7 +7,7 @@
             <view class="clear-input" @click="clearInput"></view>
             <view class="search-title">{{ modelValue ? resultTitle : defaultTitle }}</view>
         </view>
-        <scroll-view scroll-y class="result-box" v-if="modelValue">
+        <scroll-view scroll-y class="result-box" id="result-box" v-if="modelValue" @scroll="foodScrollHandle">
             <template v-if="searchResultList.length">
                 <slot name="result"></slot>
             </template>
@@ -15,7 +15,7 @@
                 <CommonError></CommonError>
             </view>
         </scroll-view>
-        <scroll-view scroll-y v-else class="default-box">
+        <scroll-view scroll-y v-else class="default-box" id="default-box" @scroll="foodScrollHandle">
             <slot name="default"></slot>
         </scroll-view>
     </view>
@@ -25,16 +25,18 @@
 import { ComputedI, RefI } from "@/interface/vueInterface";
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { MinusPromotionsObjectI } from "@/store/getters/menu";
-import { delaySync } from "@/utils/";
+import { delaySync, selectQuery } from "@/utils/";
 import Shop from "@/components/Shop.vue";
 import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, getCurrentInstance, watch } from "vue";
 import { ShopItemI } from "@/interface/home";
 import { searchDefaultTransitionTime } from "./config";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
+import { debounce, handleFoodCategoryListScroll } from "@/pages/menu/info/components/common";
 interface PropsI {
     bottom?: number;
     searchResultList: any;
+    defaultList: any;
     modelValue: string;
     animationTime?: number;
     resultTitle?: string;
@@ -45,11 +47,41 @@ interface EmitI {
     (e: "clickCancel"): void;
     (e: "update:modelValue"): void;
 }
+// const foodScrollHandle = () => {
+//     console.log(11111)
+
+// };
+const idPre = "img-search";
+const foodScrollHandle = debounce(handleScroll, 70);
+const currentInstance = getCurrentInstance();
+async function handleScroll() {
+    const currentCollectFoodList = props.modelValue ? props.searchResultList : props.defaultList;
+    const searchListBoxId = props.modelValue ? "#result-box" : "#default-box";
+    console.log(currentCollectFoodList);
+    const res = await selectQuery(searchListBoxId, currentInstance);
+    const searchBosPositionInfo = {
+        top: res.top,
+        bottom: res.bottom,
+    };
+
+    const { top, bottom } = searchBosPositionInfo;
+    for (let i = 0; i < currentCollectFoodList.length; i++) {
+        const foodItem = currentCollectFoodList[i];
+        const imgPositionInfo = await selectQuery(`#${idPre}-${foodItem.foodID}`, currentInstance);
+        if ((top <= imgPositionInfo.top && imgPositionInfo.top <= bottom) || (top <= imgPositionInfo.bottom && imgPositionInfo.bottom < bottom)) {
+            foodItem.currentImg = foodItem.fullImgPath;
+        }
+        if (imgPositionInfo.top > bottom) {
+            break;
+        }
+    }
+}
 
 // const searchDefaultTransitionTime = 300
 const props: PropsI = withDefaults(defineProps<PropsI>(), {
     bottom: 0,
-    searchOriginList: [],
+    searchResultList: [],
+    defaultList: [],
     modelValue: "",
     animationTime: searchDefaultTransitionTime,
     resultTitle: "搜索结果",
@@ -61,10 +93,24 @@ const { overlayAnimationData, toStartAnimation, toEndAnimation } = useOverlayAni
 });
 onMounted(() => {
     toStartAnimation();
+    setTimeout(() => {
+        handleScroll();
+    }, 50);
 });
 function inputChange(e: any) {
     emit("update:modelValue", e.detail.value);
 }
+watch(
+    () => props.modelValue,
+    () => {
+        console.log(34);
+        if (props.searchResultList.length) {
+            setTimeout(() => {
+                handleScroll();
+            }, 150);
+        }
+    }
+);
 
 function clearInput() {
     emit("update:modelValue", "");
