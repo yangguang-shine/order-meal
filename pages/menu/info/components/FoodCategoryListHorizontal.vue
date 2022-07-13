@@ -62,6 +62,7 @@ async function handleScroll(e: any) {
         setSelectedCategoryID,
         setCategoryIDMain,
         setCategoryIDAside,
+        type: 'horizontal'
     });
 
     // for (let i = 0; i < categoryList.value.length; i++) {

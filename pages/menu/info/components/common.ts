@@ -2,32 +2,43 @@ import { CategoryItemI } from "@/interface/menu";
 import { ComputedStateI } from "@/interface/vuex";
 import { MenuActionI } from "@/piniaStore/menu/actions";
 import { selectQuery, systemInfo } from "@/utils/";
-import { topBarHeightPX } from "../infoConfig";
+import { categoryAsideBarHorizontalAndTopBarHeightPX, topBarHeightPX } from "../infoConfig";
 interface HandleFoodCategoryListScrollParams {
     categoryList: ComputedStateI<CategoryItemI[]>;
     currentInstance: any;
+    type?: "vertical" | "horizontal";
     setSelectedCategoryID: MenuActionI["setSelectedCategoryID"];
     setCategoryIDMain: MenuActionI["setCategoryIDMain"];
     setCategoryIDAside: MenuActionI["setCategoryIDAside"];
 }
-export async function handleFoodCategoryListScroll({ categoryList, currentInstance, setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside }: HandleFoodCategoryListScrollParams) {
+export async function handleFoodCategoryListScroll({ categoryList, currentInstance, setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside, type = "vertical" }: HandleFoodCategoryListScrollParams) {
     for (let i = 0; i < categoryList.value.length; i++) {
         const categoryItem: CategoryItemI = categoryList.value[i];
-        console.log(categoryItem.categoryIDMain);
         const categoryItemPositionInfo = await selectQuery(`#${categoryItem.categoryIDMain}`, currentInstance);
-        console.log(categoryItemPositionInfo);
-        if (topBarHeightPX <= categoryItemPositionInfo.top || categoryItemPositionInfo.bottom > topBarHeightPX) {
-            setSelectedCategoryID(categoryItem.categoryID);
-            setCategoryIDMain("");
-            setCategoryIDAside(categoryItem.categoryIDAside);
-            console.log("categoryList.value");
-            console.log(categoryList.value);
-            await handleLazyImg({
-                index: i,
-                currentInstance,
-                categoryList,
-            });
-            break;
+        if (type === "vertical") {
+            if (topBarHeightPX <= categoryItemPositionInfo.top || categoryItemPositionInfo.bottom > topBarHeightPX) {
+                setSelectedCategoryID(categoryItem.categoryID);
+                setCategoryIDMain("");
+                setCategoryIDAside(categoryItem.categoryIDAside);
+                await handleLazyImg({
+                    index: i,
+                    currentInstance,
+                    categoryList,
+                });
+                break;
+            }
+        } else if (type === "horizontal") {
+            if (categoryAsideBarHorizontalAndTopBarHeightPX <= categoryItemPositionInfo.top || categoryItemPositionInfo.bottom > categoryAsideBarHorizontalAndTopBarHeightPX) {
+                setSelectedCategoryID(categoryItem.categoryID);
+                setCategoryIDMain("");
+                setCategoryIDAside(categoryItem.categoryIDAside);
+                await handleLazyImg({
+                    index: i,
+                    currentInstance,
+                    categoryList,
+                });
+                break;
+            }
         }
     }
 }
