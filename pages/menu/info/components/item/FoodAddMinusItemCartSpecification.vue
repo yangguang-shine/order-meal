@@ -1,27 +1,30 @@
 <template>
-    <view class="food-add-minus-container flex-row flex-ja-center" @click.stop>
-        <view :animation="minusAnimationData" class="food-count-minus" :style="{ color: shopInfo.mainColor }" :class="mountedTransitionFlag ? '' : 'show-food-count-minus'" @click.stop="minusCount()">
-            <view class="reduce-icon-css" :style="{ 'background-color': shopInfo.mainColor }"></view>
-        </view>
-        <view v-if="specificationOrderCount" :class="mountedTransitionFlag ? '' : 'show-food-order-count'" :animation="countAnimationData" class="food-order-count">{{ specificationOrderCount }}</view>
-        <view class="food-count-add" :id="type + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
-            <ReserveRemain v-if="foodItem.showReserveCountFlag" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
-        </view>
-        <view v-for="item in addList" :key="item.random" class="food-count-add-animation-x" :animation="item.animationXData">
-            <view class="food-count-add-animation-y" :animation="item.animationYData">
-                <view class="food-count-add food-count-add-copy" :style="{ 'background-color': shopInfo.mainColor }"></view>
+    <view class="food-add-minus-container" @click.stop>
+        <div v-if="(foodItem.specificationList || []).length > 0 && foodItem.orderCount === 0" class="specification-button flex-center" :style="{ 'background-color': shopInfo.mainColor }" @click="toShowFoodSpecification">选规格</div>
+        <div v-else class="flex-row flex-ja-center">
+            <view :animation="minusAnimationData" class="food-count-minus" :style="{ color: shopInfo.mainColor }" :class="mountedTransitionFlag ? '' : 'show-food-count-minus'" @click.stop="minusCount()">
+                <view class="reduce-icon-css" :style="{ 'background-color': shopInfo.mainColor }"></view>
             </view>
-        </view>
+            <view v-if="orderSpecifaItem.orderCount" :class="mountedTransitionFlag ? '' : 'show-food-order-count'" :animation="countAnimationData" class="food-order-count">{{ orderSpecifaItem.orderCount }}</view>
+            <view class="food-count-add" :id="`${idPre}-${orderSpecifaItem.key}-${foodItem.foodID}`" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
+                <ReserveRemain v-if="foodItem.showReserveCountFlag" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
+            </view>
+            <view v-for="item in addList" :key="item.random" class="food-count-add-animation-x" :animation="item.animationXData">
+                <view class="food-count-add-animation-y" :animation="item.animationYData">
+                    <view class="food-count-add food-count-add-copy" :style="{ 'background-color': shopInfo.mainColor }"></view>
+                </view>
+            </view>
+        </div>
     </view>
 </template>
 
 <script lang="ts" setup>
 import { delaySync, selectQuery } from "@/utils/index";
-import { watch, reactive, ref, getCurrentInstance, onMounted, toRefs, computed } from "vue";
+import { watch, reactive, ref, getCurrentInstance, onMounted, toRefs } from "vue";
 import { mapMutation, mapState } from "@/utils/mapVuex";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
-import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI, PositionInfoI, ShopItemI } from "@/interface/index";
+import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI, OrderSpecifaItemI, PositionInfoI, ShopItemI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
 import { cartImgWidthHeightPX, countAddTransitionTime, foodAddMinusTransitionTime, foodAddWidthHeightPX } from "../../infoConfig";
 import ReserveRemain from "./ReserveRemain.vue";
@@ -30,7 +33,7 @@ import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { AddItemI } from "./interface";
 interface PropsI {
     foodItem: FoodItemI;
-    type?: string; // cartDetail search collectFood main foodDetail foodSpecification
+    orderSpecifaItem: OrderSpecifaItemI,
 }
 interface CartChangeParamI {
     foodItem: FoodItemI;
@@ -42,7 +45,6 @@ interface MenuStateF {
     cartDetailFlag: ComputedStateI<boolean>;
     shopInfo: ComputedStateI<ShopItemI>;
     cartImgPositionInfo: ComputedStateI<PositionInfoI>;
-    foodSpecificationInfo: ComputedStateI<FoodItemI>;
 }
 interface MutationF {
     cartChange: ComputedMutationI<CartChangeParamI>;
@@ -52,34 +54,13 @@ interface MutationF {
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPositionInfo, foodSpecificationInfo }: MenuStateF = toRefs(menuStore.menuState);
+const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPositionInfo }: MenuStateF = toRefs(menuStore.menuState);
 // action
-const specificationOrderCount = computed(() => {
-    const length = foodSpecificationInfo.value.orderSpecifaList.length;
-    if (length) {
-        const key = foodSpecificationInfo.value.specificationSlectedIndexList.join("");
-        const lastOrderSpecificationItem = foodSpecificationInfo.value.orderSpecifaList[length - 1];
-        if (lastOrderSpecificationItem.key === key) {
-            return foodSpecificationInfo.value.orderSpecifaList[length - 1].orderCount
-        } else {
-            const findIndex = foodSpecificationInfo.value.orderSpecifaList.findIndex((item) => item.key === key)
-            if (findIndex > -1) {
-                return foodSpecificationInfo.value.orderSpecifaList[findIndex].orderCount
-            } else {
-            return 0;
-
-            }
-        }
-        // return foodSpecificationInfo.value.orderSpecifaList[length - 1].orderCount;
-    } else {
-        return 0;
-    }
-});
 const { cartChange, setCartDetailFlag, setCartImgAnimationFlag, setFoodSpecificationInfo, setFoodSpecificationFlag } = menuStore;
-
+const idPre = "id"
 const props: PropsI = withDefaults(defineProps<PropsI>(), {
     foodItem: {},
-    type: "main",
+    orderSpecifaItem: {}
 });
 
 const addList: AddItemI[] = reactive([]);
@@ -111,7 +92,7 @@ onMounted(async () => {
     // 获取曲线起始位置
 });
 watch(
-    () => specificationOrderCount.value,
+    () => props.foodItem.orderCount,
     (newValue: number, oldValue: number) => {
         if (newValue >= 1 && oldValue === 0) {
             countAnimation.opacity(1).step();
@@ -128,19 +109,15 @@ watch(
 );
 async function getPositionInfo(): Promise<PositionInfoI> {
     const currentInstance = getCurrentInstance();
-    const res = await selectQuery(`#${props.type}${props.foodItem.foodID}`, currentInstance);
+    const res = await selectQuery(`#${idPre}-${props.orderSpecifaItem.key}-${props.foodItem.foodID}`, currentInstance);
     return {
         left: res.left,
         top: res.top,
     };
 }
-const specificationString = computed(() => {
-    return foodSpecificationInfo.value.specificationSlectedIndexList.join('')
-})
 async function addCount(e: any) {
     // if (props.foodItem.specificationList.length) {
     //     toShowFoodSpecification();
-
     //     return;
     // }
     const addPositionInfo: PositionInfoI = await getPositionInfo();
@@ -163,22 +140,17 @@ async function addCount(e: any) {
         foodItem: props.foodItem,
         count: 1,
         type: "add",
-        specificationString: specificationString.value
-        // specificaIndexList: props.foodItem.specificationSlectedIndexList
+        specificationString: props.orderSpecifaItem.key
     });
 }
 
 async function minusCount() {
     if (!props.foodItem.orderCount) return;
-    // if (props.foodItem.specificationList.length) {
-    //     toShowFoodSpecification();
-    //     return;
-    // }
     cartChange({
         foodItem: props.foodItem,
         count: -1,
         type: "minus",
-        specificationString: specificationString.value
+        specificationString: props.orderSpecifaItem.key
     });
     if (cartCategoryList.value.length === 0 && cartDetailFlag.value) {
         setCartDetailFlag(false);

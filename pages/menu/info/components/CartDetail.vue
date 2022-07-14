@@ -22,7 +22,13 @@
             <scroll-view scroll-y class="cart-detail-list-box">
                 <view class="cart-food-list">
                     <view class="food-category-item" v-for="foodCategoryItem in cartCategoryList" :key="foodCategoryItem.categoryID">
-                        <FoodItem v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID" :foodItem="cartFoodItem" mode="small" type="cartDetail" class="cart-food-item"></FoodItem>
+                        <div class="cart-food-item-box" v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID">
+                            <FoodItem v-if="!cartFoodItem.orderSpecifaList.length" :foodItem="cartFoodItem" mode="small" type="cartDetail" class="cart-food-item"></FoodItem>
+                            <div v-else v-for="(orderSpecifaItem, index) in cartFoodItem.orderSpecifaList" :key="index">
+                            <FoodItemCartSpecification class="cart-food-item" :foodItem="cartFoodItem" :orderSpecifaItem="orderSpecifaItem" mode="small" type="cartDetail"></FoodItemCartSpecification>
+
+                            </div>
+                        </div>
                     </view>
                 </view>
                 <!-- <div v-if="cartPriceInfo.allPackPrice" class="all-pack-price-split"></div>
@@ -40,6 +46,8 @@
 import { delaySync, showModal } from "@/utils/index";
 import FoodAddMinusItem from "./item/FoodAddMinusItem.vue";
 import FoodItem from "./item/FoodItem.vue";
+import FoodItemCartSpecification from "./item/FoodItemCartSpecification.vue";
+
 import { getCurrentInstance, computed, onMounted, ref, toRefs, watch } from "vue";
 import { footerInfoAndMinusPromotionsHeightRPX, cartDetailTransitionTime } from "../infoConfig";
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";

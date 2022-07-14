@@ -34,6 +34,29 @@ import { AddItemI } from "./interface";
 interface PropsI {
     foodItem: FoodItemI;
     type?: string; // cartDetail search collectFood main foodDetail foodSpecification
+    emitFlag?: boolean;
+}
+interface EmitI {
+    (
+        e: "addCount",
+        {
+            count,
+            type,
+        }: {
+            count: number;
+            type: "add";
+        }
+    ): void;
+    (
+        e: "minusCount",
+        {
+            count,
+            type,
+        }: {
+            count: number;
+            type: "minus";
+        }
+    ): void;
 }
 interface CartChangeParamI {
     foodItem: FoodItemI;
@@ -61,7 +84,11 @@ const { cartChange, setCartDetailFlag, setCartImgAnimationFlag, setFoodSpecifica
 const props: PropsI = withDefaults(defineProps<PropsI>(), {
     foodItem: {},
     type: "main",
+    emitFlag: false,
 });
+
+const emit = defineEmits<EmitI>();
+
 const addList: AddItemI[] = reactive([]);
 const OriginFoodItem = props.foodItem;
 const mountedTransitionFlag: RefI<boolean> = ref(true);
@@ -115,9 +142,15 @@ async function getPositionInfo(): Promise<PositionInfoI> {
     };
 }
 async function addCount(e: any) {
+    if (props.emitFlag) {
+        emit("addCount", {
+            count: 1,
+            type: "add",
+        });
+        return;
+    }
     if (props.foodItem.specificationList.length) {
         toShowFoodSpecification();
-
         return;
     }
     const addPositionInfo: PositionInfoI = await getPositionInfo();
@@ -144,6 +177,13 @@ async function addCount(e: any) {
 }
 
 async function minusCount() {
+    if (props.emitFlag) {
+        emit("minusCount", {
+            count: -1,
+            type: "minus",
+        });
+        return;
+    }
     if (!props.foodItem.orderCount) return;
     if (props.foodItem.specificationList.length) {
         toShowFoodSpecification();

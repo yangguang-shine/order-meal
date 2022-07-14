@@ -41,9 +41,10 @@ import { mapState, mapMutation } from "@/utils/mapVuex";
 import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { FoodItemI, initFoodItem } from "@/interface/menu";
 import { foodDetailTransitionTime } from "../infoConfig";
-import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
+import { getCurrentInstance, computed, onMounted, ref, toRefs, onBeforeUnmount } from "vue";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { RefI } from "@/interface/vueInterface";
+import { onShow, onLoad, onPageScroll, onUnload, onHide, onReady } from "@dcloudio/uni-app";
 
 interface MenuStateF {
     foodSpecificationInfo: ComputedStateI<FoodItemI>;
@@ -84,15 +85,25 @@ const selectSpecificationText = computed(() => {
 const specificationSlectedIndexList: RefI<number[]> = ref([]);
 onMounted(() => {
     toStartAnimation();
-    const orderSpecifaListLength = foodSpecificationInfo.value.orderSpecifaList.length 
+    initSpecificationSlectedIndexList();
+
+});
+onLoad(() => {
+    console.log('onLoad')
+    // initSpecificationSlectedIndexList();
+});
+
+function initSpecificationSlectedIndexList() {
+    const orderSpecifaListLength = foodSpecificationInfo.value.orderSpecifaList.length;
     if (orderSpecifaListLength) {
-        foodSpecificationInfo.value.specificationSlectedIndexList = foodSpecificationInfo.value.orderSpecifaList[orderSpecifaListLength - 1].specifa.map((item) => item.index)
+        foodSpecificationInfo.value.specificationSlectedIndexList = foodSpecificationInfo.value.orderSpecifaList[orderSpecifaListLength - 1].specifa.map((item) => item.index);
     } else {
         foodSpecificationInfo.value.specificationSlectedIndexList = foodSpecificationInfo.value.specificationList.map(() => {
             return 0;
         });
     }
-});
+    console.log(foodSpecificationInfo.value.specificationSlectedIndexList)
+}
 function toStartAnimation() {
     overlayAnimation.opacity(1).step();
     overlayAnimationData.value = overlayAnimation.export();
@@ -110,6 +121,7 @@ async function closeFoodSpecification() {
     toEndAnimation();
     await delaySync(foodDetailTransitionTime);
     setFoodSpecificationFlag(false);
+    initSpecificationSlectedIndexList()
     setFoodSpecificationInfo(initFoodItem);
 }
 function change(index: number, specificationIndex: number) {
