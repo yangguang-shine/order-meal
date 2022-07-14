@@ -30,6 +30,10 @@ export interface OriginFoodItemI {
     specification: string;
 }
 
+export interface OriginOrderFoodItemI extends OriginFoodItemI {
+    orderSpecifaListJSON: string
+}
+
 export interface CategoryListMapI {
     // [index: number]: CategoryItemI
     [index: string]: CategoryItemI;
@@ -73,7 +77,9 @@ export interface OrderSpecifaItemI{
         specificationPrice: number
     }[],
     key: string,
-    orderCount: number
+    orderCount: number,
+    price: number,
+    allPrice: number
 }
 export interface FoodItemI extends OriginFoodItemI {
     currentImg: string;
@@ -84,16 +90,6 @@ export interface FoodItemI extends OriginFoodItemI {
     orderCount: number;
     specificationList: specificationItemI[];
     orderSpecifaList: OrderSpecifaItemI[]
-    orderSpecifaListMap: {
-        [index: string]: {
-            specifa: [{
-                index: number,
-                specificationDetail: string,
-                specificationPrice: string
-            }],
-            orderCount: number
-        }
-    },
     specificationSlectedIndexList: number[]
 }
 
@@ -133,7 +129,6 @@ export const initFoodItem: FoodItemI = {
     showReserveCountFlag: false,
     specificationList: [],
     orderSpecifaList: [],
-    orderSpecifaListMap: {},
     specification: '[]',
     specificationSlectedIndexList: []
 };

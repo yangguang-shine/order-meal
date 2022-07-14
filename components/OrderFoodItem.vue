@@ -2,7 +2,7 @@
 	<div class="order-food-item-container flex-row flex-a-center">
 		<image class="food-img flex-shrink" :src="orderFoodItem.fullImgPath"></image>
 		<div class="food-info flex-col flex-j-between">
-			<div class="food-name line1">嘻嘻嘻嘻</div>
+			<div class="food-name line1">{{orderFoodItem.foodName}}</div>
 			<div class="food-price flex-row">
 				<span class="money-unit">¥</span>
 				{{ orderFoodItem.price }}

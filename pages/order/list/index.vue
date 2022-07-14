@@ -19,7 +19,7 @@
                         </div>
                         <view class="flex-row flex-a-center flex-j-between">
                             <view class="minus-box flex-row ">
-                                <MinusList class="order-shop-minus flex-item flex-shrink" :minusList="orderItem.shopInfo.minusList.length > 4 ? orderItem.shopInfo.minusList.slice(0, 4) : orderItem.shopInfo.minusList" :mainColor="$mainColor"></MinusList>
+                                <MinusList v-if="orderItem.shopInfo.minusList.length" class="order-shop-minus flex-item flex-shrink" :minusList="orderItem.shopInfo.minusList.length > 4 ? orderItem.shopInfo.minusList.slice(0, 4) : orderItem.shopInfo.minusList" :mainColor="$mainColor"></MinusList>
                             </view>
                             <view class="order-status-box flex-shrink">
                                 <text class="order-status-title">状态：</text>

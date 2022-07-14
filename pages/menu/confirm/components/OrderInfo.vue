@@ -8,9 +8,15 @@
             <view @click="continueOrder" class="continue-order flex-row flex-ja-center" :style="{ color: $mainColor }">继续点单</view>
         </view>
         <view class="food-list" :animation="foodListAnimationData" :style="{ 'max-height': foodListMaxHeihgt }">
-            <OrderFoodItem v-for="(orderFoodItem, index) in orderFoodList" :orderFoodItem="orderFoodItem" :key="index"></OrderFoodItem>
+            <div v-for="(orderFoodItem, index) in orderFoodList" :key="index">
+                <template v-if="orderFoodItem.orderSpecifaList.length">
+                    <OrderFoodItemSpecifica v-for="(orderFoodItemSpecifica, index1) in orderFoodItem.orderSpecifaList" :key="index1" :orderFoodItem="orderFoodItem" :orderFoodItemSpecifica="orderFoodItemSpecifica"></OrderFoodItemSpecifica>
+                </template>
+                <OrderFoodItem v-else :orderFoodItem="orderFoodItem"></OrderFoodItem>
+
+            </div>
         </view>
-        <view v-if="orderFoodList.length > defaultIndex" class="display-more flex-row flex-ja-center" @click="toggleDisplay">
+        <view v-if="foodListLength > defaultIndex" class="display-more flex-row flex-ja-center" @click="toggleDisplay">
             <view v-if="displayMoreFlag" class="flex-row flex-ja-center">
                 <view class="display-more-title">点击收起</view>
                 <image class="show-more-arrow" src="/static/img/user-confirm/show-more-order.png" mode=""></image>
@@ -62,6 +68,8 @@
 <script lang="ts" setup>
 import { computed, ref, getCurrentInstance, toRefs } from "vue";
 import OrderFoodItem from "@/components/OrderFoodItem.vue";
+import OrderFoodItemSpecifica from "@/components/OrderFoodItemSpecifica.vue";
+
 import { mapState, mapGetter } from "@/utils/mapVuex";
 import { foodListTransitionTime } from "../comfirmConfig";
 import { ComputedStateI, ComputedGetterI } from "@/interface/vuex";
@@ -87,10 +95,19 @@ const menuStore: MenuStoreI = useMenuStore();
 const { shopInfo, businessType }: MenuStateF = toRefs(menuStore.menuState);
 // menu getter
 const { orderFoodList, cartPriceInfo }: MenuGetterF = storeToRefs(menuStore);
+console.log(orderFoodList.value[0].orderSpecifaList);
 
 const defaultIndex = 3;
 const defaultMaxHeight = "480rpx";
-const displayMoreMaxHeight = `${(150 + 10) * orderFoodList.value.length + 50}rpx`;
+const foodListLength = computed(() => {
+    return orderFoodList.value.reduce((num, item, index) => {
+        console.log(num)
+        const itemNum = item.orderSpecifaList.length || 1;
+        return num + itemNum
+    }, 0)
+})
+console.log(foodListLength.value)
+const displayMoreMaxHeight = `${(150 + 10) * (foodListLength.value + 1) + 50}rpx`;
 const foodListMaxHeihgt: RefI<string> = ref(defaultMaxHeight);
 const displayMoreFlag: RefI<boolean> = ref<boolean>(false);
 const foodListAnimationData = ref(null);
@@ -156,7 +173,7 @@ function continueOrder() {
         margin-bottom: 20rpx;
     }
     .display-more {
-        margin: 10rpx auto 20rpx;
+        margin: 20rpx auto 20rpx;
         width: 150rpx;
         height: 50rpx;
         box-sizing: border-box;

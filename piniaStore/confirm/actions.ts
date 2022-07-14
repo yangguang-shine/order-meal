@@ -26,6 +26,23 @@ async function submitOrder (payload?: any = {}) {
     const menuStore: MenuStoreI = useMenuStore()
     // 不需要进行响应式
     const { cartPriceInfo, orderFoodList }: CartPriceInfoGetterF = storeToRefs(menuStore)
+    console.log(
+        {
+            foodList: orderFoodList.value,
+            shopID: menuStore.menuState.shopInfo.shopID,
+            payPrice: cartPriceInfo.value.payPrice,
+            businessType: menuStore.menuState.businessType,
+            minusPrice: cartPriceInfo.value.minusPrice,
+            allPackPrice: cartPriceInfo.value.allPackPrice || 0,
+            deliverPrice: menuStore.menuState.shopInfo.deliverPrice || 0,
+            orderOriginAmount: cartPriceInfo.value.orderOriginAmount,
+            noteText: confirmState.noteText,
+            takeOutTime: confirmState.takeOutTime,
+            address: JSON.stringify(addressState.defaultAddress),
+            ...payload
+        }
+    )
+    // return
     await fetch('order/submit', {
         foodList: orderFoodList.value,
         shopID: menuStore.menuState.shopInfo.shopID,
@@ -38,6 +55,8 @@ async function submitOrder (payload?: any = {}) {
         noteText: confirmState.noteText,
         takeOutTime: confirmState.takeOutTime,
         address: JSON.stringify(addressState.defaultAddress),
+        reservePhone: addressState.defaultAddress.mobile,
+        selfTakeTime: confirmState.selfTakeTime,
         ...payload
     })
 }

@@ -12,7 +12,7 @@
                     <div class="business-item flex-row flex-ja-center" :style="{'color': $mainColor}" v-for="(businessTitleItem, index) in shopItem.businessTitleList" :key="index">{{ businessTitleItem }}</div>
                 </div>
                 <div class="flex-row">
-                    <MinusList :minusList="shopItem.minusList.length > 6 ? shopItem.minusList.slice(0, 6) : shopItem.minusList" :mainColor="shopItem.mainColor"></MinusList>
+                    <MinusList v-if="shopItem.minusList.length" :minusList="shopItem.minusList.length > 6 ? shopItem.minusList.slice(0, 6) : shopItem.minusList" :mainColor="shopItem.mainColor"></MinusList>
                 </div>
             </div>
             <image class="arrow-right-icon" src="/static/img/shop/arrow-right.png"></image>

@@ -1,6 +1,6 @@
 import fetch from "@/utils/fetch";
 import { defaultFoodImg, foodImgPath, shopImgPath } from "@/config/index";
-import { OriginCategoryItemI, CategoryItemI, FoodItemI, OriginFoodItemI, FoodListMapI, CategoryListMapI, StateI, initFoodItem, PositionInfoI, ShopItemI, CollectFoodListMapI, CollectFoodKeyObjI, OriginShopItemI } from "@/interface/index";
+import { OriginCategoryItemI, CategoryItemI, FoodItemI, OriginFoodItemI, FoodListMapI, CategoryListMapI, StateI, initFoodItem, PositionInfoI, ShopItemI, CollectFoodListMapI, CollectFoodKeyObjI, OriginShopItemI, OriginOrderFoodItemI } from "@/interface/index";
 
 import { toFixedToNumber } from "@/utils/index";
 import { menuDefault, MenuDefaultI } from "./state";
@@ -9,6 +9,12 @@ import getBusinessTypeInfo from "@/utils/getBusinessTypeInfo";
 import { getCollectFoodList } from "./handle";
 
 function setShopInfo(shopInfo: ShopItemI): void {
+    console.log(menuState.shopInfo.shopID)
+    console.log(shopInfo.shopID)
+    // 防止不同店铺进行多次初始化
+    if (menuState.shopInfo.shopID !== shopInfo.shopID) {
+        clearCart()
+    }
     menuState.shopInfo = shopInfo;
 }
 
@@ -101,8 +107,11 @@ function setOverReserveFoodListMap(overReserveFoodListMap: FoodListMapI) {
 
 function clearCart() {
     menuState.cartCategoryList.forEach((categoryTtem) => {
-        categoryTtem.foodList.forEach((foodItem) => {
+        categoryTtem.foodList.forEach((foodItem :FoodItemI) => {
             foodItem.orderCount = 0;
+            foodItem.foodItemAmount = 0
+            foodItem.orderSpecifaList = []
+            foodItem.specificationSlectedIndexList = foodItem.specificationList.map(() => 0)
         });
     });
     // 清空数组
@@ -111,26 +120,7 @@ function clearCart() {
     // uni.removeStorageSync(`storageFoodList_${menuState.shopInfo.shopID}`)
 }
 
-// specificationList: specificationItemI[];
-// orderSpecifaList: {
-//     [index: string]: {
-//         specifa: [{
-//             index: number,
-//             value: string
-//         }],
-//         orderCount: number
-//     }
-// }[]
-// orderSpecifaListMap: {
-//     [index: string]: {
-//         specifa: [{
-//             index: number,
-//             value: string
-//         }],
-//         orderCount: number
-//     }
-// },
-// specificationSlectedIndexList: number[]
+
 // 菜品变动核心，只有此时cartCategoryListMap才会进行正确的变化
 interface CartChangeParamsI {
     foodItem: FoodItemI;
@@ -138,12 +128,14 @@ interface CartChangeParamsI {
     type: "add" | "minus";
     specificationString?: string
 }
+
 function cartChange({ foodItem, count = 0, type = "add", specificationString = '' }: CartChangeParamsI) {
     // 存在规格时
     if (specificationString) {
         const findIndex = foodItem.orderSpecifaList.findIndex((item) => item.key === specificationString);
         if (findIndex > -1) {
             foodItem.orderSpecifaList[findIndex].orderCount = foodItem.orderSpecifaList[findIndex].orderCount + count;
+            foodItem.orderSpecifaList[findIndex].allPrice = toFixedToNumber(foodItem.price * foodItem.orderSpecifaList[findIndex].orderCount)
             if (foodItem.orderSpecifaList[findIndex].orderCount <= 0) {
                 foodItem.orderSpecifaList.splice(findIndex, 1);
                 // 同种商品去掉一种规格种类时重置规格默认
@@ -157,13 +149,15 @@ function cartChange({ foodItem, count = 0, type = "add", specificationString = '
                 foodItem.orderSpecifaList.push({
                     key: specificationString,
                     orderCount: count,
-                    specifa: foodItem.specificationSlectedIndexList.map((item, index) => {
+                    specifa: specificationString.split('').map((item, index) => {
                         return {
-                            index: item,
+                            index: Number(item),
                             specificationDetail: foodItem.specificationList[index].categoryList[item].specificationDetail,
                             specificationPrice: foodItem.specificationList[index].categoryList[item].specificationPrice,
                         };
                     }),
+                    price: foodItem.price,
+                    allPrice: toFixedToNumber(foodItem.price * count)
                 });
             } else {
                 throw "type error " + type;
@@ -171,13 +165,13 @@ function cartChange({ foodItem, count = 0, type = "add", specificationString = '
         }
     }
     foodItem.orderCount = foodItem.orderCount + count;
-    foodItem.orderSpecifaList;
     foodItem.foodItemAmount = toFixedToNumber(foodItem.price * foodItem.orderCount);
     const stateCartCategoryItem = menuState.cartCategoryListMap[`${foodItem.categoryID}`];
     if (stateCartCategoryItem) {
         const stateCartFoodItem = stateCartCategoryItem.foodListMap[`${foodItem.foodID}`];
         if (stateCartFoodItem) {
-            if (foodItem.orderCount === 0) {
+            if (foodItem.orderCount <= 0) {
+                // 删除 foodListMap 中一项也需要删除数组 foodList 相同的一项，因为两个同步存在，为了减少复杂度，因此 foodList 最终通过 foodListMap 遍历获取
                 delete stateCartCategoryItem.foodListMap[`${foodItem.foodID}`];
             }
         } else {
@@ -189,7 +183,7 @@ function cartChange({ foodItem, count = 0, type = "add", specificationString = '
             categoryIDMain: `main${foodItem.categoryID}`,
             categoryIDAside: `aside${foodItem.categoryID}`,
             categoryName: foodItem.categoryName,
-            foodList: [foodItem],
+            foodList: [], // 通过后面 foodListMap 进行获取
             foodListMap: {
                 [foodItem.foodID]: foodItem,
             },
@@ -209,17 +203,19 @@ function cartChange({ foodItem, count = 0, type = "add", specificationString = '
             const foodList = keys.map((item) => {
                 return categoryItem.foodListMap[item];
             });
-            categoryItem.foodList = foodList;
-            if (foodList.length > 0) {
+            categoryItem.foodList = foodList;  // 获取最终的foodList
+            if (foodList.length > 0) { // 过滤foodList为空的
                 cartCategoryList.push(categoryItem);
+            } else {
+                delete menuState.cartCategoryListMap[categoryID];
             }
-            // return menuState.cartCategoryListMap[categoryID]
         });
-    menuState.cartCategoryList = cartCategoryList;
+        menuState.cartCategoryList = cartCategoryList;
 }
 
 function initCart() {
     const cartCategoryListOrigin = menuState.cartCategoryList;
+    console.log(cartCategoryListOrigin)
     menuState.cartCategoryList = [];
     menuState.cartCategoryListMap = {};
     cartCategoryListOrigin.forEach((cartCategoryItem) => {
@@ -236,16 +232,51 @@ function initCart() {
                             menuState.overReserveFoodList.push(cartFoodItem);
                         }
                     } else if (cartFoodItem.orderCount > 0) {
-                        cartChange({
-                            foodItem: stateFoodItem,
-                            count: cartFoodItem.orderCount,
-                            type: "add",
-                        });
+                        const length = cartFoodItem.orderSpecifaList.length
+                        if (length) {
+                            for(let i = 0; i < length; i ++) {
+                                // 防止后台口味删减修改时本地有缓存
+                                const orderSpecificationItem = cartFoodItem.orderSpecifaList[i]
+                                const indexList = orderSpecificationItem.key.split('')
+                                console.log(indexList)
+                                if (indexList.length !== stateFoodItem.specificationList.length) {
+                                    continue;
+                                }
+                                try {
+                                    const falg = indexList.every((item, index) => {
+                                       return stateFoodItem.specificationList[index].categoryList[Number(item)]
+                                    })
+                                    if(falg) { // 匹配得上
+                                        console.log('orderSpecificationItem.key')
+                                        console.log(orderSpecificationItem.key)
+                                        cartChange({
+                                            foodItem: stateFoodItem,
+                                            count: orderSpecificationItem.orderCount,
+                                            type: "add",
+                                            specificationString: orderSpecificationItem.key
+                                        });
+                                    } else {
+                                        continue
+                                    }
+                                } catch(e) {
+                                   console.log(e)
+                                   continue
+                                } 
+                            }
+                        } else {
+                            cartChange({
+                                foodItem: stateFoodItem,
+                                count: cartFoodItem.orderCount,
+                                type: "add",
+                            });
+                        }
+             
                     }
                 }
             });
         }
     });
+    console.log(menuState.cartCategoryList)
 }
 
 function setShopInfoMode(mode: "vertical" | "horizontal") {
@@ -302,7 +333,6 @@ async function getMenuList() {
             orderCount: 0,
             specificationList,
             orderSpecifaList: [],
-            orderSpecifaListMap: {},
             specificationSlectedIndexList: specificationList.map(() => {
                 return 0;
             }),
@@ -365,13 +395,15 @@ async function getMenuList() {
 }
 
 async function getOrderKeyFoodList(option: { orderKey: String } = { orderKey: "" }) {
-    const originFoodList: OriginFoodItemI[] = await fetch("order/foodList", {
+    const originFoodList: OriginOrderFoodItemI[] = await fetch("order/foodList", {
         ...option,
     });
     const cartCategoryListMap: CategoryListMapI = {};
     const overReserveFoodList: FoodItemI[] = [];
     const overReserveFoodListMap: FoodListMapI = {};
-    originFoodList.forEach((originFoodItem: OriginFoodItemI): void => {
+    originFoodList.forEach((originFoodItem: OriginOrderFoodItemI): void => {
+        const specificationList = JSON.parse(originFoodItem.specification || '[]')
+        const orderSpecifaList = JSON.parse(originFoodItem.orderSpecifaListJSON || '[]')
         const foodItem: FoodItemI = {
             ...originFoodItem,
             currentImg: defaultFoodImg,
@@ -379,6 +411,9 @@ async function getOrderKeyFoodList(option: { orderKey: String } = { orderKey: ""
             defaultImg: defaultFoodImg,
             foodItemAmount: toFixedToNumber(originFoodItem.price * originFoodItem.orderCount),
             showReserveCountFlag: originFoodItem.reserveCount < 10,
+            specificationList,
+            orderSpecifaList,
+            specificationSlectedIndexList: specificationList.map(() => 0)
         };
         const stateCategoryItem: CategoryItemI = menuState.categoryListMap[`${foodItem.categoryID}`];
         if (stateCategoryItem) {
@@ -422,6 +457,8 @@ async function getOrderKeyFoodList(option: { orderKey: String } = { orderKey: ""
             cartCategoryListMap[categoryID].foodList.sort((a, b) => a.foodID - b.foodID);
             return cartCategoryListMap[categoryID];
         });
+        console.log('cartCategoryList')
+        console.log(cartCategoryList)
     menuState.cartCategoryList = cartCategoryList;
     menuState.overReserveFoodList = overReserveFoodList;
     menuState.overReserveFoodListMap = overReserveFoodListMap;

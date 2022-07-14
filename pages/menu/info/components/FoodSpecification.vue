@@ -26,7 +26,7 @@
                         <div class="food-price">¥{{ foodSpecificationInfo.price }}</div>
                         <div v-if="foodSpecificationInfo.unit" class="food-unit">/{{ foodSpecificationInfo.unit }}</div>
                     </div>
-                    <FoodAddMinusItemSpecificaTion :foodItem="foodSpecificationInfo" type="foodSpecification" :specificationSlectedIndexList="specificationSlectedIndexList"></FoodAddMinusItemSpecificaTion>
+                    <FoodAddMinusItemSpecificaTion :foodItem="foodSpecificationInfo" type="foodSpecification" ></FoodAddMinusItemSpecificaTion>
                 </view>
             </view>
             <image class="close-img" src="/static/img/user-menu/close-food-detail.png" mode="" @click.stop="closeFoodSpecification"></image>
@@ -82,7 +82,6 @@ const selectSpecificationText = computed(() => {
     }, "");
 });
 
-const specificationSlectedIndexList: RefI<number[]> = ref([]);
 onMounted(() => {
     toStartAnimation();
     initSpecificationSlectedIndexList();
@@ -102,7 +101,6 @@ function initSpecificationSlectedIndexList() {
             return 0;
         });
     }
-    console.log(foodSpecificationInfo.value.specificationSlectedIndexList)
 }
 function toStartAnimation() {
     overlayAnimation.opacity(1).step();

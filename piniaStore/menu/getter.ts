@@ -151,7 +151,7 @@ const minusPromotionsObject: ComputedStateI<MinusPromotionsObjectI> = computed((
 });
 
 const asideCategoryInfo: ComputedStateI<AsideCategoryInfoI> = computed(() => {
-    const asideCategoryItemOrderCountMap: A = {};
+    const asideCategoryItemOrderCountMap: AsideCategoryItemOrderCountMapI= {};
     const asideCategoryList = menuState.categoryList.map((categotyItem) => {
         // const stateCartCartgoryItem = menuState.cartCategoryList.find((cartFoodItem) => cartFoodItem.categoryID === categotyItem.categoryID);
         const stateCartCartgoryItem = menuState.cartCategoryListMap[`${categotyItem.categoryID}`];

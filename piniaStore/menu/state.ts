@@ -23,7 +23,7 @@ export interface MenuDefaultI {
     overReserveFoodList: FoodItemI[];
     overReserveFoodListMap: FoodListMapI;
     cartCategoryListMap: CategoryListMapI;
-    shopInfo: ShopItemI;
+    // shopInfo: ShopItemI;
     businessType: number;
     // 凑单
     collectFoodFlag: Boolean;
@@ -39,6 +39,7 @@ export interface MenuDefaultI {
 
 }
 export interface MenuStateI extends MenuDefaultI {
+    shopInfo: ShopItemI,
     cartCategoryList: CategoryItemI[];
 }
 export const menuDefault: MenuDefaultI = {
@@ -64,7 +65,6 @@ export const menuDefault: MenuDefaultI = {
     overReserveFoodList: [],
     overReserveFoodListMap: {},
     cartCategoryListMap: {},
-    shopInfo: initShopItem,
     businessType: 2,
     collectFoodFlag: false,
     collectFoodListMap: {},
@@ -81,6 +81,7 @@ export const menuDefault: MenuDefaultI = {
 
 const menuState: MenuStateI = reactive({
     ...menuDefault,
+    shopInfo: initShopItem,
     cartCategoryList: [],
 });
 
