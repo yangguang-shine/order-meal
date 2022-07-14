@@ -41,8 +41,6 @@ const { asideCategoryInfo, minusPromotionsObject }: MenuGetterF = storeToRefs(me
 const { setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside } = menuStore;
 // 选择 tab
 function changeCategoryTab(asideCategoryItem: AsideCategoryItemI) {
-    console.log(111111)
-    console.log(asideCategoryItem.categoryIDMain)
     setSelectedCategoryID(asideCategoryItem.categoryID);
     setCategoryIDMain(asideCategoryItem.categoryIDMain);
     setCategoryIDAside(asideCategoryItem.categoryIDAside);

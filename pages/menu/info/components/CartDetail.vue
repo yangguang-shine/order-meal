@@ -204,7 +204,7 @@ async function cartClearCart() {
         margin: 0 20rpx;
         border-bottom: 1rpx solid #eee;
     }
-    .food-category-item:last-child .cart-food-item:last-child {
+    .food-category-item:last-child .cart-food-item-box:last-child .cart-food-item:last-child {
         // margin-bottom: 20rpx;
         border-bottom: none;
         margin-bottom: 30rpx;

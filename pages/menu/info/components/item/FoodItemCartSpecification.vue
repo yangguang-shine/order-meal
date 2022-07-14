@@ -88,12 +88,6 @@ onMounted(async () => {
 function clickFoodItem(foodItem: FoodItemI) {
     emit("clickFoodItem", foodItem);
 }
-function addCount() {
-    console.log("addCount");
-}
-function minusCount() {
-    console.log("minusCount");
-}
 </script>
 
 <style lang="scss" scoped>

@@ -5,7 +5,7 @@
             {{ foodItem.foodName }}<span class="food-unit">/{{ foodItem.unit }}</span>
         </view>
         <view class="food-price-add flex-row flex-a-center flex-j-between" @click.stop="addCount($event)" :style="{ color: $mainColor }">
-            <view class="food-price" :style="{'color': $mainColor}">¥{{ foodItem.price }}</view>
+            <view class="food-price" :style="{ color: $mainColor }">¥{{ foodItem.price }}</view>
             <view v-if="foodItem.reserveCount > 0" class="food-add" :id="type + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }">
                 <ReserveRemain v-if="foodItem.showReserveCountFlag" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
             </view>
@@ -39,7 +39,7 @@ import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 const currentInstance = getCurrentInstance();
 interface PropsI {
     foodItem: FoodItemI;
-    type?: string
+    type?: string;
 }
 interface EmitI {
     (e: "clickFoodItem", id: number): void;
@@ -47,7 +47,7 @@ interface EmitI {
 
 const props: PropsI = withDefaults(defineProps<PropsI>(), {
     foodItem: {},
-    type: 'main'
+    type: "main",
 });
 const emit = defineEmits<EmitI>();
 interface CartChangeParamI {
@@ -62,9 +62,9 @@ interface MenuStateF {
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { shopInfo, cartImgPositionInfo }: MenuStateF = toRefs(menuStore.menuState)
+const { shopInfo, cartImgPositionInfo }: MenuStateF = toRefs(menuStore.menuState);
 // action
-const { cartChange, setCartImgAnimationFlag } = menuStore
+const { cartChange, setCartImgAnimationFlag, setFoodSpecificationInfo, setFoodSpecificationFlag } = menuStore;
 
 onMounted(async () => {
     // if (props.foodItem.orderCount > 0) {
@@ -76,6 +76,10 @@ onMounted(async () => {
 const addList: AddItemI[] = reactive([]);
 
 async function addCount() {
+    if (props.foodItem.specificationList.length) {
+        toShowFoodSpecification();
+        return;
+    }
     const addPositionInfo: PositionInfoI = await getPositionInfo();
     const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.value.left;
     const offsetTop: number = cartImgPositionInfo.value.top - addPositionInfo.top;
@@ -92,11 +96,16 @@ async function addCount() {
         addList.push(addItem);
         startAddTransition(addItem);
     }
-    const count = props.foodItem.orderCount + 1;
+    // const count = props.foodItem.orderCount + 1;
     cartChange({
         foodItem: props.foodItem,
-        count,
+        count: 1,
+        type: "add",
     });
+}
+function toShowFoodSpecification() {
+    setFoodSpecificationInfo(props.foodItem);
+    setFoodSpecificationFlag(true);
 }
 async function getPositionInfo(): Promise<PositionInfoI> {
     const res = await selectQuery(`#${props.type}${props.foodItem.foodID}`, currentInstance);
@@ -156,8 +165,8 @@ function clickFoodItem(foodItem: FoodItemI) {
     background-color: #fff;
     border-radius: 12rpx;
     .food-img {
-    border-top-left-radius: 12rpx;
-    border-top-right-radius: 12rpx;
+        border-top-left-radius: 12rpx;
+        border-top-right-radius: 12rpx;
         width: 230rpx;
         height: 230rpx;
     }
@@ -181,7 +190,6 @@ function clickFoodItem(foodItem: FoodItemI) {
         padding: 20rpx 20rpx 10rpx;
         font-size: 32rpx;
         // color: #ff4b33;
-
     }
     // .food-add-box {
     //     position: relative;
@@ -252,7 +260,6 @@ function clickFoodItem(foodItem: FoodItemI) {
         padding: 0 8rpx;
         box-sizing: border-box;
         // background-color: #ff4b33;
-
     }
 }
 </style>

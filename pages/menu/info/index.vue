@@ -144,8 +144,6 @@ onLoad(async (option: OptionI) => {
 watch(
     () => shopInfo.value.mode,
     (newValue: string, oldValue: string) => {
-        console.log("newValue, oldValue");
-        console.log(newValue, oldValue);
         handleCurrentLazyImg(newValue);
     }
 );

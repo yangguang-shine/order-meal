@@ -215,7 +215,6 @@ function cartChange({ foodItem, count = 0, type = "add", specificationString = '
             }
             // return menuState.cartCategoryListMap[categoryID]
         });
-    console.log(cartCategoryList);
     menuState.cartCategoryList = cartCategoryList;
 }
 

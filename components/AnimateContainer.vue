@@ -35,11 +35,8 @@ export default {
     },
     watch: {
 		showAnimateFlag: async function (newValue, oldValue){
-            console.log(newValue)
             if (newValue) {
                 this.showAnimateContainer = true
-                console.log(this)
-                console.log(this.$slots.default)
                 this.$slots.default[0].showComponent()
                 await delaySync(200)
             } else {
@@ -47,7 +44,6 @@ export default {
                 await delaySync(200)
                 this.showAnimateContainer = false
             }
-			console.log(oldValue)
 		},
 	}
 }

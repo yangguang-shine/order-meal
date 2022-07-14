@@ -57,7 +57,6 @@ const currentInstance = getCurrentInstance();
 async function handleScroll() {
     const currentCollectFoodList = props.modelValue ? props.searchResultList : props.defaultList;
     const searchListBoxId = props.modelValue ? "#result-box" : "#default-box";
-    console.log(currentCollectFoodList);
     const res = await selectQuery(searchListBoxId, currentInstance);
     const searchBosPositionInfo = {
         top: res.top,
@@ -103,7 +102,6 @@ function inputChange(e: any) {
 watch(
     () => props.modelValue,
     () => {
-        console.log(34);
         if (props.searchResultList.length) {
             setTimeout(() => {
                 handleScroll();

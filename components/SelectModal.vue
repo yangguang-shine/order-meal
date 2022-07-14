@@ -32,8 +32,6 @@ export default {
 		}
 	},
 	mounted() {
-		console.log(this.selectList)
-		console.log(this.selectItemKey)
 	},
 	methods: {
 		clickSelectItem(selectItem, index) {

@@ -41,7 +41,6 @@ export function getCollectFoodList() {
     // 菜品价格排序后的总列表
     const collectFoodList: CollectFoodListItemI[] = getSortCollectFoodList(collectFoodListMap, collectFoodListKeys);
     // 凑单弹框使用使用
-    console.log(menuState.collectFoodList)
     menuState.collectFoodListMap = collectFoodListMap;
     menuState.collectFoodList = collectFoodList;
     menuState.collectFoodListKeys = collectFoodListKeys;
