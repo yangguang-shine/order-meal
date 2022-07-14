@@ -1,12 +1,12 @@
-import { AddressStateI } from "@/store/state/address";
-import { HomeStateI } from "@/store/state/home";
-import { MenuStateI } from "@/store/state/menu";
-import { StateConfirmI } from "@/store/state/confirm";
-import { OrderStateI } from "@/store/state/order";
-import { CenterStateI } from "@/store/state/center";
-import { ConfirmGetterI } from '@/store/getters/confirm'
-import { MenuGetterI } from '@/store/getters/menu'
-import { ShopStateI } from "@/store/state/shop";
+import { AddressStateI } from "../delete/store/state/address";
+import { HomeStateI } from "../delete/store/state/home";
+import { MenuStateI } from "../delete/store/state/menu";
+import { StateConfirmI } from "../delete/store/state/confirm";
+import { OrderStateI } from "../delete/store/state/order";
+import { CenterStateI } from "../delete/store/state/center";
+import { ConfirmGetterI } from '../delete/store/getters/confirm'
+import { MenuGetterI } from '../delete/store/getters/menu'
+import { ShopStateI } from "../delete/store/state/shop";
 export type StateI = AddressStateI & HomeStateI & MenuStateI & StateConfirmI & OrderStateI & CenterStateI & ShopStateI;
 export type GetterStateI = ConfirmGetterI & MenuGetterI;
 export interface MutationI {

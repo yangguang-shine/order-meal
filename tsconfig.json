@@ -16,7 +16,7 @@
         "@/router/*": ["./router/*"],
         "@/interface/*": ["./interface/*"],
         "@/style/*": ["./style/*"],
-        "@/store/*": ["./store/*"],
+        "@/store/*": ["delete/store/*"],
         "@/piniaStore/*": ["./piniaStore/*"],
         "@/piniaStore/": ["./piniaStore"],
       }
