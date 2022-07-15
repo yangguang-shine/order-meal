@@ -66,20 +66,22 @@ export interface OriginCategoryItemI {
 export interface specificationItemI {
     name: string;
     categoryList: {
-        specificationDetail: string;
-        specificationPrice: number;
+        content: string;
+        price: number;
     }[];
 }
 export interface OrderSpecifaItemI{
     specifa: {
         index: number,
-        specificationDetail: string,
-        specificationPrice: number
+        content: string,
+        price: number
     }[],
     key: string,
     orderCount: number,
     price: number,
-    allPrice: number
+    currentPrice: number,
+    addPrice: number
+    allCountPrice: number
 }
 export interface FoodItemI extends OriginFoodItemI {
     currentImg: string;
@@ -91,6 +93,8 @@ export interface FoodItemI extends OriginFoodItemI {
     specificationList: specificationItemI[];
     orderSpecifaList: OrderSpecifaItemI[]
     specificationSlectedIndexList: number[]
+    orderSpecifaListJSON?: string
+
 }
 
 export interface CategoryItemI extends OriginCategoryItemI {

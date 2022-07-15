@@ -1,7 +1,6 @@
 import App from './App.vue'
 import router from './utils/router'
 import fetch from './utils/fetch'
-import store from './store'
 import { delaySync } from '@/utils/index';
 import CommonError from '@/components/CommonError.vue'
 import CommonLoading from '@/components/CommonLoading.vue'
@@ -26,7 +25,6 @@ import * as Pinia from 'pinia';
 export function createApp() {
 	const app = createSSRApp(App)
 	app.config.globalProperties.$myrouter = router
-	app.config.globalProperties.$store = store
 	app.config.globalProperties.$fetch = fetch
 	app.config.globalProperties.$showModal = showModal
 	app.config.globalProperties.$showLoading = showLoading
@@ -60,7 +58,6 @@ export function createApp() {
 			// })
 		}
 	});
-	app.use(store)
 	app.use(Pinia.createPinia());
 	return {
 		app,

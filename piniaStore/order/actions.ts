@@ -1,9 +1,8 @@
-
 import fetch from "@/utils/fetch";
 import { timeStampTranslate, toFixedToNumber } from "@/utils/index";
 import getOrderTypeTitle from "@/utils/getOrderTypeTitle";
 import { shopImgPath, foodImgPath, defaultFoodImg } from "@/config/index";
-import { ActionI, ActionContextI, OrderItemI, OriginShopItemI, ShopItemI, OriginFoodItemI, FoodItemI, OrderDetailI, OrderKeyI } from "@/interface/index";
+import { ActionI, ActionContextI, OrderItemI, OriginShopItemI, ShopItemI, OriginFoodItemI, FoodItemI, OrderDetailI, OrderKeyI, OriginOrderFoodItemI } from "@/interface/index";
 import getBusinessTypeInfo from "@/utils/getBusinessTypeInfo";
 import getOrderBusinessTitle from "@/utils/getOrderBusinessTitle";
 import orderState from "./state";
@@ -25,15 +24,17 @@ async function getOrderList() {
             ...getBusinessTypeInfo(item.businessTypes),
         };
     });
-    const orderList: OrderItemI[] = data.orderKeyList.map(
-        (item): OrderItemI => ({
-            ...item,
-            shopInfo: shopListMap[item.shopID],
-            orderTimeDetail: timeStampTranslate(item.orderTime),
-            orderTypeTitle: getOrderTypeTitle(item.orderStatus, item.businessType),
-            orderBusinessTitle: getOrderBusinessTitle(item.businessType)
-        })
-    ).filter(orderItem => orderItem.shopInfo);
+    const orderList: OrderItemI[] = data.orderKeyList
+        .map(
+            (item): OrderItemI => ({
+                ...item,
+                shopInfo: shopListMap[item.shopID],
+                orderTimeDetail: timeStampTranslate(item.orderTime),
+                orderTypeTitle: getOrderTypeTitle(item.orderStatus, item.businessType),
+                orderBusinessTitle: getOrderBusinessTitle(item.businessType),
+            })
+        )
+        .filter((orderItem) => orderItem.shopInfo);
 
     orderState.allOrderList[orderState.orderTabIndex] = orderList;
     return orderList;
@@ -42,7 +43,7 @@ async function getOrderList() {
 async function getOrderDetail(payload: { orderKey: string }): Promise<OrderDetailI> {
     const originOrderDetail: {
         orderInfo: OrderKeyI;
-        foodList: OriginFoodItemI[];
+        foodList: OriginOrderFoodItemI[];
     } = await fetch("order/orderDetail", payload);
     const { orderInfo, foodList } = originOrderDetail;
     const orderDetail: OrderDetailI = {
@@ -50,18 +51,24 @@ async function getOrderDetail(payload: { orderKey: string }): Promise<OrderDetai
         orderTypeTitle: getOrderTypeTitle(orderInfo.orderStatus, orderInfo.businessType),
         orderTimeDetail: timeStampTranslate(orderInfo.orderTime),
         deliverAddress: JSON.parse(orderInfo.address),
-        foodList: foodList.map(
-            (foodItem): FoodItemI => ({
+        foodList: foodList.map((foodItem: OriginOrderFoodItemI) => {
+            const orderSpecifaList = JSON.parse(foodItem.orderSpecifaListJSON || '[]')
+            const specificationList = JSON.parse(foodItem.specification)
+            const orderFoodItem: FoodItemI = {
                 ...foodItem,
                 foodItemAmount: toFixedToNumber(foodItem.price * foodItem.orderCount),
                 currentImg: defaultFoodImg,
                 fullImgPath: `${foodImgPath}/${orderState.orderDetailShopInfo.shopID}/${foodItem.imgUrl}`,
                 defaultImg: defaultFoodImg,
-                showReserveCountFlag: foodItem.reserveCount < 10
-            })
-        ),
+                showReserveCountFlag: foodItem.reserveCount < 10,
+                specificationList,
+                orderSpecifaList,
+                specificationSlectedIndexList: specificationList.map(() => 0),
+            };
+            return orderFoodItem;
+        }),
     };
-    orderState.orderDetail = orderDetail
+    orderState.orderDetail = orderDetail;
     return orderDetail;
 }
 
@@ -73,37 +80,36 @@ async function getOrderDetailShopInfo(payload: { shopID: number }): Promise<Shop
         fullImgPath: `${shopImgPath}/${originShopInfo.imgUrl}`,
         ...getBusinessTypeInfo(originShopInfo.businessTypes),
     };
-    orderState.orderDetailShopInfo = orderDetailShopInfo
+    orderState.orderDetailShopInfo = orderDetailShopInfo;
     return orderDetailShopInfo;
 }
-
 
 async function cancelOrder(payload: { orderKey: string }) {
     await fetch("order/cancel", payload);
 }
-function setOrderTabIndex (orderTabIndex: number): void  {
+function setOrderTabIndex(orderTabIndex: number): void {
     orderState.orderTabIndex = orderTabIndex;
-};
+}
 
-function setOrderErrorListFlag (flag: boolean): void  {
+function setOrderErrorListFlag(flag: boolean): void {
     orderState.orderErrorListFlag[orderState.orderTabIndex] = flag;
-};
-function setOrderDetail (orderDetail: OrderDetailI): void  {
+}
+function setOrderDetail(orderDetail: OrderDetailI): void {
     orderState.orderDetail = orderDetail;
-};
-function setOrderDetailShopInfo (shopInfo: ShopItemI): void  {
+}
+function setOrderDetailShopInfo(shopInfo: ShopItemI): void {
     orderState.orderDetailShopInfo = shopInfo;
-};
+}
 
 export interface OrderActionI {
-    getOrderList:() => Promise<OrderItemI[]>,
-    getOrderDetail:(payload: { orderKey: string }) =>  Promise<OrderDetailI>,
-    getOrderDetailShopInfo:(payload: { shopID: number }) => Promise<ShopItemI>,
-    cancelOrder : (payload: { orderKey: string }) => void,
-    setOrderTabIndex:(orderTabIndex: number) => void,
-    setOrderErrorListFlag:(flag: boolean)=> void,
-    setOrderDetail:(orderDetail: OrderDetailI) => void,
-    setOrderDetailShopInfo:(shopInfo: ShopItemI)=> void,
+    getOrderList: () => Promise<OrderItemI[]>;
+    getOrderDetail: (payload: { orderKey: string }) => Promise<OrderDetailI>;
+    getOrderDetailShopInfo: (payload: { shopID: number }) => Promise<ShopItemI>;
+    cancelOrder: (payload: { orderKey: string }) => void;
+    setOrderTabIndex: (orderTabIndex: number) => void;
+    setOrderErrorListFlag: (flag: boolean) => void;
+    setOrderDetail: (orderDetail: OrderDetailI) => void;
+    setOrderDetailShopInfo: (shopInfo: ShopItemI) => void;
 }
 export default {
     getOrderList,

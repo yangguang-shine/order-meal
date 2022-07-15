@@ -7,7 +7,7 @@
                 <view class="food-description line1">规格：{{ orderSpecifaText }}</view>
             </view>
             <view class="food-price-button flex-row flex-j-between flex-a-center">
-                <view class="food-price" :style="{ color: $mainColor }">¥{{ foodItem.price }}</view>
+                <view class="food-price" :style="{ color: $mainColor }">¥{{orderSpecifaItem.currentPrice}}</view>
                 <FoodAddMinusItemCartSpecification class="" :foodItem="foodItem" :orderSpecifaItem="orderSpecifaItem" ></FoodAddMinusItemCartSpecification>
             </view>
         </view>
@@ -46,9 +46,9 @@ const emit = defineEmits<EmitI>();
 const orderSpecifaText = computed(() => {
     return props.orderSpecifaItem.specifa.reduce((str, item) => {
         if (str) {
-            str = `${str}、${item.specificationDetail}`
+            str = `${str}、${item.content}`
         } else {
-            str = item.specificationDetail
+            str = item.content
         }
         return str;
     }, "");

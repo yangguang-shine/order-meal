@@ -38,14 +38,15 @@ defineProps({
 	    // background-color: red;
 	}
 	.food-info {
-	    flex: 8;
+	    flex: 10;
+	    width: 320rpx;
+
 	    font-size: 28rpx;
 	    height: 110rpx;
 	
 	    // height: 90rpx;
 	}
 	.food-name {
-	    max-width: 320rpx;
 	    font-size: 28rpx;
 	    line-height: 40rpx;
 	    color: #333;
@@ -62,7 +63,7 @@ defineProps({
 	    color: #666;
 	}
 	.food-count-price {
-	    flex: 4;
+	    flex: 2.5;
 	    font-size: 28rpx;
 	    text-align: right;
 	    color: #333;

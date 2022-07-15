@@ -15,7 +15,7 @@ export interface MinusPromotionsObjectI {
 /**
  * @interface CartPriceInfoI
  * @params allOriginPrice - 所有商品无优惠前总金额(包含打包费、不包含配送费)
- * @params allPriceAfterDiscount - 购物车优惠后总金额
+ * @params allPriceAfterDiscount - 购物车优惠后总金额 (含打包费， 不含配送费)
  * @params orderOriginAmount - 订单原价格（包含打包费和配送费）
  * @params minusPrice - 购物车优惠金额
  * @params minusIndex - 满减信息索引
@@ -65,7 +65,13 @@ const cartPriceInfo = computed((): CartPriceInfoI => {
     let allFoodPrice: number = 0;
     menuState.cartCategoryList.forEach((categoryItem) => {
         categoryItem.foodList.forEach((foodItem) => {
-            allFoodPrice += foodItem.price * foodItem.orderCount;
+            if (foodItem.orderSpecifaList.length) {
+                allFoodPrice = foodItem.orderSpecifaList.reduce((allFoodPrice, item, index) => {
+                    return allFoodPrice + item.allCountPrice
+                }, allFoodPrice)
+            } else {
+                 allFoodPrice += foodItem.price * foodItem.orderCount;
+            }
             allCartFoodCount += foodItem.orderCount;
             if (menuState.businessType === 2 || menuState.businessType === 3) {
                 allPackPrice += foodItem.packPrice * foodItem.orderCount;

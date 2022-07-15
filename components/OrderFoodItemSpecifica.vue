@@ -6,11 +6,11 @@
 			<div class="food-specifica line1">规格：{{specificaText}}</div>
             <div class="food-price flex-row">
                 <span class="money-unit">¥</span>
-                {{ orderFoodItemSpecifica.price }}
+                {{ orderFoodItemSpecifica.currentPrice }}
             </div>
         </div>
         <div class="food-count">×{{ orderFoodItemSpecifica.orderCount }}</div>
-        <div class="food-count-price"><span class="money-unit">¥</span>{{ orderFoodItemSpecifica.allPrice }}</div>
+        <div class="food-count-price"><span class="money-unit">¥</span>{{ orderFoodItemSpecifica.allCountPrice }}</div>
     </div>
 </template>
 
@@ -28,9 +28,9 @@ const props:PropsI = withDefaults(defineProps<PropsI>(), {
 const specificaText = computed(() => {
 	return props.orderFoodItemSpecifica.specifa.reduce((str, item) => {
         if (str) {
-            str = `${str}、${item.specificationDetail}`
+            str = `${str}、${item.content}`
         } else {
-            str = item.specificationDetail
+            str = item.content
         }
         return str;
     }, "")
@@ -53,6 +53,8 @@ const specificaText = computed(() => {
 
     padding: 20rpx;
     background-color: #f8f8f8;
+    width: 100%;
+    box-sizing: border-box;
     .food-img {
         height: 110rpx;
         width: 110rpx;
@@ -61,14 +63,14 @@ const specificaText = computed(() => {
         // background-color: red;
     }
     .food-info {
-        flex: 8;
+        flex: 10;
+        width:320rpx;
         font-size: 28rpx;
         height: 110rpx;
 
         // height: 90rpx;
     }
     .food-name {
-        max-width: 320rpx;
         font-size: 28rpx;
         line-height: 40rpx;
         color: #333;
@@ -89,7 +91,7 @@ const specificaText = computed(() => {
         color: #666;
     }
     .food-count-price {
-        flex: 4;
+        flex: 2.5;
         font-size: 28rpx;
         text-align: right;
         color: #333;

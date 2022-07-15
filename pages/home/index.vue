@@ -141,6 +141,7 @@ page {
     line-height: 1.2;
     font-size: 28rpx;
     color: #333;
+    padding-bottom: 30rpx;
     .swiper-box {
         height: 280rpx;
         width: 100%;

@@ -1,44 +1,51 @@
 <template>
-    <div class="order-food-info-container">
-        <div class="shop-info-box line1 flex-row flex-a-center" @click="toOrder">
-            <div class="shop-name">{{ orderDetailShopInfo.shopName }}</div>
+    <view class="order-food-info-container">
+        <view class="shop-info-box line1 flex-row flex-a-center" @click="toOrder">
+            <view class="shop-name">{{ orderDetailShopInfo.shopName }}</view>
             <img class="arrow-right" src="/static/img/arrow-right.png" alt="" />
-        </div>
-        <div class="order-list-box">
-            <order-food-item v-for="(orderFoodItem, index) in orderDetail.foodList" :orderFoodItem="orderFoodItem" :key="index"></order-food-item>
-        </div>
-        <div class="pack-deliver-price-box" v-if="orderDetail.allPackPrice || orderDetail.businessType === 2">
-            <div v-if="orderDetail.allPackPrice" class="pack-price flex-row flex-a-center flex-j-between">
-                <div class="left">打包费</div>
-                <div class="right">¥{{ orderDetail.allPackPrice }}</div>
-            </div>
-            <div v-if="orderDetail.businessType === 2" class="deliver-price flex-row flex-a-center flex-j-between">
-                <div class="left">配送费</div>
-                <div class="right">¥{{ orderDetail.deliverPrice }}</div>
-            </div>
-        </div>
-        <div class="minus-box flex-row flex-a-center" v-if="orderDetail.minusPrice">
+        </view>
+        <view class="order-list-box">
+            <view v-for="(orderFoodItem, index) in orderDetail.foodList" :key="index">
+                <template v-if="orderFoodItem.orderSpecifaList.length">
+                    <OrderFoodItemSpecifica v-for="(orderFoodItemSpecifica, index1) in orderFoodItem.orderSpecifaList" :key="index1" :orderFoodItem="orderFoodItem" :orderFoodItemSpecifica="orderFoodItemSpecifica"></OrderFoodItemSpecifica>
+                </template>
+                <OrderFoodItem v-else :orderFoodItem="orderFoodItem"></OrderFoodItem>
+            </view>
+            <!-- <OrderFoodItem v-for="(orderFoodItem, index) in orderDetail.foodList" :orderFoodItem="orderFoodItem" :key="index"></OrderFoodItem> -->
+        </view>
+        <view class="pack-deliver-price-box" v-if="orderDetail.allPackPrice || orderDetail.businessType === 2">
+            <view v-if="orderDetail.allPackPrice" class="pack-price flex-row flex-a-center flex-j-between">
+                <view class="left">打包费</view>
+                <view class="right">¥{{ orderDetail.allPackPrice }}</view>
+            </view>
+            <view v-if="orderDetail.businessType === 2" class="deliver-price flex-row flex-a-center flex-j-between">
+                <view class="left">配送费</view>
+                <view class="right">¥{{ orderDetail.deliverPrice }}</view>
+            </view>
+        </view>
+        <view class="minus-box flex-row flex-a-center" v-if="orderDetail.minusPrice">
             <image class="minus-icon" src="/static/img/orderMinus.svg"></image>
-            <div class="flex-item flex-row flex-j-between">
-                <div class="minus-title">满减优惠</div>
-                <div class="minus-price" :style="{ color: $mainColor }">-¥{{ orderDetail.minusPrice }}</div>
-            </div>
-        </div>
-        <div class="all-price-box flex-row flex-a-center flex-j-between">
-            <div></div>
-            <div class="all-price-info flex-row flex-a-center">
-                <div class="origin-price">共计￥{{ orderDetail.orderOriginAmount }}</div>
-                <div class="discount-price">已优惠￥{{ orderDetail.minusPrice }}</div>
-                <div class="pay-price">
-                    小计<span class="pay-price-color" :style="{ color: $mainColor }">￥{{ orderDetail.payPrice }}</span>
-                </div>
-            </div>
-        </div>
-    </div>
+            <view class="flex-item flex-row flex-j-between">
+                <view class="minus-title">满减优惠</view>
+                <view class="minus-price" :style="{ color: $mainColor }">-¥{{ orderDetail.minusPrice }}</view>
+            </view>
+        </view>
+        <view class="all-price-box flex-row flex-a-center flex-j-between">
+            <view></view>
+            <view class="all-price-info flex-row flex-a-center">
+                <view class="origin-price">共计¥{{ orderDetail.orderOriginAmount }}</view>
+                <view class="discount-price">已优惠¥{{ orderDetail.minusPrice }}</view>
+                <view class="pay-price">
+                    小计<span class="pay-price-color" :style="{ color: $mainColor }">¥{{ orderDetail.payPrice }}</span>
+                </view>
+            </view>
+        </view>
+    </view>
 </template>
 
 <script lang="ts" setup>
 import OrderFoodItem from "@/components/OrderFoodItem.vue";
+import OrderFoodItemSpecifica from "@/components/OrderFoodItemSpecifica.vue";
 import { ShopItemI } from "@/interface/home";
 import { OrderDetailI } from "@/interface/order";
 import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
@@ -47,28 +54,25 @@ import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { OrderStoreI, useOrderStore } from "@/piniaStore/order";
 import { mapAction, mapMutation, mapState } from "@/utils/mapVuex";
 import router from "@/utils/router";
-import {toRefs} from 'vue'
+import { toRefs } from "vue";
 interface OrderStateF {
     orderDetail: ComputedStateI<OrderDetailI>;
     orderDetailShopInfo: ComputedStateI<ShopItemI>;
 }
 interface MutationF {
-    setBusinessType: ComputedMutationI<number>
-
+    setBusinessType: ComputedMutationI<number>;
 }
 interface ActionF {
-    getShopInfo: ComputedActionI<{shopID: number}>
-
+    getShopInfo: ComputedActionI<{ shopID: number }>;
 }
 // order store
 const orderStore: OrderStoreI = useOrderStore();
 const { orderDetail, orderDetailShopInfo }: OrderStateF = toRefs(orderStore.orderState);
 
 // home store
-const MenuStore: MenuStoreI = useMenuStore()
+const MenuStore: MenuStoreI = useMenuStore();
 // home action
-const { setBusinessType, getShopInfo} = MenuStore
-
+const { setBusinessType, getShopInfo } = MenuStore;
 
 async function toOrder() {
     await getShopInfo({

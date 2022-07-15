@@ -7,11 +7,11 @@
             <scroll-view scroll-y class="food-specification-list-scroll">
                 <view class="food-specification-list">
                     <view v-for="(specificationItem, index) in foodSpecificationInfo.specificationList" :key="index" class="food-specification-item">
-                        <view class="specification-name">{{ specificationItem.specificationName }}:</view>
+                        <view class="specification-name">{{ specificationItem.name }}:</view>
                         <view class="food-specification-detail-list flex-row flex-wrap">
-                            <view v-for="(specificationDetail, specificationIndex) in specificationItem.categoryList" :key="specificationIndex" class="food-specification-detail flex-row flex-a-center" :style="{ color: specificationIndex === foodSpecificationInfo.specificationSlectedIndexList[index] ? $mainColor : '', border: specificationIndex === foodSpecificationInfo.specificationSlectedIndexList[index] ? '1px solid ' + $mainColor : '' }" @click="change(index, specificationIndex)">
-                                <view class="food-specification-content flex-center line1"> {{ specificationDetail.specificationDetail }}</view>
-                                <view v-if="specificationDetail.specificationPrice > 0" class="food-specification-price flex-center" :style="{ 'border-left': specificationIndex === foodSpecificationInfo.specificationSlectedIndexList[index] ? '1px solid ' + $mainColor : '' }"> {{ specificationDetail.specificationPrice }}</view>
+                            <view v-for="(specificationDetailItem, specificationIndex) in specificationItem.categoryList" :key="specificationIndex" class="food-specification-detail flex-row flex-a-center" :style="{ color: specificationIndex === foodSpecificationInfo.specificationSlectedIndexList[index] ? $mainColor : '', border: specificationIndex === foodSpecificationInfo.specificationSlectedIndexList[index] ? '1px solid ' + $mainColor : '' }" @click="change(index, specificationIndex)">
+                                <view class="food-specification-content flex-center line1"> {{ specificationDetailItem.content }}</view>
+                                <view v-if="specificationDetailItem.price > 0" class="food-specification-price flex-center" :style="{ 'border-left': specificationIndex === foodSpecificationInfo.specificationSlectedIndexList[index] ? '1px solid ' + $mainColor : '' }"> ¥{{ specificationDetailItem.price }}</view>
                             </view>
                         </view>
                     </view>
@@ -23,10 +23,10 @@
                 <view v-if="foodSpecificationInfo.description" class="food-description">{{ foodSpecificationInfo.description }}</view>
                 <view class="food-price-order flex-row flex-j-between">
                     <div class="flex-row flex-a-end">
-                        <div class="food-price">¥{{ foodSpecificationInfo.price }}</div>
+                        <div class="food-price">¥{{foodaAddspecificaPrice}}</div>
                         <div v-if="foodSpecificationInfo.unit" class="food-unit">/{{ foodSpecificationInfo.unit }}</div>
                     </div>
-                    <FoodAddMinusItemSpecificaTion :foodItem="foodSpecificationInfo" type="foodSpecification" ></FoodAddMinusItemSpecificaTion>
+                    <FoodAddMinusItemSpecificaTion :foodItem="foodSpecificationInfo" type="foodSpecification"></FoodAddMinusItemSpecificaTion>
                 </view>
             </view>
             <image class="close-img" src="/static/img/user-menu/close-food-detail.png" mode="" @click.stop="closeFoodSpecification"></image>
@@ -65,6 +65,12 @@ const overlayAnimation = uni.createAnimation({
     duration: foodDetailTransitionTime,
     timingFunction: "ease-in-out",
 });
+const foodaAddspecificaPrice = computed(() => {
+    return foodSpecificationInfo.value.specificationSlectedIndexList.reduce((price, item, index) => {
+        price += foodSpecificationInfo.value.specificationList[index].categoryList[item].price;
+        return price
+    }, foodSpecificationInfo.value.price);
+});
 
 const detailAnimation = uni.createAnimation({
     duration: foodDetailTransitionTime,
@@ -72,7 +78,7 @@ const detailAnimation = uni.createAnimation({
 });
 const selectSpecificationText = computed(() => {
     return foodSpecificationInfo.value.specificationSlectedIndexList.reduce((str, value, index) => {
-        const specification: string = foodSpecificationInfo.value.specificationList[index].categoryList[value].specificationDetail;
+        const specification: string = foodSpecificationInfo.value.specificationList[index].categoryList[value].content;
         if (str) {
             str = `${str}、${specification}`;
         } else {
@@ -85,10 +91,9 @@ const selectSpecificationText = computed(() => {
 onMounted(() => {
     toStartAnimation();
     initSpecificationSlectedIndexList();
-
 });
 onLoad(() => {
-    console.log('onLoad')
+    console.log("onLoad");
     // initSpecificationSlectedIndexList();
 });
 
@@ -119,7 +124,7 @@ async function closeFoodSpecification() {
     toEndAnimation();
     await delaySync(foodDetailTransitionTime);
     setFoodSpecificationFlag(false);
-    initSpecificationSlectedIndexList()
+    initSpecificationSlectedIndexList();
     setFoodSpecificationInfo(initFoodItem);
 }
 function change(index: number, specificationIndex: number) {

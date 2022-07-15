@@ -32,12 +32,12 @@
                     <div class="order-again flex-row flex-ja-center" :style="{ color: $mainColor }" @click.stop="orderAgain(orderItem)">再来一单</div>
                     <div class="price-box flex-row flex-a-end">
                         <view class="minus-info">
-                            <text>已优惠：</text>
+                            <text>已优惠:</text>
                             <span class="minus-money-unit">¥</span>
                             <span>{{ orderItem.minusPrice }}</span>
                         </view>
                         <view class="pay-info">
-                            <span class="pay-price-title">支付：</span>
+                            <span class="pay-price-title">支付:</span>
                             <span class="pay-money-unit">¥</span>
                             <span>{{ orderItem.payPrice }}</span>
                         </view>
