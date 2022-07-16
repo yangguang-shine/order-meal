@@ -86,7 +86,6 @@ const idPre = "img-collect";
 const foodScrollHandle = debounce(handleScroll, 70);
 async function handleScroll(e: any) {
     const currentCollectFoodList = collectFoodList.value[collectTabIndex.value].foodList;
-    console.log(currentCollectFoodList);
     const { top, bottom } = collectFoodListBoxPositionInfo;
     for (let i = 0; i < currentCollectFoodList.length; i++) {
         const foodItem = currentCollectFoodList[i];
@@ -112,7 +111,6 @@ async function getCollectFoodListBoxPositionInfo(id: string) {
         top: res.top,
         bottom: res.bottom,
     };
-    console.log(collectFoodListBoxPositionInfo);
 }
 async function closeCartDetail() {
     toEndAnimation();

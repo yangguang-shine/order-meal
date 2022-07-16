@@ -1,11 +1,11 @@
 <template>
     <view class="order-info-container">
         <view class="shop-info flex-row flex-a-center flex-j-between">
-            <view class="flex-row flex-a-center">
-                <image class="shop-img"></image>
-                <view class="shop-name">{{ shopInfo.shopName }}</view>
+            <view class="flex-item flex-row flex-a-center">
+                <image class="shop-img" :src="shopInfo.fullImgPath"></image>
+                <view class="shop-name line1">{{ shopInfo.shopName }}</view>
             </view>
-            <view @click="continueOrder" class="continue-order flex-row flex-ja-center" :style="{ color: $mainColor }">继续点单</view>
+            <view @click="continueOrder" class="continue-order flex-row flex-ja-center flex-shrink" :style="{ color: $mainColor }">继续点单</view>
         </view>
         <view class="food-list" :animation="foodListAnimationData" :style="{ 'max-height': foodListMaxHeihgt }">
             <div v-for="(orderFoodItem, index) in orderFoodList" :key="index">
@@ -143,17 +143,22 @@ function continueOrder() {
     border-radius: 12rpx;
     .shop-info {
         height: 100rpx;
-        padding: 0 20rpx;
+        padding: 20rpx;
     }
     .shop-img {
-        width: 40rpx;
-        height: 40rpx;
-        padding-right: 20rpx;
+        width: 80rpx;
+        height: 80rpx;
+        border-radius: 40rpx;
+        margin: 0 20rpx;
+    }
+    .shop-info {
+        // width: 400rpx;
     }
     .shop-name {
         color: #333;
         font-weight: bold;
         font-size: 34rpx;
+        max-width: 360rpx;
     }
     .continue-order {
         // color: #666;

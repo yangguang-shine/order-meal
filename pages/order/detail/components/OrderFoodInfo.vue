@@ -1,7 +1,7 @@
 <template>
     <view class="order-food-info-container">
         <view class="shop-info-box line1 flex-row flex-a-center" @click="toOrder">
-            <view class="shop-name">{{ orderDetailShopInfo.shopName }}</view>
+            <view class="shop-name line1">{{ orderDetailShopInfo.shopName }}</view>
             <img class="arrow-right" src="/static/img/arrow-right.png" alt="" />
         </view>
         <view class="order-list-box">
