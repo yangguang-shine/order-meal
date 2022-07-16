@@ -7,6 +7,7 @@
             </view>
             <view @click="continueOrder" class="continue-order flex-row flex-ja-center flex-shrink" :style="{ color: $mainColor }">继续点单</view>
         </view>
+        
         <view class="food-list" :animation="foodListAnimationData" :style="{ 'max-height': foodListMaxHeihgt }">
             <div v-for="(orderFoodItem, index) in orderFoodList" :key="index">
                 <template v-if="orderFoodItem.orderSpecifaList.length">
