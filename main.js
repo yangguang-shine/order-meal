@@ -22,6 +22,7 @@ import getShopMinusList from '@/utils/getShopMinusList';
 
 import { createSSRApp } from 'vue'
 import * as Pinia from 'pinia';
+console.log(uni)
 export function createApp() {
 	const app = createSSRApp(App)
 	app.config.globalProperties.$myrouter = router

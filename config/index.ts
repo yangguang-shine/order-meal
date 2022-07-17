@@ -1,7 +1,20 @@
-
-export const host: string = 'http://dev.jr.jd.com:9999'
-export const shopImgPath: string = 'http://dev.jr.jd.com:9999/image/shop'
-export const foodImgPath:string = 'http://dev.jr.jd.com:9999/image/food'
-export const commonImgPath:string = 'http://dev.jr.jd.com:9999/image/common'
-export const defaultFoodImg:string = 'http://dev.jr.jd.com:9999/image/food/default.png'
-export const requestHost: string = "http://dev.jr.jd.com:8899/api"
+  
+const devTestProduce = true
+export let domain = devTestProduce ? 'http://dev.jr.jd.com:9999' :  `http://r329sx.natappfree.cc`
+export let requestHost: string = `${domain}/api`
+if (process.env.NODE_ENV === 'development') {
+	console.log('开发环境');
+	domain = `http://dev.jr.jd.com:9999`
+	requestHost = "http://dev.jr.jd.com:8899/api"
+} else {
+	console.log('生产环境');
+	// domain = `http://vpvdtr.natappfree.cc`;
+	// requestHost: string = `${domain}/api`
+}
+// export const domain = `http://vpvdtr.natappfree.cc`
+export const host: string = `${domain}`
+export const shopImgPath: string = `${domain}/image/shop`
+export const foodImgPath:string = `${domain}/image/food`
+export const commonImgPath:string = `${domain}/image/common`
+export const defaultFoodImg:string = `${domain}/image/food/default.png`
+// export const requestHost: string = "http://dev.jr.jd.com:8899/api"

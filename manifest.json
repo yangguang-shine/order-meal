@@ -76,7 +76,8 @@
     },
     "h5" : {
         "router" : {
-            "mode" : "history"
+            "mode" : "history",
+            "base" : "/h5/"
         },
         "title" : "用户",
         "domain" : "",
