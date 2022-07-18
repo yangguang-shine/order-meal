@@ -1,6 +1,6 @@
 <template>
     <view class="banner-container">
-        <swiper class="swiper-box"  autoplay interval="200000" circular>
+        <swiper class="swiper-box" autoplay interval="2000" circular>
             <swiper-item v-for="(swiperItem, index) in swiperList" :key="index" class="flex-row flex-ja-center" @click="clickSwiperItem(swiperItem)">
                 <image class="swiper-item-img" :src="swiperItem.fullImgPath"></image>
                 <!-- <view class="swiper-item uni-bg-red">{{ swiperItem.title }}</view> -->
@@ -28,20 +28,20 @@ interface SwiperItemI {
 // })
 const swiperList: SwiperItemI[] = reactive([
     {
-        fullImgPath: `${commonImgPath}/578809225709769.jpeg`,
+        fullImgPath: `${commonImgPath}/img-1.jpeg`,
 
         title: "堂食",
         name: "shop",
         businessType: 1,
     },
     {
-        fullImgPath: `${commonImgPath}/578809315094131.jpeg`,
+        fullImgPath: `${commonImgPath}/img-2.jpeg`,
         title: "外卖",
         name: "shop",
         businessType: 2,
     },
     {
-        fullImgPath: `${commonImgPath}/578809268289436.jpeg`,
+        fullImgPath: `${commonImgPath}/img-3.jpeg`,
 
         title: "自提",
         name: "shop",
@@ -64,8 +64,9 @@ function clickSwiperItem(swiperItem: SwiperItemI) {
     // height: 200rpx;
     // background-color: red;
     margin: 20rpx 20rpx 0;
-        padding: 20rpx;
-        background-color: #fff;
+    padding: 20rpx;
+    background-color: #fff;
+    border-radius: 12rpx;
 
     .swiper-box {
         height: 206rpx;
@@ -77,7 +78,6 @@ function clickSwiperItem(swiperItem: SwiperItemI) {
         width: 658rpx;
         height: 206rpx;
         border-radius: 12rpx;
-
     }
 }
 </style>

@@ -3,8 +3,13 @@
         <view class="search-box flex-row flex-ja-center">
             <input type="text" class="search-input flex-item" placeholder="请输入搜索关键字" :value="modelValue" @input="inputChange($event)" />
             <view class="cancel" @click="clickCancel">取消</view>
-            <view class="search-icon"></view>
-            <view class="clear-input" @click="clearInput"></view>
+
+            <!-- <image class="search-icon"></image> -->
+                <image class="search-icon" src='/static/img/common/search.png'></image>
+
+
+                <image class="clear-input" v-if="modelValue" @click="clearInput" src='/static/img/common/close1.png'></image>
+
             <view class="search-title">{{ modelValue ? resultTitle : defaultTitle }}</view>
         </view>
         <scroll-view scroll-y class="result-box" id="result-box" v-if="modelValue" @scroll="foodScrollHandle">
@@ -41,6 +46,7 @@ interface PropsI {
     animationTime?: number;
     resultTitle?: string;
     defaultTitle?: string;
+    type?: string
 }
 interface EmitI {
     (e: "clickResultItem", id: number): void;
@@ -55,6 +61,9 @@ const idPre = "img-search";
 const foodScrollHandle = debounce(handleScroll, 70);
 const currentInstance = getCurrentInstance();
 async function handleScroll() {
+    if (props.type !== 'searchFood') {
+        return
+    }
     const currentCollectFoodList = props.modelValue ? props.searchResultList : props.defaultList;
     const searchListBoxId = props.modelValue ? "#result-box" : "#default-box";
     const res = await selectQuery(searchListBoxId, currentInstance);
@@ -85,6 +94,7 @@ const props: PropsI = withDefaults(defineProps<PropsI>(), {
     animationTime: searchDefaultTransitionTime,
     resultTitle: "搜索结果",
     defaultTitle: "推荐结果",
+    type: ''
 });
 const emit = defineEmits<EmitI>();
 const { overlayAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
@@ -158,20 +168,21 @@ async function clickCancel() {
             margin-left: 20rpx;
         }
         .search-icon {
-            position: absolute;
-            top: 52rpx;
-            left: 60rpx;
-            width: 16rpx;
-            height: 16rpx;
-            background-color: red;
+          position: absolute;
+            top: 35rpx;
+            left: 40rpx;
+            width: 50rpx;
+            height: 50rpx;
+            // transform: translateY(-50%);
         }
         .clear-input {
             position: absolute;
-            top: 52rpx;
-            right: 160rpx;
-            width: 16rpx;
-            height: 16rpx;
-            background-color: red;
+            top: 35rpx;
+            right: 140rpx;
+            width: 30rpx;
+            height: 30rpx;
+            padding: 10rpx;
+            // background-color: red;
         }
         .search-title {
             position: absolute;

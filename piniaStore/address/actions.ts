@@ -19,6 +19,11 @@ async function addAddress(addressInfo: AddressItemI) {
 }
 async function findAddress(addressID: number) {
     const addressInfo: AddressItemI = await fetch("address/find", { addressID });
+    if (!addressInfo.address1) {
+        addressInfo.address1 = "北京市丰台区顶秀金瑞家园"
+        addressInfo.latitude = "111"
+        addressInfo.longitude = "222"
+    }
     return addressInfo;
 }
 async function editAddress(addressInfo: AddressItemI) {

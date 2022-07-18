@@ -1,7 +1,7 @@
 <template>
     <view class="tools-list-container flex-row flex-wrap">
         <view class="tool-item flex-col flex-a-center" v-for="(toolItem, index) in toolsList" :key="index" @click="toToolDetail(toolItem)">
-            <image class="tool-icon"></image>
+            <image class="tool-icon" :src="toolItem.icon"></image>
             <view class="tool-title line1 text-center">
                 {{ toolItem.title }}
             </view>
@@ -10,6 +10,7 @@
 </template>
 
 <script lang="ts" setup>
+import { commonImgPath } from "@/config/";
 import router from "@/utils/router";
 import { reactive } from "vue";
 interface ToolItemI {
@@ -20,23 +21,30 @@ interface ToolItemI {
 }
 const toolsList: ToolItemI[] = reactive([
     {
-        icon: "",
+        icon: `${commonImgPath}/tang-shi.png`,
         title: "堂食",
         name: "shop",
         businessType: 1,
     },
     {
-        icon: "",
+        icon: `${commonImgPath}/wai-mai.png`,
+
         title: "外卖",
         name: "shop",
         businessType: 2,
     },
     {
-        icon: "",
+        icon: `${commonImgPath}/zi-ti.png`,
         title: "自提",
         name: "shop",
         businessType: 3,
-    }
+    },
+    {
+        icon: `${commonImgPath}/order.png`,
+        title: "订单",
+        name: "order/list",
+        businessType: 0,
+    },
 ] as ToolItemI[]);
 
 function toToolDetail(toolItem: ToolItemI) {
@@ -47,6 +55,10 @@ function toToolDetail(toolItem: ToolItemI) {
                 businessType: toolItem.businessType,
             },
         });
+    } else if (toolItem.name === 'order/list') {
+        router.switchTabTo({
+            name: toolItem.name
+        })
     }
 }
 </script>
@@ -70,7 +82,7 @@ function toToolDetail(toolItem: ToolItemI) {
     .tool-icon {
         width: 90rpx;
         height: 90rpx;
-        background-color: red;
+        // background-color: red;
     }
     .tool-title {
         padding-top: 12rpx;

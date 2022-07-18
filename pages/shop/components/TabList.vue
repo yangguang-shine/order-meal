@@ -3,7 +3,8 @@
         <view v-for="(tabItem, index) in tabList" :key="index" class="tab-item flex-item flex-row flex-ja-center" :class="selectedTabItem.type === tabItem.type ? 'select-tab-item' : ''" @click="clickTabItem(tabItem)">{{ tabItem.title }}</view>
         <div class="tab-item flex-item flex-row flex-ja-center">
             <view class="search-box flex-row flex-ja-center" @click.stop="toSearch">
-                <view class="search-img"></view>
+                <image class="search-icon" src='/static/img/common/search.png'></image>
+
                 <view class="search-title">搜索</view>
             </view>
         </div>
@@ -101,14 +102,14 @@ function toSearch() {
         border: 1px solid;
         position: relative;
         border-radius: 25rpx;
-        .search-img {
+        .search-icon {
             position: absolute;
             top: 50%;
-            left: 16rpx;
+            left: 10rpx;
             transform: translateY(-50%);
-            width: 25rpx;
-            height: 25rpx;
-            background-color: #ccc;
+            width: 40rpx;
+            height: 40rpx;
+            // background-color: #ccc;
             border-radius: 50%;
         }
         .search-title {

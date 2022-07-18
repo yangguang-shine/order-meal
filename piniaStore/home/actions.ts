@@ -18,6 +18,7 @@ async function getRecommandShopList( { type = "", businessType = 2 }: ShopListPa
         latitude: addressState.defaultAddress.latitude,
         longitude: addressState.defaultAddress.longitude,
     });
+    data.push(...data)
     const recommandShopList: ShopItemI[] = (data || []).map(
         (item: OriginShopItemI): ShopItemI => ({
             ...item,
@@ -26,33 +27,9 @@ async function getRecommandShopList( { type = "", businessType = 2 }: ShopListPa
             ...getBusinessTypeInfo(item.businessTypes),
         })
     );
-    // recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList));
-    // recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList))
     homeState.recommandShopList = recommandShopList
     return recommandShopList || [];
 }
-
-// async function getShopList({ type = "", businessType = 2 }: ShopListParamsI = {}) {
-//     let data: OriginShopItemI[] = await fetch("shop/list", {
-//         type,
-//         businessType,
-//         latitude: addressState.defaultAddress.latitude,
-//         longitude: addressState.defaultAddress.longitude,
-//     });
-//     const shopList: ShopItemI[] = (data || []).map(
-//         (item: OriginShopItemI): ShopItemI => ({
-//             ...item,
-//             minusList: JSON.parse(item.minus),
-//             fullImgPath: `${shopImgPath}/${item.imgUrl}`,
-//             ...getBusinessTypeInfo(item.businessTypes),
-//         })
-//     );
-//     // recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList));
-//     // recommandShopList.push(...recommandShopList.concat(recommandShopList).concat(recommandShopList).concat(recommandShopList).concat(recommandShopList))
-//     commit("setShopList", shopList);
-//     shopState.shopList = shopList
-//     return shopList || [];
-// }
 
 function setTopAddressWidthFlag(topAddressWidthFlag: boolean): void {
     homeState.topAddressWidthFlag = topAddressWidthFlag;

@@ -4,7 +4,7 @@
             <div class="title">昵称:</div>
             <input class="key-input" type="text" v-model="nicknameInput" />
             <div class="tips">限4-16个字符，一个汉字为2个字符</div>
-            <div class="confirm-button flex-row flex-ja-center" @click="toShowConfrimModal">确认</div>
+            <div class="confirm-button flex-row flex-ja-center" :style="{background: $mainColor}" @click="toShowConfrimModal">确认</div>
         </div>
         <!-- 后续to do -->
         <div v-else-if="key === 'passward'"></div>
@@ -112,7 +112,7 @@ page {
     .confirm-button {
         margin-top: 40rpx;
         height: 80rpx;
-        background-color: red;
+        // background-color: red;
         color: #fff;
         font-weight: bold;
         font-size: 32rpx;

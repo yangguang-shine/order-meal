@@ -1,6 +1,6 @@
 <template>
     <div class="search-food-container">
-        <Search :searchResultList="searchFoodList" :defaultList="categoryFoodList" v-model="searchValue" :bottom="minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightPX : footerInfoHeightPX" @clickCancel="clickCancel">
+        <Search :searchResultList="searchFoodList" :defaultList="categoryFoodList" v-model="searchValue" :bottom="minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightPX : footerInfoHeightPX" @clickCancel="clickCancel" type="searchFood">
             <!-- <FoodItem v-for="searchFoodItem in searchFoodList" :key="searchFoodItem.foodID" class="search-food-item" :foodItem="searchFoodItem" @clickFoodItem="toShowFoodDetail"></FoodItem> -->
 
             <template #result>

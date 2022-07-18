@@ -287,7 +287,7 @@ page {
         padding: 4rpx 8rpx;
         font-size: 22rpx;
         line-height: 24rpx;
-        background-color: red;
+        // background-color: red;
         color: #fff;
     }
     .common-error-box {

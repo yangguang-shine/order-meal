@@ -1,16 +1,21 @@
 <template>
     <view class="com-top-bar-container flex-row flex-a-center flex-j-between">
         <view class="left flex-row flex--ja-center">
-            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '点餐' }" @click="clickTopBar('点餐')" >点餐</view>
-            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '商家' }"  @click="clickTopBar('商家')">商家</view>
+            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '点餐' }" @click="clickTopBar('点餐')">点餐</view>
+            <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '商家' }" @click="clickTopBar('商家')">商家</view>
         </view>
         <view class="select-top-bar-bottom" :style="{ background: shopInfo.mainColor, left: topBarInfo === '点餐' ? '100rpx' : '300rpx' }"></view>
         <view class="right flex-row flex-ja-center" :animation="overlayAnimationData">
             <view class="search-box flex-row flex-ja-center" @click="toSearch">
-                <view class="search-img"></view>
+                <!-- <view class="search-icon"></view> -->
+                <image class="search-icon" src="/static/img/common/search.png"></image>
+
                 <view class="search-title">想吃点什么</view>
             </view>
-            <view class="pattern-icon" @click="changeShopInfoMode"></view>
+            <image class="pattern-icon" v-if="shopInfo.mode === 'vertical'" @click="changeShopInfoMode" src="/static/img/common/vertical.png"></image>
+            <image class="pattern-icon" v-else-if="shopInfo.mode === 'horizontal'" @click="changeShopInfoMode" src="/static/img/common/horizontal.png"></image>
+
+            <!-- <view class="pattern-icon" @click="changeShopInfoMode"></view> -->
         </view>
         <!-- <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '点餐' }" @click="clickTopBar('点餐')" :style="{ color: topBarInfo === '点餐' ? shopInfo.mainColor : '' }">点餐</view>
             <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '商家' }" :style="{ color: topBarInfo === '商家' ? shopInfo.mainColor : '' }" @click="clickTopBar('商家')">商家</view>
@@ -100,7 +105,7 @@ function changeShopInfoMode() {
     box-sizing: border-box;
     border-bottom: 1rpx solid #e4e4e4;
     background-color: #ffffff;
-color: #666;
+    color: #666;
     z-index: 200;
     .left,
     .right {
@@ -131,10 +136,10 @@ color: #666;
         border: 1px solid;
         position: relative;
         border-radius: 25rpx;
-        .search-img {
-            width: 30rpx;
-            height: 30rpx;
-            background-color: #ccc;
+        .search-icon {
+            width: 40rpx;
+            height: 40rpx;
+            // background-color: #ccc;
             border-radius: 50%;
         }
         .search-title {
@@ -147,7 +152,7 @@ color: #666;
         width: 40rpx;
         height: 40rpx;
         margin: 0 30rpx;
-        background-color: red;
+        // background-color: red;
     }
 }
 </style>

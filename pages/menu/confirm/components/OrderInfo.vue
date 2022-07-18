@@ -133,7 +133,8 @@ function toggleDisplay() {
     }
 }
 function continueOrder() {
-    router.back();
+    // router.back();
+    uni.navigateBack(1)
 }
 </script>
 

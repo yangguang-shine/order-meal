@@ -6,7 +6,10 @@
                 <view class="address-info flex-item line1">{{defaultAddress.address1 || '请选择地址'}}</view>
                 <image src="/static/img/user-home/home-address-arrow-icon.png" class="arrow-right-icon flex-shrink" mode=""></image>
             </view>
-            <view class="input-search line1 flex-item flex-row flex-a-center" @click.stop="toSearchShop">请输入商家名称</view>
+            <view class="input-search line1 flex-item flex-row flex-a-center" @click.stop="toSearchShop">
+                <image class="search-icon" src='/static/img/common/search.png'></image>
+                请输入商家名称
+                </view>
         </view>
     </view>
 </template>
@@ -101,10 +104,18 @@ const toSearchShop = () => {
         .input-search {
             position: relative;
             height: 60rpx;
-            padding: 0 60rpx;
+            padding: 0 70rpx;
             background-color: #fff;
             border-radius: 30rpx;
             color: #999;
+        }
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 10rpx;
+            width: 50rpx;
+            height: 50rpx;
+            transform: translateY(-50%);
         }
     }
 }

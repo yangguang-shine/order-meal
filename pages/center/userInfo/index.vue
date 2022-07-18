@@ -35,7 +35,7 @@
                 </div>
             </div>
         </div>
-        <div class="logout-button flex-row flex-ja-center" @click="showLogoutModal">退出该账号</div>
+        <div class="logout-button flex-row flex-ja-center" :style="{color: $mainColor}" @click="showLogoutModal">退出该账号</div>
     </div>
 </template>
 
@@ -131,7 +131,7 @@ page {
         width: 100%;
         height: 100rpx;
         font-size: 30rpx;
-        color: rgb(248, 69, 69);
+        // color: rgb(248, 69, 69);
         background-color: #fff;
     }
 }

@@ -14,6 +14,7 @@ async function getShopList(payload: { businessType: number; type: string }) {
         latitude: addressState.defaultAddress.latitude,
         longitude: addressState.defaultAddress.longitude,
     });
+    data.push(...data)
     const shopList: ShopItemI[] = (data || []).map(
         (item: OriginShopItemI): ShopItemI => ({
             ...item,

@@ -4,7 +4,7 @@
         <view class="explain-box" :animation="mainAnimationData">
             <view class="title text-center">包装费说明</view>
             <view class="content">依据国家有关政策要求，不得免费提供塑料购物袋。为保障您的商品安全、卫生送达，需基于外卖自提业务特性对您的外卖商品使用塑料购物袋等材料进行打包，收取相应的包装费用。</view>
-            <view class="close-img" @click.stop="close"></view>
+            <image class="close-img"  src="/static/img/common/close1.png" @click.stop="close"></image>
         </view>
     </view>
 </template>
@@ -79,7 +79,7 @@ async function close() {
             right: 20rpx;
             width: 40rpx;
             height: 40rpx;
-            background-color: red;
+            // background-color: red;
         }
     }
 }

@@ -2,7 +2,7 @@
     <view class="address-edit-container">
         <div class="item flex-row flex-a-center">
             <div class="title text-center">姓名</div>
-            <input class="flex-item" type="text" v-model="addressInfo.name" />
+            <input class="flex-item input-item" type="text" v-model="addressInfo.name" />
         </div>
         <div class="item flex-row flex-a-center">
             <div class="title text-center"></div>
@@ -13,15 +13,15 @@
         </div>
         <div class="item flex-row flex-a-center">
             <div class="title text-center">手机号</div>
-            <input class="flex-item" type="text" v-model="addressInfo.mobile" />
+            <input class="flex-item input-item" type="text" v-model="addressInfo.mobile" />
         </div>
         <div class="item flex-row flex-a-center">
             <div class="title text-center">地址</div>
-            <div class="flex-item" @click="chooseAddress" :style="{ color: addressInfo.address1 ? '' : '#999' }">{{ addressInfo.address1 || "请选择地址" }}</div>
+            <div class="flex-item input-item line1" @click="chooseAddress" :style="{ color: addressInfo.address1 ? '' : '#999' }">{{ addressInfo.address1 || "请选择地址" }}</div>
         </div>
         <div class="item flex-row flex-a-center">
             <div class="title text-center">门牌号</div>
-            <input type="text" v-model="addressInfo.address2" />
+            <input type="text" class="flex-item input-item" v-model="addressInfo.address2" />
         </div>
         <div class="flex-row flex-j-center">
             <div v-if="routerAddressID" class="button" :style="{ 'background-color': $mainColor }" @click="toEditAddress">修改</div>
@@ -45,12 +45,12 @@ interface ActionF {
     editAddress: ComputedActionI<AddressItemI>;
 }
 // address store
-const addressStore: AddressStoreI = useAddressStore()
+const addressStore: AddressStoreI = useAddressStore();
 // address action
-const { addAddress, findAddress, editAddress } = addressStore
+const { addAddress, findAddress, editAddress } = addressStore;
 let routerAddressID: RefI<number> = ref("");
 interface OptionI {
-    addressID: string
+    addressID: string;
 }
 onLoad((option: OptionI) => {
     if (option.addressID) {
@@ -62,10 +62,10 @@ let addressInfo: AddressItemI = reactive<AddressItemI>({
     name: "",
     sex: 1,
     mobile: "",
-    address1: "",
+    address1: "北京市丰台区顶秀金瑞家园",
     address2: "",
-    latitude: "",
-    longitude: "",
+    latitude: "111",
+    longitude: "222",
 });
 async function init() {
     try {
@@ -83,6 +83,7 @@ async function toFindAddress() {
 }
 async function toAddAddress() {
     try {
+        if (!checkAddress()) return;
         showLoading();
         await addAddress(addressInfo);
         hideLoading();
@@ -98,6 +99,7 @@ async function toAddAddress() {
 }
 async function toEditAddress() {
     try {
+        if (!checkAddress()) return;
         showLoading();
         await editAddress({
             ...addressInfo,
@@ -113,6 +115,32 @@ async function toEditAddress() {
     } finally {
         hideLoading();
     }
+}
+function checkAddress() {
+    let flag = true;
+    if (!addressInfo.name) {
+        flag = false;
+        showToast({
+            title: "请输入姓名",
+        });
+    } else if (!addressInfo.mobile) {
+        flag = false;
+
+        showToast({
+            title: "请输入手机号",
+        });
+    } else if (!addressInfo.address1) {
+        flag = false;
+        showToast({
+            title: "请选择地址",
+        });
+    } else if (!addressInfo.address2) {
+        flag = false;
+        showToast({
+            title: "请输入门牌号",
+        });
+    }
+    return flag;
 }
 function changeSex(index: number) {
     addressInfo.sex = index;
@@ -136,9 +164,15 @@ async function chooseAddress() {
         success: (res: any) => {
             console.log("res");
             console.log(res);
-            addressInfo.address1 = res.address;
-            addressInfo.latitude = res.latitude;
-            addressInfo.longitude = res.longitude;
+            if (res.address && res.latitude && res.longitude) {
+                addressInfo.address1 = res.address;
+                addressInfo.latitude = res.latitude;
+                addressInfo.longitude = res.longitude;
+            } else {
+                showToast({
+                    title: "地址获取失败",
+                });
+            }
         },
     });
 }
@@ -154,7 +188,7 @@ page {
     .item {
         padding: 20rpx 0;
         height: 60rpx;
-        line-height: 1.2rpx;
+        // line-height: 1.2rpx;
         // border-bottom: 2rpx solid #eee;
     }
     input {
@@ -182,6 +216,12 @@ page {
         text-align: center;
         border-radius: 40rpx;
         color: #fff;
+    }
+    .input-item {
+        margin-right: 80rpx;
+        height: 60rpx;
+        border-bottom: 1rpx solid #ccc;
+        line-height: 60rpx;
     }
 }
 </style>

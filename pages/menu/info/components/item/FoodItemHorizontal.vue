@@ -4,9 +4,9 @@
         <view class="food-name line2">
             {{ foodItem.foodName }}<span class="food-unit">/{{ foodItem.unit }}</span>
         </view>
-        <view class="food-price-add flex-row flex-a-center flex-j-between" @click.stop="addCount($event)" :style="{ color: $mainColor }">
+        <view class="food-price-add flex-row flex-a-center flex-j-between"  :style="{ color: $mainColor }">
             <view class="food-price" :style="{ color: $mainColor }">¥{{ foodItem.price }}</view>
-            <view v-if="foodItem.reserveCount > 0" class="food-add" :id="type + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }">
+            <view v-if="foodItem.reserveCount > 0" class="food-add" :id="type + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
                 <ReserveRemain v-if="foodItem.showReserveCountFlag" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
             </view>
             <ReserveNotEnough v-else></ReserveNotEnough>

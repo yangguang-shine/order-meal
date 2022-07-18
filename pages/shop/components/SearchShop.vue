@@ -1,5 +1,5 @@
 <template>
-    <Search :searchResultList="searchShopList" v-model="searchValue" @clickCancel="clickCancel">
+    <Search :searchResultList="searchShopList"  :defaultList="shopList"  v-model="searchValue" @clickCancel="clickCancel">
         <template #result>
             <Shop v-for="searchShopItem in searchShopList" :key="searchShopItem.shopID" class="search-shop-item" :shopItem="searchShopItem" @clickShopItem="clickShopItem" :showExtraFlag="routerBusinessType === 2"></Shop>
         </template>
@@ -69,44 +69,44 @@ async function clickCancel() {
 </script>
 
 <style lang="scss" scoped>
-.tab-list-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80rpx;
-    background-color: #fff;
-    z-index: 100;
-    .tab-item {
-        color: #666;
-        height: 100%;
-    }
-    .select-tab-item {
-        font-weight: bold;
-        color: #333;
-    }
-    .search-box {
-        width: 160rpx;
-        height: 50rpx;
-        color: #ccc;
-        border: 1px solid;
-        position: relative;
-        border-radius: 25rpx;
-        .search-img {
-            position: absolute;
-            top: 50%;
-            left: 16rpx;
-            transform: translateY(-50%);
-            width: 25rpx;
-            height: 25rpx;
-            background-color: #ccc;
-            border-radius: 50%;
-        }
-        .search-title {
-            margin-left: 8rpx;
-            font-size: 24rpx;
-            color: #ccc;
-        }
-    }
-}
+// .tab-list-container {
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 80rpx;
+//     background-color: #fff;
+//     z-index: 100;
+//     .tab-item {
+//         color: #666;
+//         height: 100%;
+//     }
+//     .select-tab-item {
+//         font-weight: bold;
+//         color: #333;
+//     }
+//     .search-box {
+//         width: 160rpx;
+//         height: 50rpx;
+//         color: #ccc;
+//         border: 1px solid;
+//         position: relative;
+//         border-radius: 25rpx;
+//         .search-img {
+//             position: absolute;
+//             top: 50%;
+//             left: 16rpx;
+//             transform: translateY(-50%);
+//             width: 25rpx;
+//             height: 25rpx;
+//             background-color: #ccc;
+//             border-radius: 50%;
+//         }
+//         .search-title {
+//             margin-left: 8rpx;
+//             font-size: 24rpx;
+//             color: #ccc;
+//         }
+//     }
+// }
 </style>

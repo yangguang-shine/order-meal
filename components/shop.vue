@@ -73,7 +73,7 @@ function toClickShopItem() {
     font-size: 28rpx;
     color: #333;
     // line-height: 1.1;
-    padding: 20rpx;
+    padding: 30rpx;
     background-color: #fff;
     // margin-bottom: 10rpx;
     // border-radius: 12rpx;

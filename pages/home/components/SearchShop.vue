@@ -1,6 +1,6 @@
 <template>
     <view class="search-shop-container">
-        <Search :searchResultList="searchShopList" v-model="searchValue" :bottom="tabBarHeightPX" @clickCancel="clickCancel">
+        <Search :searchResultList="searchShopList" :defaultList="recommandShopList" v-model="searchValue" :bottom="tabBarHeightPX" @clickCancel="clickCancel">
             <template #result>
                 <Shop v-for="searchShopItem in searchShopList" :key="searchShopItem.shopID" class="search-shop-item" :shopItem="searchShopItem" @clickShopItem="clickShopItem" showExtraFlag></Shop>
             </template>
@@ -11,9 +11,11 @@
         <view v-if="showSelectTypeFlag" class="select-type-box flex-row flex-ja-center" :style="{ bottom: tabBarHeightPX + 'px' }">
             <view class="overlay" :animation="overlayAnimationData" @click.stop="closeSlelectType"></view>
             <view class="type-list flex-col flex-ja-center" :animation="mainAnimationData">
-                <view class="title text-center">{{ selectedShopItem.shopName }}的业务类型的业务类型</view>
-                <view class="type-item flex-row flex-ja-center" v-for="(typeItem, index) in selectedShopItem.businessTitleList" :key="index" @click.stop="confirmType(index)">{{ typeItem }}</view>
-                <view class="close-img" @click.stop="closeSlelectType"></view>
+                <view class="title text-center">{{ selectedShopItem.shopName }}的业务类型</view>
+                <view class="type-item flex-row flex-ja-center" v-for="(typeItem, index) in selectedShopItem.businessTitleList" :key="index" @click.stop="confirmType(index)" :style="{color: $mainColor}">{{ typeItem }}</view>
+                <!-- <view class="close-img" @click.stop="closeSlelectType"></view> -->
+                <image class="close-img" @click.stop="closeSlelectType" src='/static/img/common/close1.png'></image>
+
             </view>
         </view>
     </view>
@@ -143,15 +145,17 @@ function confirmType(index: number) {
             width: 40rpx;
             height: 40rpx;
             padding: 8rpx;
-            background-color: red;
+            // background-color: red;
         }
         .title {
             font-weight: bold;
-            font-size: 28rpx;
+            font-size: 32rpx;
+            line-height: 40rpx;
+            margin-bottom: 10rpx;
             // text-align: center;
         }
         .type-item {
-            font-size: 36rpx;
+            font-size: 32rpx;
             height: 70rpx;
             margin-top: 30rpx;
             width: 100%;

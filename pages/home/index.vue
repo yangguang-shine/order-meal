@@ -5,7 +5,7 @@
         <Banner></Banner>
         <RecommandInfo></RecommandInfo>
         <SearchShop v-if="searchShopFlag" :bottom="tabBarHeightPX"></SearchShop>
-        <FixedImg></FixedImg>
+        <FixedImg ref="refFixedImg"></FixedImg>
     </view>
 </template>
 
