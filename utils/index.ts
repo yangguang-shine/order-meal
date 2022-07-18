@@ -188,40 +188,17 @@ export function selectQuery(id: string, currentInstance?: any): Promise<any> {
         query
             .select(id)
             .boundingClientRect((res: any = {}) => {
-                res.top = res.top + navigationBarHeightPX;
-                res.bottom = res.bottom + navigationBarHeightPX;
+				console.log(id)
+				console.log(res)
+                if (process.env.NODE_ENV === 'development') {
+                    res.top = res.top + navigationBarHeightPX;
+                    res.bottom = res.bottom + navigationBarHeightPX;
+                } else {
+                    console.log('生产环境');
+                }
                 resolve(res);
             })
             .exec();
     });
-
-    // if (currentInstance) {
-    //     return new Promise((resolve, reject) => {
-    //         uni.createSelectorQuery()
-    //             .in(currentInstance)
-    //             .select(id)
-    //             .boundingClientRect((res: any) => {
-    //                 console.log("navigationBarHeightPX");
-    //                 console.log(navigationBarHeightPX);
-    //                 res.top = res.top + navigationBarHeightPX;
-    //                 res.bottom = res.bottom + navigationBarHeightPX;
-    //                 resolve(res);
-    //             })
-    //             .exec();
-    //     });
-    // } else {
-    //     return new Promise((resolve, reject) => {
-    //         uni.createSelectorQuery()
-    //             .select(id)
-    //             .boundingClientRect((res: any) => {
-    //                 console.log("navigationBarHeightPX");
-    //                 console.log(navigationBarHeightPX);
-    //                 res.top = res.top + navigationBarHeightPX;
-    //                 res.bottom = res.bottom + navigationBarHeightPX;
-    //                 resolve(res);
-    //             })
-    //             .exec();
-    //     });
-    // }
 }
 

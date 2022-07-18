@@ -5,7 +5,7 @@ export let requestHost: string = `${domain}/api`
 if (process.env.NODE_ENV === 'development') {
 	console.log('开发环境');
 	domain = `http://dev.jr.jd.com:9999`
-	requestHost = "http://dev.jr.jd.com:8899/api"
+	requestHost = "http://dev.jr.jd.com:6789/api"
 } else {
 	console.log('生产环境');
 	// domain = `http://vpvdtr.natappfree.cc`;
@@ -17,4 +17,4 @@ export const shopImgPath: string = `${domain}/image/shop`
 export const foodImgPath:string = `${domain}/image/food`
 export const commonImgPath:string = `${domain}/image/common`
 export const defaultFoodImg:string = `${domain}/image/food/default.png`
-// export const requestHost: string = "http://dev.jr.jd.com:8899/api"
+// export const requestHost: string = "http://dev.jr.jd.com:6789/api"
