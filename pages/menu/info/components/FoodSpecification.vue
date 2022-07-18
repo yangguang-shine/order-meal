@@ -23,7 +23,7 @@
                 <view v-if="foodSpecificationInfo.description" class="food-description">{{ foodSpecificationInfo.description }}</view>
                 <view class="food-price-order flex-row flex-j-between">
                     <div class="flex-row flex-a-end">
-                        <div class="food-price">¥{{foodaAddspecificaPrice}}</div>
+                        <div class="food-price">¥{{ foodaAddspecificaPrice }}</div>
                         <div v-if="foodSpecificationInfo.unit" class="food-unit">/{{ foodSpecificationInfo.unit }}</div>
                     </div>
                     <FoodAddMinusItemSpecificaTion :foodItem="foodSpecificationInfo" type="foodSpecification"></FoodAddMinusItemSpecificaTion>
@@ -68,7 +68,7 @@ const overlayAnimation = uni.createAnimation({
 const foodaAddspecificaPrice = computed(() => {
     return foodSpecificationInfo.value.specificationSlectedIndexList.reduce((price, item, index) => {
         price += foodSpecificationInfo.value.specificationList[index].categoryList[item].price;
-        return price
+        return price;
     }, foodSpecificationInfo.value.price);
 });
 
@@ -172,7 +172,7 @@ function change(index: number, specificationIndex: number) {
     }
     .food-specification-list-scroll {
         min-height: 300rpx;
-        max-height: 600rpx;
+        max-height: 450rpx;
         padding: 0 30rpx;
         box-sizing: border-box;
     }

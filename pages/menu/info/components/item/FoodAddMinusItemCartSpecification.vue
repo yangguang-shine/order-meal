@@ -33,7 +33,7 @@ import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { AddItemI } from "./interface";
 interface PropsI {
     foodItem: FoodItemI;
-    orderSpecifaItem: OrderSpecifaItemI,
+    orderSpecifaItem: OrderSpecifaItemI;
 }
 interface CartChangeParamI {
     foodItem: FoodItemI;
@@ -57,10 +57,10 @@ const menuStore: MenuStoreI = useMenuStore();
 const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPositionInfo }: MenuStateF = toRefs(menuStore.menuState);
 // action
 const { cartChange, setCartDetailFlag, setCartImgAnimationFlag, setFoodSpecificationInfo, setFoodSpecificationFlag } = menuStore;
-const idPre = "id"
+const idPre = "id";
 const props: PropsI = withDefaults(defineProps<PropsI>(), {
     foodItem: {},
-    orderSpecifaItem: {}
+    orderSpecifaItem: {},
 });
 
 const addList: AddItemI[] = reactive([]);
@@ -107,9 +107,9 @@ watch(
         }
     }
 );
-async function getPositionInfo(): Promise<PositionInfoI> {
+async function getPositionInfo(id: string): Promise<PositionInfoI> {
     const currentInstance = getCurrentInstance();
-    const res = await selectQuery(`#${idPre}-${props.orderSpecifaItem.key}-${props.foodItem.foodID}`, currentInstance);
+    const res = await selectQuery(id, currentInstance);
     return {
         left: res.left,
         top: res.top,
@@ -120,9 +120,12 @@ async function addCount(e: any) {
     //     toShowFoodSpecification();
     //     return;
     // }
-    const addPositionInfo: PositionInfoI = await getPositionInfo();
-    const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.value.left;
-    const offsetTop: number = cartImgPositionInfo.value.top - addPositionInfo.top;
+
+    // 微信底部会根据上下滑动添加底部栏
+    const cartImgPositionInfo = await getPositionInfo("#cart-img-box");
+    const addPositionInfo: PositionInfoI = await getPositionInfo(`#${idPre}-${props.orderSpecifaItem.key}-${props.foodItem.foodID}`);
+    const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.left;
+    const offsetTop: number = cartImgPositionInfo.top - addPositionInfo.top;
     if (offsetLeft) {
         const addItem = {
             random: Math.random(),
@@ -140,7 +143,7 @@ async function addCount(e: any) {
         foodItem: props.foodItem,
         count: 1,
         type: "add",
-        specificationString: props.orderSpecifaItem.key
+        specificationString: props.orderSpecifaItem.key,
     });
 }
 
@@ -150,7 +153,7 @@ async function minusCount() {
         foodItem: props.foodItem,
         count: -1,
         type: "minus",
-        specificationString: props.orderSpecifaItem.key
+        specificationString: props.orderSpecifaItem.key,
     });
     if (cartCategoryList.value.length === 0 && cartDetailFlag.value) {
         setCartDetailFlag(false);

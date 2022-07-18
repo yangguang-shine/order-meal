@@ -16,7 +16,7 @@ export async function handleFoodCategoryListScroll({ categoryList, currentInstan
         const categoryItem: CategoryItemI = categoryList.value[i];
         const categoryItemPositionInfo = await selectQuery(`#${categoryItem.categoryIDMain}`, currentInstance);
         if (type === "vertical") {
-            if (topBarHeightPX <= categoryItemPositionInfo.top || categoryItemPositionInfo.bottom > topBarHeightPX) {
+            if (topBarHeightPX <= categoryItemPositionInfo.top + 1 || categoryItemPositionInfo.bottom - 1 > topBarHeightPX) {
                 setSelectedCategoryID(categoryItem.categoryID);
                 setCategoryIDMain("");
                 setCategoryIDAside(categoryItem.categoryIDAside);
@@ -28,7 +28,7 @@ export async function handleFoodCategoryListScroll({ categoryList, currentInstan
                 break;
             }
         } else if (type === "horizontal") {
-            if (categoryAsideBarHorizontalAndTopBarHeightPX <= categoryItemPositionInfo.top || categoryItemPositionInfo.bottom > categoryAsideBarHorizontalAndTopBarHeightPX) {
+            if (categoryAsideBarHorizontalAndTopBarHeightPX <= categoryItemPositionInfo.top + 1 || categoryItemPositionInfo.bottom -1 > categoryAsideBarHorizontalAndTopBarHeightPX) {
                 setSelectedCategoryID(categoryItem.categoryID);
                 setCategoryIDMain("");
                 setCategoryIDAside(categoryItem.categoryIDAside);

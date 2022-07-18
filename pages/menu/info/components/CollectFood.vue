@@ -80,7 +80,6 @@ watch(
         }
     }
 );
-const currentInstance = getCurrentInstance();
 const idPre = "img-collect";
 
 const foodScrollHandle = debounce(handleScroll, 70);
@@ -106,6 +105,7 @@ let collectFoodListBoxPositionInfo: {
     bottom: 0,
 };
 async function getCollectFoodListBoxPositionInfo(id: string) {
+    const currentInstance = getCurrentInstance();
     const res = await selectQuery(id, currentInstance);
     collectFoodListBoxPositionInfo = {
         top: res.top,

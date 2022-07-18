@@ -4,7 +4,7 @@
         <view class="food-name line2">
             {{ foodItem.foodName }}<span class="food-unit">/{{ foodItem.unit }}</span>
         </view>
-        <view class="food-price-add flex-row flex-a-center flex-j-between"  :style="{ color: $mainColor }">
+        <view class="food-price-add flex-row flex-a-center flex-j-between" :style="{ color: $mainColor }">
             <view class="food-price" :style="{ color: $mainColor }">¥{{ foodItem.price }}</view>
             <view v-if="foodItem.reserveCount > 0" class="food-add" :id="type + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
                 <ReserveRemain v-if="foodItem.showReserveCountFlag" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
@@ -36,7 +36,6 @@ import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { AddItemI } from "./interface";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 
-const currentInstance = getCurrentInstance();
 interface PropsI {
     foodItem: FoodItemI;
     type?: string;
@@ -80,9 +79,13 @@ async function addCount() {
         toShowFoodSpecification();
         return;
     }
-    const addPositionInfo: PositionInfoI = await getPositionInfo();
-    const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.value.left;
-    const offsetTop: number = cartImgPositionInfo.value.top - addPositionInfo.top;
+    // 微信底部会根据上下滑动添加底部栏
+    console.log(1111)
+    const cartImgPositionInfo = await getPositionInfo("#cart-img-box");
+    console.log(222)
+    const addPositionInfo: PositionInfoI = await getPositionInfo(`#${props.type}${props.foodItem.foodID}`);
+    const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.left;
+    const offsetTop: number = cartImgPositionInfo.top - addPositionInfo.top;
     if (offsetLeft) {
         const addItem = {
             random: Math.random(),
@@ -107,8 +110,9 @@ function toShowFoodSpecification() {
     setFoodSpecificationInfo(props.foodItem);
     setFoodSpecificationFlag(true);
 }
-async function getPositionInfo(): Promise<PositionInfoI> {
-    const res = await selectQuery(`#${props.type}${props.foodItem.foodID}`, currentInstance);
+async function getPositionInfo(id: string): Promise<PositionInfoI> {
+const currentInstance = getCurrentInstance();
+    const res = await selectQuery(id, currentInstance);
     return {
         left: res.left,
         top: res.top,

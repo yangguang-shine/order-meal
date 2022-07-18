@@ -18,7 +18,6 @@ import FoodItemHorizontal from "./item/FoodItemHorizontal.vue";
 import { getRpxToPx, selectQuery, systemInfo } from "@/utils/index";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { topBarHeightPX, minusPromotionsHeightRPX, footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX, categoryAsideBarHorizontalHeightRPX, categoryAsideBarHorizontalAndTopBarHeightPX } from "../infoConfig";
-const currentInstance = getCurrentInstance();
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
 
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
@@ -56,6 +55,7 @@ function toShowFoodDetail(foodItem: FoodItemI) {
 const foodScrollHandle = debounce(handleScroll, 70);
 
 async function handleScroll(e: any) {
+    const currentInstance = getCurrentInstance();
     handleFoodCategoryListScroll({
         categoryList,
         currentInstance,

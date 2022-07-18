@@ -60,14 +60,13 @@ const specificationOrderCount = computed(() => {
         const key = foodSpecificationInfo.value.specificationSlectedIndexList.join("");
         const lastOrderSpecificationItem = foodSpecificationInfo.value.orderSpecifaList[length - 1];
         if (lastOrderSpecificationItem.key === key) {
-            return foodSpecificationInfo.value.orderSpecifaList[length - 1].orderCount
+            return foodSpecificationInfo.value.orderSpecifaList[length - 1].orderCount;
         } else {
-            const findIndex = foodSpecificationInfo.value.orderSpecifaList.findIndex((item) => item.key === key)
+            const findIndex = foodSpecificationInfo.value.orderSpecifaList.findIndex((item) => item.key === key);
             if (findIndex > -1) {
-                return foodSpecificationInfo.value.orderSpecifaList[findIndex].orderCount
+                return foodSpecificationInfo.value.orderSpecifaList[findIndex].orderCount;
             } else {
-            return 0;
-
+                return 0;
             }
         }
         // return foodSpecificationInfo.value.orderSpecifaList[length - 1].orderCount;
@@ -126,26 +125,28 @@ watch(
         }
     }
 );
-async function getPositionInfo(): Promise<PositionInfoI> {
+async function getPositionInfo(id: string): Promise<PositionInfoI> {
     const currentInstance = getCurrentInstance();
-    const res = await selectQuery(`#${props.type}${props.foodItem.foodID}`, currentInstance);
+    const res = await selectQuery(id, currentInstance);
     return {
         left: res.left,
         top: res.top,
     };
 }
 const specificationString = computed(() => {
-    return foodSpecificationInfo.value.specificationSlectedIndexList.join('')
-})
+    return foodSpecificationInfo.value.specificationSlectedIndexList.join("");
+});
 async function addCount(e: any) {
     // if (props.foodItem.specificationList.length) {
     //     toShowFoodSpecification();
 
     //     return;
     // }
-    const addPositionInfo: PositionInfoI = await getPositionInfo();
-    const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.value.left;
-    const offsetTop: number = cartImgPositionInfo.value.top - addPositionInfo.top;
+    // 微信底部会根据上下滑动添加底部栏
+    const cartImgPositionInfo = await getPositionInfo("#cart-img-box");
+    const addPositionInfo: PositionInfoI = await getPositionInfo(`#${props.type}${props.foodItem.foodID}`);
+    const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.left;
+    const offsetTop: number = cartImgPositionInfo.top - addPositionInfo.top;
     if (offsetLeft) {
         const addItem = {
             random: Math.random(),
@@ -163,7 +164,7 @@ async function addCount(e: any) {
         foodItem: props.foodItem,
         count: 1,
         type: "add",
-        specificationString: specificationString.value
+        specificationString: specificationString.value,
         // specificaIndexList: props.foodItem.specificationSlectedIndexList
     });
 }
@@ -178,7 +179,7 @@ async function minusCount() {
         foodItem: props.foodItem,
         count: -1,
         type: "minus",
-        specificationString: specificationString.value
+        specificationString: specificationString.value,
     });
     if (cartCategoryList.value.length === 0 && cartDetailFlag.value) {
         setCartDetailFlag(false);
