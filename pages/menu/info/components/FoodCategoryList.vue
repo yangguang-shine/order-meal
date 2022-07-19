@@ -24,7 +24,6 @@
 import FoodItem from "./item/FoodItem.vue";
 import { getRpxToPx, selectQuery, systemInfo } from "@/utils/index";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { topBarHeightPX, minusPromotionsHeightRPX, footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX } from "../infoConfig";
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
 
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
@@ -39,9 +38,13 @@ import { debounce, handleFoodCategoryListScroll } from "./common";
 interface MenuStateF {
     categoryList: ComputedStateI<CategoryItemI[]>;
     categoryIDMain: ComputedStateI<string>;
+    footerPX: ComputedStateI<number>
+
 }
 interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
+    footerAndMinusPX: ComputedGetterI<number>;
+
 }
 interface MutationF {
     setFoodDetailFlag: ComputedMutationI<boolean>;
@@ -53,13 +56,13 @@ interface MutationF {
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { categoryList, categoryIDMain }: MenuStateF = toRefs(menuStore.menuState);
+const { categoryList, categoryIDMain, footerPX }: MenuStateF = toRefs(menuStore.menuState);
 // getter
-const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
+const { minusPromotionsObject, footerAndMinusPX }: MenuGetterF = storeToRefs(menuStore);
 // action
 const { setFoodDetailFlag, setFoodInfo, setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside } = menuStore;
 
-const categoryItemLastPaddingBottom: string = computed((): string => (minusPromotionsObject.value.show ? footerInfoAndMinusPromotionsHeightRPX + 20 + "rpx" : footerInfoHeightRPX + 20 + "rpx"));
+const categoryItemLastPaddingBottom: string = computed((): string => (minusPromotionsObject.value.show ? footerAndMinusPX.value + 10 + "px" : footerPX.value + 10 + "px"));
 
 function toShowFoodDetail(foodItem: FoodItemI) {
     setFoodDetailFlag(true);

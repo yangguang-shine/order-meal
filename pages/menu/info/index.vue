@@ -50,7 +50,7 @@ import { onShow, onLoad, onPageScroll, onUnload, onHide, onReady } from "@dcloud
 import { ComputedActionI, ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { ShopItemI } from "@/interface/home";
 import { CategoryItemI, FoodItemI } from "@/interface/menu";
-import { footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX, shopInfoTransitionTime } from "./infoConfig";
+import {  shopInfoTransitionTime } from "./infoConfig";
 import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";

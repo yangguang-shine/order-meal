@@ -21,11 +21,12 @@ import { watch, reactive, ref, getCurrentInstance, onMounted, toRefs, computed }
 import { mapMutation, mapState } from "@/utils/mapVuex";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
-import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI, PositionInfoI, ShopItemI } from "@/interface/index";
+import { CategoryItemI, ComputedGetterI, ComputedMutationI, ComputedStateI, FoodItemI, PositionInfoI, ShopItemI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
-import { cartImgWidthHeightPX, countAddTransitionTime, foodAddMinusTransitionTime, foodAddWidthHeightPX } from "../../infoConfig";
+import {  countAddTransitionTime, foodAddMinusTransitionTime } from "../../infoConfig";
 import ReserveRemain from "./ReserveRemain.vue";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { storeToRefs } from 'pinia'
 
 import { AddItemI } from "./interface";
 interface PropsI {
@@ -43,6 +44,10 @@ interface MenuStateF {
     shopInfo: ComputedStateI<ShopItemI>;
     cartImgPositionInfo: ComputedStateI<PositionInfoI>;
     foodSpecificationInfo: ComputedStateI<FoodItemI>;
+    cartImgPX: ComputedStateI<number>
+    foodAddIconPX: ComputedStateI<number>
+
+
 }
 interface MutationF {
     cartChange: ComputedMutationI<CartChangeParamI>;
@@ -52,7 +57,7 @@ interface MutationF {
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPositionInfo, foodSpecificationInfo }: MenuStateF = toRefs(menuStore.menuState);
+const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPositionInfo, foodSpecificationInfo, cartImgPX ,foodAddIconPX}: MenuStateF = toRefs(menuStore.menuState);
 // action
 const specificationOrderCount = computed(() => {
     const length = foodSpecificationInfo.value.orderSpecifaList.length;
@@ -212,11 +217,11 @@ function startAnimationX(addItem: AddItemI) {
         // timingFunction: "linear",
     });
 
-    animationX.translateX(-(addItem.offsetInfo.offsetLeft - (cartImgWidthHeightPX - foodAddWidthHeightPX) / 2) / 10).step({
+    animationX.translateX(-(addItem.offsetInfo.offsetLeft - (cartImgPX.value - foodAddIconPX.value) / 2) / 10).step({
         duration: countAddTransitionTime / 4,
         timingFunction: "linear",
     });
-    animationX.translateX(-(addItem.offsetInfo.offsetLeft - (cartImgWidthHeightPX - foodAddWidthHeightPX) / 2)).step({
+    animationX.translateX(-(addItem.offsetInfo.offsetLeft - (cartImgPX.value - foodAddIconPX.value) / 2)).step({
         duration: (countAddTransitionTime * 3) / 4,
         timingFunction: "linear",
     });
@@ -232,7 +237,7 @@ function startAnimationY(addItem: AddItemI) {
         duration: countAddTransitionTime / 3,
         timingFunction: "ease-out",
     });
-    animationY.translateY(addItem.offsetInfo.offsetTop + (cartImgWidthHeightPX - foodAddWidthHeightPX) / 2).step({
+    animationY.translateY(addItem.offsetInfo.offsetTop + (cartImgPX.value - foodAddIconPX.value) / 2).step({
         duration: (countAddTransitionTime * 2) / 3,
         timingFunction: "ease-in",
     });

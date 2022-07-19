@@ -1,6 +1,6 @@
 <template>
     <div class="search-food-container">
-        <Search :searchResultList="searchFoodList" :defaultList="categoryFoodList" v-model="searchValue" :bottom="minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightPX : footerInfoHeightPX" @clickCancel="clickCancel" type="searchFood">
+        <Search :searchResultList="searchFoodList" :defaultList="categoryFoodList" v-model="searchValue" :bottom="minusPromotionsObject.show ? footerAndMinusPX : footerPX" @clickCancel="clickCancel" type="searchFood">
             <!-- <FoodItem v-for="searchFoodItem in searchFoodList" :key="searchFoodItem.foodID" class="search-food-item" :foodItem="searchFoodItem" @clickFoodItem="toShowFoodDetail"></FoodItem> -->
 
             <template #result>
@@ -11,7 +11,7 @@
             </template>
         </Search>
     </div>
-    <!-- <view class="search-food-container" :animation="searchModalAnimationData" :style="{ bottom: minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightPX + 'rpx' : footerInfoHeightPX + 'rpx' }">
+    <!-- <view class="search-food-container" :animation="searchModalAnimationData" :style="{ bottom: minusPromotionsObject.show ? footerAndMinusPX + 'rpx' : footerPX + 'rpx' }">
         <view class="search-food-overlay"></view>
         <view class="top-box flex-row flex-ja-center">
             <input type="text" class="search-input flex-item" v-model="searchValue" />
@@ -37,7 +37,6 @@ import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { delaySync } from "@/utils/";
 import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
 import { ref, onMounted, computed, toRefs } from "vue";
-import { footerInfoAndMinusPromotionsHeightPX, footerInfoHeightPX, searchModalTransitionTime } from "../infoConfig";
 import FoodItem from "./item/FoodItem.vue";
 import Search from "@/components/Search.vue";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
@@ -48,6 +47,8 @@ interface MenuStateF {
 }
 interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
+    footerAndMinusPX: ComputedGetterI<number>;
+
 }
 interface MutationF {
     setSearchFoodFlag: ComputedMutationI<boolean>;
@@ -59,7 +60,7 @@ const menuStore: MenuStoreI = useMenuStore();
 // state
 const { categoryList }: MenuStateF = toRefs(menuStore.menuState);
 // getter
-const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
+const { minusPromotionsObject, footerAndMinusPX }: MenuGetterF = storeToRefs(menuStore);
 // action
 const { setSearchFoodFlag, setFoodDetailFlag, setFoodInfo } = menuStore;
 const idPre = 'img-search'

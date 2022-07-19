@@ -1,4 +1,4 @@
-import { GetterI, StateI, FoodItemI, GetterStateI, minusItemI, ComputedStateI } from "@/interface/index";
+import { GetterI, StateI, FoodItemI, GetterStateI, minusItemI, ComputedGetterI } from "@/interface/index";
 import { toFixedToNumber } from "@/utils/";
 import { computed } from "vue";
 import homeState from "../home/state";
@@ -124,7 +124,7 @@ const cartPriceInfo = computed((): CartPriceInfoI => {
         allCartFoodCount: toFixedToNumber(allCartFoodCount),
     };
 });
-const minusPromotionsObject: ComputedStateI<MinusPromotionsObjectI> = computed((): MinusPromotionsObjectI => {
+const minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI> = computed((): MinusPromotionsObjectI => {
     if ((menuState.shopInfo.minusList || []).length === 0 || menuState.cartCategoryList.length === 0) {
         return {
             show: false,
@@ -156,7 +156,7 @@ const minusPromotionsObject: ComputedStateI<MinusPromotionsObjectI> = computed((
     }
 });
 
-const asideCategoryInfo: ComputedStateI<AsideCategoryInfoI> = computed(() => {
+const asideCategoryInfo: ComputedGetterI<AsideCategoryInfoI> = computed(() => {
     const asideCategoryItemOrderCountMap: AsideCategoryItemOrderCountMapI= {};
     const asideCategoryList = menuState.categoryList.map((categotyItem) => {
         // const stateCartCartgoryItem = menuState.cartCategoryList.find((cartFoodItem) => cartFoodItem.categoryID === categotyItem.categoryID);
@@ -180,23 +180,28 @@ const asideCategoryInfo: ComputedStateI<AsideCategoryInfoI> = computed(() => {
     };
 });
 
-const orderFoodList: ComputedStateI<FoodItemI[]> = computed((): FoodItemI[] => {
+const orderFoodList: ComputedGetterI<FoodItemI[]> = computed((): FoodItemI[] => {
     const orderFoodList = menuState.cartCategoryList.reduce((list: any[], item) => {
         return [...list, ...item.foodList];
     }, []);
     return orderFoodList;
 });
+const footerAndMinusPX: ComputedGetterI<number> = computed(() => {
+    return menuState.footerPX + menuState.topBarPX
+})
 export interface MenuGetterI {
-    minusPromotionsObject: ComputedStateI<MinusPromotionsObjectI>;
-    cartPriceInfo: ComputedStateI<CartPriceInfoI>;
-    asideCategoryInfo: ComputedStateI<AsideCategoryInfoI>;
-    orderFoodList: ComputedStateI<FoodItemI[]>;
+    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
+    cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
+    asideCategoryInfo: ComputedGetterI<AsideCategoryInfoI>;
+    orderFoodList: ComputedGetterI<FoodItemI[]>;
+    footerAndMinusPX: ComputedGetterI<number>
 }
 const menuGetter: MenuGetterI = {
     minusPromotionsObject,
     cartPriceInfo,
     asideCategoryInfo,
     orderFoodList,
+    footerAndMinusPX
 };
 
 export default menuGetter;

@@ -1,5 +1,5 @@
 <template>
-    <view class="collect-food-component" @click.stop="closeCartDetail" :style="{ bottom: minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX + 'rpx' : '' }">
+    <view class="collect-food-component" @click.stop="closeCartDetail" :style="{ bottom: minusPromotionsObject.show ? footerAndMinusPX + 'px' : '' }">
         <view :animation="overlayAnimationData" class="collect-food-overlay"></view>
         <view :animation="mainAnimationData" class="collect-food-box flex-col" @click.stop>
             <view class="title">为您精选凑单商品，一起结算更优惠</view>
@@ -20,7 +20,7 @@ import { delaySync, selectQuery, showModal, systemInfo } from "@/utils/index";
 import FoodAddMinusItem from "./item/FoodAddMinusItem.vue";
 import FoodItem from "./item/FoodItem.vue";
 import { getCurrentInstance, computed, onMounted, ref, toRefs, watch } from "vue";
-import { footerInfoAndMinusPromotionsHeightRPX, collectTransitionTime } from "../infoConfig";
+import { collectTransitionTime } from "../infoConfig";
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI, CollectFoodListItemI } from "@/interface/menu";
@@ -44,15 +44,17 @@ interface MenuStateF {
 interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
     cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
+    footerAndMinusPX: ComputedGetterI<number>;
+
 }
 // menu store
 const menuStore: MenuStoreI = useMenuStore();
 // menu state
 const { cartCategoryList, categoryList, businessType, shopInfo, collectFoodList, showCollectClickCartImgFlag }: MenuStateF = toRefs(menuStore.menuState);
 // menu getter
-const { minusPromotionsObject, cartPriceInfo }: MenuGetterF = storeToRefs(menuStore);
+const { minusPromotionsObject, cartPriceInfo, footerAndMinusPX }: MenuGetterF = storeToRefs(menuStore);
 // menu action
-const { setCollectFoodFlag, setCollectTabIndex, setShowCollectClickCartImgFlag, setCartDetailFlag } = menuStore;
+const { setCollectFoodFlag, setShowCollectClickCartImgFlag, setCartDetailFlag } = menuStore;
 // animation
 const { overlayAnimationData, mainAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: collectTransitionTime,

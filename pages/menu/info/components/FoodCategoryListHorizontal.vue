@@ -1,5 +1,5 @@
 <template>
-    <scroll-view scroll-y scroll-with-animation :scroll-into-view="categoryIDMain" class="category-list-horizontal-container" id="food-main-box" @scroll="foodScrollHandle" :style="{ 'padding-top': categoryAsideBarHorizontalHeightRPX + 'rpx' }">
+    <scroll-view scroll-y scroll-with-animation :scroll-into-view="categoryIDMain" class="category-list-horizontal-container" id="food-main-box" @scroll="foodScrollHandle" :style="{ 'padding-top': asideBarHorizontalPX + 'px' }">
         <div class="category-list">
             <view class="category-item" v-for="(foodCategoryItem, index) in categoryList" :key="index" :id="foodCategoryItem.categoryIDMain" :style="{ 'padding-bottom': index === categoryList.length - 1 ? categoryItemLastPaddingBottom : '' }">
                 <view class="category-name">{{ foodCategoryItem.categoryName }}{{ foodCategoryItem.categoryIDMain }}</view>
@@ -17,7 +17,6 @@ import FoodItem from "./item/FoodItem.vue";
 import FoodItemHorizontal from "./item/FoodItemHorizontal.vue";
 import { getRpxToPx, selectQuery, systemInfo } from "@/utils/index";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { topBarHeightPX, minusPromotionsHeightRPX, footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX, categoryAsideBarHorizontalHeightRPX, categoryAsideBarHorizontalAndTopBarHeightPX } from "../infoConfig";
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
 
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
@@ -33,20 +32,26 @@ interface MenuStateF {
     categoryList: ComputedStateI<CategoryItemI[]>;
     categoryIDMain: ComputedStateI<string>;
     shopInfo: ComputedStateI<ShopItemI>;
+    footerPX: ComputedStateI<number>
+    asideBarHorizontalPX: ComputedStateI<number>
+    
+
 }
 interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
+    footerAndMinusPX: ComputedGetterI<number>;
+
 }
 
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { categoryList, categoryIDMain, shopInfo }: MenuStateF = toRefs(menuStore.menuState);
+const { categoryList, categoryIDMain, shopInfo, footerPX, asideBarHorizontalPX }: MenuStateF = toRefs(menuStore.menuState);
 // getter
-const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
+const { minusPromotionsObject, footerAndMinusPX }: MenuGetterF = storeToRefs(menuStore);
 // action
 const { setFoodDetailFlag, setFoodInfo, setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside } = menuStore;
-const categoryItemLastPaddingBottom: string = computed((): string => (minusPromotionsObject.value.show ? footerInfoAndMinusPromotionsHeightRPX + 20 + "rpx" : footerInfoHeightRPX + 20 + "rpx"));
+const categoryItemLastPaddingBottom: string = computed((): string => (minusPromotionsObject.value.show ? footerAndMinusPX.value + 10 + "px" : footerPX.value + 10 + "px"));
 
 function toShowFoodDetail(foodItem: FoodItemI) {
     setFoodDetailFlag(true);

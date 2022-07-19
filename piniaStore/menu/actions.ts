@@ -229,7 +229,6 @@ function cartChange({ foodItem, count = 0, type = "add", specificationString = "
 
 function initCart() {
     const cartCategoryListOrigin = menuState.cartCategoryList;
-    console.log(cartCategoryListOrigin);
     menuState.cartCategoryList = [];
     menuState.cartCategoryListMap = {};
     cartCategoryListOrigin.forEach((cartCategoryItem) => {

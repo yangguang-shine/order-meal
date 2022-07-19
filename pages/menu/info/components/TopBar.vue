@@ -1,5 +1,5 @@
 <template>
-    <view class="com-top-bar-container flex-row flex-a-center flex-j-between">
+    <view class="com-top-bar-container flex-row flex-a-center flex-j-between" id="com-top-bar-container">
         <view class="left flex-row flex--ja-center">
             <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '点餐' }" @click="clickTopBar('点餐')">点餐</view>
             <view class="top-bar-item flex-item flex-row flex-ja-center" :class="{ 'select-top-item': topBarInfo === '商家' }" @click="clickTopBar('商家')">商家</view>
@@ -26,10 +26,10 @@
 <script lang="ts" setup>
 import { mapState, mapMutation } from "@/utils/mapVuex";
 import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
-import { delaySync } from "@/utils/";
+import { delaySync, selectQuery } from "@/utils/";
 import { barSearchTransitionTime, shopInfoTransitionTime } from "../infoConfig";
 import { ShopItemI } from "@/interface/home";
-import { ref, watch, toRefs } from "vue";
+import { ref, watch, toRefs, onMounted } from "vue";
 import { RefI } from "@/interface/vueInterface";
 import router from "@/utils/router";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
@@ -53,7 +53,7 @@ const menuStore: MenuStoreI = useMenuStore();
 // state
 const { topBarInfo, shopInfo, selectedCategoryID }: MenuStateF = toRefs(menuStore.menuState);
 // action
-const { setTopBarInfo, setShopInfoFlag, setStartShopInfoAnimationFlag, setSearchFoodFlag, setShopInfoMode, setCategoryIDMain } = menuStore;
+const { setTopBarInfo, setShopInfoFlag, setStartShopInfoAnimationFlag, setSearchFoodFlag, setShopInfoMode, setCategoryIDMain, setTopBarHeightPX } = menuStore;
 
 const { overlayAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: barSearchTransitionTime,
@@ -67,6 +67,18 @@ watch(topBarInfo, (newValue: string, oldValue: string) => {
         toEndAnimation();
     }
 });
+onMounted(async () => {
+    getTopBarHeight();
+});
+async function getTopBarHeight() {
+    try {
+        const topBarPositionInfo = await selectQuery("#com-top-bar-container");
+        setTopBarHeightPX(topBarPositionInfo.height);
+    } catch (e) {
+        console.log(e);
+    } finally {
+    }
+}
 function toSearch() {
     if (topBarInfo.value === "商家") return;
     setSearchFoodFlag(true);
@@ -101,7 +113,6 @@ function changeShopInfoMode() {
     top: 0;
     left: 0;
     width: 100%;
-    height: 80rpx;
     box-sizing: border-box;
     border-bottom: 1rpx solid #e4e4e4;
     background-color: #ffffff;
@@ -109,11 +120,12 @@ function changeShopInfoMode() {
     z-index: 200;
     .left,
     .right {
-        height: 100%;
+        height: 80rpx;
+        // height: 100%;
     }
     .top-bar-item {
         width: 200rpx;
-        height: 100%;
+        height: 80rpx;
         font-size: 32rpx;
     }
     .select-top-item {

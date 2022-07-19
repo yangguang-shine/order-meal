@@ -2,7 +2,7 @@ import { CategoryItemI } from "@/interface/menu";
 import { ComputedStateI } from "@/interface/vuex";
 import { MenuActionI } from "@/piniaStore/menu/actions";
 import { selectQuery, systemInfo } from "@/utils/";
-import { categoryAsideBarHorizontalAndTopBarHeightPX, topBarHeightPX } from "../infoConfig";
+import menuState from "@/piniaStore/menu/state";
 interface HandleFoodCategoryListScrollParams {
     categoryList: ComputedStateI<CategoryItemI[]>;
     type?: "vertical" | "horizontal";
@@ -15,7 +15,7 @@ export async function handleFoodCategoryListScroll({ categoryList, setSelectedCa
         const categoryItem: CategoryItemI = categoryList.value[i];
         const categoryItemPositionInfo = await selectQuery(`#${categoryItem.categoryIDMain}`);
         if (type === "vertical") {
-            if (topBarHeightPX <= categoryItemPositionInfo.top + 1 || categoryItemPositionInfo.bottom - 1 > topBarHeightPX) {
+            if (menuState.topBarPX <= categoryItemPositionInfo.top + 1 || categoryItemPositionInfo.bottom - 1 > menuState.topBarPX) {
                 setSelectedCategoryID(categoryItem.categoryID);
                 setCategoryIDMain("");
                 setCategoryIDAside(categoryItem.categoryIDAside);
@@ -26,7 +26,8 @@ export async function handleFoodCategoryListScroll({ categoryList, setSelectedCa
                 break;
             }
         } else if (type === "horizontal") {
-            if (categoryAsideBarHorizontalAndTopBarHeightPX <= categoryItemPositionInfo.top + 1 || categoryItemPositionInfo.bottom -1 > categoryAsideBarHorizontalAndTopBarHeightPX) {
+            const topBarAndAsideBarPX = menuState.topBarPX + menuState.asideBarHorizontalPX
+            if (topBarAndAsideBarPX <= categoryItemPositionInfo.top + 1 || categoryItemPositionInfo.bottom -1 > topBarAndAsideBarPX) {
                 setSelectedCategoryID(categoryItem.categoryID);
                 setCategoryIDMain("");
                 setCategoryIDAside(categoryItem.categoryIDAside);

@@ -1,5 +1,5 @@
 <template>
-    <scroll-view scroll-y scroll-with-animation class="category-aside-bar-container" :scroll-into-view="categoryIDAside" :style="{ 'padding-bottom': minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX + 'rpx' : footerInfoHeightRPX + 'rpx' }">
+    <scroll-view scroll-y scroll-with-animation class="category-aside-bar-container" :scroll-into-view="categoryIDAside" :style="{ 'padding-bottom': minusPromotionsObject.show ? footerAndMinusPX + 'px' : footerPX + 'px' }">
         <view class="aside-category-item" v-for="(asideCategoryItem, index) in asideCategoryInfo.asideCategoryList" :key="index" :class="{ 'aside-categroy-item-active': selectedCategoryID === asideCategoryItem.categoryID }" @click="changeCategoryTab(asideCategoryItem)" :style="{ color: selectedCategoryID === asideCategoryItem.categoryID ? shopInfo.mainColor : '' }" :id="asideCategoryItem.categoryIDAside">
             {{ asideCategoryItem.categoryName }}
             <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count" :style="{ background: $mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
@@ -11,7 +11,6 @@
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
-import { footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX, minusPromotionsHeightRPX } from "../infoConfig";
 
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI } from "@/interface/menu";
@@ -25,18 +24,21 @@ interface MenuStateF {
     selectedCategoryID: ComputedStateI<string>;
     categoryIDAside: ComputedStateI<string>;
     shopInfo: ComputedStateI<ShopItemI>;
+    footerPX: ComputedStateI<number>
 }
 interface MenuGetterF {
     asideCategoryInfo: ComputedGetterI<AsideCategoryInfoI>;
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
+    footerAndMinusPX: ComputedGetterI<number>;
+
 }
 
 // store
 const menuStore: MenuStoreI = useMenuStore()
 // state
-const { selectedCategoryID,categoryIDAside, shopInfo }: MenuStateF = toRefs(menuStore.menuState)
+const { selectedCategoryID,categoryIDAside, shopInfo, footerPX }: MenuStateF = toRefs(menuStore.menuState)
 // getter
-const { asideCategoryInfo, minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore) 
+const { asideCategoryInfo, minusPromotionsObject, footerAndMinusPX }: MenuGetterF = storeToRefs(menuStore) 
 // action
 const { setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside } = menuStore;
 // 选择 tab

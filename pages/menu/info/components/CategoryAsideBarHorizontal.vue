@@ -13,7 +13,6 @@
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
-import { footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX, minusPromotionsHeightRPX } from "../infoConfig";
 
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI } from "@/interface/menu";

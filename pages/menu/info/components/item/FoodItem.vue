@@ -24,7 +24,6 @@ import FoodAddMinusItem from "./FoodAddMinusItem.vue";
 import ReserveNotEnough from "./ReserveNotEnough.vue";
 import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI, PositionInfoI, ShopItemI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
-import { cartImgWidthHeightPX, countAddTransitionTime, foodAddMinusTransitionTime } from "../../infoConfig";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 
 interface PropsI {

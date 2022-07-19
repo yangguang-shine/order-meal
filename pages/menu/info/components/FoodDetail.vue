@@ -1,7 +1,7 @@
 <template>
     <view class="food-detail-container flex-row flex-ja-center" @click.stop="closeFoodDetail" @touchmove.stop>
         <view :animation="overlayAnimationData" class="food-detail-overlay"></view>
-        <view :animation="mainAnimationData" class="food-detail-box flex-col" @click.stop :style="{ 'padding-bottom': (minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX : footerInfoHeightRPX) + 30 + 'rpx' }">
+        <view :animation="mainAnimationData" class="food-detail-box flex-col" @click.stop :style="{ 'padding-bottom': (minusPromotionsObject.show ? footerAndMinusPX : footerPX) + 15 + 'px' }">
             <!-- <view class="food-img"></view> -->
             <image class="food-img" :src="foodInfo.fullImgPath" alt=""></image>
             <!-- <image class="food-img" :src="foodInfo.fullImgPath" alt="" ></image> -->
@@ -32,9 +32,9 @@ import { mapState, mapMutation, mapGetter } from "@/utils/mapVuex";
 
 const showComponents = false;
 
-import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { FoodItemI, initFoodItem } from "@/interface/menu";
-import { foodDetailTransitionTime, footerInfoAndMinusPromotionsHeightRPX, footerInfoHeightRPX } from "../infoConfig";
+import { foodDetailTransitionTime } from "../infoConfig";
 import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { ComputedI } from "@/interface/vueInterface";
 import { ShopItemI } from "@/interface/home";
@@ -49,16 +49,20 @@ interface MenuStateF {
     shopInfo: ComputedStateI<ShopItemI>;
 
     businessType: ComputedStateI<number>;
+    footerPX: ComputedStateI<number>
+
 }
 interface MenuGetterF {
-    minusPromotionsObject: ComputedStateI<MinusPromotionsObjectI[]>;
+    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI[]>;
+    footerAndMinusPX: ComputedGetterI<number>;
+
 }
 // store
 const menuStore: MenuStoreI = useMenuStore()
 // state
-const { foodInfo, shopInfo, businessType }: MenuStateF = toRefs(menuStore.menuState);
+const { foodInfo, shopInfo, businessType, footerPX }: MenuStateF = toRefs(menuStore.menuState);
 // getter
-const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore)
+const { minusPromotionsObject, footerAndMinusPX }: MenuGetterF = storeToRefs(menuStore)
 // action
 const { setFoodDetailFlag, setFoodInfo } = menuStore
 // animation

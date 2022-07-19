@@ -1,5 +1,5 @@
 <template>
-    <view class="cart-detail-component" @click.stop="closeCartDetail" :style="{ bottom: minusPromotionsObject.show ? footerInfoAndMinusPromotionsHeightRPX + 'rpx' : '' }">
+    <view class="cart-detail-component" @click.stop="closeCartDetail" :style="{ bottom: minusPromotionsObject.show ? footerAndMinusPX + 'px' : '' }">
         <view :animation="overlayAnimationData" class="cart-detail-overlay"></view>
         <view :animation="mainAnimationData" class="cart-detail-box" @click.stop>
             <view class="cart-select-box flex-row flex-j-between flex-a-center">
@@ -49,7 +49,7 @@ import FoodItem from "./item/FoodItem.vue";
 import FoodItemCartSpecification from "./item/FoodItemCartSpecification.vue";
 
 import { getCurrentInstance, computed, onMounted, ref, toRefs, watch } from "vue";
-import { footerInfoAndMinusPromotionsHeightRPX, cartDetailTransitionTime } from "../infoConfig";
+import {  cartDetailTransitionTime } from "../infoConfig";
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI } from "@/interface/menu";
@@ -70,13 +70,15 @@ interface MenuStateF {
 interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
     cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
+    footerAndMinusPX: ComputedGetterI<number>;
+    
 }
 // menu store
 const menuStore: MenuStoreI = useMenuStore();
 // menu state
 const { cartCategoryList, categoryList, businessType, shopInfo, showCartClickCartImgFlag }: MenuStateF = toRefs(menuStore.menuState);
 // menu getter
-const { minusPromotionsObject, cartPriceInfo }: MenuGetterF = storeToRefs(menuStore);
+const { minusPromotionsObject, cartPriceInfo, footerAndMinusPX }: MenuGetterF = storeToRefs(menuStore);
 // menu action
 const { setCartDetailFlag, clearCart, setMenuPackPriceExpalinFlag, setShowCartClickCartImgFlag } = menuStore;
 // animation

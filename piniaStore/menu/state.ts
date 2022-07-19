@@ -38,7 +38,18 @@ export interface MenuDefaultI {
     foodSpecificationFlag: boolean
 
 }
-export interface MenuStateI extends MenuDefaultI {
+interface HeightPXI {
+    topBarPX: number,
+    minusPX: number,
+    footerPX: number,
+    cartImgPX: number,
+    foodAddIconPX: number
+    asideBarHorizontalPX: number
+}
+// const positionInfo = {
+//     topBarPX: 40.5
+// }
+export interface MenuStateI extends MenuDefaultI, HeightPXI {
     shopInfo: ShopItemI,
     cartCategoryList: CategoryItemI[];
 }
@@ -78,11 +89,21 @@ export const menuDefault: MenuDefaultI = {
     foodSpecificationFlag: false
 
 };
+const defaultPositionState: HeightPXI = {
+    topBarPX: 40.5,
+    minusPX: 25,
+    footerPX: 70,
+    cartImgPX: 60,
+    foodAddIconPX: 20,
+    asideBarHorizontalPX: 40
+}
+
 
 const menuState: MenuStateI = reactive({
     ...menuDefault,
+    ...defaultPositionState,
     shopInfo: initShopItem,
     cartCategoryList: [],
-});
+} as MenuStateI);
 
 export default menuState;
