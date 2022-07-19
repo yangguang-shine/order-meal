@@ -60,7 +60,6 @@ const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
 const { setFoodDetailFlag, setFoodInfo, setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside } = menuStore;
 
 const categoryItemLastPaddingBottom: string = computed((): string => (minusPromotionsObject.value.show ? footerInfoAndMinusPromotionsHeightRPX + 20 + "rpx" : footerInfoHeightRPX + 20 + "rpx"));
-const currentInstance = getCurrentInstance();
 
 function toShowFoodDetail(foodItem: FoodItemI) {
     setFoodDetailFlag(true);
@@ -71,7 +70,6 @@ const foodScrollHandle = debounce(handleScroll, 70);
 async function handleScroll(e: any) {
     handleFoodCategoryListScroll({
         categoryList,
-        currentInstance,
         setSelectedCategoryID,
         setCategoryIDMain,
         setCategoryIDAside,

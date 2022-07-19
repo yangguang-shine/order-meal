@@ -125,14 +125,14 @@ watch(
         }
     }
 );
-async function getPositionInfo(id: string): Promise<PositionInfoI> {
-    const currentInstance = getCurrentInstance();
-    const res = await selectQuery(id, currentInstance);
-    return {
-        left: res.left,
-        top: res.top,
-    };
-}
+// async function getPositionInfo(id: string): Promise<PositionInfoI> {
+//     const currentInstance = getCurrentInstance();
+//     const res = await selectQuery(id, currentInstance);
+//     return {
+//         left: res.left,
+//         top: res.top,
+//     };
+// }
 const specificationString = computed(() => {
     return foodSpecificationInfo.value.specificationSlectedIndexList.join("");
 });
@@ -143,8 +143,8 @@ async function addCount(e: any) {
     //     return;
     // }
     // 微信底部会根据上下滑动添加底部栏
-    const cartImgPositionInfo = await getPositionInfo("#cart-img-box");
-    const addPositionInfo: PositionInfoI = await getPositionInfo(`#${props.type}${props.foodItem.foodID}`);
+    const cartImgPositionInfo = await selectQuery("#cart-img-box");
+    const addPositionInfo: PositionInfoI = await selectQuery(`#${props.type}${props.foodItem.foodID}`);
     const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.left;
     const offsetTop: number = cartImgPositionInfo.top - addPositionInfo.top;
     if (offsetLeft) {

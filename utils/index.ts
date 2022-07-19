@@ -1,5 +1,5 @@
 import { PositionInfoI } from "../interface";
-
+import { getCurrentInstance } from 'vue'
 export const getSetting = (scopeName: string): Promise<void> => {
     return new Promise((resolve, reject) => {
         uni.getSetting({
@@ -182,13 +182,14 @@ export function toFixedToNumber(num: number, remain: number = 2) {
 export function selectQuery(id: string, currentInstance?: any): Promise<any> {
     return new Promise((resolve, reject) => {
         let query: any = uni.createSelectorQuery();
-        if (currentInstance) {
+        if (!currentInstance) {
             query = query.in(currentInstance);
         }
         query
             .select(id)
             .boundingClientRect((res: any = {}) => {
 				console.log(id)
+                console.log(11111)
 				console.log(res)
                 if (process.env.NODE_ENV === 'development') {
                     res.top = res.top + navigationBarHeightPX;

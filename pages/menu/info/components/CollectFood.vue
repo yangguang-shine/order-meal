@@ -88,7 +88,7 @@ async function handleScroll(e: any) {
     const { top, bottom } = collectFoodListBoxPositionInfo;
     for (let i = 0; i < currentCollectFoodList.length; i++) {
         const foodItem = currentCollectFoodList[i];
-        const imgPositionInfo = await selectQuery(`#${idPre}-${foodItem.foodID}`, currentInstance);
+        const imgPositionInfo = await selectQuery(`#${idPre}-${foodItem.foodID}`);
         if ((top <= imgPositionInfo.top && imgPositionInfo.top <= bottom) || (top <= imgPositionInfo.bottom && imgPositionInfo.bottom < bottom)) {
             foodItem.currentImg = foodItem.fullImgPath;
         }
@@ -105,8 +105,7 @@ let collectFoodListBoxPositionInfo: {
     bottom: 0,
 };
 async function getCollectFoodListBoxPositionInfo(id: string) {
-    const currentInstance = getCurrentInstance();
-    const res = await selectQuery(id, currentInstance);
+    const res = await selectQuery(id);
     collectFoodListBoxPositionInfo = {
         top: res.top,
         bottom: res.bottom,

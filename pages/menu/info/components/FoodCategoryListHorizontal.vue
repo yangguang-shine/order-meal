@@ -55,10 +55,8 @@ function toShowFoodDetail(foodItem: FoodItemI) {
 const foodScrollHandle = debounce(handleScroll, 70);
 
 async function handleScroll(e: any) {
-    const currentInstance = getCurrentInstance();
     handleFoodCategoryListScroll({
         categoryList,
-        currentInstance,
         setSelectedCategoryID,
         setCategoryIDMain,
         setCategoryIDAside,

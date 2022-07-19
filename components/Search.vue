@@ -59,14 +59,13 @@ interface EmitI {
 // };
 const idPre = "img-search";
 const foodScrollHandle = debounce(handleScroll, 70);
-const currentInstance = getCurrentInstance();
 async function handleScroll() {
     if (props.type !== 'searchFood') {
         return
     }
     const currentCollectFoodList = props.modelValue ? props.searchResultList : props.defaultList;
     const searchListBoxId = props.modelValue ? "#result-box" : "#default-box";
-    const res = await selectQuery(searchListBoxId, currentInstance);
+    const res = await selectQuery(searchListBoxId);
     const searchBosPositionInfo = {
         top: res.top,
         bottom: res.bottom,
@@ -75,7 +74,7 @@ async function handleScroll() {
     const { top, bottom } = searchBosPositionInfo;
     for (let i = 0; i < currentCollectFoodList.length; i++) {
         const foodItem = currentCollectFoodList[i];
-        const imgPositionInfo = await selectQuery(`#${idPre}-${foodItem.foodID}`, currentInstance);
+        const imgPositionInfo = await selectQuery(`#${idPre}-${foodItem.foodID}`);
         if ((top <= imgPositionInfo.top && imgPositionInfo.top <= bottom) || (top <= imgPositionInfo.bottom && imgPositionInfo.bottom < bottom)) {
             foodItem.currentImg = foodItem.fullImgPath;
         }

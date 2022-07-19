@@ -171,7 +171,6 @@ onMounted(() => {
 })
 
 
-const currentInstance = getCurrentInstance();
 async function init() {
     await getMenuList();
     handleCurrentLazyImg(shopInfo.value.mode);

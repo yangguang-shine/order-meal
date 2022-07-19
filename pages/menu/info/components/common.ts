@@ -5,16 +5,15 @@ import { selectQuery, systemInfo } from "@/utils/";
 import { categoryAsideBarHorizontalAndTopBarHeightPX, topBarHeightPX } from "../infoConfig";
 interface HandleFoodCategoryListScrollParams {
     categoryList: ComputedStateI<CategoryItemI[]>;
-    currentInstance: any;
     type?: "vertical" | "horizontal";
     setSelectedCategoryID: MenuActionI["setSelectedCategoryID"];
     setCategoryIDMain: MenuActionI["setCategoryIDMain"];
     setCategoryIDAside: MenuActionI["setCategoryIDAside"];
 }
-export async function handleFoodCategoryListScroll({ categoryList, currentInstance, setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside, type = "vertical" }: HandleFoodCategoryListScrollParams) {
+export async function handleFoodCategoryListScroll({ categoryList, setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside, type = "vertical" }: HandleFoodCategoryListScrollParams) {
     for (let i = 0; i < categoryList.value.length; i++) {
         const categoryItem: CategoryItemI = categoryList.value[i];
-        const categoryItemPositionInfo = await selectQuery(`#${categoryItem.categoryIDMain}`, currentInstance);
+        const categoryItemPositionInfo = await selectQuery(`#${categoryItem.categoryIDMain}`);
         if (type === "vertical") {
             if (topBarHeightPX <= categoryItemPositionInfo.top + 1 || categoryItemPositionInfo.bottom - 1 > topBarHeightPX) {
                 setSelectedCategoryID(categoryItem.categoryID);
@@ -22,7 +21,6 @@ export async function handleFoodCategoryListScroll({ categoryList, currentInstan
                 setCategoryIDAside(categoryItem.categoryIDAside);
                 await handleLazyImg({
                     index: i,
-                    currentInstance,
                     categoryList,
                 });
                 break;
@@ -34,7 +32,6 @@ export async function handleFoodCategoryListScroll({ categoryList, currentInstan
                 setCategoryIDAside(categoryItem.categoryIDAside);
                 await handleLazyImg({
                     index: i,
-                    currentInstance,
                     categoryList,
                 });
                 break;
@@ -44,15 +41,14 @@ export async function handleFoodCategoryListScroll({ categoryList, currentInstan
 }
 interface HandleLazyImgParams {
     index: number;
-    currentInstance: any;
     categoryList: ComputedStateI<CategoryItemI[]>;
 }
-async function handleLazyImg({ index, currentInstance, categoryList }: HandleLazyImgParams) {
+async function handleLazyImg({ index, categoryList }: HandleLazyImgParams) {
     const categoryItem: CategoryItemI = categoryList.value[index];
     let lastCategoryFlag: boolean = true;
     for (let i = 0; i < categoryItem.foodList.length; i++) {
         const foodItem = categoryItem.foodList[i];
-        const imgPositionInfo = await selectQuery(`#img-${foodItem.foodID}`, currentInstance);
+        const imgPositionInfo = await selectQuery(`#img-${foodItem.foodID}`);
         if (imgPositionInfo.top > systemInfo.windowHeight) {
             lastCategoryFlag = false;
             break;
@@ -64,7 +60,6 @@ async function handleLazyImg({ index, currentInstance, categoryList }: HandleLaz
     if (lastCategoryFlag && index + 1 < categoryList.value.length) {
         await handleLazyImg({
             index: index + 1,
-            currentInstance,
             categoryList,
         });
     }

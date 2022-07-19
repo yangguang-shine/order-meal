@@ -147,8 +147,7 @@ onMounted(async () => {
     setCartImgPositionInfo(positionInfo);
 });
 async function getCartImgPositionInfo(): Promise<PositionInfoI> {
-    const currentInstance = getCurrentInstance();
-    const res = await selectQuery("#cart-img-box", currentInstance);
+    const res = await selectQuery("#cart-img-box");
     return {
         left: res.left,
         top: res.top,
