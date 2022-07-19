@@ -1,17 +1,16 @@
 import { defineStore } from "pinia";
 import { ref, reactive } from "vue";
 import menuState, { MenuStateI } from "./state";
-import meunAction, { MenuActionI } from "./actions";
+import meunAction, {MenuActionI} from "./action";
 import menuGetter, { MenuGetterI } from "./getter";
-import setAction, { SetActionI } from "./setAction";
 // interface AddressStoreI {
 //     menuState: MenuStateI,
 // }
 export type MenuStoreI = {
     menuState: MenuStateI;
-} & MenuActionI &
-    MenuGetterI & SetActionI
+} & MenuGetterI & MenuActionI
 
 export const useMenuStore = defineStore("menu", () => {
-    return { menuState, ...meunAction, ...menuGetter, ...setAction } as MenuStoreI;
+    const store: MenuStoreI = { menuState, ...meunAction, ...menuGetter }
+    return  store ;
 });

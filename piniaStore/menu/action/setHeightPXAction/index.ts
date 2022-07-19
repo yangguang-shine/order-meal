@@ -1,4 +1,4 @@
-import menuState from "../state";
+import menuState from "../../state";
 // topBarPX: 40.5,
 // minusPX: 25,
 // footerPX: 70,
@@ -30,18 +30,18 @@ function setAsideBarHorizontalPX(asideBarHorizontalPX: number) {
 }
 
 
-export interface setHeightPXActionI {
+export interface SetHeightPXActionI {
     setTopBarHeightPX: (topBarPX: number) => void
     setMinusPX: (minusPX: number) => void
     setFooterPX: (footerPX: number) => void
     setCartImgPX: (cartImgPX: number) => void
     setAsideBarHorizontalPX: (asideBarHorizontalPX: number) => void
 }
-const setHeightPX: setHeightPXActionI = {
+const setHeightPXAction: SetHeightPXActionI = {
     setTopBarHeightPX,
     setMinusPX,
     setFooterPX,
     setCartImgPX,
     setAsideBarHorizontalPX,
 }
-export default setHeightPX
+export default setHeightPXAction

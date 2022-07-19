@@ -22,7 +22,7 @@ function setNoteText(noteText: string) {
     confirmState.noteText = noteText;
 };
 
-async function submitOrder (payload?: any = {}) {
+async function submitOrder (payload: any = {}) {
     const menuStore: MenuStoreI = useMenuStore()
     const { cartPriceInfo, orderFoodList }: CartPriceInfoGetterF = storeToRefs(menuStore)
     await fetch('order/submit', {

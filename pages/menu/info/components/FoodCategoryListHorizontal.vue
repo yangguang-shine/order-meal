@@ -2,7 +2,7 @@
     <scroll-view scroll-y scroll-with-animation :scroll-into-view="categoryIDMain" class="category-list-horizontal-container" id="food-main-box" @scroll="foodScrollHandle" :style="{ 'padding-top': asideBarHorizontalPX + 'px' }">
         <div class="category-list">
             <view class="category-item" v-for="(foodCategoryItem, index) in categoryList" :key="index" :id="foodCategoryItem.categoryIDMain" :style="{ 'padding-bottom': index === categoryList.length - 1 ? categoryItemLastPaddingBottom : '' }">
-                <view class="category-name">{{ foodCategoryItem.categoryName }}{{ foodCategoryItem.categoryIDMain }}</view>
+                <view class="category-name">{{ foodCategoryItem.categoryName }}</view>
                 <div class="food-list-box flex-row flex-wrap">
                     <FoodItemHorizontal v-for="foodItem in foodCategoryItem.foodList" :key="foodItem.foodID" :foodItem="foodItem" @clickFoodItem="toShowFoodDetail"></FoodItemHorizontal>
                 </div>
