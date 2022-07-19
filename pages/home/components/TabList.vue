@@ -29,10 +29,10 @@ const { changeTabItem, setTabListTop, getRecommandShopList } = homeStore;
 
 onMounted(() => {
     getTabListTop();
-
+    // 为了获取最终的位置
     setTimeout(() => {
         getTabListTop()
-    }, 4000);
+    }, 200);
     //    uni.createSelectorQuery()
     //         .select('#tab-list-fixed-id')
     //         .boundingClientRect((res: any) => {

@@ -1,5 +1,5 @@
 <template>
-    <view class="home-container" id="home-container" :style="{'padding-top': topAddressSearchPX + 'px'}">
+    <view class="home-container" id="home-container" :style="{ 'padding-top': topAddressSearchPX + 'px' }">
         <TopAddressSearch></TopAddressSearch>
         <ToolsList></ToolsList>
         <Banner></Banner>
@@ -29,7 +29,7 @@ import { ShopListParamsI } from "@/store/actions/home";
 import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
 import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
 import { HomeStateI } from "@/store/state/home";
-import { storeToRefs} from 'pinia'
+import { storeToRefs } from "pinia";
 
 interface HomeStateF {
     searchShopFlag: ComputedStateI<boolean>;
@@ -44,17 +44,25 @@ const homeStore: HomeStoreI = useHomeStore();
 const { searchShopFlag, tabListTop, selectedTabItem, topAddressSearchPX }: HomeStateF = toRefs(homeStore.homeState);
 // home action
 const { getRecommandShopList, setTopAddressWidthFlag, setTabListFixedFlag } = homeStore;
-console.log('homeStore')
-console.log(homeStore)
 
 // address store
 const addressStore: AddressStoreI = useAddressStore();
 // address action
 const { getDefaultAddress } = addressStore;
-
+let pageHaShowFlag = false;
 onShow(async () => {
     console.log("onShow");
     init();
+    if (pageHaShowFlag) {
+        // 页面展示时是否固定店铺tab
+        getShowTabListPosition();
+    } else {
+        // 渲染时获取不到相关元素信息 需要延迟获取
+        setTimeout(() => {
+            getShowTabListPosition();
+        }, 100);
+        pageHaShowFlag = true;
+    }
     setTimeout(async () => {
         try {
             const res = await selectQuery("#home-container");
@@ -66,6 +74,7 @@ onShow(async () => {
         } catch (e) {
             console.log(e);
         } finally {
+            console.log(1111);
         }
     }, 100);
 
@@ -77,6 +86,19 @@ onShow(async () => {
     // });
     // }, 0);
 });
+async function getShowTabListPosition() {
+    try {
+        const res = await selectQuery("#home-container");
+        if (-res.top >= tabListTop.value - topAddressSearchPX.value) {
+            setTabListFixedFlag(true);
+        } else {
+            setTabListFixedFlag(false);
+        }
+    } catch (e) {
+        console.log(e);
+    } finally {
+    }
+}
 onLoad(() => {
     console.log("onLoad");
 });
@@ -91,10 +113,7 @@ onUnload(() => {
 });
 
 onPageScroll((e: any) => {
-    console.log(tabListTop.value)
-    console.log(topAddressSearchPX.value)
     if (e.scrollTop > topAddressSearchPX.value) {
-        // console.log(e.scrollTop)
         setTopAddressWidthFlag(true);
     } else {
         setTopAddressWidthFlag(false);
