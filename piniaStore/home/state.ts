@@ -11,6 +11,7 @@ export interface HomeStateI {
     searchShopFlag: boolean,
     // businessType: number;
     tabListTop: number
+    topAddressSearchPX: number
 }
 export const tabList: TabItemI[] = [
     {
@@ -37,7 +38,8 @@ const homeState: HomeStateI = reactive({
     // shopInfo: initShopItem,
     searchShopFlag: false,
     // businessType: 2,
-    tabListTop: 0
+    tabListTop: 0,
+    topAddressSearchPX: 50
 });
 
 export default homeState

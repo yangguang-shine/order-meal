@@ -67,7 +67,7 @@ function toToolDetail(toolItem: ToolItemI) {
 .tools-list-container {
     // width: 100%;
     width: 710rpx;
-    margin: 20rpx auto 0;
+    margin: 0 auto;
     background-color: #fff;
     border-radius: 12rpx;
     padding-bottom: 40rpx;

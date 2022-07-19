@@ -12,7 +12,6 @@
 <script lang="ts" setup>
 import { defineComponent, computed, getCurrentInstance, ref, toRefs } from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
-import { topAddressSearchHeight } from "../homeConfig";
 import { TabItemI, ComputedStateI, ComputedMutationI, ComputedActionI, ShopItemI } from "@/interface/index";
 import { ComputedI, RefI } from "@/interface/vueInterface";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";

@@ -2,7 +2,7 @@
 
 import fetch from "@/utils/fetch";
 import { shopImgPath } from "@/config/index";
-import {  OriginShopItemI, ShopItemI, TabItemI } from "@/interface/index";
+import { OriginShopItemI, ShopItemI, TabItemI } from "@/interface/index";
 import getBusinessTypeInfo from "@/utils/getBusinessTypeInfo";
 import addressState from "../address/state";
 import homeState from "./state";
@@ -11,14 +11,14 @@ export interface ShopListParamsI {
     type?: string;
     businessType?: number;
 }
-async function getRecommandShopList( { type = "", businessType = 2 }: ShopListParamsI = {}) {
+export async function getRecommandShopList({ type = "", businessType = 2 }: ShopListParamsI = {}) {
     let data: OriginShopItemI[] = await fetch("shop/list", {
         businessType,
         type,
         latitude: addressState.defaultAddress.latitude,
         longitude: addressState.defaultAddress.longitude,
     });
-    data.push(...data)
+    data.push(...data);
     const recommandShopList: ShopItemI[] = (data || []).map(
         (item: OriginShopItemI): ShopItemI => ({
             ...item,
@@ -27,30 +27,31 @@ async function getRecommandShopList( { type = "", businessType = 2 }: ShopListPa
             ...getBusinessTypeInfo(item.businessTypes),
         })
     );
-    homeState.recommandShopList = recommandShopList
+    homeState.recommandShopList = recommandShopList;
     return recommandShopList || [];
 }
-
-function setTopAddressWidthFlag(topAddressWidthFlag: boolean): void {
+export function setTopAddressWidthFlag(topAddressWidthFlag: boolean): void {
     homeState.topAddressWidthFlag = topAddressWidthFlag;
 }
-function setTabListFixedFlag(tabListFixedFlag: boolean): void {
+export function setTabListFixedFlag(tabListFixedFlag: boolean): void {
     homeState.tabListFixedFlag = tabListFixedFlag;
 }
-
-function setRecommandShopList( recommandShopList: ShopItemI[]): void {
+export function setRecommandShopList(recommandShopList: ShopItemI[]): void {
     homeState.recommandShopList = recommandShopList;
 }
-
-function changeTabItem( tabItem: TabItemI): void {
+export function changeTabItem(tabItem: TabItemI): void {
     homeState.selectedTabItem = tabItem;
 }
-function setSearchShopFlag( searchShopFlag: boolean): void {
+export function setSearchShopFlag(searchShopFlag: boolean): void {
     homeState.searchShopFlag = searchShopFlag;
 }
-
-function setTabListTop( tabListTop: number): void {
+export function setTabListTop(tabListTop: number): void {
     homeState.tabListTop = tabListTop;
+}
+export function setTopAddressSearchPX(topAddressSearchPX: number) {
+    console.log('topAddressSearchPX')
+    console.log(topAddressSearchPX)
+    homeState.topAddressSearchPX = topAddressSearchPX;
 }
 
 export interface HomeActionI {
@@ -61,6 +62,8 @@ export interface HomeActionI {
     changeTabItem: (tabItem: TabItemI) => void;
     setSearchShopFlag: (searchShopFlag: boolean) => void;
     setTabListTop: (tabListTop: number) => void;
+    setTopAddressSearchPX
+    : (topAddressSearchPX: number) => void;
 }
 const homeAction: HomeActionI = {
     getRecommandShopList,
@@ -70,5 +73,6 @@ const homeAction: HomeActionI = {
     changeTabItem,
     setSearchShopFlag,
     setTabListTop,
-} 
-export default homeAction
+    setTopAddressSearchPX,
+};
+export default homeAction;

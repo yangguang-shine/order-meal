@@ -1,5 +1,5 @@
 <template>
-    <view class="home-container" id="home-container">
+    <view class="home-container" id="home-container" :style="{'padding-top': topAddressSearchPX + 'px'}">
         <TopAddressSearch></TopAddressSearch>
         <ToolsList></ToolsList>
         <Banner></Banner>
@@ -20,7 +20,6 @@ import Banner from "./components/Banner.vue";
 import FixedImg from "./components/FixedImg.vue";
 import RecommandInfo from "./components/RecommandInfo.vue";
 import SearchShop from "./components/SearchShop.vue";
-import { topAddressSearchHeight } from "./homeConfig";
 import { getCurrentInstance, onMounted, toRefs } from "vue";
 import { onShow, onLoad, onPageScroll, onHide, onUnload } from "@dcloudio/uni-app";
 import { AddressItemI, ComputedActionI, ComputedMutationI, ComputedStateI, ShopItemI, TabItemI } from "@/interface/index";
@@ -36,12 +35,13 @@ interface HomeStateF {
     searchShopFlag: ComputedStateI<boolean>;
     tabListTop: ComputedStateI<number>;
     selectedTabItem: ComputedStateI<TabItemI>;
+    topAddressSearchPX: ComputedStateI<number>;
 }
 
 // home store
 const homeStore: HomeStoreI = useHomeStore();
 // home state
-const { searchShopFlag, tabListTop, selectedTabItem }: HomeStateF = toRefs(homeStore.homeState);
+const { searchShopFlag, tabListTop, selectedTabItem, topAddressSearchPX }: HomeStateF = toRefs(homeStore.homeState);
 // home action
 const { getRecommandShopList, setTopAddressWidthFlag, setTabListFixedFlag } = homeStore;
 console.log('homeStore')
@@ -58,7 +58,7 @@ onShow(async () => {
     setTimeout(async () => {
         try {
             const res = await selectQuery("#home-container");
-            if (-res.top >= tabListTop.value - topAddressSearchHeight) {
+            if (-res.top >= tabListTop.value - topAddressSearchPX.value) {
                 setTabListFixedFlag(true);
             } else {
                 setTabListFixedFlag(false);
@@ -91,12 +91,15 @@ onUnload(() => {
 });
 
 onPageScroll((e: any) => {
-    if (e.scrollTop > topAddressSearchHeight) {
+    console.log(tabListTop.value)
+    console.log(topAddressSearchPX.value)
+    if (e.scrollTop > topAddressSearchPX.value) {
+        // console.log(e.scrollTop)
         setTopAddressWidthFlag(true);
     } else {
         setTopAddressWidthFlag(false);
     }
-    if (e.scrollTop > tabListTop.value - topAddressSearchHeight) {
+    if (e.scrollTop > tabListTop.value - topAddressSearchPX.value) {
         setTabListFixedFlag(true);
     } else {
         setTabListFixedFlag(false);
@@ -142,6 +145,7 @@ page {
     font-size: 28rpx;
     color: #333;
     padding-bottom: 30rpx;
+    margin-top: 20rpx;
     .swiper-box {
         height: 280rpx;
         width: 100%;

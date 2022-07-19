@@ -49,9 +49,9 @@ function changeCategoryTab(asideCategoryItem: CategoryItemI) {
     setCategoryIDAside(asideCategoryItem.categoryIDAside);
 }
 onMounted(() => {
-    getAsideBarHorizontalPositionInfo();
+    getAsideBarHorizontalHeight();
 });
-async function getAsideBarHorizontalPositionInfo() {
+async function getAsideBarHorizontalHeight() {
     const res = await selectQuery("#aside-bar-horizontal");
     setAsideBarHorizontalPX(res.height);
 }

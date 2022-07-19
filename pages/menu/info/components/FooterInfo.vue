@@ -138,15 +138,15 @@ const confirmButtonInfo: ComputedI<ConfirmButtonInfoI> = computed((): ConfirmBut
     };
 });
 onMounted(async () => {
-    getFooterCartContainerPositionInfo()
-    getCartImgBoxPositionInfo();
+    getFooterCartContainerHeight()
+    getCartImgBoxHeight();
 });
-async function getFooterCartContainerPositionInfo() {
+async function getFooterCartContainerHeight() {
     const res = await selectQuery('#footer-cart-container')
     setFooterPX(res.height)
 }
 
-async function getCartImgBoxPositionInfo() {
+async function getCartImgBoxHeight() {
     const res = await selectQuery("#cart-img-box");
     setCartImgPX(res.height)
 

@@ -1,9 +1,9 @@
 <template>
     <view class="promotion-title flex-row flex-ja-center" id="minus-promotion-title" :style="{ position: startShopInfoAnimationFlag || shopInfoFlag ? 'absolute' : 'fixed' }">
         <view class="minus-info flex-item flex-row flex-ja-center">
-            <text v-for="(contentItem, index) in minusPromotionsObject.contentList" :key="index" :class="{ 'content-red': index % 2 !== 0 }" :style="{'color': index % 2 !== 0 ? $mainColor : ''}">{{ contentItem }}</text>
+            <text v-for="(contentItem, index) in minusPromotionsObject.contentList" :key="index" :class="{ 'content-red': index % 2 !== 0 }" :style="{ color: index % 2 !== 0 ? $mainColor : '' }">{{ contentItem }}</text>
         </view>
-        <view class="collect-to-want flex-center content-red" :style="{'color': $mainColor}" @click="toCollect">去凑单</view>
+        <view class="collect-to-want flex-center content-red" :style="{ color: $mainColor }" @click="toCollect">去凑单</view>
     </view>
 </template>
 
@@ -22,7 +22,7 @@ interface MenuStateF {
     startShopInfoAnimationFlag: ComputedStateI<boolean>;
     shopInfoFlag: ComputedStateI<boolean>;
     shopInfo: ComputedStateI<ShopItemI>;
-    collectFoodFlag: ComputedStateI<boolean>
+    collectFoodFlag: ComputedStateI<boolean>;
 }
 interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
@@ -32,16 +32,19 @@ const menuStore: MenuStoreI = useMenuStore();
 // state
 const { startShopInfoAnimationFlag, shopInfoFlag, shopInfo, collectFoodFlag }: MenuStateF = toRefs(menuStore.menuState);
 // getter
-const { minusPromotionsObject,  }: MenuGetterF = storeToRefs(menuStore);
-const { setCollectFoodFlag,setMinusPX } = menuStore
+const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
+const { setCollectFoodFlag, setMinusPX } = menuStore;
 
 onMounted(async () => {
-    const res = await selectQuery('#minus-promotion-title')
-    setMinusPX(res.height)
-})
+    getMinusPromotionTitleHeight();
+});
+async function getMinusPromotionTitleHeight() {
+    const res = await selectQuery("#minus-promotion-title");
+    setMinusPX(res.height);
+}
 function toCollect() {
     if (!collectFoodFlag.value) {
-        setCollectFoodFlag(true)
+        setCollectFoodFlag(true);
     }
 }
 </script>

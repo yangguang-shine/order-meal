@@ -1,34 +1,38 @@
 <template>
-    <view class="tab-list-container">
-        <view id="tab-list-fixed-id" class="tab-list flex-row flex-a-center" :class="{ 'tab-list-fixed': tabListFixedFlag }" :style="{ top: tabListFixedFlag ? topAddressSearchHeight + 'px' : '' }">
+    <view class="tab-list-container" id="tab-list-container">
+        <view id="tab-list-fixed-id" class="tab-list flex-row flex-a-center" :class="{ 'tab-list-fixed': tabListFixedFlag }" :style="{ top: tabListFixedFlag ? topAddressSearchPX + 'px' : '' }">
             <view v-for="(tabItem, index) in tabList" :key="index" class="tab-item flex-item flex-row flex-ja-center" :class="selectedTabItem.type === tabItem.type ? 'select-tab-item' : ''" @click="clickTabItem(tabItem)">{{ tabItem.title }}</view>
         </view>
     </view>
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, computed, getCurrentInstance, ref, onMounted,toRefs } from "vue";
+import { defineComponent, computed, getCurrentInstance, ref, onMounted, toRefs } from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
-import { topAddressSearchHeight } from "../homeConfig";
 import { TabItemI, ComputedStateI, ComputedMutationI, ComputedActionI } from "@/interface/index";
 import { hideLoading, selectQuery, showLoading } from "@/utils/";
 import { ShopListParamsI } from "@/store/actions/home";
 import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
-import { storeToRefs} from 'pinia'
+import { storeToRefs } from "pinia";
 interface HomeStateF {
     tabList: ComputedStateI<TabItemI[]>;
     selectedTabItem: ComputedStateI<TabItemI>;
     tabListFixedFlag: ComputedStateI<boolean>;
     tabListTop: ComputedStateI<number>;
+    topAddressSearchPX: ComputedStateI<number>;
 }
 // home store
-const homeStore: HomeStoreI = useHomeStore()
+const homeStore: HomeStoreI = useHomeStore();
 // home state
-const { tabList, selectedTabItem, tabListFixedFlag, tabListTop }: HomeStateF = toRefs(homeStore.homeState);
-const { changeTabItem, setTabListTop , getRecommandShopList} = homeStore;
+const { tabList, selectedTabItem, tabListFixedFlag, tabListTop, topAddressSearchPX }: HomeStateF = toRefs(homeStore.homeState);
+const { changeTabItem, setTabListTop, getRecommandShopList } = homeStore;
 
 onMounted(() => {
     getTabListTop();
+
+    setTimeout(() => {
+        getTabListTop()
+    }, 4000);
     //    uni.createSelectorQuery()
     //         .select('#tab-list-fixed-id')
     //         .boundingClientRect((res: any) => {
@@ -39,9 +43,13 @@ onMounted(() => {
 });
 async function getTabListTop() {
     const res = await selectQuery("#tab-list-fixed-id");
+    setTabListTop(res.top);
+
+    const res1 = await selectQuery("#tab-list-container");
+    console.log(">>>>");
     console.log(res);
-    const { top } = res;
-    setTabListTop(top);
+    console.log(res1);
+    console.log('<<<<<')
 }
 const clickTabItem = async (tabItem: TabItemI) => {
     if (selectedTabItem.value.type === tabItem.type) return;
@@ -49,12 +57,12 @@ const clickTabItem = async (tabItem: TabItemI) => {
         showLoading();
         await getRecommandShopList({
             type: tabItem.type,
-            businessType: 2
+            businessType: 2,
         });
         // await $delaySync(2000)
         changeTabItem(tabItem);
         uni.pageScrollTo({
-            scrollTop: tabListTop.value - topAddressSearchHeight,
+            scrollTop: tabListTop.value - topAddressSearchPX.value,
             duration: 200,
         });
     } catch (e) {

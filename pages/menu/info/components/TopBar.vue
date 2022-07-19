@@ -72,8 +72,8 @@ onMounted(async () => {
 });
 async function getTopBarHeight() {
     try {
-        const topBarPositionInfo = await selectQuery("#com-top-bar-container");
-        setTopBarHeightPX(topBarPositionInfo.height);
+        const res = await selectQuery("#com-top-bar-container");
+        setTopBarHeightPX(res.height);
     } catch (e) {
         console.log(e);
     } finally {
