@@ -1,6 +1,6 @@
   
 const devTestProduce = true
-export let domain = devTestProduce ? 'http://dev.jr.jd.com:9999' :  `http://r329sx.natappfree.cc`
+export let domain = devTestProduce ? 'http://dev.jr.jd.com:9999' :  `http://yangguang.natappvip.cc`
 export let requestHost: string = `${domain}/api`
 if (process.env.NODE_ENV === 'development') {
 	console.log('开发环境');
