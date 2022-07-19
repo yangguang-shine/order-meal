@@ -50,10 +50,6 @@ const showInfoFlag: RefI<boolean> = ref(false);
 
 interface MenuStateF {
     shopInfo: ComputedStateI<ShopItemI>;
-
-    // cartCategoryList: ComputedStateI<CategoryItemI[]>;
-    // cartDetailFlag: ComputedStateI<boolean>;
-    // cartImgPositionInfo: ComputedStateI<PositionInfoI>;
 }
 interface RandomStyleI {
     random: number;

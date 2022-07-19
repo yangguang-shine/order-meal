@@ -1,5 +1,5 @@
 <template>
-    <view class="promotion-title flex-row flex-ja-center" :style="{ position: startShopInfoAnimationFlag || shopInfoFlag ? 'absolute' : 'fixed' }">
+    <view class="promotion-title flex-row flex-ja-center" id="minus-promotion-title" :style="{ position: startShopInfoAnimationFlag || shopInfoFlag ? 'absolute' : 'fixed' }">
         <view class="minus-info flex-item flex-row flex-ja-center">
             <text v-for="(contentItem, index) in minusPromotionsObject.contentList" :key="index" :class="{ 'content-red': index % 2 !== 0 }" :style="{'color': index % 2 !== 0 ? $mainColor : ''}">{{ contentItem }}</text>
         </view>
@@ -12,10 +12,11 @@ import { mapGetter, mapState } from "@/utils/mapVuex";
 
 import { ComputedGetterI, ComputedStateI } from "@/interface/vuex";
 import { MinusPromotionsObjectI } from "@/store/getters/menu";
-import { toRefs } from "vue";
+import { toRefs, onMounted } from "vue";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
 import { ShopItemI } from "@/interface/home";
+import { selectQuery } from "@/utils/";
 
 interface MenuStateF {
     startShopInfoAnimationFlag: ComputedStateI<boolean>;
@@ -32,7 +33,12 @@ const menuStore: MenuStoreI = useMenuStore();
 const { startShopInfoAnimationFlag, shopInfoFlag, shopInfo, collectFoodFlag }: MenuStateF = toRefs(menuStore.menuState);
 // getter
 const { minusPromotionsObject,  }: MenuGetterF = storeToRefs(menuStore);
-const { setCollectFoodFlag } = menuStore
+const { setCollectFoodFlag,setMinusPX } = menuStore
+
+onMounted(async () => {
+    const res = await selectQuery('#minus-promotion-title')
+    setMinusPX(res.height)
+})
 function toCollect() {
     if (!collectFoodFlag.value) {
         setCollectFoodFlag(true)

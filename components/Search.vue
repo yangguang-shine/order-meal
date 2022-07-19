@@ -37,7 +37,7 @@ import { ref, onMounted, computed, getCurrentInstance, watch } from "vue";
 import { ShopItemI } from "@/interface/home";
 import { searchDefaultTransitionTime } from "./config";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
-import { debounce, handleFoodCategoryListScroll } from "@/pages/menu/info/components/common";
+import { debounce } from "@/utils/tool";
 interface PropsI {
     bottom?: number;
     searchResultList: any;

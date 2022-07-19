@@ -1,5 +1,5 @@
 <template>
-    <view class="footer-cart-container" :style="{ position: startShopInfoAnimationFlag || shopInfoFlag ? 'absolute' : 'fixed' }">
+    <view class="footer-cart-container" id="footer-cart-container" :style="{ position: startShopInfoAnimationFlag || shopInfoFlag ? 'absolute' : 'fixed' }">
         <view class="footer-cart flex-row flex-j-between flex-a-center">
             <view :animation="cartImgAnimationData" class="cart-img-box" id="cart-img-box">
                 <CartImg @click="clickCartImg"></CartImg>
@@ -50,7 +50,6 @@ interface MenuStateF {
     businessType: ComputedStateI<number>;
     shopInfo: ComputedStateI<ShopItemI>;
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
-    cartImgPositionInfo: ComputedStateI<PositionInfoI>;
     cartImgAnimationFlag: ComputedStateI<boolean>;
     requiredCategoryIDList: ComputedStateI<number[]>;
 }
@@ -58,18 +57,14 @@ interface MenuGetterF {
     cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
     asideCategoryInfo: ComputedGetterI<AsideCategoryInfoI>;
 }
-interface MutationF {
-    toogleCartDetailFlag: ComputedMutationI;
-    setCartImgPositionInfo: ComputedMutationI<PositionInfoI>;
-}
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCategoryList, cartImgPositionInfo, cartImgAnimationFlag, requiredCategoryIDList }: MenuStateF = toRefs(menuStore.menuState);
+const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCategoryList,  cartImgAnimationFlag, requiredCategoryIDList }: MenuStateF = toRefs(menuStore.menuState);
 // getter
 const { cartPriceInfo, asideCategoryInfo }: MenuGetterF = storeToRefs(menuStore);
 // action
-const { toogleCartDetailFlag, setCartImgPositionInfo, setScrollToViewCategory } = menuStore;
+const { toogleCartDetailFlag, setScrollToViewCategory, setFooterPX, setCartImgPX } = menuStore;
 const cartImgAnimationData = ref(null);
 const hasOrderRequiredListFlag = computed(() => {
     let hasOrderRequiredFlag: boolean = true;
@@ -143,15 +138,18 @@ const confirmButtonInfo: ComputedI<ConfirmButtonInfoI> = computed((): ConfirmBut
     };
 });
 onMounted(async () => {
-    const positionInfo = await getCartImgPositionInfo();
-    setCartImgPositionInfo(positionInfo);
+    getFooterCartContainerPositionInfo()
+    getCartImgBoxPositionInfo();
 });
-async function getCartImgPositionInfo(): Promise<PositionInfoI> {
+async function getFooterCartContainerPositionInfo() {
+    const res = await selectQuery('#footer-cart-container')
+    setFooterPX(res.height)
+}
+
+async function getCartImgBoxPositionInfo() {
     const res = await selectQuery("#cart-img-box");
-    return {
-        left: res.left,
-        top: res.top,
-    };
+    setCartImgPX(res.height)
+
 }
 watch(cartImgAnimationFlag, (newValue: boolean, oldValue: boolean) => {
     if (newValue) {

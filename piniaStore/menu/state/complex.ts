@@ -5,7 +5,6 @@ export interface ComplexI {
     categoryListMap: CategoryListMapI;
     foodInfo: FoodItemI;
     foodSpecificationInfo: FoodItemI;
-    cartImgPositionInfo: PositionInfoI;
     overReserveFoodList: FoodItemI[];
     overReserveFoodListMap: FoodListMapI;
     cartCategoryListMap: CategoryListMapI;
@@ -21,10 +20,6 @@ const complexDefault: ComplexI = {
     categoryListMap: {},
     foodInfo: initFoodItem,
     foodSpecificationInfo: initFoodItem,
-    cartImgPositionInfo: {
-        left: 0,
-        top: 0,
-    },
     overReserveFoodList: [],
     overReserveFoodListMap: {},
     cartCategoryListMap: {},

@@ -1,5 +1,5 @@
 import { PositionInfoI } from "../interface";
-import { getCurrentInstance } from 'vue'
+import { getCurrentInstance } from "vue";
 export const getSetting = (scopeName: string): Promise<void> => {
     return new Promise((resolve, reject) => {
         uni.getSetting({
@@ -179,7 +179,17 @@ export function toFixedToNumber(num: number, remain: number = 2) {
     return Number(num.toFixed(remain));
 }
 
-export function selectQuery(id: string, currentInstance?: any): Promise<any> {
+interface ResSelectQueryI {
+    bottom: number;
+    dataset: any;
+    height: number;
+    id: string;
+    left: number;
+    right: number;
+    top: number;
+    width: number;
+}
+export function selectQuery(id: string, currentInstance?: any): Promise<ResSelectQueryI> {
     return new Promise((resolve, reject) => {
         let query: any = uni.createSelectorQuery();
         if (!currentInstance) {
@@ -187,19 +197,19 @@ export function selectQuery(id: string, currentInstance?: any): Promise<any> {
         }
         query
             .select(id)
-            .boundingClientRect((res: any = {}) => {
-				// console.log(id)
-                // console.log(11111)
-				// console.log(res)
-                if (process.env.NODE_ENV === 'development') {
-                    res.top = res.top + navigationBarHeightPX;
-                    res.bottom = res.bottom + navigationBarHeightPX;
+            .boundingClientRect((res: ResSelectQueryI | null) => {
+                if (res) {
+                    if (process.env.NODE_ENV === "development") {
+                        res.top = res.top + navigationBarHeightPX;
+                        res.bottom = res.bottom + navigationBarHeightPX;
+                    } else {
+                        console.log("生产环境");
+                    }
+                    resolve(res);
                 } else {
-                    console.log('生产环境');
+                    reject(null);
                 }
-                resolve(res);
             })
             .exec();
     });
 }
-

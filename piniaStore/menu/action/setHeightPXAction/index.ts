@@ -7,24 +7,24 @@ import menuState from "../../state";
 // asideBarHorizontalPX: 40
 
 
-function setTopBarHeightPX(topBarPX: number) {
+export function setTopBarHeightPX(topBarPX: number) {
     console.log('topBarPX', topBarPX)
     menuState.topBarPX = topBarPX
 }
-function setMinusPX(minusPX: number) {
+export function setMinusPX(minusPX: number) {
     console.log('minusPX', minusPX)
     menuState.minusPX = minusPX
 }
-function setFooterPX(footerPX: number) {
+export function setFooterPX(footerPX: number) {
     console.log('footerPX', footerPX)
     menuState.footerPX = footerPX
 }
 
-function setCartImgPX(cartImgPX: number) {
+export function setCartImgPX(cartImgPX: number) {
     console.log('cartImgPX', cartImgPX)
     menuState.cartImgPX = cartImgPX
 }
-function setAsideBarHorizontalPX(asideBarHorizontalPX: number) {
+export function setAsideBarHorizontalPX(asideBarHorizontalPX: number) {
     console.log('asideBarHorizontalPX', asideBarHorizontalPX)
     menuState.asideBarHorizontalPX = asideBarHorizontalPX
 }

@@ -45,7 +45,6 @@ interface MenuStateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
     cartDetailFlag: ComputedStateI<boolean>;
     shopInfo: ComputedStateI<ShopItemI>;
-    cartImgPositionInfo: ComputedStateI<PositionInfoI>;
     cartImgPX: ComputedStateI<number>
     foodAddIconPX: ComputedStateI<number>
 
@@ -58,7 +57,7 @@ interface MutationF {
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPositionInfo, cartImgPX , foodAddIconPX}: MenuStateF = toRefs(menuStore.menuState);
+const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPX , foodAddIconPX}: MenuStateF = toRefs(menuStore.menuState);
 const { cartChange, setCartDetailFlag, setCartImgAnimationFlag, setFoodSpecificationInfo, setFoodSpecificationFlag } = menuStore;
 const idPre = "id";
 const props: PropsI = withDefaults(defineProps<PropsI>(), {

@@ -42,7 +42,6 @@ interface MenuStateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
     cartDetailFlag: ComputedStateI<boolean>;
     shopInfo: ComputedStateI<ShopItemI>;
-    cartImgPositionInfo: ComputedStateI<PositionInfoI>;
     foodSpecificationInfo: ComputedStateI<FoodItemI>;
     cartImgPX: ComputedStateI<number>
     foodAddIconPX: ComputedStateI<number>
@@ -57,7 +56,7 @@ interface MutationF {
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPositionInfo, foodSpecificationInfo, cartImgPX ,foodAddIconPX}: MenuStateF = toRefs(menuStore.menuState);
+const { cartCategoryList, cartDetailFlag, shopInfo, foodSpecificationInfo, cartImgPX ,foodAddIconPX}: MenuStateF = toRefs(menuStore.menuState);
 // action
 const specificationOrderCount = computed(() => {
     const length = foodSpecificationInfo.value.orderSpecifaList.length;

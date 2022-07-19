@@ -8,10 +8,7 @@ if (process.env.NODE_ENV === 'development') {
 	requestHost = "http://dev.jr.jd.com:6789/api"
 } else {
 	console.log('生产环境');
-	// domain = `http://vpvdtr.natappfree.cc`;
-	// requestHost: string = `${domain}/api`
 }
-// export const domain = `http://vpvdtr.natappfree.cc`
 export const host: string = `${domain}`
 export const shopImgPath: string = `${domain}/image/shop`
 export const foodImgPath:string = `${domain}/image/food`

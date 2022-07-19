@@ -1,6 +1,6 @@
 <template>
     <scroll-view scroll-x="true" scroll-with-animation class="category-aside-bar-horizontal-container" :scroll-into-view="categoryIDAside">
-        <div class="category-list flex-row flex-a-center">
+        <div class="category-list flex-row flex-a-center" id="aside-bar-horizontal">
             <view class="category-item flex-shrink flex-row flex-ja-center" v-for="(asideCategoryItem, index) in asideCategoryInfo.asideCategoryList" :key="index" :class="{ 'categroy-item-active': selectedCategoryID === asideCategoryItem.categoryID }" @click="changeCategoryTab(asideCategoryItem)" :style="{ color: selectedCategoryID === asideCategoryItem.categoryID ? shopInfo.mainColor : '' }" :id="asideCategoryItem.categoryIDAside">
                 {{ asideCategoryItem.categoryName }}
                 <view v-if="asideCategoryItem.categoryOrderCount" class="category-order-count flex-row flex-ja-center" :style="{ background: $mainColor }">{{ asideCategoryItem.categoryOrderCount }}</view>
@@ -20,8 +20,9 @@ import { RefI } from "@/interface/vueInterface";
 import { ShopItemI } from "@/interface/home";
 import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
-import { storeToRefs} from 'pinia'
+import { storeToRefs } from "pinia";
 import { AsideCategoryInfoI, MinusPromotionsObjectI, AsideCategoryItemI } from "@/piniaStore/menu/getter";
+import { selectQuery } from "@/utils/";
 
 interface MenuStateF {
     selectedCategoryID: ComputedStateI<number>;
@@ -34,18 +35,25 @@ interface MenuGetterF {
 }
 
 // store
-const menuStore: MenuStoreI = useMenuStore()
+const menuStore: MenuStoreI = useMenuStore();
 // state
-const { selectedCategoryID, shopInfo, categoryIDAside }:MenuStateF =toRefs(menuStore.menuState) 
+const { selectedCategoryID, shopInfo, categoryIDAside }: MenuStateF = toRefs(menuStore.menuState);
 // getter
-const { asideCategoryInfo, minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore) 
+const { asideCategoryInfo, minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
 // action
-const { setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside } = menuStore
+const { setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside, setAsideBarHorizontalPX } = menuStore;
 //
 function changeCategoryTab(asideCategoryItem: CategoryItemI) {
     setSelectedCategoryID(asideCategoryItem.categoryID);
     setCategoryIDMain(asideCategoryItem.categoryIDMain);
     setCategoryIDAside(asideCategoryItem.categoryIDAside);
+}
+onMounted(() => {
+    getAsideBarHorizontalPositionInfo();
+});
+async function getAsideBarHorizontalPositionInfo() {
+    const res = await selectQuery("#aside-bar-horizontal");
+    setAsideBarHorizontalPX(res.height);
 }
 </script>
 

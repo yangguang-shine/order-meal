@@ -5,7 +5,7 @@ import menuState from "../../state";
 import getBusinessTypeInfo from "@/utils/getBusinessTypeInfo";
 import fetch from "@/utils/fetch";
 import { shopImgPath } from "@/config/index";
-function setShopInfo(shopInfo: ShopItemI): void {
+export function setShopInfo(shopInfo: ShopItemI): void {
     console.log(menuState.shopInfo.shopID);
     console.log(shopInfo.shopID);
     // 防止不同店铺进行多次初始化
@@ -15,57 +15,53 @@ function setShopInfo(shopInfo: ShopItemI): void {
     menuState.shopInfo = shopInfo;
 }
 
-function setBusinessType(type: number): void {
+export function setBusinessType(type: number): void {
     menuState.businessType = type;
 }
-function setSelectedCategoryID(selectedCategoryID: number) {
+export function setSelectedCategoryID(selectedCategoryID: number) {
     menuState.selectedCategoryID = selectedCategoryID;
 }
 
-function setCategoryIDMain(categoryIDMain: string) {
+export function setCategoryIDMain(categoryIDMain: string) {
     menuState.categoryIDMain = categoryIDMain;
 }
 
-function setCategoryIDAside(categoryIDAside: string) {
+export function setCategoryIDAside(categoryIDAside: string) {
     menuState.categoryIDAside = categoryIDAside;
 }
-function setCategoryList(categoryList: CategoryItemI[]) {
+export function setCategoryList(categoryList: CategoryItemI[]) {
     menuState.categoryList = categoryList;
 }
 
-function setCategoryListMap(categoryListMap: CategoryListMapI) {
+export function setCategoryListMap(categoryListMap: CategoryListMapI) {
     menuState.categoryListMap = categoryListMap;
 }
 
-function setFoodInfo(foodInfo: FoodItemI = initFoodItem) {
+export function setFoodInfo(foodInfo: FoodItemI = initFoodItem) {
     menuState.foodInfo = foodInfo;
 }
 
-function setTopBarInfo(topBarInfo: string) {
+export function setTopBarInfo(topBarInfo: string) {
     menuState.topBarInfo = topBarInfo;
 }
 
-function setCartImgPositionInfo(positionInfo: PositionInfoI) {
-    menuState.cartImgPositionInfo = positionInfo;
-}
-
-function setCartCategoryList(cartCategoryList: CategoryItemI[]) {
+export function setCartCategoryList(cartCategoryList: CategoryItemI[]) {
     menuState.cartCategoryList = cartCategoryList;
 }
 
-function setCartCategoryListMap(cartCategoryListMap: CategoryListMapI) {
+export function setCartCategoryListMap(cartCategoryListMap: CategoryListMapI) {
     menuState.cartCategoryListMap = cartCategoryListMap;
 }
 
-function setOverReserveFoodList(overReserveFoodList: FoodItemI[]) {
+export function setOverReserveFoodList(overReserveFoodList: FoodItemI[]) {
     menuState.overReserveFoodList = overReserveFoodList;
 }
 
-function setOverReserveFoodListMap(overReserveFoodListMap: FoodListMapI) {
+export function setOverReserveFoodListMap(overReserveFoodListMap: FoodListMapI) {
     menuState.overReserveFoodListMap = overReserveFoodListMap;
 }
 
-function clearCart() {
+export function clearCart() {
     menuState.cartCategoryList.forEach((categoryTtem) => {
         categoryTtem.foodList.forEach((foodItem: FoodItemI) => {
             foodItem.orderCount = 0;
@@ -80,20 +76,20 @@ function clearCart() {
     // uni.removeStorageSync(`storageFoodList_${menuState.shopInfo.shopID}`)
 }
 
-function setShopInfoMode(mode: "vertical" | "horizontal") {
+export function setShopInfoMode(mode: "vertical" | "horizontal") {
     menuState.shopInfo.mode = mode;
 }
 
-function setMenuDefault() {
+export function setMenuDefault() {
     Object.keys(menuDefault).forEach((key) => {
         menuState[key] = menuDefault[key];
     });
 }
 
-function setScrollToViewCategory(categoryID: number) {
+export function setScrollToViewCategory(categoryID: number) {
     menuState.categoryIDMain = `main${categoryID}`;
 }
-function setFoodSpecificationInfo(foodInfo: FoodItemI) {
+export function setFoodSpecificationInfo(foodInfo: FoodItemI) {
     menuState.foodSpecificationInfo = foodInfo;
 }
 
@@ -109,7 +105,6 @@ export interface SetSimpleActionI {
     setCategoryListMap: (categoryListMap: CategoryListMapI) => void;
     setFoodInfo: (foodInfo: FoodItemI) => void;
     setTopBarInfo: (topBarInfo: string) => void;
-    setCartImgPositionInfo: (positionInfo: PositionInfoI) => void;
     setCartCategoryList: (cartCategoryList: CategoryItemI[]) => void;
     setCartCategoryListMap: (cartCategoryListMap: CategoryListMapI) => void;
     setOverReserveFoodList: (overReserveFoodList: FoodItemI[]) => void;
@@ -130,7 +125,6 @@ const setSimpleAction: SetSimpleActionI = {
     setCategoryListMap,
     setFoodInfo,
     setTopBarInfo,
-    setCartImgPositionInfo,
     setCartCategoryList,
     setCartCategoryListMap,
     setOverReserveFoodList,

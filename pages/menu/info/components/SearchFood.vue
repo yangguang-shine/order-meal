@@ -44,6 +44,8 @@ import { storeToRefs} from 'pinia'
 
 interface MenuStateF {
     categoryList: ComputedStateI<CategoryItemI[]>;
+    footerPX: ComputedStateI<number>;
+    
 }
 interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
@@ -58,7 +60,7 @@ interface MutationF {
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { categoryList }: MenuStateF = toRefs(menuStore.menuState);
+const { categoryList, footerPX }: MenuStateF = toRefs(menuStore.menuState);
 // getter
 const { minusPromotionsObject, footerAndMinusPX }: MenuGetterF = storeToRefs(menuStore);
 // action

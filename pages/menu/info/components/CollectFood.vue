@@ -30,7 +30,8 @@ import useOverlayAnimation from "@/utils/useOverlayAnimation";
 import { ShopItemI } from "@/interface/home";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
-import { debounce } from "./common";
+import { debounce } from "@/utils/tool";
+
 import { onShow, onLoad, onPageScroll, onUnload, onHide, onReady } from "@dcloudio/uni-app";
 
 interface MenuStateF {

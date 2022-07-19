@@ -187,7 +187,7 @@ const orderFoodList: ComputedGetterI<FoodItemI[]> = computed((): FoodItemI[] => 
     return orderFoodList;
 });
 const footerAndMinusPX: ComputedGetterI<number> = computed(() => {
-    return menuState.footerPX + menuState.topBarPX
+    return menuState.footerPX + menuState.minusPX
 })
 export interface MenuGetterI {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;

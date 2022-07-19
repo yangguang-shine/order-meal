@@ -57,7 +57,6 @@ interface CartChangeParamI {
 
 interface MenuStateF {
     shopInfo: ComputedStateI<ShopItemI>;
-    cartImgPositionInfo: ComputedStateI<PositionInfoI>;
     cartImgPX: ComputedStateI<number>
     foodAddIconPX: ComputedStateI<number>
 
@@ -66,7 +65,7 @@ interface MenuStateF {
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { shopInfo, cartImgPositionInfo, cartImgPX, foodAddIconPX }: MenuStateF = toRefs(menuStore.menuState);
+const { shopInfo, cartImgPX, foodAddIconPX }: MenuStateF = toRefs(menuStore.menuState);
 // action
 const { cartChange, setCartImgAnimationFlag, setFoodSpecificationInfo, setFoodSpecificationFlag } = menuStore;
 

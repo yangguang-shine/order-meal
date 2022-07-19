@@ -34,7 +34,7 @@ import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
 import { foodImgPath } from "@/config/";
-import { debounce, handleFoodCategoryListScroll } from "./common";
+import { debounce } from "@/utils/tool";
 interface MenuStateF {
     categoryList: ComputedStateI<CategoryItemI[]>;
     categoryIDMain: ComputedStateI<string>;
@@ -60,7 +60,7 @@ const { categoryList, categoryIDMain, footerPX }: MenuStateF = toRefs(menuStore.
 // getter
 const { minusPromotionsObject, footerAndMinusPX }: MenuGetterF = storeToRefs(menuStore);
 // action
-const { setFoodDetailFlag, setFoodInfo, setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside } = menuStore;
+const { setFoodDetailFlag, setFoodInfo, setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside, handleFoodCategoryListScroll } = menuStore;
 
 const categoryItemLastPaddingBottom: string = computed((): string => (minusPromotionsObject.value.show ? footerAndMinusPX.value + 10 + "px" : footerPX.value + 10 + "px"));
 
@@ -71,12 +71,7 @@ function toShowFoodDetail(foodItem: FoodItemI) {
 const foodScrollHandle = debounce(handleScroll, 70);
 
 async function handleScroll(e: any) {
-    handleFoodCategoryListScroll({
-        categoryList,
-        setSelectedCategoryID,
-        setCategoryIDMain,
-        setCategoryIDAside,
-    });
+    handleFoodCategoryListScroll();
 }
 defineExpose({
     foodScrollHandle,

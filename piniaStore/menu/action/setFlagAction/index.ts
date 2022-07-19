@@ -1,22 +1,22 @@
 
 import menuState from "../../state";
 import getCollectFoodList from "../complexAction/getCollectFoodList";
-function setFoodDetailFlag(foodDetailFalg: boolean) {
+export function setFoodDetailFlag(foodDetailFalg: boolean) {
     menuState.foodDetailFalg = foodDetailFalg;
 }
 
-function setStartShopInfoAnimationFlag(startShopInfoAnimationFlag: boolean) {
+export function setStartShopInfoAnimationFlag(startShopInfoAnimationFlag: boolean) {
     menuState.startShopInfoAnimationFlag = startShopInfoAnimationFlag;
 }
 
-function setShopInfoFlag(shopInfoFlag: boolean) {
+export function setShopInfoFlag(shopInfoFlag: boolean) {
     menuState.shopInfoFlag = shopInfoFlag;
 }
-function setCartImgAnimationFlag(cartImgAnimationFlag: boolean) {
+export function setCartImgAnimationFlag(cartImgAnimationFlag: boolean) {
     menuState.cartImgAnimationFlag = cartImgAnimationFlag;
 }
 
-function toogleCartDetailFlag() {
+export function toogleCartDetailFlag() {
     if (menuState.collectFoodFlag) {
         menuState.showCollectClickCartImgFlag = true;
         return;
@@ -31,30 +31,30 @@ function toogleCartDetailFlag() {
         menuState.cartDetailFlag = false;
     }
 }
-function setSearchFoodFlag(searchFoodFlag: boolean) {
+export function setSearchFoodFlag(searchFoodFlag: boolean) {
     menuState.searchFoodFlag = searchFoodFlag;
 }
 
-function setCartDetailFlag(cartDetailFlag: boolean) {
+export function setCartDetailFlag(cartDetailFlag: boolean) {
     menuState.cartDetailFlag = cartDetailFlag;
 }
-function setCollectFoodFlag(collectFoodFlag: boolean) {
+export function setCollectFoodFlag(collectFoodFlag: boolean) {
     getCollectFoodList();
     menuState.collectFoodFlag = collectFoodFlag;
 }
 
-function setMenuPackPriceExpalinFlag(menuPackPriceExpalinFlag: boolean) {
+export function setMenuPackPriceExpalinFlag(menuPackPriceExpalinFlag: boolean) {
     menuState.menuPackPriceExpalinFlag = menuPackPriceExpalinFlag;
 }
 
-function setShowCartClickCartImgFlag(showCartClickCartImgFlag: boolean) {
+export function setShowCartClickCartImgFlag(showCartClickCartImgFlag: boolean) {
     menuState.showCartClickCartImgFlag = showCartClickCartImgFlag;
 }
 
-function setShowCollectClickCartImgFlag(showCollectClickCartImgFlag: boolean) {
+export function setShowCollectClickCartImgFlag(showCollectClickCartImgFlag: boolean) {
     menuState.showCollectClickCartImgFlag = showCollectClickCartImgFlag;
 }
-function setFoodSpecificationFlag(foodSpecificationFlag: boolean) {
+export function setFoodSpecificationFlag(foodSpecificationFlag: boolean) {
     menuState.foodSpecificationFlag = foodSpecificationFlag;
 }
 

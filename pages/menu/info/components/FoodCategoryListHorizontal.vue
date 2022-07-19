@@ -27,7 +27,8 @@ import { ShopItemI } from "@/interface/home";
 import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
-import { debounce, handleFoodCategoryListScroll } from "./common";
+import { debounce } from "@/utils/tool";
+
 interface MenuStateF {
     categoryList: ComputedStateI<CategoryItemI[]>;
     categoryIDMain: ComputedStateI<string>;
@@ -50,7 +51,7 @@ const { categoryList, categoryIDMain, shopInfo, footerPX, asideBarHorizontalPX }
 // getter
 const { minusPromotionsObject, footerAndMinusPX }: MenuGetterF = storeToRefs(menuStore);
 // action
-const { setFoodDetailFlag, setFoodInfo, setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside } = menuStore;
+const { setFoodDetailFlag, setFoodInfo, setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside, handleFoodCategoryListScroll } = menuStore;
 const categoryItemLastPaddingBottom: string = computed((): string => (minusPromotionsObject.value.show ? footerAndMinusPX.value + 10 + "px" : footerPX.value + 10 + "px"));
 
 function toShowFoodDetail(foodItem: FoodItemI) {
@@ -60,13 +61,7 @@ function toShowFoodDetail(foodItem: FoodItemI) {
 const foodScrollHandle = debounce(handleScroll, 70);
 
 async function handleScroll(e: any) {
-    handleFoodCategoryListScroll({
-        categoryList,
-        setSelectedCategoryID,
-        setCategoryIDMain,
-        setCategoryIDAside,
-        type: 'horizontal'
-    });
+    handleFoodCategoryListScroll('horizontal');
 
     // for (let i = 0; i < categoryList.value.length; i++) {
     //     const categoryItem = categoryList.value[i];

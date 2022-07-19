@@ -11,7 +11,7 @@ const orderFoodList: ComputedGetterI<FoodItemI[]> = computed((): FoodItemI[] => 
 });
 
 const footerAndMinusPX: ComputedGetterI<number> = computed(() => {
-    return menuState.footerPX + menuState.topBarPX
+    return menuState.footerPX + menuState.minusPX
 })
 export interface SimpleGetterI {
     orderFoodList: ComputedGetterI<FoodItemI[]>;
