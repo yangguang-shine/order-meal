@@ -2,28 +2,30 @@
 
 ## 在线使用
 
-手机浏览器访问：[个人点餐项目](https://yangguang.natappvip.cc) https://yangguang.natappvip.cc
+手机浏览器访问：[个人点餐项目](http://yangguang.natappvip.cc) http://yangguang.natappvip.cc
 
-客户端：手机浏览器访问 https://yangguang.natappvip.cc
+客户端：手机浏览器访问 http://yangguang.natappvip.cc
 
-管理端：手机浏览器访问 https://yangguang.natappvip.cc/ （该域名随时变动）
+管理端：手机浏览器访问 http://yangguang.natappvip.cc/ （该域名随时变动）
 
 小程序版： 添加微信：13429808281，获取体验权限
 
+暂时只支持http访问，https暂不支持
+
 ## 相关github地址
 
-客户端github地址: https://github.com/yangguang-shine/order-meal
+客户端github地址: http://github.com/yangguang-shine/order-meal
 
-管理端github地址： https://github.com/yangguang-shine/manage
+管理端github地址： http://github.com/yangguang-shine/manage
 
-后端github地址: https://github.com/yangguang-shine/serve
+后端github地址: http://github.com/yangguang-shine/serve
 
 ## 使用流程
 
 1. 安装node和HbuilderX。
 2. 在HbuilderX中选择运行到浏览器选项
 3. 在HbuilderX的选项“运行”在微信小程序中
-4. 需要搭配nodejs 接口服务才行，地址为： https://github.com/yangguang-shine/serve
+4. 需要搭配nodejs 接口服务才行，地址为： http://github.com/yangguang-shine/serve
 
 
 ## 主要功能
