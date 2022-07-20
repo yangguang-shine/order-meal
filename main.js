@@ -4,6 +4,7 @@ import fetch from './utils/fetch'
 import { delaySync } from '@/utils/index';
 import CommonError from '@/components/CommonError.vue'
 import CommonLoading from '@/components/CommonLoading.vue'
+import TopNotice from '@/components/TopNotice.vue'
 import {
 	showModal,
 	showLoading,
@@ -37,6 +38,7 @@ export function createApp() {
 	app.config.globalProperties.$getShopMinusList = getShopMinusList
 	app.component('CommonError', CommonError)
 	app.component('CommonLoading', CommonLoading)
+	app.component('TopNotice', TopNotice)
 	// app.component('BottomButton', BottomButton)
 	// const $mainColor = "#0096ff"
 	const $mainColor = "#ff4b33"

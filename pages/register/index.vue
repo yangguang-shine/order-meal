@@ -7,16 +7,16 @@
             </div>
             <div class="input-item-box flex-row flex-a-center">
                 <div class="title">密码</div>
-                <input class="input-item flex-item" type="text" v-model="password" max-length="50" placeholder="请输入密码" />
+                <input class="input-item flex-item" type="password" v-model="password" max-length="50" placeholder="请输入密码" />
             </div>
-            <div class="input-item-box flex-row flex-a-center">
+            <!-- <div class="input-item-box flex-row flex-a-center">
                 <div class="title">确认密码</div>
                 <input class="input-item flex-item" type="text" v-model="confirmPassword" max-length="50" placeholder="请确认密码" />
             </div>
             <div class="input-item-box flex-row flex-a-center">
                 <div class="title">昵称</div>
                 <input class="input-item flex-item" type="text" v-model="nickname" max-length="50" placeholder="请输入昵称" />
-            </div>
+            </div> -->
             <div class="register-button" :style="{ 'background-color': $mainColor }" @click="userRegister">用户注册</div>
             <div class="to-login-box">
                 有用户账号，
@@ -49,7 +49,7 @@ async function userRegister() {
     const params = {
         phone: phone.value,
         password: password.value,
-        nickname: nickname.value,
+        nickname: nickname.value || phone.value,
     };
     try {
         showLoading();
@@ -78,18 +78,18 @@ function checkRegisterLegal() {
         });
         return;
     }
-    if (password.value !== confirmPassword.value) {
-        showModal({
-            content: "两次输入密码不一样",
-        });
-        return;
-    }
-    if (!nickname.value) {
-        showModal({
-            content: "请输入昵称",
-        });
-        return;
-    }
+    // if (password.value !== confirmPassword.value) {
+    //     showModal({
+    //         content: "两次输入密码不一样",
+    //     });
+    //     return;
+    // }
+    // if (!nickname.value) {
+    //     showModal({
+    //         content: "请输入昵称",
+    //     });
+    //     return;
+    // }
     return true;
 }
 

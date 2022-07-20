@@ -3,7 +3,7 @@
         <view :animation="overlayAnimationData" class="collect-food-overlay"></view>
         <view :animation="mainAnimationData" class="collect-food-box flex-col" @click.stop>
             <view class="title">为您精选凑单商品，一起结算更优惠</view>
-            <view class="tab-list flex-row flex-a-center flex-no-wrap">
+            <view class="tab-list flex-row flex-a-center flex-nowrap">
                 <view v-for="(collectFoodListItem, index) in collectFoodList" :key="index" class="tab-item flex-center flex-shrink" :class="collectTabIndex === index ? 'tab-item-selected' : ''" :style="{ color: collectTabIndex === index ? shopInfo.mainColor : '' }" @click="changeTabItem(index)">{{ collectFoodListItem.title }}</view>
             </view>
             <scroll-view scroll-y class="collect-food-list-box flex-item" id="collect-food-list-box" @scroll="foodScrollHandle" :scroll-top="scrollTopNum">

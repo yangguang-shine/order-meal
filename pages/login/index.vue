@@ -1,21 +1,24 @@
 <template>
     <view class="login-container flex-row flex-ja-center">
-        <div class="login-box">
-            <div class="input-item-box flex-row flex-a-center">
-                <div class="title">手机号</div>
+        <view class="top-box" :style="{ 'background-color': $mainColor }">
+            <TopNotice class="flex-row flex-center" content="使用默认账号登录容易被挤出登录，推荐注册"></TopNotice>
+        </view>
+        <view class="login-box">
+            <view class="input-item-box flex-row flex-a-center">
+                <view class="title">手机号</view>
                 <input class="input-item flex-item" type="text" v-model="phone" max-length="50" placeholder="请输入手机号" />
-            </div>
-            <div class="input-item-box flex-row flex-a-center">
-                <div class="title">密码</div>
-                <input class="input-item flex-item" type="text" v-model="password" max-length="50" placeholder="请输入密码" />
-            </div>
-            <div class="submit-button" :style="{ 'background-color': $mainColor }" @click="userLogin">用户登录</div>
+            </view>
+            <view class="input-item-box flex-row flex-a-center">
+                <view class="title">密码</view>
+                <input class="input-item flex-item" type="password" v-model="password" max-length="50" placeholder="请输入密码" />
+            </view>
+            <view class="submit-button" :style="{ 'background-color': $mainColor }" @click="userLogin">用户登录</view>
 
-            <div class="to-login-box">
+            <view class="to-login-box">
                 没有用户账号，
                 <span :style="{ color: $mainColor }" @click="toRegisterPage">去注册</span>
-            </div>
-        </div>
+            </view>
+        </view>
     </view>
 </template>
 
@@ -25,8 +28,8 @@ import { RefI } from "@/interface/vueInterface";
 import router from "@/utils/router";
 import { showModal, showLoading, hideLoading } from "@/utils/";
 import fetch from "@/utils/fetch";
-const phone: RefI<string> = ref("");
-const password: RefI<string> = ref("");
+const phone: RefI<string> = ref("13429808283");
+const password: RefI<string> = ref("13429808283");
 
 function toRegisterPage() {
     router.reLaunchTo({
@@ -76,10 +79,20 @@ page {
     // height: 100%;
     background-color: #f4f4f4;
 }
+
 .login-container {
-    height: 100%;
+    height: 100vh;
     font-size: 28rpx;
     color: #333;
+    .top-box {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        color: #fff;
+        font-size: 32rpx;
+        font-weight: bold;
+    }
     .login-box {
         padding: 30rpx;
         width: 550rpx;

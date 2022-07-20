@@ -44,12 +44,6 @@ onMounted(() => {
 async function getTabListTop() {
     const res = await selectQuery("#tab-list-fixed-id");
     setTabListTop(res.top);
-
-    const res1 = await selectQuery("#tab-list-container");
-    console.log(">>>>");
-    console.log(res);
-    console.log(res1);
-    console.log('<<<<<')
 }
 const clickTabItem = async (tabItem: TabItemI) => {
     if (selectedTabItem.value.type === tabItem.type) return;

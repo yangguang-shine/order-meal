@@ -1,6 +1,7 @@
 <template>
     <view class="top-address-search-container" id="top-address-search-container">
         <!-- <view class="top-vertical-scroll"> </view> -->
+        <TopNotice animationFlag linkFlag bgc="#d34eb0" content="项目代码地址：https://github.com/yangguang-shine/order-meal 点击右侧按钮详情"></TopNotice>
         <view class="top-address-search flex-row flex-a-center" :style="{ 'background-color': $mainColor }">
             <view class="address-box flex-row flex-a-center" :style="{ 'max-width': topAddressWidthFlag ? '0' : '' }" @click.stop="toSelectAddress">
                 <image class="address-icon flex-shrink" src="/static/img/user-home/home-address-icon.png"></image>
