@@ -9,14 +9,14 @@
                 <div v-if="linkItem.notice">{{ linkItem.notice }}</div>
             </div>
         </div>
-        <div class="title flex-center">功能介绍</div>
+        <!-- <div class="title flex-center">功能介绍</div>
         <div class="item flex-row">
             <div class="left">客服端功能：</div>
             <div class="right flex-item">
                 <div class="function">1. 登录、注册、个人信息、地址列表、</div>
                 <div class="function">1. 首页提供不同的下单类型（外卖、堂食、字体）</div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 

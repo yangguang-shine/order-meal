@@ -14,6 +14,14 @@ async function getShopList(payload: { businessType: number; type: TabItemI["type
         latitude: addressState.defaultAddress.latitude,
         longitude: addressState.defaultAddress.longitude,
     });
+    if (payload.type === 'sale') {
+        (data || []).reverse()
+    } else if (payload.type === 'distance') {
+        (data || []).sort((a, b) => {
+            console.log(a.shopName > b.shopName)
+            return a.shopName > b.shopName ? 1 : -1
+        } )
+    }
     data.push(...data)
     const shopList: ShopItemI[] = (data || []).map(
         (item: OriginShopItemI): ShopItemI => ({

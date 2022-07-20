@@ -2,7 +2,7 @@
     <div class="minus-list-container flex-row flex-a-center" :style="{'color': $mainColor}">
         <div class="minus-item flex-shrink"  v-for="(minusItem, index) in minusList" :key="index">
             {{minusItem.reach}}减{{minusItem.reduce}}
-            <div class="border-right" :style="{'background-color': $mainColor}"></div>
+            <div v-if="index < minusList.length -1" class="border-right" :style="{'background-color': $mainColor}"></div>
         </div>
     </div>
 </template>
