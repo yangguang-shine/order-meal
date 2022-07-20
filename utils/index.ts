@@ -94,7 +94,7 @@ export const showLoading = ({ title = "加载中", mask = true } = {}): Promise<
     });
 };
 
-export const showToast = ({ title = "", icon = "none", duration = 1500, mask = true } = {}): Promise<any> => {
+export const showToast = ({ title = "", icon = "none", duration = 2000, mask = true } = {}): Promise<any> => {
     return new Promise((resolve, reject) => {
         uni.showToast({
             title,

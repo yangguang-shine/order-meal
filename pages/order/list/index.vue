@@ -169,7 +169,7 @@ page {
     font-size: 28rpx;
     color: #333;
 
-    padding: 0 20rpx;
+    padding: 0 20rpx 80rpx;
     .tab-list-box {
         position: fixed;
         top: 0;

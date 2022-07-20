@@ -34,11 +34,11 @@ import CartImg from "./CartImg.vue";
 
 import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
-import { CategoryItemI, FoodItemI, PositionInfoI } from "@/interface/menu";
+import { CategoryItemI, CategoryListMapI, FoodItemI, PositionInfoI } from "@/interface/menu";
 import { MinusPromotionsObjectI, AsideCategoryItemI, CartPriceInfoI } from "@/store/getters/menu";
 import { ComputedI, RefI } from "@/interface/vueInterface";
 import { ShopItemI } from "@/interface/home";
-import { selectQuery, toFixedToNumber } from "@/utils/";
+import { selectQuery, showToast, toFixedToNumber } from "@/utils/";
 import router from "@/utils/router";
 import { countAddTransitionTime } from "../infoConfig";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
@@ -52,6 +52,7 @@ interface MenuStateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
     cartImgAnimationFlag: ComputedStateI<boolean>;
     requiredCategoryIDList: ComputedStateI<number[]>;
+    categoryListMap: ComputedStateI<CategoryListMapI>
 }
 interface MenuGetterF {
     cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
@@ -60,7 +61,7 @@ interface MenuGetterF {
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCategoryList,  cartImgAnimationFlag, requiredCategoryIDList }: MenuStateF = toRefs(menuStore.menuState);
+const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCategoryList,  cartImgAnimationFlag, requiredCategoryIDList, categoryListMap }: MenuStateF = toRefs(menuStore.menuState);
 // getter
 const { cartPriceInfo, asideCategoryInfo }: MenuGetterF = storeToRefs(menuStore);
 // action
@@ -115,7 +116,7 @@ const confirmButtonInfo: ComputedI<ConfirmButtonInfoI> = computed((): ConfirmBut
         if (!hasOrderRequiredFlag) {
             requireText = "未点必选品";
         }
-    } else if (cartPriceInfo.value.allOriginPrice > startDeliverPrice) {
+    } else if (cartPriceInfo.value.allOriginPrice >= startDeliverPrice) {
         text = "去结算";
         canOrderFlag = true;
         if (!hasOrderRequiredFlag) {
@@ -182,7 +183,19 @@ function toComfirmOrder() {
             name: "menu/confirm",
         });
     } else if(!confirmButtonInfo.value.hasOrderRequiredFlag) {
-        setScrollToViewCategory(confirmButtonInfo.value.requiredCategoryID)
+        const requiredCategoryID = confirmButtonInfo.value.requiredCategoryID
+        const  requiredCategoryName = categoryListMap.value[`${requiredCategoryID}`].categoryName
+        console.log(categoryListMap.value)
+        console.log(requiredCategoryName)
+        showToast({
+            title: `【${requiredCategoryName}】类别需要必选一项`,
+        })
+        setScrollToViewCategory(requiredCategoryID)
+    } else {
+        showToast({
+            title: `起${businessType.value === 2 ? "送" : "做"}价格不足`,
+            duration: 2000
+        })
     }
 }
 function clickCartImg() {

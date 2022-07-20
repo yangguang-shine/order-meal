@@ -104,7 +104,6 @@ const cartFoodList = computed(() => {
         cartCategoryItem.foodList.forEach((foodItem) => {
             if (foodItem.orderSpecifaList.length) {
                 foodItem.orderSpecifaList.forEach((orderSpecifaItem) => {
-                    foodItem.key = orderSpecifaItem.key;
                     cartFoodItem.push(foodItem);
                 });
             } else {
