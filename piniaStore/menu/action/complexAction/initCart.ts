@@ -8,7 +8,6 @@ import cartChange from "./cartChange";
 export type InitCartI = () => void
 function initCart() {
     const cartCategoryListOrigin = menuState.cartCategoryList;
-    console.log(cartCategoryListOrigin);
     menuState.cartCategoryList = [];
     menuState.cartCategoryListMap = {};
     cartCategoryListOrigin.forEach((cartCategoryItem) => {
@@ -31,7 +30,6 @@ function initCart() {
                                 // 防止后台口味删减修改时本地有缓存
                                 const orderSpecificationItem = cartFoodItem.orderSpecifaList[i];
                                 const indexList = orderSpecificationItem.key.split("");
-                                console.log(indexList);
                                 if (indexList.length !== stateFoodItem.specificationList.length) {
                                     continue;
                                 }
@@ -41,8 +39,6 @@ function initCart() {
                                     });
                                     if (falg) {
                                         // 匹配得上
-                                        console.log("orderSpecificationItem.key");
-                                        console.log(orderSpecificationItem.key);
                                         cartChange({
                                             foodItem: stateFoodItem,
                                             count: orderSpecificationItem.orderCount,

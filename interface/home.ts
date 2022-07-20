@@ -1,6 +1,6 @@
 export interface TabItemI {
     title: string;
-    type: string;
+    type: 'comprehensive' | 'sale' | 'distance';
 }
 
 export interface OriginShopItemI {

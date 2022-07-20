@@ -19,14 +19,13 @@
                     <text class="clear-cart-title">清空</text>
                 </view>
             </view>
-            <scroll-view scroll-y class="cart-detail-list-box">
+            <scroll-view scroll-y class="cart-detail-list-box" id="cart-detail-list-box" @scroll="foodScrollHandle">
                 <view class="cart-food-list">
                     <view class="food-category-item" v-for="foodCategoryItem in cartCategoryList" :key="foodCategoryItem.categoryID">
                         <div class="cart-food-item-box" v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID">
-                            <FoodItem v-if="!cartFoodItem.orderSpecifaList.length" :foodItem="cartFoodItem" mode="small" type="cartDetail" class="cart-food-item"></FoodItem>
+                            <FoodItem v-if="!cartFoodItem.orderSpecifaList.length" :foodItem="cartFoodItem" mode="small" type="cartDetail" class="cart-food-item" idPre="cart-food-img"></FoodItem>
                             <div v-else v-for="(orderSpecifaItem, index) in cartFoodItem.orderSpecifaList" :key="index">
-                            <FoodItemCartSpecification class="cart-food-item" :foodItem="cartFoodItem" :orderSpecifaItem="orderSpecifaItem" mode="small" type="cartDetail"></FoodItemCartSpecification>
-
+                                <FoodItemCartSpecification class="cart-food-item" :foodItem="cartFoodItem" :idPre="`cart-food-img-${orderSpecifaItem.key}`" :orderSpecifaItem="orderSpecifaItem" mode="small" type="cartDetail"></FoodItemCartSpecification>
                             </div>
                         </div>
                     </view>
@@ -43,22 +42,23 @@
 </template>
 
 <script lang="ts" setup>
-import { delaySync, showModal } from "@/utils/index";
+import { delaySync, ResSelectQueryI, selectQuery, showModal } from "@/utils/index";
 import FoodAddMinusItem from "./item/FoodAddMinusItem.vue";
 import FoodItem from "./item/FoodItem.vue";
 import FoodItemCartSpecification from "./item/FoodItemCartSpecification.vue";
 
 import { getCurrentInstance, computed, onMounted, ref, toRefs, watch } from "vue";
-import {  cartDetailTransitionTime } from "../infoConfig";
+import { cartDetailTransitionTime } from "../infoConfig";
 import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
 import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
-import { CategoryItemI } from "@/interface/menu";
+import { CategoryItemI, FoodItemI } from "@/interface/menu";
 import { CartPriceInfoI, MinusPromotionsObjectI } from "@/store/getters/menu";
 import { ComputedI, RefI } from "@/interface/vueInterface";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
 import { ShopItemI } from "@/interface/home";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
+import { debounce } from "@/utils/tool";
 
 interface MenuStateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
@@ -71,7 +71,6 @@ interface MenuGetterF {
     minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
     cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
     footerAndMinusPX: ComputedGetterI<number>;
-    
 }
 // menu store
 const menuStore: MenuStoreI = useMenuStore();
@@ -85,9 +84,115 @@ const { setCartDetailFlag, clearCart, setMenuPackPriceExpalinFlag, setShowCartCl
 const { overlayAnimationData, mainAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: cartDetailTransitionTime,
 });
-onMounted(() => {
+let collectFoodListBoxPositionInfo: ResSelectQueryI;
+onMounted(async () => {
     toStartAnimation();
+    // 获取动画前需要加载的图片
+    getCartDetailListBoxPositionInfo();
+    foodScrollHandle();
+    // 动画完成后才能获取位置准确信息
+    await delaySync(500);
+    getCartDetailListBoxPositionInfo();
 });
+async function getCartDetailListBoxPositionInfo() {
+    collectFoodListBoxPositionInfo = await selectQuery("#cart-detail-list-box");
+}
+
+const cartFoodList = computed(() => {
+    const cartFoodItem: any = [];
+    cartCategoryList.value.forEach((cartCategoryItem) => {
+        cartCategoryItem.foodList.forEach((foodItem) => {
+            if (foodItem.orderSpecifaList.length) {
+                foodItem.orderSpecifaList.forEach((orderSpecifaItem) => {
+                    foodItem.key = orderSpecifaItem.key;
+                    cartFoodItem.push(foodItem);
+                });
+            } else {
+                cartFoodItem.push(foodItem);
+            }
+        });
+    });
+    return cartFoodItem;
+});
+
+const foodScrollHandle = debounce(handleScroll, 70);
+async function handleScroll(e: any) {
+    const { top, bottom } = collectFoodListBoxPositionInfo;
+    for (let i = 0; i < cartFoodList.value.length; i++) {
+        const foodItem: FoodItemI = cartFoodList.value[i];
+        let endLoopFlag: boolean =false
+        if (foodItem.orderSpecifaList.length) {
+            for (let j = 0; j < foodItem.orderSpecifaList.length; j++) {
+                const orderSpecifaItem = foodItem.orderSpecifaList[j];
+                const idPre = `cart-food-img-${orderSpecifaItem.key}`;
+                const foodImgPositoninfo = await selectQuery(`#${idPre}-${foodItem.foodID}`);
+
+                if ((top <= foodImgPositoninfo.top && foodImgPositoninfo.top <= bottom) || (top <= foodImgPositoninfo.bottom && foodImgPositoninfo.bottom < bottom)) {
+                    foodItem.currentImg = foodItem.fullImgPath;
+                }
+                if (foodImgPositoninfo.top > bottom) {
+                    endLoopFlag = true
+                    break;
+                }
+            }
+        } else {
+            const idPre = "cart-food-img";
+            const foodImgPositoninfo = await selectQuery(`#${idPre}-${foodItem.foodID}`);
+            if ((top <= foodImgPositoninfo.top && foodImgPositoninfo.top <= bottom) || (top <= foodImgPositoninfo.bottom && foodImgPositoninfo.bottom < bottom)) {
+                foodItem.currentImg = foodItem.fullImgPath;
+            }
+            if (foodImgPositoninfo.top > bottom) {
+                break;
+            }
+        }
+        if (endLoopFlag) {
+                break;
+        }
+    }
+
+    // for (let i = 0; i < cartCategoryList.value.length; i++) {
+    //     const cartCategoryItem = cartCategoryList.value[i];
+    //     const { top, bottom } = collectFoodListBoxPositionInfo;
+    //     let foodImgPositoninfo: ResSelectQueryI;
+    //     for (let j = 0; j < cartCategoryItem.foodList.length; j++) {
+    //         const foodItem = cartCategoryItem.foodList[j];
+    //         if (foodItem.orderSpecifaList.length) {
+    //             for (let k = 0; k < foodItem.orderSpecifaList.length; k++) {
+    //                 const orderSpecifaItem = foodItem.orderSpecifaList[k];
+    //                 const idPre = `cart-food-img-${orderSpecifaItem.key}`;
+    //                 foodImgPositoninfo = await selectQuery(`#${idPre}-${foodItem.foodID}`);
+    //             }
+    //         } else {
+    //             const idPre = "cart-food-img";
+    //             foodImgPositoninfo = await selectQuery(`#${idPre}-${foodItem.foodID}`);
+    //         }
+    //         console.log("foodImgPositoninfo");
+    //         console.log(foodImgPositoninfo);
+    //         if ((top <= foodImgPositoninfo.top && foodImgPositoninfo.top <= bottom) || (top <= foodImgPositoninfo.bottom && foodImgPositoninfo.bottom < bottom)) {
+    //             foodItem.currentImg = foodItem.fullImgPath;
+    //         }
+    //     }
+    //     // if (menuState.topBarPX <= categoryItemPositionInfo.top + 1 || categoryItemPositionInfo.bottom - 1 > menuState.topBarPX) {
+    //     //     setSelectedCategoryID(categoryItem.categoryID);
+    //     //     setCategoryIDMain("");
+    //     //     setCategoryIDAside(categoryItem.categoryIDAside);
+    //     //     await handleLazyImg(i);
+    //     //     break;
+    //     // }
+    // }
+    // const currentCollectFoodList = cartCategoryList.value[collectTabIndex.value].foodList;
+    // const { top, bottom } = collectFoodListBoxPositionInfo;
+    // for (let i = 0; i < currentCollectFoodList.length; i++) {
+    //     const foodItem = currentCollectFoodList[i];
+    //     const imgPositionInfo = await selectQuery(`#${idPre}-${foodItem.foodID}`);
+    //     if ((top <= imgPositionInfo.top && imgPositionInfo.top <= bottom) || (top <= imgPositionInfo.bottom && imgPositionInfo.bottom < bottom)) {
+    //         foodItem.currentImg = foodItem.fullImgPath;
+    //     }
+    //     if (imgPositionInfo.top > bottom) {
+    //         break;
+    //     }
+    // }
+}
 
 watch(
     () => showCartClickCartImgFlag.value,

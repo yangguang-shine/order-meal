@@ -95,6 +95,13 @@
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
+		{
+			"path": "pages/explain/index",
+			"style": {
+				"navigationBarTitleText": "项目介绍",
+				"navigationBarBackgroundColor": "#ffffff"
+			}
+		},
 		// {
 		// 	"path": "pages/shop/list/index",
 		// 	"style": {

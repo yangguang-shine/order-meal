@@ -1,7 +1,7 @@
 <template>
     <view class="login-container flex-row flex-ja-center">
         <view class="top-box" :style="{ 'background-color': $mainColor }">
-            <TopNotice class="flex-row flex-center" content="使用默认账号登录容易被挤出登录，推荐注册"></TopNotice>
+            <TopNotice class="flex-row flex-center" content="使用默认账号体验容易被挤出登录，推荐注册体验"></TopNotice>
         </view>
         <view class="login-box">
             <view class="input-item-box flex-row flex-a-center">
@@ -76,12 +76,12 @@ function checkLegal(): boolean {
 
 <style lang="scss">
 page {
-    // height: 100%;
+    height: 100%;
     background-color: #f4f4f4;
 }
 
 .login-container {
-    height: 100vh;
+    height: 100%;
     font-size: 28rpx;
     color: #333;
     .top-box {

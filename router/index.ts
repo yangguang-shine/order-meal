@@ -79,6 +79,12 @@ const register:RouteInfoI[] = [
 		path: '/pages/register/index'
 	},
 ]
+const explain: RouteInfoI[] = [
+{
+	name: 'explain',
+	path: '/pages/explain/index'
+}
+]
 
 
 const route = [
@@ -89,7 +95,8 @@ const route = [
 	...login,
 	...menu,
 	...order,
-	...register
+	...register,
+	...explain
 	// ...manage,
 	// ...role,
 ]

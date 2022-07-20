@@ -10,9 +10,12 @@ import { reactive } from "vue";
 
 function clickImg() {
     console.log("clickImg");
-    showToast({
-        title: '暂未设置跳转'
+    router.navigateTo({
+        name: 'explain'
     })
+    // showToast({
+    //     title: '暂未设置跳转'
+    // })
 }
 </script>
 

@@ -179,7 +179,7 @@ export function toFixedToNumber(num: number, remain: number = 2) {
     return Number(num.toFixed(remain));
 }
 
-interface ResSelectQueryI {
+export interface ResSelectQueryI {
     bottom: number;
     dataset: any;
     height: number;

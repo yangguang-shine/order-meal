@@ -4,11 +4,12 @@
 
         <div v-else class="content flex-item flex-center text-center">{{ content }}</div>
 
-        <view v-if="linkFlag" id="content-link" class="content-link flex-center" >{{linkContent}}</view>
+        <view v-if="linkFlag" id="content-link" class="content-link flex-center" @click="toExplain">{{linkContent}}</view>
     </view>
 </template>
 
 <script lang="ts" setup>
+import router from "@/utils/router";
 import { ref } from "vue";
 interface PropsI {
     content: string;
@@ -28,6 +29,12 @@ const props: PropsI = withDefaults(defineProps<PropsI>(), {
 });
 console.log(props.linkFlag)
 const conentlen = ref(props.content.length);
+function toExplain() {
+    router.navigateTo({
+        name: 'explain',
+        
+    })
+}
 </script>
 
 <style scoped lang="scss">

@@ -8,16 +8,25 @@ import addressState from "../address/state";
 import homeState from "./state";
 import shopState from "../shop/state";
 export interface ShopListParamsI {
-    type?: string;
+    type?: TabItemI["type"];
     businessType?: number;
 }
-export async function getRecommandShopList({ type = "", businessType = 2 }: ShopListParamsI = {}) {
+export async function getRecommandShopList({ type = "comprehensive", businessType = 2 }: ShopListParamsI = {}) {
     let data: OriginShopItemI[] = await fetch("shop/list", {
         businessType,
         type,
         latitude: addressState.defaultAddress.latitude,
         longitude: addressState.defaultAddress.longitude,
     });
+    console.log(type)
+    if (type === 'sale') {
+        (data || []).reverse()
+    } else if (type === 'distance') {
+        (data || []).sort((a, b) => {
+            console.log(a.shopName > b.shopName)
+            return a.shopName > b.shopName ? 1 : -1
+        } )
+    }
     data.push(...data);
     const recommandShopList: ShopItemI[] = (data || []).map(
         (item: OriginShopItemI): ShopItemI => ({

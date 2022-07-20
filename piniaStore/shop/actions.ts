@@ -8,7 +8,7 @@ import { shopImgPath } from "@/config/index";
 import getBusinessTypeInfo from "@/utils/getBusinessTypeInfo";
 import addressState from "../address/state";
 
-async function getShopList(payload: { businessType: number; type: string }) {
+async function getShopList(payload: { businessType: number; type: TabItemI["type"] }) {
     let data: OriginShopItemI[] = await fetch("shop/list", {
         ...payload,
         latitude: addressState.defaultAddress.latitude,
@@ -37,7 +37,7 @@ function setSearchShopListFlag(searchShopListFlag: boolean): void {
 }
 
 export interface ShopActionI {
-    getShopList: (payload: { businessType: number; type: string }) => void,
+    getShopList: (payload: { businessType: number; type: TabItemI["type"] }) => void,
     setShopList: (shopList: ShopItemI[]) => void ,
     setRouterBusinessType: (routerBusinessType: number) => void 
     setSearchShopListFlag: (searchShopListFlag: boolean) => void
