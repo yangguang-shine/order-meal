@@ -3,7 +3,9 @@
 ## 项目体验
 
 **手机体验地址：[【点餐下单】](http://yangguang.natappvip.cc) http://yangguang.natappvip.cc**
+
 **手机体验地址：[【点餐下单】](http://yangguang.natappvip.cc) http://yangguang.natappvip.cc**
+
 **手机体验地址：[【点餐下单】](http://yangguang.natappvip.cc) http://yangguang.natappvip.cc**
 
 **重要的事情说三遍！！！**
@@ -33,28 +35,27 @@ vue3、pinia、uni-app、typescript、es6及以上语法、composition api
 
 ## 目录
 
-```
-order-meal
-	|----pages：		项目的页面文件
-		|----home		项目首页
-		|----menu		用户进行点单、确认订单、提交订单等一系列相关页面
-		|----order		用户下单之后的订单列表以及详情页面
-		|----center		用户个人中心页
-		|----address	用户地址相关页面
-		|----login		用户登录页面
-		|----register	用户注册页面
-		|----shop		店铺列表页面
-		|----explain	用户地址页面
-	|----components：	一般公共组件存放处
-	|----config：		关于项目相关的域名地址的配置
-	|----delete：		包含之前一些 vuex 和 option api pinia的相关store
-	|----interface：	项目 typescript 相关模块的 interface 数据定义文件
-	|----piniaStore：	vue3的全局数据状态管理，使用的 composition api 
-	|----router：		全局路由配置文件
-	|----static：		存放项目静态资源文件
-	|----style：		存放全局公共css scss样式
-	|----utils：		存放一些常用的公共方法
-```
+	order-meal
+		|----pages：		项目的页面文件
+			|----home	项目首页
+			|----menu	用户进行点单、确认订单、提交订单等一系列相关页面
+			|----order	用户下单之后的订单列表以及详情页面
+			|----center	用户个人中心页
+			|----address	用户地址相关页面
+			|----login	用户登录页面
+			|----register	用户注册页面
+			|----shop	店铺列表页面
+			|----explain	用户地址页面
+		|----components：	一般公共组件存放处
+		|----config：		关于项目相关的域名地址的配置
+		|----delete：		包含之前一些 vuex 和 option api pinia的相关store
+		|----interface：	项目 typescript 相关模块的 interface 数据定义文件
+		|----piniaStore：	vue3的全局数据状态管理，使用的 composition api 
+		|----router：		全局路由配置文件
+		|----static：		存放项目静态资源文件
+		|----style：		存放全局公共css scss样式
+		|----utils：		存放一些常用的公共方法
+	
 ## 使用流程
 
 1. 安装node和HbuilderX 最新版（因时间原因，项目暂未迁移为 cli 模式，目前使用该工具主要进行打包，代码编写使用的是 vs code）。
