@@ -34,58 +34,45 @@ const linkList = [
     {
         title: "前端体验：",
         link: "http://yangguang.natappvip.cc",
-
         content: "http://yangguang.natappvip.cc",
-        notice: "",
     },
     {
         title: "后台体验：",
-        link: "http://daddf.natappvip.cc",
-
-        content: "http://daddf.natappvip.cc",
-        notice: "(该体验域名会因为每次启动随机变动)",
+        link: "http://yangguang.natappvip.c/manage",
+        content: "http://yangguang.natappvip.c/manage",
     },
     {
         title: "客户端代码：",
         link: "https://github.com/yangguang-shine/order-meal",
-
         content: "https://github.com/yangguang-shine/order-meal",
-        notice: "",
+        
     },
     {
         title: "管理端代码：",
         link: "https://github.com/yangguang-shine/manage",
-
         content: "https://github.com/yangguang-shine/manage",
-        notice: "",
+        
     },
     {
         title: "服务端代码：",
         link: "https://github.com/yangguang-shine/serve",
-
         content: "https://github.com/yangguang-shine/serve",
-        notice: "",
     },
     {
         title: "客户端核心：",
         link: "https://github.com/yangguang-shine/order-meal",
-
         content: "Vue3、composition API、TypeScript、Pinia、Uni-App、Sass、ES6及以上",
-        notice: "",
     },
     {
         title: "管理端核心：",
         link: "https://github.com/yangguang-shine/manage",
-
         content: "react-hook、antd、webpack",
-        notice: "",
     },
     {
         title: "服务端核心：",
         link: "https://github.com/yangguang-shine/serve",
-
         content: "node.js、Koa2、Mysql、Natapp（提供外网访问）",
-        notice: "",
+        
     },
 ];
 function clickLink(clickLink) {

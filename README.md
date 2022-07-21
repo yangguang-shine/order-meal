@@ -1,16 +1,27 @@
 # 项目介绍
 
-## 在线使用
+## 项目体验
 
-手机浏览器访问：[个人点餐项目](http://yangguang.natappvip.cc) http://yangguang.natappvip.cc
+**手机体验地址：[【点餐下单】](http://yangguang.natappvip.cc) http://yangguang.natappvip.cc**
+**手机体验地址：[【点餐下单】](http://yangguang.natappvip.cc) http://yangguang.natappvip.cc**
+**手机体验地址：[【点餐下单】](http://yangguang.natappvip.cc) http://yangguang.natappvip.cc**
+
+**重要的事情说三遍！！！**
+
+## 使用的核心技术
+
+vue3、pinia、uni-app、typescript、es6及以上语法、composition api
+
+## 相关访问地址
 
 客户端：手机浏览器访问 http://yangguang.natappvip.cc
 
-管理端：手机浏览器访问 http://yangguang.natappvip.cc/ （该域名随时变动）
+管理端：手机浏览器访问 http://yangguang.natappvip.cc/manage/ （该域名随时变动）
 
-小程序版： 添加微信：13429808281，获取体验权限
+服务端：运行在域名 yangguang.natappvip.cc， 使用的是内网穿透技术，自己的电脑在充当服务器，提供外网访问
 
-暂时只支持http访问，https暂不支持
+小程序版： 添加微信：13429808281，获取体验权限（后续兼容，暂不支持小程序）
+
 
 ## 相关github地址
 
@@ -20,13 +31,83 @@
 
 后端github地址: http://github.com/yangguang-shine/serve
 
+## 目录
+
+```
+order-meal
+	|----pages：		项目的页面文件
+		|----home		项目首页
+		|----menu		用户进行点单、确认订单、提交订单等一系列相关页面
+		|----order		用户下单之后的订单列表以及详情页面
+		|----center		用户个人中心页
+		|----address	用户地址相关页面
+		|----login		用户登录页面
+		|----register	用户注册页面
+		|----shop		店铺列表页面
+		|----explain	用户地址页面
+	|----components：	一般公共组件存放处
+	|----config：		关于项目相关的域名地址的配置
+	|----delete：		包含之前一些 vuex 和 option api pinia的相关store
+	|----interface：	项目 typescript 相关模块的 interface 数据定义文件
+	|----piniaStore：	vue3的全局数据状态管理，使用的 composition api 
+	|----router：		全局路由配置文件
+	|----static：		存放项目静态资源文件
+	|----style：		存放全局公共css scss样式
+	|----utils：		存放一些常用的公共方法
+```
 ## 使用流程
 
-1. 安装node和HbuilderX。
-2. 在HbuilderX中选择运行到浏览器选项
-3. 在HbuilderX的选项“运行”在微信小程序中
-4. 需要搭配nodejs 接口服务才行，地址为： http://github.com/yangguang-shine/serve
+1. 安装node和HbuilderX 最新版（因时间原因，项目暂未迁移为 cli 模式，目前使用该工具主要进行打包，代码编写使用的是 vs code）。
+2. 在HbuilderX中选择 `运行` --> `运行到浏览器`，进行本地预览开发
+4. 需要搭配nodejs 接口服务才行，接口代码地址为： http://github.com/yangguang-shine/serve
+## 点餐核心数据对象
 
+ CategoryItemI、CategoryListMapI、FoodItemI、FoodListMapI
+
+
+**categoryItem: CategoryItemI 对象**
+
+	categoryID: number; // 分类的唯一id
+    categoryName: string; // 分类的名称
+    required: number;	// 该分类是否必选 1、0
+	categoryIDMain: string; //菜品滚动标识id
+    categoryIDAside: string;	//菜品分类滚动标识id
+    foodList: FoodItemI[]; // 菜品列表
+    foodListMap: FoodListMapI //菜品列表的map对象，以foodID为key，foodItem为值
+
+**foodItem: FoodItemI 对象**
+
+    categoryID: number;	// 分类的唯一id
+    categoryName: string;	// 分类的名称
+    description: string;	//菜品描述
+    foodID: number;	//菜品唯一id
+    foodName: string;	//菜品名称
+    imgUrl: string;	//菜品初始url
+    orderCount: number;	//菜品已下单数量
+    price: number;	//菜品价格
+    shopID: number;	//菜品所属店铺id
+    unit: string;	//菜品单位
+    reserveCount: number;	//菜品库存
+    packPrice: number;	//菜品打包价格
+    specification: string;	//菜品规格 需要JSON.parse()获取菜品规格列表
+	currentImg: string;	//菜品当前图片url，用于懒加载
+    fullImgPath: string;	//菜品正确展示的url
+    defaultImg: string;	//菜品默认初始图片url，用于懒加载
+    foodItemAmount: number;	//下单菜品总价
+    showReserveCountFlag: boolean;	//是否展示库存不足tag
+    specificationList: specificationItemI[];	// 菜品规格列表
+    orderSpecifaList: OrderSpecifaItemI[];	// 菜品已下单规格列表
+    specificationSlectedIndexList: number[];	//菜品选择是不同规格的选项
+    orderSpecifaListJSON?: string;	// 菜品已下单规格列表的 JSON.stringify()
+
+**CategoryListMapI、FoodListMapI**
+
+	两者存在是为了解决在增加菜品或删减菜品时需要每次遍历这个分类列表和菜品列表问题。
+	将每个分类类表和菜品类表map化，每次只需要根据categoryID或foodID就能准确获取相关对象
+
+	CategoryListMapI: 菜品分类的map对象，以categoryID为key，categoryItem为值
+
+	FoodListMapI: 菜品列表的map对象，以foodID为key，foodItem为值
 
 ## 主要功能
 
@@ -38,8 +119,6 @@
 6. 提供删除自定义店铺相关信息（包含图片），操作不可逆。
 
 ### 问题思考
-
-
 
 #### 页面有许多可以重复使用的组件和方法
 
