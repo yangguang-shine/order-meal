@@ -23,13 +23,15 @@ import SearchShop from "./components/SearchShop.vue";
 import { getCurrentInstance, onMounted, toRefs } from "vue";
 import { onShow, onLoad, onPageScroll, onHide, onUnload } from "@dcloudio/uni-app";
 import { AddressItemI, ComputedActionI, ComputedMutationI, ComputedStateI, ShopItemI, TabItemI } from "@/interface/index";
-import { hideLoading, selectQuery, showLoading, showModal, tabBarHeightPX } from "@/utils/";
+import { hideLoading, selectQuery, showLoading, showModal, showToast, systemInfo, tabBarHeightPX } from "@/utils/";
 import router from "@/utils/router";
 import { ShopListParamsI } from "@/store/actions/home";
 import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
 import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
 import { HomeStateI } from "@/store/state/home";
 import { storeToRefs } from "pinia";
+import { debounce } from "@/utils/tool";
+import { HomeStateGetI } from "@/piniaStore/home/state";
 
 interface HomeStateF {
     searchShopFlag: ComputedStateI<boolean>;
@@ -41,9 +43,9 @@ interface HomeStateF {
 // home store
 const homeStore: HomeStoreI = useHomeStore();
 // home state
-const { searchShopFlag, tabListTop, selectedTabItem, topAddressSearchPX }: HomeStateF = toRefs(homeStore.homeState);
+const { searchShopFlag, tabListTop, selectedTabItem, topAddressSearchPX }: HomeStateGetI = toRefs(homeStore.homeState);
 // home action
-const { getRecommandShopList, setTopAddressWidthFlag, setTabListFixedFlag } = homeStore;
+const { getRecommandShopList, setTopAddressWidthFlag, setTabListFixedFlag, setFixedImgOpacityFlag } = homeStore;
 
 // address store
 const addressStore: AddressStoreI = useAddressStore();
@@ -53,6 +55,7 @@ let pageHaShowFlag = false;
 onShow(async () => {
     console.log("onShow");
     init();
+    handlePhoneType();
     if (pageHaShowFlag) {
         // 页面展示时是否固定店铺tab
         getShowTabListPosition();
@@ -74,7 +77,6 @@ onShow(async () => {
         } catch (e) {
             console.log(e);
         } finally {
-            console.log(1111);
         }
     }, 100);
 
@@ -86,6 +88,19 @@ onShow(async () => {
     // });
     // }, 0);
 });
+function handlePhoneType() {
+    console.log("systemInfo");
+    const ua = systemInfo.ua || "";
+    const reg = /iphone|android|ipad/i;
+    const mobileFlag = reg.test(ua);
+    if (systemInfo.screenWidth > 750) {
+        showToast({
+            title: "推荐使用移动端模式，PC端展示暂未兼容",
+            duration: 2500,
+            mask: false,
+        });
+    }
+}
 async function getShowTabListPosition() {
     try {
         const res = await selectQuery("#home-container");
@@ -112,8 +127,13 @@ onUnload(() => {
     console.log("onUnload");
 });
 
+const handelDelayScroll = debounce(toSetFixedImgOpacityFlagFalse, 200);
+function toSetFixedImgOpacityFlagFalse() {
+    setFixedImgOpacityFlag(false);
+}
 onPageScroll((e: any) => {
-    if (e.scrollTop > topAddressSearchPX.value) {
+    setFixedImgOpacityFlag(true);
+    if (e.scrollTop > (topAddressSearchPX.value * 3) / 2) {
         setTopAddressWidthFlag(true);
     } else {
         setTopAddressWidthFlag(false);
@@ -123,6 +143,7 @@ onPageScroll((e: any) => {
     } else {
         setTabListFixedFlag(false);
     }
+    handelDelayScroll();
 });
 async function toGetDefaultAddress() {
     const defaultAddress: AddressItemI = await getDefaultAddress();

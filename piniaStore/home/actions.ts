@@ -62,6 +62,10 @@ export function setTopAddressSearchPX(topAddressSearchPX: number) {
     console.log(topAddressSearchPX)
     homeState.topAddressSearchPX = topAddressSearchPX;
 }
+export function setFixedImgOpacityFlag(fixedImgOpacityFlag: boolean) {
+    homeState.fixedImgOpacityFlag = fixedImgOpacityFlag;
+}
+
 
 export interface HomeActionI {
     getRecommandShopList: (payload: ShopListParamsI) => Promise<ShopItemI[]>;
@@ -73,6 +77,7 @@ export interface HomeActionI {
     setTabListTop: (tabListTop: number) => void;
     setTopAddressSearchPX
     : (topAddressSearchPX: number) => void;
+    setFixedImgOpacityFlag: (fixedImgOpacityFlag: boolean) => void
 }
 const homeAction: HomeActionI = {
     getRecommandShopList,
@@ -83,5 +88,6 @@ const homeAction: HomeActionI = {
     setSearchShopFlag,
     setTabListTop,
     setTopAddressSearchPX,
+    setFixedImgOpacityFlag
 };
 export default homeAction;

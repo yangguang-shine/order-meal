@@ -234,7 +234,7 @@ function startAnimationY(addItem: AddItemI) {
         right: 0;
         width: 40rpx;
         height: 40rpx;
-        z-index: 999;
+        z-index: 950;
     }
     .food-count-add-animation-y {
         position: absolute;

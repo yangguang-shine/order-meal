@@ -8,7 +8,7 @@ export interface OverlayAnimationI {
 }
 export interface OverlayAnimationParamsI {
     duration?: number;
-    type?: 'translateY' | 'scale';
+    type?: 'translateY' | 'scale' | 'fixedImg';
     timingFunction?: string;
 }
 
@@ -21,7 +21,7 @@ export default function useOverlayAnimation({ duration = 300, type = "translateY
         timingFunction,
     });
 
-    const detailAnimation = uni.createAnimation({
+    const mainAnimation = uni.createAnimation({
         duration,
         timingFunction,
     });
@@ -29,25 +29,31 @@ export default function useOverlayAnimation({ duration = 300, type = "translateY
         overlayAnimation.opacity(1).step();
         overlayAnimationData.value = overlayAnimation.export();
         if (type === "translateY") {
-            detailAnimation.translateY(0).step();
+            mainAnimation.translateY(0).step();
         } else if (type === "scale") {
-            detailAnimation.scale(1).step();
+            mainAnimation.scale(1).step();
+        } else if (type === "fixedImg") {
+            mainAnimation.right('-40rpx').opacity(.5).step()
+            // mainAnimation.scale(1).step();
         } else {
             console.log("暂不支持该模式");
         }
-        mainAnimationData.value = detailAnimation.export();
+        mainAnimationData.value = mainAnimation.export();
     }
     function toEndAnimation() {
         overlayAnimation.opacity(0).step();
         overlayAnimationData.value = overlayAnimation.export();
         if (type === "translateY") {
-            detailAnimation.translateY("100%").step();
+            mainAnimation.translateY("100%").step();
         } else if (type === "scale") {
-            detailAnimation.scale(0).step();
+            mainAnimation.scale(0).step();
+        } else if (type === "fixedImg") {
+            mainAnimation.right('30rpx').opacity(1).step()
+
         } else {
             console.log("暂不支持该模式");
         }
-        mainAnimationData.value = detailAnimation.export();
+        mainAnimationData.value = mainAnimation.export();
     }
     return {
         overlayAnimationData,

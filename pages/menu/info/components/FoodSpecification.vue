@@ -142,7 +142,7 @@ function change(index: number, specificationIndex: number) {
     // -webkit-backdrop-filter: blur(20px) brightness(100%);
     // backdrop-filter: blur(20px) brightness(100%);
     // background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1100;
+    z-index: 970;
     .food-specification-overlay {
         position: absolute;
         top: 0;

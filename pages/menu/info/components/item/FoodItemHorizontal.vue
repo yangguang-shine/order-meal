@@ -222,7 +222,7 @@ function clickFoodItem(foodItem: FoodItemI) {
         right: 20rpx;
         width: 40rpx;
         height: 40rpx;
-        z-index: 999;
+        z-index: 950;
     }
     .food-add-y {
         position: absolute;

@@ -40,7 +40,7 @@ async function close() {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2000;
+    z-index: 980;
     .overlay {
         position: absolute;
         top: 0;

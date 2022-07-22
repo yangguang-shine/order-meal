@@ -1,4 +1,5 @@
 import { TabItemI, ShopItemI, initShopItem } from "@/interface/index";
+import { RefI } from "@/interface/vueInterface";
 import { ref, reactive } from "vue";
 
 export interface HomeStateI {
@@ -7,11 +8,24 @@ export interface HomeStateI {
     recommandShopList: ShopItemI[];
     tabList: TabItemI[];
     selectedTabItem: TabItemI;
-    // shopInfo: ShopItemI;
+
     searchShopFlag: boolean,
-    // businessType: number;
     tabListTop: number
-    topAddressSearchPX: number
+    topAddressSearchPX: number,
+    fixedImgOpacityFlag: boolean
+}
+export interface HomeStateGetI  {
+    topAddressWidthFlag: RefI<boolean>,
+    tabListFixedFlag: RefI<boolean>,
+    recommandShopList: RefI<ShopItemI[]>,
+    tabList: RefI<TabItemI[]>,
+    selectedTabItem: RefI<TabItemI>,
+
+    searchShopFlag: RefI<boolean>,
+    tabListTop: RefI<number>,
+    topAddressSearchPX: RefI<number>,
+    fixedImgOpacityFlag: RefI<boolean>,
+
 }
 export const tabList: TabItemI[] = [
     {
@@ -39,7 +53,8 @@ const homeState: HomeStateI = reactive({
     searchShopFlag: false,
     // businessType: 2,
     tabListTop: 0,
-    topAddressSearchPX: 50
+    topAddressSearchPX: 50,
+    fixedImgOpacityFlag: false
 });
 
 export default homeState

@@ -64,6 +64,7 @@ function copyOrderKey() {
                 title: "订单号已复制",
                 icon: "none",
                 duration: 2000,
+                mask: false
             });
         },
     });

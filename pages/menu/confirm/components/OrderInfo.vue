@@ -165,7 +165,7 @@ function continueOrder() {
     .continue-order {
         // color: #666;
         font-size: 28rpx;
-        margin-right: 20rpx;
+        // margin-right: 20rpx;
         width: 150rpx;
         height: 50rpx;
         border-radius: 8rpx;

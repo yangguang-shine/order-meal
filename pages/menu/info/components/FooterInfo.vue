@@ -52,7 +52,7 @@ interface MenuStateF {
     cartCategoryList: ComputedStateI<CategoryItemI[]>;
     cartImgAnimationFlag: ComputedStateI<boolean>;
     requiredCategoryIDList: ComputedStateI<number[]>;
-    categoryListMap: ComputedStateI<CategoryListMapI>
+    categoryListMap: ComputedStateI<CategoryListMapI>;
 }
 interface MenuGetterF {
     cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
@@ -61,7 +61,7 @@ interface MenuGetterF {
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCategoryList,  cartImgAnimationFlag, requiredCategoryIDList, categoryListMap }: MenuStateF = toRefs(menuStore.menuState);
+const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCategoryList, cartImgAnimationFlag, requiredCategoryIDList, categoryListMap }: MenuStateF = toRefs(menuStore.menuState);
 // getter
 const { cartPriceInfo, asideCategoryInfo }: MenuGetterF = storeToRefs(menuStore);
 // action
@@ -139,18 +139,17 @@ const confirmButtonInfo: ComputedI<ConfirmButtonInfoI> = computed((): ConfirmBut
     };
 });
 onMounted(async () => {
-    getFooterCartContainerHeight()
+    getFooterCartContainerHeight();
     getCartImgBoxHeight();
 });
 async function getFooterCartContainerHeight() {
-    const res = await selectQuery('#footer-cart-container')
-    setFooterPX(res.height)
+    const res = await selectQuery("#footer-cart-container");
+    setFooterPX(res.height);
 }
 
 async function getCartImgBoxHeight() {
     const res = await selectQuery("#cart-img-box");
-    setCartImgPX(res.height)
-
+    setCartImgPX(res.height);
 }
 watch(cartImgAnimationFlag, (newValue: boolean, oldValue: boolean) => {
     if (newValue) {
@@ -182,20 +181,24 @@ function toComfirmOrder() {
         router.navigateTo({
             name: "menu/confirm",
         });
-    } else if(!confirmButtonInfo.value.hasOrderRequiredFlag) {
-        const requiredCategoryID = confirmButtonInfo.value.requiredCategoryID
-        const  requiredCategoryName = categoryListMap.value[`${requiredCategoryID}`].categoryName
-        console.log(categoryListMap.value)
-        console.log(requiredCategoryName)
+    } else if (!confirmButtonInfo.value.hasOrderRequiredFlag) {
+        const requiredCategoryID = confirmButtonInfo.value.requiredCategoryID;
+        const requiredCategoryName = categoryListMap.value[`${requiredCategoryID}`].categoryName;
+        console.log(categoryListMap.value);
+        console.log(requiredCategoryName);
         showToast({
             title: `【${requiredCategoryName}】类别需要必选一项`,
-        })
-        setScrollToViewCategory(requiredCategoryID)
+            duration: 2000,
+            mask: false,
+
+        });
+        setScrollToViewCategory(requiredCategoryID);
     } else {
         showToast({
             title: `起${businessType.value === 2 ? "送" : "做"}价格不足`,
-            duration: 2000
-        })
+            duration: 2000,
+            mask: false,
+        });
     }
 }
 function clickCartImg() {
