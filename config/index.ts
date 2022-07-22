@@ -11,8 +11,8 @@ serveDomain = `https://yangguang.natappvip.cc`;
 export let requestHost: string = `${serveDomain}/api`;
 if (process.env.NODE_ENV === "development") {
     console.log("开发环境");
-    serveDomain = `http://${devHost}:${devPort}`;
-    requestHost = `http://${devHost}:${proHost}`;
+    serveDomain = `http://${devHost}:${proHost}`;
+    requestHost = `http://${devHost}:${devPort}/api`;
 } else {
     console.log("生产环境");
 }

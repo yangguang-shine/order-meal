@@ -1,5 +1,7 @@
 # 项目介绍
 
+**[【五脏俱全的餐饮点单项目】](http://yangguang.natappvip.cc)**
+
 ## 项目体验
 
 **手机体验地址：[【点餐下单】](http://yangguang.natappvip.cc) http://yangguang.natappvip.cc**
@@ -18,20 +20,58 @@ vue3、pinia、uni-app、typescript、es6及以上语法、composition api
 
 客户端：手机浏览器访问 http://yangguang.natappvip.cc
 
-管理端：手机浏览器访问 http://yangguang.natappvip.cc/manage/ （该域名随时变动）
+管理端：手机浏览器访问 http://yangguang.natappvip.cc/manage/
 
-服务端：运行在域名 yangguang.natappvip.cc， 使用的是内网穿透技术，自己的电脑在充当服务器，提供外网访问
-
-小程序版： 添加微信：13429808281，获取体验权限（后续兼容，暂不支持小程序）
-
-
-## 相关github地址
+服务端：运行在域名 yangguang.natappvip.cc， 使用的是内网穿透技术，提供外网访问
 
 客户端github地址: http://github.com/yangguang-shine/order-meal
 
 管理端github地址： http://github.com/yangguang-shine/manage
 
-后端github地址: http://github.com/yangguang-shine/serve
+服务端github地址: http://github.com/yangguang-shine/serve
+
+## 主要功能
+
+**首页**
+1. 	登录、注册、注销、查看和修改个人信息
+2. 	个人地址添加、删除、修改
+3. 	支持店铺搜索、不同店铺`业务类型`（外卖、堂食、字体）、店铺不同`排序展示`（综合、销量、距离）、店铺的`满减营销`。
+4. 	支持店铺的满减营销、轮播广告位、固定浮动广告位
+
+**下单页**
+1. 	支持点餐过程菜品和店铺切换、搜索菜品、菜品和分类`联合滚动`
+2. 	支持店铺 `垂直模式` 和 `水平模式` 任意切换
+3. 	支持滚动过程菜品`图片懒加载`
+4. 	支持菜品详情、购物车总数量查看
+5. 	支持购物车同菜品不同规格分别展示
+6. 	支持菜品增加数量时，添加`按钮和购物车动效`
+7. 	支持`菜品多规格、多规格加价`
+8. 	支持菜品打包费、运费、起送价格配置
+9. 	支持`分类必选项`、`店铺满减`信息实时查看
+10. 支持菜品增加减少时，所有相关信息动态展示最新价格和数量
+11. 支持菜品`凑单功能`、支持不同的价格区间展示
+12. 支持购物车`一键清空`菜品
+13. 支持动态展示必选项和起送差价按钮
+14. 支持弹框展示过渡动效
+
+**确订单页**
+1. 支持送达大约`时间选择`
+2. 支持送达`地址选择`
+3. 支持继续点单
+4. 支持同菜品不同规格分别展示
+5. 支持下单菜品量大时，展示更多下单菜品
+6. 支持查看包装费、运送费、满减优惠、实际预付价
+7. 支持`用户备注`
+8. 支持`下单`
+
+**订单页**
+
+1. 支持不同类型的订单显示
+2. 支持订单`再来一单`
+3. 支持订单的业务类型、店铺、订单状态、满减信息、支付信息等
+4. 支持查看订单详情
+5. 支持取消订单
+6. 支持订单相关菜品以及其他信息展示
 
 ## 目录
 
@@ -58,13 +98,13 @@ vue3、pinia、uni-app、typescript、es6及以上语法、composition api
 	
 ## 使用流程
 
-1. 安装node和HbuilderX 最新版（因时间原因，项目暂未迁移为 cli 模式，目前使用该工具主要进行打包，代码编写使用的是 vs code）。
+1. 安装 `node` 和 `HbuilderX` 最新版（因时间原因，项目暂未迁移为 cli 模式，目前使用该工具主要进行打包，代码编写使用的是 `vs code`）。
 2. 在HbuilderX中选择 `运行` --> `运行到浏览器`，进行本地预览开发
-4. 需要搭配nodejs 接口服务才行，接口代码地址为： http://github.com/yangguang-shine/serve
+4. 需要搭配nodejs 接口服务才行，接口服务代码地址为： http://github.com/yangguang-shine/serve
+
 ## 点餐核心数据对象
 
- CategoryItemI、CategoryListMapI、FoodItemI、FoodListMapI
-
+ `CategoryItemI、CategoryListMapI、FoodItemI、FoodListMapI` 四个核心对象
 
 **categoryItem: CategoryItemI 对象**
 
@@ -110,14 +150,7 @@ vue3、pinia、uni-app、typescript、es6及以上语法、composition api
 
 	FoodListMapI: 菜品列表的map对象，以foodID为key，foodItem为值
 
-## 主要功能
 
-1. 可以自定义店铺、菜品分类、菜品详情。
-2. 可以上传店铺图片和菜品图片。
-3. 店铺中可以增加满减营销和业务类型（预定和外卖）
-4. 可以在自定义的店铺进行点餐、下单。
-5. 店铺的管理者可以对其他客户下的订单进行操作。
-6. 提供删除自定义店铺相关信息（包含图片），操作不可逆。
 
 ### 问题思考
 
