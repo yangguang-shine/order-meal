@@ -4,13 +4,10 @@
 
 ## 项目体验
 
-**手机体验地址：[【点餐下单】](http://yangguang.natappvip.cc) http://yangguang.natappvip.cc**
+**手机体验地址：[【点餐下单】](http://yangguang.natappvip.cc) <http://yangguang.natappvip.cc>**
 
-**手机体验地址：[【点餐下单】](http://yangguang.natappvip.cc) http://yangguang.natappvip.cc**
-
-**手机体验地址：[【点餐下单】](http://yangguang.natappvip.cc) http://yangguang.natappvip.cc**
-
-**重要的事情说三遍！！！**
+**扫码体验图片二维码**
+![http://yangguang.natappvip.cc](./static/http___yangguang.natappvip.cc.png)
 
 ## 使用的核心技术
 
@@ -144,7 +141,7 @@ vue3、pinia、uni-app、typescript、es6及以上语法、composition api
 **CategoryListMapI、FoodListMapI**
 
 	两者存在是为了解决在增加菜品或删减菜品时需要每次遍历这个分类列表和菜品列表问题。
-	将每个分类类表和菜品类表map化，每次只需要根据categoryID或foodID就能准确获取相关对象
+	将每个分类类表和菜品列表map化，每次只需要根据categoryID或foodID就能准确获取相关对象
 
 	CategoryListMapI: 菜品分类的map对象，以categoryID为key，categoryItem为值
 
@@ -166,20 +163,7 @@ vue3、pinia、uni-app、typescript、es6及以上语法、composition api
 12. 再来一单查看购物车时，有的图片还未加载问题（已解决）
 13. 用户体验时可能使用的是pc端 无法友好体验（已解决）
 
-
-
-### 问题思考
-
-#### 页面有许多可以重复使用的组件和方法
-
-初始有些页面有些重复书写的方法和组件，现在功能 还不完善，等后期整体完工后，统一进行优化
-
-#### 页面使用了跨端，兼容小程序和H5
-
-开始时依照小程序的开发模式进行开发，当小程序没有问题后，在H5上进行内容扩充
-
-
-思考总结
+### 思考总结
 
 1. height和flex：1共存时，取最大的值，能解决元素宽高问题
 2. 组件动画，在mounted进行属性改变最好，在v-if或v-show上对属性设置动画失效，因为渲染时，默认获得的属性就是结束后的状态，没有一种状态的变化，mounted初始化属性时，页面初始化状态属性已存在，在mounted修改属性能有动画
@@ -191,8 +175,8 @@ vue3、pinia、uni-app、typescript、es6及以上语法、composition api
 8. v-if显示的组件里使用scroll-view 动画可能不会失效在蒙层上添加 @touchmove.stop.prevent，一般情况下蒙层里内容是不能滑动的，但是发现想蒙层需要滑动的内容添加 @touchmove.stop 这是添加这个属性的div 是能滑动的，只有当滑动到底部时，才有页面级的滑动穿透，另一种是蒙层中使用<scroll-view> 组件
 9. pointer-events: none; 可以忽略当前层点击事件，触发当前层下的点击事件
 
-
 ### 解决的问题
+
 1. watch问题 组件 FoodAddMinus 中 props.foodItem.orderCount 只会监听这个数字变化，如果foodItem变成新的值，依然会触发回调，使用watch 要确保使用的对象一直保持不变，否则会出现意想不到的问题，对数据进行初始化，能避免问题
 
 #### 滑动穿透问题，根据不同的场景使用不同的方法
@@ -209,11 +193,4 @@ vue3、pinia、uni-app、typescript、es6及以上语法、composition api
 
 ### 升级后的vue3和vuex使用踩坑 (已弃用，使用了pinia)
 
-1. mapState，mapMutation，mapAction等在setup中使用时，因无this，mapState不能使用，mapMutation，mapAction在setup中直接调用因无this一样不行，但在setup外却能使用，因为存在这个问题，自己封装了简单的mapState，mapMutation，mapAction，在utils/mapVuex中，当然仅限于基础使用，
-
-
-
-
-
-
-
+1. mapState，mapMutation，mapAction等在setup中使用时，因无this，mapState不能使用，mapMutation，mapAction在setup中直接调用因无this一样不行，但在setup外却能使用，因为存在这个问题，自己封装了简单的mapState，mapMutation，mapAction，在utils/mapVuex中，当然仅限于基础使用
