@@ -22,43 +22,18 @@
 
 <script lang="ts" setup>
 import FoodItem from "./item/FoodItem.vue";
-import { getRpxToPx, selectQuery, systemInfo } from "@/utils/index";
-import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
-
-import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI, FoodItemI } from "@/interface/menu";
-import { MinusPromotionsObjectI, AsideCategoryItemI } from "@/store/getters/menu";
-import { RefI } from "@/interface/vueInterface";
 import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
-import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { MenuGetterG, MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
-import { foodImgPath } from "@/config/";
 import { debounce } from "@/utils/tool";
-interface MenuStateF {
-    categoryList: ComputedStateI<CategoryItemI[]>;
-    categoryIDMain: ComputedStateI<string>;
-    footerPX: ComputedStateI<number>
-
-}
-interface MenuGetterF {
-    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
-    footerAndMinusPX: ComputedGetterI<number>;
-
-}
-interface MutationF {
-    setFoodDetailFlag: ComputedMutationI<boolean>;
-    setFoodInfo: ComputedMutationI<FoodItemI>;
-    setSelectedCategoryID: ComputedMutationI<number>;
-    setCategoryIDMain: ComputedMutationI<string>;
-    setCategoryIDAside: ComputedMutationI<string>;
-}
+import { MenuStateG } from "@/piniaStore/menu/state";
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { categoryList, categoryIDMain, footerPX }: MenuStateF = toRefs(menuStore.menuState);
+const { categoryList, categoryIDMain, footerPX }: MenuStateG = toRefs(menuStore.menuState);
 // getter
-const { minusPromotionsObject, footerAndMinusPX }: MenuGetterF = storeToRefs(menuStore);
+const { minusPromotionsObject, footerAndMinusPX }: MenuGetterG = storeToRefs(menuStore);
 // action
 const { setFoodDetailFlag, setFoodInfo, setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside, handleFoodCategoryListScroll } = menuStore;
 

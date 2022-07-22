@@ -21,25 +21,16 @@
 import { defineComponent, computed, getCurrentInstance, ref, onMounted, toRefs } from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { onShow, onLoad } from "@dcloudio/uni-app";
-import { AddressItemI, ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/index";
+import { AddressItemI } from "@/interface/index";
 import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
 import { delaySync, hideLoading, showLoading, showModal } from "@/utils/";
 import router from "@/utils/router";
 import  { storeToRefs} from 'pinia'
-interface AddressStateF {
-    addressList: ComputedStateI<AddressItemI[]>;
-    defaultAddress: ComputedStateI<AddressItemI>;
-}
-interface ActionF {
-    getAddressList: ComputedActionI<void>;
-    deleteAddress: ComputedActionI<number>;
-    setDefaultAddressFetch: ComputedActionI<number>;
-    setDefaultAddress: ComputedMutationI<AddressItemI>;
-}
+import { AddressStateG } from "@/piniaStore/address/state";
 // address store
 const addressStore: AddressStoreI = useAddressStore()
 // address state
-const {addressList , defaultAddress }: AddressStateF = toRefs(addressStore.addressState)
+const {addressList , defaultAddress }: AddressStateG = toRefs(addressStore.addressState)
 // address action
 const { getAddressList, deleteAddress, setDefaultAddressFetch, setDefaultAddress} = addressStore
 

@@ -14,24 +14,18 @@ import OrderInfo from "./components/OrderInfo.vue";
 import OtherInfo from "./components/OtherInfo.vue";
 import FooterButton from "./components/FooterButton.vue";
 import NoteInput from "./components/NoteInput.vue";
-import { mapMutation, mapState, mapAction } from "@/utils/mapVuex";
 import { getCurrentInstance, toRefs } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { AddressItemI } from "@/interface/address";
-import { footerButtonHeightRPX } from "./comfirmConfig";
-import { hideLoading, showLoading, showToast } from "@/utils/";
-import router from "@/utils/router";
+import { hideLoading, showLoading, showModal, showToast } from "@/utils/";
 import {useConfirmStore, ConfirmStoreI} from '@/piniaStore/confirm'
-import {storeToRefs } from 'pinia'
 import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
-interface ConfirmStateF {
-    noteInputFlag: ComputedStateI<boolean>;
-}
+import { ConfirmStateG } from "@/piniaStore/confirm/state";
+import router from "@/utils/router";
 // confirm store
 const confirmStore: ConfirmStoreI = useConfirmStore()
 // confirm state
-const { noteInputFlag }: ConfirmStateF = toRefs(confirmStore.confirmState)
+const { noteInputFlag }: ConfirmStateG = toRefs(confirmStore.confirmState)
 // confirm action
 const { setTakeOutTime } = confirmStore
 // address store
@@ -64,7 +58,7 @@ async function toGetDefaultAddress() {
                 content: "为提供更好服务，请先选择地址",
                 confirmText: "去选择地址",
             });
-            myrouter.navigateTo({
+            router.navigateTo({
                 name: "address/list",
                 query: {
                     fromPage: "userHome",

@@ -21,39 +21,20 @@ import FoodAddMinusItem from "./item/FoodAddMinusItem.vue";
 import FoodItem from "./item/FoodItem.vue";
 import { getCurrentInstance, computed, onMounted, ref, toRefs, watch } from "vue";
 import { collectTransitionTime } from "../infoConfig";
-import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
-import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
-import { CategoryItemI, CollectFoodListItemI } from "@/interface/menu";
-import { CartPriceInfoI, MinusPromotionsObjectI } from "@/store/getters/menu";
-import { ComputedI, RefI } from "@/interface/vueInterface";
+import { RefI } from "@/interface/vueInterface";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
-import { ShopItemI } from "@/interface/home";
-import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { MenuGetterG, MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
 import { debounce } from "@/utils/tool";
 
 import { onShow, onLoad, onPageScroll, onUnload, onHide, onReady } from "@dcloudio/uni-app";
-
-interface MenuStateF {
-    cartCategoryList: ComputedStateI<CategoryItemI[]>;
-    categoryList: ComputedStateI<CategoryItemI[]>;
-    businessType: ComputedStateI<number>;
-    shopInfo: ComputedStateI<ShopItemI>;
-    collectFoodList: ComputedStateI<CollectFoodListItemI[]>;
-    showCollectClickCartImgFlag: ComputedStateI<boolean>;
-}
-interface MenuGetterF {
-    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
-    cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
-    footerAndMinusPX: ComputedGetterI<number>;
-
-}
+import { MenuStateG } from "@/piniaStore/menu/state";
 // menu store
 const menuStore: MenuStoreI = useMenuStore();
 // menu state
-const { cartCategoryList, categoryList, businessType, shopInfo, collectFoodList, showCollectClickCartImgFlag }: MenuStateF = toRefs(menuStore.menuState);
+const { cartCategoryList, categoryList, businessType, shopInfo, collectFoodList, showCollectClickCartImgFlag }: MenuStateG = toRefs(menuStore.menuState);
 // menu getter
-const { minusPromotionsObject, cartPriceInfo, footerAndMinusPX }: MenuGetterF = storeToRefs(menuStore);
+const { minusPromotionsObject, cartPriceInfo, footerAndMinusPX }: MenuGetterG = storeToRefs(menuStore);
 // menu action
 const { setCollectFoodFlag, setShowCollectClickCartImgFlag, setCartDetailFlag } = menuStore;
 // animation

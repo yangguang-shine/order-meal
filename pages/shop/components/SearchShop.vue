@@ -11,27 +11,18 @@
 
 <script lang="ts" setup>
 import { defineComponent, computed, getCurrentInstance, ref, toRefs } from "vue";
-import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
-import { TabItemI, ComputedStateI, ComputedMutationI, ComputedActionI, ShopItemI } from "@/interface/index";
-import { ComputedI, RefI } from "@/interface/vueInterface";
-import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { delaySync, hideLoading, showLoading } from "@/utils/";
+import { ShopItemI } from "@/interface/index";
+import { RefI } from "@/interface/vueInterface";
 import Search from "@/components/Search.vue";
 import Shop from "@/components/Shop.vue";
 import router from "@/utils/router";
 import { ShopStoreI, useShopStore } from "@/piniaStore/shop";
-import { storeToRefs} from 'pinia'
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
-
-interface ShopStateF {
-    tabList: ComputedStateI<TabItemI[]>;
-    shopList: ComputedStateI<ShopItemI[]>;
-    routerBusinessType: ComputedStateI<number>;
-}
+import { ShopStateG } from "@/piniaStore/shop/state";
 // shop store
 const shopStore: ShopStoreI = useShopStore()
 // shop state
-const { tabList, shopList, routerBusinessType }: ShopStateF = toRefs(shopStore.shopState);
+const { tabList, shopList, routerBusinessType }: ShopStateG = toRefs(shopStore.shopState);
 // shop action
 const { setSearchShopListFlag } = shopStore;
 // menu store
@@ -40,7 +31,7 @@ const menuStore: MenuStoreI = useMenuStore()
 const {  setShopInfo, setBusinessType } = menuStore;
 
 const searchValue: RefI<string> = ref("");
-const searchShopList: ComputedI<ShopItemI> = computed(() => {
+const searchShopList: RefI<ShopItemI> = computed(() => {
     if (!searchValue.value) return [];
     const searchShopList: ShopItemI[] = [];
     shopList.value.forEach((shopItem: ShopItemI) => {

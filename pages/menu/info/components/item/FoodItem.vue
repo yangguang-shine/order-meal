@@ -16,18 +16,16 @@
 </template>
 
 <script lang="ts" setup>
-import { delaySync, selectQuery } from "@/utils/index";
 import { watch, reactive, ref, getCurrentInstance, onMounted, toRefs } from "vue";
-import { mapMutation, mapState } from "@/utils/mapVuex";
-import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import FoodAddMinusItem from "./FoodAddMinusItem.vue";
 import ReserveNotEnough from "./ReserveNotEnough.vue";
-import { CategoryItemI, ComputedMutationI, ComputedStateI, FoodItemI, PositionInfoI, ShopItemI } from "@/interface/index";
+import { FoodItemI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { MenuStateG } from "@/piniaStore/menu/state";
 
 interface PropsI {
-    foodItem: FoodItemI;
+    foodItem: FoodItemI; 
     mode?: string; // large | midden | small
     type?: string,
     idPre?: string
@@ -48,20 +46,10 @@ interface CartChangeParamI {
 }
 const showInfoFlag: RefI<boolean> = ref(false);
 
-interface MenuStateF {
-    shopInfo: ComputedStateI<ShopItemI>;
-}
-interface RandomStyleI {
-    random: number;
-    style: {
-        top: number;
-        right: number;
-    };
-}
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { shopInfo  }: MenuStateF = toRefs(menuStore.menuState)
+const { shopInfo  }: MenuStateG = toRefs(menuStore.menuState)
 
 onMounted(async () => {
     if (props.foodItem.orderCount > 0) {

@@ -31,39 +31,21 @@
 <script lang="ts" setup>
 import { getCurrentInstance, onMounted, watch, ref, computed, toRefs } from "vue";
 import CartImg from "./CartImg.vue";
-
-import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
-import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
-import { CategoryItemI, CategoryListMapI, FoodItemI, PositionInfoI } from "@/interface/menu";
-import { MinusPromotionsObjectI, AsideCategoryItemI, CartPriceInfoI } from "@/store/getters/menu";
-import { ComputedI, RefI } from "@/interface/vueInterface";
-import { ShopItemI } from "@/interface/home";
+import { RefI } from "@/interface/vueInterface";
 import { selectQuery, showToast, toFixedToNumber } from "@/utils/";
 import router from "@/utils/router";
 import { countAddTransitionTime } from "../infoConfig";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
-import { AsideCategoryInfoI } from "@/piniaStore/menu/getter";
-interface MenuStateF {
-    startShopInfoAnimationFlag: ComputedStateI<boolean>;
-    shopInfoFlag: ComputedStateI<boolean>;
-    businessType: ComputedStateI<number>;
-    shopInfo: ComputedStateI<ShopItemI>;
-    cartCategoryList: ComputedStateI<CategoryItemI[]>;
-    cartImgAnimationFlag: ComputedStateI<boolean>;
-    requiredCategoryIDList: ComputedStateI<number[]>;
-    categoryListMap: ComputedStateI<CategoryListMapI>;
-}
-interface MenuGetterF {
-    cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
-    asideCategoryInfo: ComputedGetterI<AsideCategoryInfoI>;
-}
+import {  MenuGetterG } from "@/piniaStore/menu/getter";
+import { MenuStateG } from "@/piniaStore/menu/state";
+
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCategoryList, cartImgAnimationFlag, requiredCategoryIDList, categoryListMap }: MenuStateF = toRefs(menuStore.menuState);
+const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCategoryList, cartImgAnimationFlag, requiredCategoryIDList, categoryListMap }: MenuStateG = toRefs(menuStore.menuState);
 // getter
-const { cartPriceInfo, asideCategoryInfo }: MenuGetterF = storeToRefs(menuStore);
+const { cartPriceInfo, asideCategoryInfo }: MenuGetterG = storeToRefs(menuStore);
 // action
 const { toogleCartDetailFlag, setScrollToViewCategory, setFooterPX, setCartImgPX } = menuStore;
 const cartImgAnimationData = ref(null);
@@ -87,7 +69,7 @@ interface ConfirmButtonInfoI {
     requiredCategoryID: number;
     requireText: string;
 }
-const confirmButtonInfo: ComputedI<ConfirmButtonInfoI> = computed((): ConfirmButtonInfoI => {
+const confirmButtonInfo: RefI<ConfirmButtonInfoI> = computed((): ConfirmButtonInfoI => {
     let hasOrderRequiredFlag: boolean = true;
     let requiredCategoryID: number = 0;
     for (let i = 0; i < requiredCategoryIDList.value.length; i++) {

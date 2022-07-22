@@ -10,36 +10,19 @@
 </template>
 
 <script lang="ts" setup>
-import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-
-import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
-
-import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI } from "@/interface/menu";
-import { RefI } from "@/interface/vueInterface";
-import { ShopItemI } from "@/interface/home";
 import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
-import { AsideCategoryInfoI, MinusPromotionsObjectI, AsideCategoryItemI } from "@/piniaStore/menu/getter";
+import {  MenuGetterG } from "@/piniaStore/menu/getter";
 import { selectQuery } from "@/utils/";
-
-interface MenuStateF {
-    selectedCategoryID: ComputedStateI<number>;
-    shopInfo: ComputedStateI<ShopItemI>;
-    categoryIDAside: ComputedStateI<string>;
-}
-interface MenuGetterF {
-    asideCategoryInfo: ComputedGetterI<AsideCategoryInfoI>;
-    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
-}
-
+import { MenuStateG } from "@/piniaStore/menu/state";
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { selectedCategoryID, shopInfo, categoryIDAside }: MenuStateF = toRefs(menuStore.menuState);
+const { selectedCategoryID, shopInfo, categoryIDAside }: MenuStateG = toRefs(menuStore.menuState);
 // getter
-const { asideCategoryInfo, minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
+const { asideCategoryInfo, minusPromotionsObject }: MenuGetterG = storeToRefs(menuStore);
 // action
 const { setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside, setAsideBarHorizontalPX } = menuStore;
 //

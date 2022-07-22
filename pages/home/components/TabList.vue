@@ -9,22 +9,15 @@
 <script lang="ts" setup>
 import { defineComponent, computed, getCurrentInstance, ref, onMounted, toRefs } from "vue";
 import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
-import { TabItemI, ComputedStateI, ComputedMutationI, ComputedActionI } from "@/interface/index";
+import { TabItemI } from "@/interface/index";
 import { hideLoading, selectQuery, showLoading } from "@/utils/";
-import { ShopListParamsI } from "@/store/actions/home";
 import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
-import { storeToRefs } from "pinia";
-interface HomeStateF {
-    tabList: ComputedStateI<TabItemI[]>;
-    selectedTabItem: ComputedStateI<TabItemI>;
-    tabListFixedFlag: ComputedStateI<boolean>;
-    tabListTop: ComputedStateI<number>;
-    topAddressSearchPX: ComputedStateI<number>;
-}
+import { HomeStateG } from "@/piniaStore/home/state";
+
 // home store
 const homeStore: HomeStoreI = useHomeStore();
 // home state
-const { tabList, selectedTabItem, tabListFixedFlag, tabListTop, topAddressSearchPX }: HomeStateF = toRefs(homeStore.homeState);
+const { tabList, selectedTabItem, tabListFixedFlag, tabListTop, topAddressSearchPX }: HomeStateG = toRefs(homeStore.homeState);
 const { changeTabItem, setTabListTop, getRecommandShopList } = homeStore;
 
 onMounted(() => {

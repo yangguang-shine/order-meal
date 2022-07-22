@@ -41,20 +41,13 @@
 
 <script setup lang="ts">
 import { getCurrentInstance, reactive, toRefs } from "vue";
-import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { UserInfoI } from "@/interface/center";
-import { ComputedActionI, ComputedStateI } from "@/interface/vuex";
-import { mapAction, mapState } from "@/utils/mapVuex";
 import { hideLoading, showLoading, showModal, showToast } from "@/utils/index";
 import router from "@/utils/router";
 import { CenterStoreI, useCenterStore } from "@/piniaStore/center";
-import { storeToRefs} from 'pinia'
-interface CenterStateF {
-    userInfo: ComputedStateI<UserInfoI>;
-}
+import { CenterStateG } from "@/piniaStore/center/state";
 // center store
 const centerStore: CenterStoreI = useCenterStore()
-const { userInfo }: CenterStateF = toRefs(centerStore.centerState);
+const { userInfo }: CenterStateG = toRefs(centerStore.centerState);
 const { logout } = centerStore;
 
 function toEditInfo(key: string) {
@@ -66,7 +59,7 @@ function toEditInfo(key: string) {
     });
 }
 function toDisableToast() {
-    $showToast({
+    showToast({
         title: "暂不支持修改",
     });
 }

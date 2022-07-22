@@ -24,34 +24,17 @@
 </template>
 
 <script lang="ts" setup>
-import { mapState, mapMutation } from "@/utils/mapVuex";
-import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { delaySync, selectQuery } from "@/utils/";
 import { barSearchTransitionTime, shopInfoTransitionTime } from "../infoConfig";
-import { ShopItemI } from "@/interface/home";
 import { ref, watch, toRefs, onMounted } from "vue";
 import { RefI } from "@/interface/vueInterface";
-import router from "@/utils/router";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
-
-interface MenuStateF {
-    topBarInfo: ComputedStateI<string>;
-    shopInfo: ComputedStateI<ShopItemI>;
-    selectedCategoryID: ComputedStateI<number>;
-}
-interface MutationF {
-    setTopBarInfo: ComputedMutationI<string>;
-    setShopInfoFlag: ComputedMutationI<boolean>;
-    setStartShopInfoAnimationFlag: ComputedMutationI<boolean>;
-    setSearchFoodFlag: ComputedMutationI<boolean>;
-    setShopInfoMode: ComputedMutationI<string>;
-    setCategoryIDMain: ComputedMutationI<string>;
-}
+import { MenuStateG } from "@/piniaStore/menu/state";
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { topBarInfo, shopInfo, selectedCategoryID }: MenuStateF = toRefs(menuStore.menuState);
+const { topBarInfo, shopInfo, selectedCategoryID }: MenuStateG = toRefs(menuStore.menuState);
 // action
 const { setTopBarInfo, setShopInfoFlag, setStartShopInfoAnimationFlag, setSearchFoodFlag, setShopInfoMode, setCategoryIDMain, setTopBarHeightPX } = menuStore;
 

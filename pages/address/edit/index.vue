@@ -30,20 +30,14 @@
     </view>
 </template>
 <script lang="ts" setup>
-import { getSetting, authorize } from "@/utils";
+import { getSetting, authorize } from "@/utils/";
 import { defineComponent, computed, getCurrentInstance, reactive, ref } from "vue";
-import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import { onShow, onLoad } from "@dcloudio/uni-app";
-import { AddressItemI, ComputedActionI, ComputedStateI } from "@/interface/index";
+import { AddressItemI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
 import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
 import { hideLoading, showLoading, showModal, showToast } from "@/utils/";
 import router from "@/utils/router";
-interface ActionF {
-    addAddress: ComputedActionI<AddressItemI>;
-    findAddress: ComputedActionI<number, AddressItemI>;
-    editAddress: ComputedActionI<AddressItemI>;
-}
 // address store
 const addressStore: AddressStoreI = useAddressStore();
 // address action

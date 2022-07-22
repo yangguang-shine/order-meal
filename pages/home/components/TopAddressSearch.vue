@@ -17,23 +17,17 @@
 </template>
 
 <script lang="ts" setup>
-import { AddressItemI } from "@/interface/address";
-import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
+import { ComputedMutationI} from "@/interface/vuex";
 import { defineComponent, computed, getCurrentInstance, toRefs, onMounted } from "vue";
-import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
 import router from "@/utils/router";
 import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
 import { onShow, onLoad, onPageScroll, onHide, onUnload } from "@dcloudio/uni-app";
 import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
-import { storeToRefs } from "pinia";
 import { selectQuery } from "@/utils/";
+import { HomeStateG } from "@/piniaStore/home/state";
+import { AddressStateG } from "@/piniaStore/address/state";
 
-interface HomeStateF {
-    topAddressWidthFlag: ComputedStateI<boolean>;
-}
-interface AddressStateF {
-    defaultAddress: ComputedStateI<AddressItemI>;
-}
+
 
 interface MutationF {
     setSearchShopFlag: ComputedMutationI<boolean>;
@@ -41,13 +35,13 @@ interface MutationF {
 // home store
 const homeStore: HomeStoreI = useHomeStore();
 // home state
-const { topAddressWidthFlag }: HomeStateF = toRefs(homeStore.homeState);
+const { topAddressWidthFlag }: HomeStateG = toRefs(homeStore.homeState);
 // home action
 const { setSearchShopFlag, setTopAddressSearchPX } = homeStore;
 // address store
 const addressStore: AddressStoreI = useAddressStore();
 // address state
-const { defaultAddress }: AddressStateF = toRefs(addressStore.addressState);
+const { defaultAddress }: AddressStateG = toRefs(addressStore.addressState);
 
 onShow(() => {});
 onMounted(() => {

@@ -25,25 +25,15 @@
 <script lang="ts" setup>
 import FoodAddMinusItem from "./item/FoodAddMinusItem.vue";
 import { delaySync } from "@/utils/index";
-import { mapState, mapMutation } from "@/utils/mapVuex";
-import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { FoodItemI, initFoodItem } from "@/interface/menu";
 import { foodDetailTransitionTime } from "../infoConfig";
 import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
-
-
-interface MenuStateF {
-    foodInfo: ComputedStateI<FoodItemI[]>;
-}
-interface MutationF {
-    setFoodDetailFlag: ComputedMutationI<boolean>;
-    setFoodInfo: ComputedMutationI<FoodItemI>;
-}
+import { MenuStateG } from "@/piniaStore/menu/state";
 // store
 const menuStore: MenuStoreI = useMenuStore()
 // state
-const { foodInfo }: MenuStateF = toRefs(menuStore.menuState)
+const { foodInfo }: MenuStateG = toRefs(menuStore.menuState)
 // action
 const { setFoodDetailFlag, setFoodInfo } = menuStore
 const overlayAnimationData = ref(null);

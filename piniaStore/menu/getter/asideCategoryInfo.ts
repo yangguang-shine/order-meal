@@ -1,4 +1,4 @@
-import {  ComputedGetterI } from "@/interface/index";
+import { RefI } from "@/interface/vueInterface";
 import { toFixedToNumber } from "@/utils/";
 import { computed } from "vue";
 import menuState from "../state";
@@ -29,7 +29,7 @@ export interface AsideCategoryItemI {
 
 
 
-const asideCategoryInfo: ComputedGetterI<AsideCategoryInfoI> = computed(() => {
+const asideCategoryInfo: RefI<AsideCategoryInfoI> = computed(() => {
     const asideCategoryItemOrderCountMap: AsideCategoryItemOrderCountMapI= {};
     const asideCategoryList = menuState.categoryList.map((categotyItem) => {
         // const stateCartCartgoryItem = menuState.cartCategoryList.find((cartFoodItem) => cartFoodItem.categoryID === categotyItem.categoryID);

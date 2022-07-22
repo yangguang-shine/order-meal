@@ -9,19 +9,16 @@
 <script lang="ts" setup>
 import Shop from "@/components/Shop.vue";
 import { defineComponent, computed, getCurrentInstance, toRefs } from "vue";
-import { ComputedStateI, ShopItemI } from "@/interface/index";
+import { ShopItemI } from "@/interface/index";
 import router from "@/utils/router";
 import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
-import { storeToRefs} from 'pinia'
+import { HomeStateG } from "@/piniaStore/home/state";
 
-interface HomeStateF {
-    recommandShopList: ComputedStateI<ShopItemI[]>;
-}
 // home store
 const homeStore: HomeStoreI = useHomeStore()
 // home state
-const { recommandShopList }: HomeStateF = toRefs(homeStore.homeState);
+const { recommandShopList }: HomeStateG = toRefs(homeStore.homeState);
 // menu store
 const menuStore: MenuStoreI = useMenuStore()
 // menu action

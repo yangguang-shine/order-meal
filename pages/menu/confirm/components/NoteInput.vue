@@ -15,33 +15,23 @@
 </template>
 
 <script lang="ts" setup>
-import { mapState, mapMutation } from "@/utils/mapVuex";
 import { computed, ref, toRefs } from "vue";
-import { ComputedStateI, ComputedMutationI } from "@/interface/vuex";
-import { ComputedI, RefI } from "@/interface/vueInterface";
+import { RefI } from "@/interface/vueInterface";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { noteInputTransionTime } from "../comfirmConfig";
 import { delaySync } from "@/utils/";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
 import { ConfirmStoreI, useConfirmStore } from "@/piniaStore/confirm";
-
-interface ConfirmStateF {
-    noteText: ComputedStateI<string>;
-}
-interface MutationF {
-    setNoteInputFlag: ComputedMutationI<boolean>;
-    setNoteText: ComputedMutationI<string>;
-}
-
+import { ConfirmStateG } from "@/piniaStore/confirm/state";
 // confirm store
 const confirmStore: ConfirmStoreI = useConfirmStore();
 // confirm state
-const { noteText }: ConfirmStateF = toRefs(confirmStore.confirmState)
+const { noteText }: ConfirmStateG = toRefs(confirmStore.confirmState)
 // confirm acton
 const { setNoteInputFlag, setNoteText }= confirmStore
 const noteInput: RefI<string> = ref(noteText.value);
 const maxlength: number = 20;
-const noteInputLength: ComputedI<number> = computed(() => noteInput.value.length);
+const noteInputLength: RefI<number> = computed(() => noteInput.value.length);
 
 const { overlayAnimationData, mainAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: noteInputTransionTime,

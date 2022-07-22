@@ -22,35 +22,23 @@
 </template>
 
 <script lang="ts" setup>
-import { ComputedI, RefI } from "@/interface/vueInterface";
-import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
-import { MinusPromotionsObjectI } from "@/store/getters/menu";
+import { RefI } from "@/interface/vueInterface";
 import { delaySync, tabBarHeightPX } from "@/utils/";
 import Shop from "@/components/Shop.vue";
 import Search from "@/components/Search.vue";
-import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
 import { ref, onMounted, computed, toRefs } from "vue";
 import { initShopItem, ShopItemI } from "@/interface/home";
 import { searchShopTransitionTime, selectTypeTransitionTime } from "../homeConfig";
 import router from "@/utils/router";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
-import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
-
-import { storeToRefs} from 'pinia'
+import { HomeStateG, HomeStoreI, useHomeStore } from "@/piniaStore/home";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 
-interface HomeStateF {
-    recommandShopList: ComputedStateI<ShopItemI[]>;
-}
-interface MutationF {
-    setSearchShopFlag: ComputedMutationI<boolean>;
-    setShopInfo: ComputedMutationI<ShopItemI>;
-    setBusinessType: ComputedMutationI<number>;
-}
+
 // home store
 const homeStore: HomeStoreI = useHomeStore()
 // home state
-const { recommandShopList }: HomeStateF = toRefs(homeStore.homeState);
+const { recommandShopList }: HomeStateG = toRefs(homeStore.homeState);
 // home action
 const { setSearchShopFlag } = homeStore
 // menu store
@@ -61,7 +49,7 @@ const { setShopInfo, setBusinessType } = menuStore
 const showSelectTypeFlag: RefI<boolean> = ref(false);
 const selectedShopItem: RefI<ShopItemI> = ref(recommandShopList.value[0]);
 const searchValue: RefI<string> = ref("");
-const searchShopList: ComputedI<ShopItemI> = computed(() => {
+const searchShopList: RefI<ShopItemI> = computed(() => {
     if (!searchValue.value) return [];
     const searchShopList: ShopItemI[] = [];
     recommandShopList.value.forEach((shopItem: ShopItemI) => {

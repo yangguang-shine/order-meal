@@ -8,31 +8,17 @@
 </template>
 
 <script lang="ts" setup>
-import { mapGetter, mapState } from "@/utils/mapVuex";
-
-import { ComputedGetterI, ComputedStateI } from "@/interface/vuex";
-import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { toRefs, onMounted } from "vue";
-import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { MenuGetterG, MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
-import { ShopItemI } from "@/interface/home";
 import { selectQuery } from "@/utils/";
-
-interface MenuStateF {
-    startShopInfoAnimationFlag: ComputedStateI<boolean>;
-    shopInfoFlag: ComputedStateI<boolean>;
-    shopInfo: ComputedStateI<ShopItemI>;
-    collectFoodFlag: ComputedStateI<boolean>;
-}
-interface MenuGetterF {
-    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
-}
+import { MenuStateG } from "@/piniaStore/menu/state";
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { startShopInfoAnimationFlag, shopInfoFlag, shopInfo, collectFoodFlag }: MenuStateF = toRefs(menuStore.menuState);
+const { startShopInfoAnimationFlag, shopInfoFlag, shopInfo, collectFoodFlag }: MenuStateG = toRefs(menuStore.menuState);
 // getter
-const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
+const { minusPromotionsObject }: MenuGetterG = storeToRefs(menuStore);
 const { setCollectFoodFlag, setMinusPX } = menuStore;
 
 onMounted(async () => {

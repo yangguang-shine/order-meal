@@ -44,47 +44,24 @@ import SearchFood from "./components/SearchFood.vue";
 import { delaySync } from "@/utils/index.js";
 import PackPriceExplain from "@/components/PackPriceExplain.vue";
 
-import { mapState, mapMutation, mapAction, mapGetter } from "@/utils/mapVuex";
 import { defineComponent, getCurrentInstance, computed, watch, ref, toRefs, onMounted } from "vue";
 import { onShow, onLoad, onPageScroll, onUnload, onHide, onReady } from "@dcloudio/uni-app";
-import { ComputedActionI, ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
-import { ShopItemI } from "@/interface/home";
-import { CategoryItemI, FoodItemI } from "@/interface/menu";
 import {  shopInfoTransitionTime } from "./infoConfig";
-import { MinusPromotionsObjectI } from "@/store/getters/menu";
-import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { MenuGetterG, MenuStateG, MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
 import { RefI } from "@/interface/vueInterface";
-interface MenuStateF {
-    shopInfo: ComputedStateI<ShopItemI>;
-    businessType: ComputedStateI<number>;
-    topBarInfo: ComputedStateI<string>;
-    startShopInfoAnimationFlag: ComputedStateI<boolean>;
-    shopInfoFlag: ComputedStateI<boolean>;
-    cartDetailFlag: ComputedStateI<boolean>;
-    foodDetailFalg: ComputedStateI<boolean>;
-    collectFoodFlag: ComputedStateI<boolean>;
-    searchFoodFlag: ComputedStateI<boolean>;
-    menuPackPriceExpalinFlag: ComputedStateI<boolean>;
-    foodSpecificationFlag: ComputedStateI<boolean>;
-    
-}
-interface MenuGetterF {
-    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
-}
-
 // menu store
 const menuStore: MenuStoreI = useMenuStore();
 // menu state
-const { shopInfo, businessType, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag, menuPackPriceExpalinFlag, collectFoodFlag, foodSpecificationFlag }: MenuStateF = toRefs(menuStore.menuState);
+const { shopInfo, businessType, topBarInfo, startShopInfoAnimationFlag, shopInfoFlag, cartDetailFlag, foodDetailFalg, searchFoodFlag, menuPackPriceExpalinFlag, collectFoodFlag, foodSpecificationFlag }: MenuStateG = toRefs(menuStore.menuState);
 console.log(shopInfo)
 // debugger
 // menu getter
-const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
+const { minusPromotionsObject }: MenuGetterG = storeToRefs(menuStore);
 // menu action
 const { getMenuList, getOrderKeyFoodList, getShopInfo, initCart, setMenuDefault, setBusinessType, setMenuPackPriceExpalinFlag } = menuStore;
 
-const shopInfoAnimationData = ref(null);
+const shopInfoAnimationData: RefI<any> = ref(null);
 const shopInfoAnimation = uni.createAnimation({
     duration: shopInfoTransitionTime,
     timingFunction: "ease-in-out",

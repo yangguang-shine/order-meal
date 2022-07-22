@@ -1,4 +1,4 @@
-import { ComputedGetterI } from "@/interface/index";
+import { RefI } from "@/interface/vueInterface";
 import { computed } from "vue";
 import menuState from "../state";
 import cartPriceInfo from './cartPriceInfo'
@@ -12,7 +12,7 @@ export interface MinusPromotionsObjectI {
     contentList: string[];
 }
 
-const minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI> = computed((): MinusPromotionsObjectI => {
+const minusPromotionsObject: RefI<MinusPromotionsObjectI> = computed((): MinusPromotionsObjectI => {
     if ((menuState.shopInfo.minusList || []).length === 0 || menuState.cartCategoryList.length === 0) {
         return {
             show: false,

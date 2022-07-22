@@ -6,19 +6,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ShopItemI } from "@/interface/home";
-import { ComputedStateI } from "@/interface/vuex";
-import { mapState } from "@/utils/mapVuex";
 import {toRefs} from 'vue'
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { MenuStateG } from "@/piniaStore/menu/state";
 
-interface MenuStateF {
-    shopInfo: ComputedStateI<ShopItemI>
-}
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { shopInfo }: MenuStateF = toRefs(menuStore.menuState)
+const { shopInfo }: MenuStateG = toRefs(menuStore.menuState)
 interface PropsI {
     reserveRemain?: number;
 }

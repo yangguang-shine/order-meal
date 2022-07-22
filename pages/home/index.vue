@@ -22,28 +22,18 @@ import RecommandInfo from "./components/RecommandInfo.vue";
 import SearchShop from "./components/SearchShop.vue";
 import { getCurrentInstance, onMounted, toRefs } from "vue";
 import { onShow, onLoad, onPageScroll, onHide, onUnload } from "@dcloudio/uni-app";
-import { AddressItemI, ComputedActionI, ComputedMutationI, ComputedStateI, ShopItemI, TabItemI } from "@/interface/index";
+import { AddressItemI} from "@/interface/index";
 import { hideLoading, selectQuery, showLoading, showModal, showToast, systemInfo, tabBarHeightPX } from "@/utils/";
 import router from "@/utils/router";
-import { ShopListParamsI } from "@/store/actions/home";
 import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
 import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
-import { HomeStateI } from "@/store/state/home";
-import { storeToRefs } from "pinia";
 import { debounce } from "@/utils/tool";
-import { HomeStateGetI } from "@/piniaStore/home/state";
-
-interface HomeStateF {
-    searchShopFlag: ComputedStateI<boolean>;
-    tabListTop: ComputedStateI<number>;
-    selectedTabItem: ComputedStateI<TabItemI>;
-    topAddressSearchPX: ComputedStateI<number>;
-}
+import { HomeStateG } from "@/piniaStore/home/state";
 
 // home store
 const homeStore: HomeStoreI = useHomeStore();
 // home state
-const { searchShopFlag, tabListTop, selectedTabItem, topAddressSearchPX }: HomeStateGetI = toRefs(homeStore.homeState);
+const { searchShopFlag, tabListTop, selectedTabItem, topAddressSearchPX }: HomeStateG = toRefs(homeStore.homeState);
 // home action
 const { getRecommandShopList, setTopAddressWidthFlag, setTabListFixedFlag, setFixedImgOpacityFlag } = homeStore;
 

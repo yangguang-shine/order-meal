@@ -2,6 +2,8 @@ import { defineStore } from "pinia";
 import { ref, reactive } from "vue";
 import addressState , { AddressStateI } from './state'
 import addressAction, { AddressActionI} from './actions'
+export * from './state'
+export * from './actions'
 // interface AddressStoreI {
 //     addressState: AddressStateI,
 // }

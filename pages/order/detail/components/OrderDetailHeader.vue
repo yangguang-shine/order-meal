@@ -18,24 +18,15 @@
 
 <script lang="ts" setup>
 import { getCurrentInstance, toRefs } from "vue";
-import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
-import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
-import { OrderDetailI } from "@/interface/order";
-import { ShopItemI } from "@/interface/home";
 import { hideLoading, showLoading, showModal } from "@/utils/";
 import router from "@/utils/router";
 import { OrderStoreI, useOrderStore } from "@/piniaStore/order";
-import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
-interface OrderStateF {
-    orderDetail: ComputedStateI<OrderDetailI>;
-    orderDetailShopInfo: ComputedStateI<ShopItemI>
-}
-
+import { OrderStateG } from "@/piniaStore/order/state";
 // order store
 const orderStore: OrderStoreI = useOrderStore()
 // order state
-const { orderDetail,orderDetailShopInfo }: OrderStateF = toRefs(orderStore.orderState);
+const { orderDetail,orderDetailShopInfo }: OrderStateG = toRefs(orderStore.orderState);
 // order action
 const { getOrderDetail, cancelOrder } = orderStore;
 // home store

@@ -18,17 +18,15 @@
 <script lang="ts" setup>
 import { delaySync, selectQuery } from "@/utils/index";
 import { watch, reactive, ref, getCurrentInstance, onMounted, toRefs, computed } from "vue";
-import { mapMutation, mapState } from "@/utils/mapVuex";
-import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 
-import { CategoryItemI, ComputedGetterI, ComputedMutationI, ComputedStateI, FoodItemI, PositionInfoI, ShopItemI } from "@/interface/index";
+import { FoodItemI, PositionInfoI} from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
 import {  countAddTransitionTime, foodAddMinusTransitionTime } from "../../infoConfig";
 import ReserveRemain from "./ReserveRemain.vue";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
-import { storeToRefs } from 'pinia'
 
 import { AddItemI } from "./interface";
+import { MenuStateG } from "@/piniaStore/menu/state";
 interface PropsI {
     foodItem: FoodItemI;
     type?: string; // cartDetail search collectFood main foodDetail foodSpecification
@@ -37,26 +35,10 @@ interface CartChangeParamI {
     foodItem: FoodItemI;
     count: number;
 }
-
-interface MenuStateF {
-    cartCategoryList: ComputedStateI<CategoryItemI[]>;
-    cartDetailFlag: ComputedStateI<boolean>;
-    shopInfo: ComputedStateI<ShopItemI>;
-    foodSpecificationInfo: ComputedStateI<FoodItemI>;
-    cartImgPX: ComputedStateI<number>
-    foodAddIconPX: ComputedStateI<number>
-
-
-}
-interface MutationF {
-    cartChange: ComputedMutationI<CartChangeParamI>;
-    setCartDetailFlag: ComputedMutationI<boolean>;
-    setCartImgAnimationFlag: ComputedMutationI<boolean>;
-}
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { cartCategoryList, cartDetailFlag, shopInfo, foodSpecificationInfo, cartImgPX ,foodAddIconPX}: MenuStateF = toRefs(menuStore.menuState);
+const { cartCategoryList, cartDetailFlag, shopInfo, foodSpecificationInfo, cartImgPX ,foodAddIconPX}: MenuStateG = toRefs(menuStore.menuState);
 // action
 const specificationOrderCount = computed(() => {
     const length = foodSpecificationInfo.value.orderSpecifaList.length;

@@ -23,29 +23,23 @@
 <script setup lang="ts">
 import { getCurrentInstance, reactive, toRefs } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { mapAction, mapState } from "@/utils/mapVuex";
-import { ComputedActionI, ComputedStateI } from "@/interface/vuex";
-import { UserInfoI } from "@/interface/center";
-import { storeToRefs} from 'pinia'
 
 import { CenterStoreI, useCenterStore } from "@/piniaStore/center";
 import router from "@/utils/router";
+import { CenterStateG } from "@/piniaStore/center/state";
 interface ToolItemI {
     img: string;
     title: string;
     name: string;
 }
-interface CenterStateF {
-    userInfo: ComputedStateI<UserInfoI>;
-}
 // center store
 const centerStore: CenterStoreI = useCenterStore();
-const { userInfo }: CenterStateF = toRefs(centerStore.centerState)
+const { userInfo }: CenterStateG = toRefs(centerStore.centerState)
 const { getUserInfo } = centerStore;
 
 
 // interface ActionF {
-//     getUserInfo: ComputedActionI;
+//     getUserInfo: ;
 // }
 
 // const { userInfo }: StateF = mapState(["userInfo"]);

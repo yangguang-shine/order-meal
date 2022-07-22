@@ -1,6 +1,8 @@
 // export * from './home'
 export * from './address'
 export * from './center'
+export * from './confirm'
 export * from './home'
+export * from './menu'
 export * from './order'
 export * from './shop'

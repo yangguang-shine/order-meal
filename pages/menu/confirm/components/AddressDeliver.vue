@@ -31,36 +31,24 @@
 </template>
 
 <script lang="ts" setup>
-import { mapState, mapMutation, mapAction, mapGetter } from "@/utils/mapVuex";
 import { computed, ref, getCurrentInstance, toRefs } from "vue";
-import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
-import { AddressItemI } from "@/interface/address";
 import { InputEventI } from "@/interface/input";
 
 import { useConfirmStore, ConfirmStoreI } from "@/piniaStore/confirm";
-import { storeToRefs } from "pinia";
 import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
 import router from "@/utils/router";
-
-interface ConfirmStateF {
-    takeOutTime: ComputedStateI<string>;
-}
-interface AddressStateF {
-    defaultAddress: ComputedStateI<AddressItemI>;
-}
-interface MutationF {
-    setTakeOutTime: ComputedMutationI<string>;
-}
+import { AddressStateG } from "@/piniaStore/address/state";
+import { ConfirmStateG } from "@/piniaStore/confirm/state";
 // confirm store
 const confirmStore: ConfirmStoreI = useConfirmStore();
 // confirm state
-const { takeOutTime }: ConfirmStateF = toRefs(confirmStore.confirmState);
+const { takeOutTime }: ConfirmStateG = toRefs(confirmStore.confirmState);
 // confirm action
 const { setTakeOutTime } = confirmStore;
 // address store
 const addressStore: AddressStoreI = useAddressStore();
 // address state
-const { defaultAddress }: AddressStateF = toRefs(addressStore.addressState);
+const { defaultAddress }: AddressStateG = toRefs(addressStore.addressState);
 
 function toPagesAddressList() {
     router.navigateTo({

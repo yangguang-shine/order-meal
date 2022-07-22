@@ -46,28 +46,15 @@
 <script lang="ts" setup>
 import OrderFoodItem from "@/components/OrderFoodItem.vue";
 import OrderFoodItemSpecifica from "@/components/OrderFoodItemSpecifica.vue";
-import { ShopItemI } from "@/interface/home";
-import { OrderDetailI } from "@/interface/order";
-import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
-import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { OrderStoreI, useOrderStore } from "@/piniaStore/order";
-import { mapAction, mapMutation, mapState } from "@/utils/mapVuex";
+import { OrderStateG } from "@/piniaStore/order/state";
 import router from "@/utils/router";
 import { toRefs } from "vue";
-interface OrderStateF {
-    orderDetail: ComputedStateI<OrderDetailI>;
-    orderDetailShopInfo: ComputedStateI<ShopItemI>;
-}
-interface MutationF {
-    setBusinessType: ComputedMutationI<number>;
-}
-interface ActionF {
-    getShopInfo: ComputedActionI<{ shopID: number }>;
-}
+
 // order store
 const orderStore: OrderStoreI = useOrderStore();
-const { orderDetail, orderDetailShopInfo }: OrderStateF = toRefs(orderStore.orderState);
+const { orderDetail, orderDetailShopInfo }: OrderStateG = toRefs(orderStore.orderState);
 
 // home store
 const MenuStore: MenuStoreI = useMenuStore();

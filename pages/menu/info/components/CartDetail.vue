@@ -49,35 +49,18 @@ import FoodItemCartSpecification from "./item/FoodItemCartSpecification.vue";
 
 import { getCurrentInstance, computed, onMounted, ref, toRefs, watch } from "vue";
 import { cartDetailTransitionTime } from "../infoConfig";
-import { mapState, mapGetter, mapMutation } from "@/utils/mapVuex";
-import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { CategoryItemI, FoodItemI } from "@/interface/menu";
-import { CartPriceInfoI, MinusPromotionsObjectI } from "@/store/getters/menu";
-import { ComputedI, RefI } from "@/interface/vueInterface";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
-import { ShopItemI } from "@/interface/home";
-import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { MenuGetterG, MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
 import { debounce } from "@/utils/tool";
-
-interface MenuStateF {
-    cartCategoryList: ComputedStateI<CategoryItemI[]>;
-    categoryList: ComputedStateI<CategoryItemI[]>;
-    businessType: ComputedStateI<number>;
-    shopInfo: ComputedStateI<ShopItemI>;
-    showCartClickCartImgFlag: ComputedStateI<boolean>;
-}
-interface MenuGetterF {
-    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
-    cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
-    footerAndMinusPX: ComputedGetterI<number>;
-}
+import { MenuStateG } from "@/piniaStore/menu/state";
 // menu store
 const menuStore: MenuStoreI = useMenuStore();
 // menu state
-const { cartCategoryList, categoryList, businessType, shopInfo, showCartClickCartImgFlag }: MenuStateF = toRefs(menuStore.menuState);
+const { cartCategoryList, categoryList, businessType, shopInfo, showCartClickCartImgFlag }: MenuStateG = toRefs(menuStore.menuState);
 // menu getter
-const { minusPromotionsObject, cartPriceInfo, footerAndMinusPX }: MenuGetterF = storeToRefs(menuStore);
+const { minusPromotionsObject, cartPriceInfo, footerAndMinusPX }: MenuGetterG = storeToRefs(menuStore);
 // menu action
 const { setCartDetailFlag, clearCart, setMenuPackPriceExpalinFlag, setShowCartClickCartImgFlag } = menuStore;
 // animation

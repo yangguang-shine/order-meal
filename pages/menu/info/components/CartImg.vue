@@ -17,16 +17,12 @@
 
 <script lang="ts" setup>
 import { ShopItemI } from "@/interface/home";
-import { ComputedStateI } from "@/interface/vuex";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
-import router from "@/utils/router";
+import { MenuStateG } from "@/piniaStore/menu/state";
 import { toRefs } from "vue";
 
-interface MenuStateF {
-    shopInfo: ComputedStateI<ShopItemI>
-}
 const menuStore: MenuStoreI = useMenuStore()
-const { shopInfo }: MenuStateF = toRefs(menuStore.menuState)
+const { shopInfo }: MenuStateG = toRefs(menuStore.menuState)
 </script>
 
 <style lang="scss" scoped>

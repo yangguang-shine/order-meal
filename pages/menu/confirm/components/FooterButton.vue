@@ -13,31 +13,16 @@
 <script lang="ts" setup>
 import { AddressItemI } from "@/interface/address";
 import { ShopItemI } from "@/interface/home";
-import { CategoryItemI, FoodItemI } from "@/interface/menu";
-import { ComputedActionI, ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { getCurrentInstance, toRefs } from "vue";
-import { mapMutation, mapAction, mapState, mapGetter } from "@/utils/mapVuex";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { hideLoading, showLoading } from "@/utils/";
 import router from "@/utils/router";
 import { ConfirmStoreI, useConfirmStore } from "@/piniaStore/confirm";
-
-interface MenuStateF {
-    cartCategoryList: ComputedStateI<CategoryItemI[]>;
-    shopInfo: ComputedStateI<ShopItemI>;
-}
-interface MutationF {
-    clearCart: ComputedMutationI
-    setNoteText: ComputedMutationI<string>
-}
-interface ActionF {
-    submitOrder: ComputedActionI
-}
-
+import { MenuStateG } from "@/piniaStore/menu/state";
 // menu store
 const menuStore: MenuStoreI = useMenuStore()
 // menu state
-const { cartCategoryList,shopInfo }: MenuStateF = toRefs(menuStore.menuState);
+const { cartCategoryList,shopInfo }: MenuStateG = toRefs(menuStore.menuState);
 // menu action
 const { clearCart } = menuStore
 // confirm store

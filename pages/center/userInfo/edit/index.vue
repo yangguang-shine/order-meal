@@ -14,25 +14,18 @@
 <script setup lang="ts">
 import { getCurrentInstance, reactive, ref, toRefs } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { UserInfoI } from "@/interface/center";
-import { ComputedActionI, ComputedStateI } from "@/interface/vuex";
-import { mapAction, mapState } from "@/utils/mapVuex";
 import { RefI } from "@/interface/vueInterface";
 import { showLoading, showModal, showToast, hideLoading } from "@/utils/";
-import { InputEventI } from "@/interface/input";
 import { CenterStoreI, useCenterStore } from "@/piniaStore/center";
 import router from "@/utils/router";
-import { storeToRefs} from 'pinia'
+import { CenterStateG } from "@/piniaStore/center/state";
 
 interface OptionI {
     key: string;
 }
-interface CenterStateF {
-    userInfo: ComputedStateI<UserInfoI>;
-}
 // center store
 const centerStore: CenterStoreI = useCenterStore()
-const { userInfo }: CenterStateF = toRefs(centerStore.centerState);
+const { userInfo }: CenterStateG = toRefs(centerStore.centerState);
 const { changeUserInfo,getUserInfo } = centerStore;
 const key: RefI<string> = ref("");
 const nicknameInput: RefI<string> = ref(userInfo.value.nickname);

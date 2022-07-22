@@ -37,13 +37,6 @@
 <script setup lang="ts">
 import { getCurrentInstance, reactive, toRefs } from "vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { mapAction, mapState } from "@/utils/mapVuex";
-import { ComputedActionI, ComputedStateI } from "@/interface/vuex";
-import { UserInfoI } from "@/interface/center";
-import { storeToRefs } from "pinia";
-
-import { CenterStoreI, useCenterStore } from "@/piniaStore/center";
-import router from "@/utils/router";
 const linkList = [
     {
         title: "前端体验：",

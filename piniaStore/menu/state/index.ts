@@ -5,6 +5,7 @@ import simple, { SimpleI } from "./simple";
 import complex, { ComplexI } from "./complex";
 import flag, { FlagI } from "./flag";
 import heightPX, { HeightPXI } from "./heightPX";
+import { RefI } from "@/interface/vueInterface";
 
 export type MenuDefaultI = SimpleI & ComplexI & FlagI
 
@@ -20,6 +21,10 @@ export const menuDefault: MenuDefaultI = {
     // ...heightPX,
  
 };
+
+export type MenuStateG = {
+    [T in keyof MenuStateI]: RefI<MenuStateI[T]>
+}
 
 const menuState: MenuStateI = reactive({
     ...menuDefault,

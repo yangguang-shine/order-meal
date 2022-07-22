@@ -41,20 +41,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ShopItemI } from "@/interface/home";
-import { OrderDetailI } from "@/interface/order";
-import { ComputedStateI } from "@/interface/vuex";
 import { OrderStoreI, useOrderStore } from "@/piniaStore/order";
-import { mapState } from "@/utils/mapVuex";
+import { OrderStateG } from "@/piniaStore/order/state";
 import { toRefs } from "vue";
-interface OrderStateF {
-    orderDetail: ComputedStateI<OrderDetailI>;
-    orderDetailShopInfo: ComputedStateI<ShopItemI>;
-}
 // order store
 const orderStore: OrderStoreI = useOrderStore();
 // order state
-const { orderDetail, orderDetailShopInfo }: OrderStateF = toRefs(orderStore.orderState);
+const { orderDetail, orderDetailShopInfo }: OrderStateG = toRefs(orderStore.orderState);
 
 function copyOrderKey() {
     wx.setClipboardData({

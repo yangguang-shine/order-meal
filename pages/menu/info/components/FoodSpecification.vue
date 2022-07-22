@@ -10,7 +10,7 @@
                         <view class="specification-name">{{ specificationItem.name }}:</view>
                         <view class="food-specification-detail-list flex-row flex-wrap">
                             <view v-for="(specificationDetailItem, specificationIndex) in specificationItem.categoryList" :key="specificationIndex" class="food-specification-detail flex-row flex-a-center" :style="{ color: specificationIndex === foodSpecificationInfo.specificationSlectedIndexList[index] ? $mainColor : '', border: specificationIndex === foodSpecificationInfo.specificationSlectedIndexList[index] ? '1px solid ' + $mainColor : '' }" @click="change(index, specificationIndex)">
-                                <view class="food-specification-content flex-center line1"> {{ specificationDetailItem.content }}</view>
+                                <view class="food-specification-content  text-center line1"> {{ specificationDetailItem.content }}</view>
                                 <view v-if="specificationDetailItem.price > 0" class="food-specification-price flex-center" :style="{ 'border-left': specificationIndex === foodSpecificationInfo.specificationSlectedIndexList[index] ? '1px solid ' + $mainColor : '' }"> ¥{{ specificationDetailItem.price }}</view>
                             </view>
                         </view>
@@ -37,26 +37,18 @@
 <script lang="ts" setup>
 import FoodAddMinusItemSpecificaTion from "./item/FoodAddMinusItemSpecificaTion.vue";
 import { delaySync } from "@/utils/index";
-import { mapState, mapMutation } from "@/utils/mapVuex";
-import { ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { FoodItemI, initFoodItem } from "@/interface/menu";
 import { foodDetailTransitionTime } from "../infoConfig";
 import { getCurrentInstance, computed, onMounted, ref, toRefs, onBeforeUnmount } from "vue";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
-import { RefI } from "@/interface/vueInterface";
 import { onShow, onLoad, onPageScroll, onUnload, onHide, onReady } from "@dcloudio/uni-app";
+import { MenuStateG } from "@/piniaStore/menu/state";
 
-interface MenuStateF {
-    foodSpecificationInfo: ComputedStateI<FoodItemI>;
-}
-interface MutationF {
-    setFoodSpecificationFlag: ComputedMutationI<boolean>;
-    setFoodInfo: ComputedMutationI<FoodItemI>;
-}
+
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { foodSpecificationInfo }: MenuStateF = toRefs(menuStore.menuState);
+const { foodSpecificationInfo }: MenuStateG = toRefs(menuStore.menuState);
 // action
 const { setFoodSpecificationFlag, setFoodSpecificationInfo } = menuStore;
 const overlayAnimationData = ref(null);
@@ -194,6 +186,7 @@ function change(index: number, specificationIndex: number) {
         padding: 0 20rpx;
         font-size: 26rpx;
         height: 60rpx;
+        line-height: 60rpx;
     }
 
     .food-specification-price {

@@ -1,17 +1,9 @@
 import fetch from '@/utils/fetch'
-import { ActionI, ActionContextI, GetterStateI, OriginUserInfoI, UserInfoI, ComputedStateI, FoodItemI, ComputedGetterI } from "@/interface/index";
-import { getStorage, setStorage } from '@/utils/tool';
 import confirmState from './state'
-import menuState from '../menu/state';
-import { MenuStoreI, useMenuStore } from '../menu';
-import homeState from '../home/state';
+import { MenuGetterG, MenuStoreI, useMenuStore } from '../menu';
 import addressState from '../address/state';
 import {storeToRefs} from 'pinia'
-import { CartPriceInfoI } from '../../delete/getters/menu';
-interface CartPriceInfoGetterF {
-    cartPriceInfo: ComputedGetterI<CartPriceInfoI>,
-    orderFoodList: ComputedGetterI<FoodItemI[]>
-}
+
 function setTakeOutTime(takeOutTime: string) {
     confirmState.takeOutTime = takeOutTime;
 };
@@ -24,7 +16,7 @@ function setNoteText(noteText: string) {
 
 async function submitOrder (payload: any = {}) {
     const menuStore: MenuStoreI = useMenuStore()
-    const { cartPriceInfo, orderFoodList }: CartPriceInfoGetterF = storeToRefs(menuStore)
+    const { cartPriceInfo, orderFoodList }: MenuGetterG = storeToRefs(menuStore)
     await fetch('order/submit', {
         foodList: orderFoodList.value,
         shopID: menuStore.menuState.shopInfo.shopID,

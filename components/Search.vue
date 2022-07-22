@@ -27,14 +27,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ComputedI, RefI } from "@/interface/vueInterface";
-import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
-import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { delaySync, selectQuery } from "@/utils/";
 import Shop from "@/components/Shop.vue";
-import { mapGetter, mapMutation, mapState } from "@/utils/mapVuex";
 import { ref, onMounted, computed, getCurrentInstance, watch } from "vue";
-import { ShopItemI } from "@/interface/home";
 import { searchDefaultTransitionTime } from "./config";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
 import { debounce } from "@/utils/tool";

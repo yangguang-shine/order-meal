@@ -13,30 +13,24 @@
 
 <script lang="ts" setup>
 import { defineComponent, computed, getCurrentInstance, ref, toRefs } from "vue";
-import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
-import { TabItemI, ComputedStateI, ComputedMutationI, ComputedActionI } from "@/interface/index";
+import { TabItemI} from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { delaySync, hideLoading, showLoading } from "@/utils/";
 import { ShopStoreI, useShopStore } from "@/piniaStore/shop";
-import { storeToRefs} from 'pinia'
 import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
-interface ShopStateF {
-    routerBusinessType: ComputedStateI<number>;
-}
-interface HomeStateF {
-    tabList: ComputedStateI<TabItemI[]>;
-}
+import { HomeStateG } from "@/piniaStore/home/state";
+import { ShopStateG } from "@/piniaStore/shop/state";
 // shop store
 const shopStore: ShopStoreI = useShopStore()
 // shop state
-const { routerBusinessType }: ShopStateF = toRefs(shopStore.shopState);
+const { routerBusinessType }: ShopStateG = toRefs(shopStore.shopState);
 // shop action
 const { setSearchShopListFlag, getShopList } = shopStore;
 // home store
 const homeStore: HomeStoreI = useHomeStore()
 // home state
-const { tabList }: HomeStateF = toRefs(homeStore.homeState);
+const { tabList }: HomeStateG = toRefs(homeStore.homeState);
 // self state
 const selectedTabItem: RefI<TabItemI> = ref(tabList.value[0]);
 onLoad(() => {

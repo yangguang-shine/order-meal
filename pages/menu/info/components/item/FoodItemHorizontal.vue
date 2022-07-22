@@ -23,19 +23,15 @@
 <script lang="ts" setup>
 import { delaySync, selectQuery } from "@/utils/index";
 import { watch, reactive, ref, getCurrentInstance, onMounted, toRefs } from "vue";
-import { mapMutation, mapState } from "@/utils/mapVuex";
-import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import FoodAddMinusItem from "./FoodAddMinusItem.vue";
 import ReserveNotEnough from "./ReserveNotEnough.vue";
 import ReserveRemain from "./ReserveRemain.vue";
 
-import { AddressItemI, CategoryItemI, ComputedGetterI, ComputedMutationI, ComputedStateI, FoodItemI, PositionInfoI, ShopItemI } from "@/interface/index";
-import { RefI } from "@/interface/vueInterface";
+import { FoodItemI, PositionInfoI } from "@/interface/index";
 import {  countAddTransitionTime } from "../../infoConfig";
-import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { AddItemI } from "./interface";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
-import { storeToRefs } from 'pinia'
+import { MenuStateG } from "@/piniaStore/menu/state";
 
 interface PropsI {
     foodItem: FoodItemI;
@@ -55,17 +51,10 @@ interface CartChangeParamI {
     count: number;
 }
 
-interface MenuStateF {
-    shopInfo: ComputedStateI<ShopItemI>;
-    cartImgPX: ComputedStateI<number>
-    foodAddIconPX: ComputedStateI<number>
-
-
-}
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { shopInfo, cartImgPX, foodAddIconPX }: MenuStateF = toRefs(menuStore.menuState);
+const { shopInfo, cartImgPX, foodAddIconPX }: MenuStateG = toRefs(menuStore.menuState);
 // action
 const { cartChange, setCartImgAnimationFlag, setFoodSpecificationInfo, setFoodSpecificationFlag } = menuStore;
 

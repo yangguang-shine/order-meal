@@ -6,26 +6,17 @@
 
 <script lang="ts" setup>
 import { defineComponent, computed, getCurrentInstance, ref, toRefs } from "vue";
-import { mapState, mapMutation, mapAction } from "@/utils/mapVuex";
-import {  } from "../homeConfig";
-import { TabItemI, ComputedStateI, ComputedMutationI, ComputedActionI, ShopItemI } from "@/interface/index";
-import { RefI } from "@/interface/vueInterface";
-import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { delaySync, hideLoading, showLoading } from "@/utils/";
+import { ShopItemI } from "@/interface/index";
 import router from "@/utils/router";
 import Shop from '@/components/Shop.vue'
 import { ShopStoreI, useShopStore } from "@/piniaStore/shop";
-import { storeToRefs} from 'pinia'
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
-interface ShopStateF {
-    shopList: ComputedStateI<ShopItemI[]>;
-    routerBusinessType: ComputedStateI<number>;
-    
-}
+import { ShopStateG } from "@/piniaStore/shop/state";
+
 // shop store
 const shopStore: ShopStoreI = useShopStore()
 // shop state
-const { shopList, routerBusinessType }: ShopStateF = toRefs(shopStore.shopState);
+const { shopList, routerBusinessType }: ShopStateG = toRefs(shopStore.shopState);
 // menu store
 const menuStore: MenuStoreI = useMenuStore()
 // menu action

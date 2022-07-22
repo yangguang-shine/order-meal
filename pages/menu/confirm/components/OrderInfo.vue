@@ -71,31 +71,16 @@ import { computed, ref, getCurrentInstance, toRefs } from "vue";
 import OrderFoodItem from "@/components/OrderFoodItem.vue";
 import OrderFoodItemSpecifica from "@/components/OrderFoodItemSpecifica.vue";
 
-import { mapState, mapGetter } from "@/utils/mapVuex";
-import { foodListTransitionTime } from "../comfirmConfig";
-import { ComputedStateI, ComputedGetterI } from "@/interface/vuex";
-import { CategoryItemI, FoodItemI } from "@/interface/menu";
-import { ShopItemI } from "@/interface/home";
-import { ComputedI, RefI } from "@/interface/vueInterface";
-import { CartPriceInfoI } from "@/store/getters/menu";
-import router from "@/utils/router";
-import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { RefI } from "@/interface/vueInterface";
+import { MenuGetterG, MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
-interface MenuStateF {
-    shopInfo: ComputedStateI<ShopItemI>;
-    businessType: ComputedStateI<number>;
-}
-interface MenuGetterF {
-    orderFoodList: ComputedGetterI<FoodItemI[]>;
-    cartPriceInfo: ComputedGetterI<CartPriceInfoI>;
-}
-
+import { MenuStateG } from "@/piniaStore/menu/state";
 // menu store
 const menuStore: MenuStoreI = useMenuStore();
 // menu state
-const { shopInfo, businessType }: MenuStateF = toRefs(menuStore.menuState);
+const { shopInfo, businessType }: MenuStateG = toRefs(menuStore.menuState);
 // menu getter
-const { orderFoodList, cartPriceInfo }: MenuGetterF = storeToRefs(menuStore);
+const { orderFoodList, cartPriceInfo }: MenuGetterG = storeToRefs(menuStore);
 console.log(orderFoodList.value[0].orderSpecifaList);
 
 const defaultIndex = 3;

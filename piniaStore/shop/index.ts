@@ -2,6 +2,8 @@ import { defineStore } from "pinia";
 import { ref, reactive } from "vue";
 import shopAction, {  ShopActionI} from './actions'
 import shopState, { ShopStateI }  from "./state";
+export * from './state'
+export * from './actions'
 // import shopState from "./state";
 // interface ShopStoreI {
 //     homeState: HomeStateI,

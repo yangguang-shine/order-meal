@@ -1,4 +1,5 @@
-import { minusItemI, ComputedGetterI } from "@/interface/index";
+import { minusItemI } from "@/interface/index";
+import { RefI } from "@/interface/vueInterface";
 import { toFixedToNumber } from "@/utils/";
 import { computed } from "vue";
 import menuState from "../state";
@@ -28,7 +29,7 @@ export interface CartPriceInfoI {
 }
 
 
-const cartPriceInfo: ComputedGetterI<CartPriceInfoI> = computed((): CartPriceInfoI => {
+const cartPriceInfo: RefI<CartPriceInfoI> = computed((): CartPriceInfoI => {
     let allCartFoodCount: number = 0;
     let allPackPrice: number = 0;
     let allFoodPrice: number = 0;

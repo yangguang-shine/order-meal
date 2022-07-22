@@ -14,19 +14,22 @@ export interface HomeStateI {
     topAddressSearchPX: number,
     fixedImgOpacityFlag: boolean
 }
-export interface HomeStateGetI  {
-    topAddressWidthFlag: RefI<boolean>,
-    tabListFixedFlag: RefI<boolean>,
-    recommandShopList: RefI<ShopItemI[]>,
-    tabList: RefI<TabItemI[]>,
-    selectedTabItem: RefI<TabItemI>,
-
-    searchShopFlag: RefI<boolean>,
-    tabListTop: RefI<number>,
-    topAddressSearchPX: RefI<number>,
-    fixedImgOpacityFlag: RefI<boolean>,
-
+export type HomeStateG = {
+    [T in keyof HomeStateI] : RefI<HomeStateI[T]>
 }
+// export interface HomeStateGetI  {
+//     topAddressWidthFlag: RefI<boolean>,
+//     tabListFixedFlag: RefI<boolean>,
+//     recommandShopList: RefI<ShopItemI[]>,
+//     tabList: RefI<TabItemI[]>,
+//     selectedTabItem: RefI<TabItemI>,
+
+//     searchShopFlag: RefI<boolean>,
+//     tabListTop: RefI<number>,
+//     topAddressSearchPX: RefI<number>,
+//     fixedImgOpacityFlag: RefI<boolean>,
+
+// }
 export const tabList: TabItemI[] = [
     {
         title: "综合排序",

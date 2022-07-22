@@ -12,7 +12,6 @@
 <script lang="ts" setup>
 import { packPriceExpalinTransitionTime } from "./config";
 import { ref, onMounted, computed } from "vue";
-import { ComputedI } from "@/interface/vueInterface";
 import { delaySync } from "../utils";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
 

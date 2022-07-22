@@ -53,45 +53,19 @@
 </template>
 
 <script lang="ts" setup>
-import getShopMinusList from "@/utils/getShopMinusList";
 import { hideLoading, showLoading, showModal, timeStampTranslate } from "@/utils/index";
 import MinusList from "@/components/MinusList.vue";
 import { toRefs } from "vue";
-import { mapState, mapAction, mapMutation } from "@/utils/mapVuex";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
-import { ComputedActionI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { OrderItemI } from "@/interface/order";
-import { ShopItemI } from "@/interface/home";
-
 import { OrderStoreI, useOrderStore } from "@/piniaStore/order";
-import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
 import router from "@/utils/router";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
-interface OrderStateF {
-    allOrderList: ComputedStateI<OrderItemI[][]>;
-    orderTabIndex: ComputedStateI<number>;
-    orderErrorListFlag: ComputedStateI<boolean>;
-}
-// interface HomeStateF {
-//     allOrderList: ComputedStateI<OrderItemI[][]>;
-//     orderTabIndex: ComputedStateI<number>;
-//     orderErrorListFlag: ComputedStateI<boolean>;
-// }
-// interface ActionF {
-//     getOrderList: ComputedActionI<void, OrderItemI[]>;
-//     getShopInfo: ComputedActionI<{ shopID: number }, ShopItemI>;
-// }
-// interface MutationF {
-//     setOrderErrorListFlag: ComputedMutationI<boolean>;
-//     setOrderTabIndex: ComputedMutationI<number>;
-//     setShopInfo: ComputedMutationI<ShopItemI>;
-//     setBusinessType: ComputedMutationI<number>;
-//     setOrderDetailShopInfo: ComputedMutationI<ShopItemI>;
-// }
+import { OrderStateG } from "@/piniaStore/order/state";
 // order store
 const orderStore: OrderStoreI = useOrderStore();
 // order state
-const { allOrderList, orderTabIndex, orderErrorListFlag }: OrderStateF = toRefs(orderStore.orderState);
+const { allOrderList, orderTabIndex, orderErrorListFlag }: OrderStateG = toRefs(orderStore.orderState);
 // order action
 const { getOrderList , setOrderErrorListFlag, setOrderTabIndex , setOrderDetailShopInfo } = orderStore;
 // menu store

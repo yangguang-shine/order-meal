@@ -13,22 +13,15 @@ import OrderFoodInfo from "./components/OrderFoodInfo.vue";
 import OrderExtInfo from "./components/OrderExtInfo.vue";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { ref, getCurrentInstance, toRefs } from "vue";
-import { mapState, mapAction, mapMutation } from "@/utils/mapVuex";
 import { RefI } from "@/interface/vueInterface";
-import { ComputedActionI, ComputedStateI } from "@/interface/vuex";
-import { OrderItemI } from "@/interface/order";
-import { ShopItemI } from "@/interface/home";
 import { OrderStoreI, useOrderStore } from "@/piniaStore/order";
-import { OrderStateI } from "@/store/state/order";
 import router from "@/utils/router";
 import { showModal } from "@/utils/";
-interface OrderStateF {
-    orderDetailShopInfo: ComputedStateI<ShopItemI>;
-}
+import { OrderStateG } from "@/piniaStore/order/state";
 // home store
 const orderStore: OrderStoreI = useOrderStore()
 // home state
-const { orderDetailShopInfo }: OrderStateF = toRefs(orderStore.orderState);
+const { orderDetailShopInfo }: OrderStateG = toRefs(orderStore.orderState);
 // home action
 const { getOrderDetail, getOrderDetailShopInfo } = orderStore;
 

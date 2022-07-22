@@ -5,27 +5,16 @@
 </template>
 
 <script lang="ts" setup>
-import { mapGetter, mapState } from "@/utils/mapVuex";
-
-import { ComputedGetterI, ComputedStateI } from "@/interface/vuex";
-import { MinusPromotionsObjectI } from "@/store/getters/menu";
 import { toRefs } from "vue";
-import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { MenuGetterG, MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs} from 'pinia'
-
-interface MenuStateF {
-    startShopInfoAnimationFlag: ComputedStateI<boolean>;
-    shopInfoFlag: ComputedStateI<boolean>;
-}
-interface MenuGetterF {
-    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI>;
-}
+import { MenuStateG } from "@/piniaStore/menu/state";
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { startShopInfoAnimationFlag, shopInfoFlag }: MenuStateF = toRefs(menuStore.menuState);
+const { startShopInfoAnimationFlag, shopInfoFlag }: MenuStateG = toRefs(menuStore.menuState);
 // getter
-const { minusPromotionsObject }: MenuGetterF = storeToRefs(menuStore);
+const { minusPromotionsObject }: MenuGetterG = storeToRefs(menuStore);
 </script>
 
 <style lang="scss">

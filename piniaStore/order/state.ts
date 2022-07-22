@@ -2,6 +2,7 @@ import { ref, reactive } from "vue";
 
 import { initShopItem, ShopItemI } from "@/interface/home"
 import { initOrderDetail, OrderDetailI, OrderItemI } from "@/interface/order"
+import { RefI } from "@/interface/vueInterface";
 
 
 export interface OrderStateI {
@@ -10,6 +11,9 @@ export interface OrderStateI {
     orderErrorListFlag: boolean[],
     orderDetail: OrderDetailI,
     orderDetailShopInfo: ShopItemI,
+}
+export type OrderStateG = {
+    [T in keyof OrderStateI]: RefI<OrderStateI[T]>
 }
 
 const orderState: OrderStateI = reactive({

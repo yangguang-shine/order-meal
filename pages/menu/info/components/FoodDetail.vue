@@ -28,41 +28,22 @@
 import FoodAddMinusItem from "./item/FoodAddMinusItem.vue";
 import ReserveNotEnough from "./item/ReserveNotEnough.vue";
 import { delaySync } from "@/utils/index";
-import { mapState, mapMutation, mapGetter } from "@/utils/mapVuex";
 
-const showComponents = false;
-
-import { ComputedGetterI, ComputedMutationI, ComputedStateI } from "@/interface/vuex";
 import { FoodItemI, initFoodItem } from "@/interface/menu";
 import { foodDetailTransitionTime } from "../infoConfig";
-import { MinusPromotionsObjectI } from "@/store/getters/menu";
-import { ComputedI } from "@/interface/vueInterface";
-import { ShopItemI } from "@/interface/home";
+import { RefI } from "@/interface/vueInterface";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
 import { getCurrentInstance, computed, onMounted, ref, toRefs } from "vue";
-import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+import { MenuGetterG, MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs} from 'pinia'
+import { MenuStateG } from "@/piniaStore/menu/state";
 
-
-interface MenuStateF {
-    foodInfo: ComputedStateI<FoodItemI>;
-    shopInfo: ComputedStateI<ShopItemI>;
-
-    businessType: ComputedStateI<number>;
-    footerPX: ComputedStateI<number>
-
-}
-interface MenuGetterF {
-    minusPromotionsObject: ComputedGetterI<MinusPromotionsObjectI[]>;
-    footerAndMinusPX: ComputedGetterI<number>;
-
-}
 // store
 const menuStore: MenuStoreI = useMenuStore()
 // state
-const { foodInfo, shopInfo, businessType, footerPX }: MenuStateF = toRefs(menuStore.menuState);
+const { foodInfo, shopInfo, businessType, footerPX }: MenuStateG = toRefs(menuStore.menuState);
 // getter
-const { minusPromotionsObject, footerAndMinusPX }: MenuGetterF = storeToRefs(menuStore)
+const { minusPromotionsObject, footerAndMinusPX }: MenuGetterG = storeToRefs(menuStore)
 // action
 const { setFoodDetailFlag, setFoodInfo } = menuStore
 // animation
@@ -74,7 +55,7 @@ onMounted(() => {
     toStartAnimation();
 });
 
-const packPriceText: ComputedI<string> = computed((): string => {
+const packPriceText: RefI<string> = computed((): string => {
     let text = "";
     if (foodInfo.value.packPrice > 0) {
         if (businessType.value === 2 || businessType.value === 3) {
