@@ -85,7 +85,7 @@ page {
     height: 100%;
 
     background-color: #f4f4f4;
-    padding: 20rpx 20rpx 50rpx;
+    padding: 20rpx 20rpx 180rpx;
     box-sizing: border-box;
     font-size: 28rpx;
     color: #333;

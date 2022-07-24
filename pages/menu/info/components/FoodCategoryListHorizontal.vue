@@ -38,9 +38,13 @@ function toShowFoodDetail(foodItem: FoodItemI) {
     setFoodInfo(foodItem);
 }
 const foodScrollHandle = debounce(handleScroll, 70);
+const currentInstance = getCurrentInstance();
 
 async function handleScroll(e: any) {
-    handleFoodCategoryListScroll('horizontal');
+    handleFoodCategoryListScroll({
+        currentInstance,
+        type: 'horizontal'
+    });
 
     // for (let i = 0; i < categoryList.value.length; i++) {
     //     const categoryItem = categoryList.value[i];

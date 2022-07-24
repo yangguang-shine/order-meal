@@ -65,6 +65,7 @@ watch(
     }
 );
 const idPre = "img-collect";
+    const currentInstance = getCurrentInstance()
 
 const foodScrollHandle = debounce(handleScroll, 70);
 async function handleScroll(e: any) {
@@ -72,7 +73,7 @@ async function handleScroll(e: any) {
     const { top, bottom } = collectFoodListBoxPositionInfo;
     for (let i = 0; i < currentCollectFoodList.length; i++) {
         const foodItem = currentCollectFoodList[i];
-        const imgPositionInfo = await selectQuery(`#${idPre}-${foodItem.foodID}`);
+        const imgPositionInfo = await selectQuery(`#${idPre}-${foodItem.foodID}`, currentInstance);
         if ((top <= imgPositionInfo.top && imgPositionInfo.top <= bottom) || (top <= imgPositionInfo.bottom && imgPositionInfo.bottom < bottom)) {
             foodItem.currentImg = foodItem.fullImgPath;
         }
@@ -89,7 +90,7 @@ let collectFoodListBoxPositionInfo: {
     bottom: 0,
 };
 async function getCollectFoodListBoxPositionInfo(id: string) {
-    const res = await selectQuery(id);
+    const res = await selectQuery(id, currentInstance);
     collectFoodListBoxPositionInfo = {
         top: res.top,
         bottom: res.bottom,

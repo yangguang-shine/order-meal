@@ -64,6 +64,8 @@ export const showModal = ({ title = "提示", content = "", showCancelFlag = fal
             cancelText,
             confirmText,
             success: (res: any) => {
+                console.log('res')
+                console.log(res)
                 if (res.confirm) {
                     resolve(res);
                 } else if (res.cancel) {
@@ -72,8 +74,8 @@ export const showModal = ({ title = "提示", content = "", showCancelFlag = fal
                     reject(res);
                 }
             },
-            fail: () => {
-                reject();
+            fail: (e: any) => {
+                reject(e);
             },
         });
     });
@@ -191,25 +193,36 @@ export interface ResSelectQueryI {
 }
 export function selectQuery(id: string, currentInstance?: any): Promise<ResSelectQueryI> {
     return new Promise((resolve, reject) => {
-        let query: any = uni.createSelectorQuery();
-        if (!currentInstance) {
-            query = query.in(currentInstance);
-        }
-        query
-            .select(id)
-            .boundingClientRect((res: ResSelectQueryI | null) => {
-                if (res) {
-                    if (process.env.NODE_ENV === "development") {
-                        res.top = res.top + navigationBarHeightPX;
-                        res.bottom = res.bottom + navigationBarHeightPX;
+        try {
+            let query: any = uni.createSelectorQuery();
+            // if (type === "component") {
+            //     const currentInstance = getCurrentInstance();
+            //     query = query.in(currentInstance);
+            // }
+            if (currentInstance) {
+                // const currentInstance = getCurrentInstance();
+                query = query.in(currentInstance);
+            }
+            query
+                .select(id)
+                .boundingClientRect((res: ResSelectQueryI | null) => {
+                    if (res) {
+                        if (process.env.NODE_ENV === "development") {
+                            res.top = res.top + navigationBarHeightPX;
+                            res.bottom = res.bottom + navigationBarHeightPX;
+                        } else {
+                            console.log("生产环境");
+                        }
+                        resolve(res);
                     } else {
-                        console.log("生产环境");
+                        reject(null);
                     }
-                    resolve(res);
-                } else {
-                    reject(null);
-                }
-            })
-            .exec();
+                })
+                .exec();
+        } catch (e) {
+            console.log(id);
+            console.log(e);
+        } finally {
+        }
     });
 }

@@ -34,8 +34,10 @@ function changeCategoryTab(asideCategoryItem: CategoryItemI) {
 onMounted(() => {
     getAsideBarHorizontalHeight();
 });
+    const currentInstance = getCurrentInstance()
+
 async function getAsideBarHorizontalHeight() {
-    const res = await selectQuery("#aside-bar-horizontal");
+    const res = await selectQuery("#aside-bar-horizontal", currentInstance);
     setAsideBarHorizontalPX(res.height);
 }
 </script>

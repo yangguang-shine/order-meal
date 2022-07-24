@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import { toRefs, onMounted } from "vue";
+import { toRefs, onMounted, getCurrentInstance } from "vue";
 import { MenuGetterG, MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
 import { selectQuery } from "@/utils/";
@@ -24,8 +24,10 @@ const { setCollectFoodFlag, setMinusPX } = menuStore;
 onMounted(async () => {
     getMinusPromotionTitleHeight();
 });
+    const currentInstance = getCurrentInstance()
+
 async function getMinusPromotionTitleHeight() {
-    const res = await selectQuery("#minus-promotion-title");
+    const res = await selectQuery("#minus-promotion-title", currentInstance);
     setMinusPX(res.height);
 }
 function toCollect() {

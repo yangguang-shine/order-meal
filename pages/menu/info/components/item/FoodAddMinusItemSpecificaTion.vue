@@ -122,6 +122,8 @@ watch(
 const specificationString = computed(() => {
     return foodSpecificationInfo.value.specificationSlectedIndexList.join("");
 });
+    const currentInstance = getCurrentInstance()
+
 async function addCount(e: any) {
     // if (props.foodItem.specificationList.length) {
     //     toShowFoodSpecification();
@@ -129,8 +131,8 @@ async function addCount(e: any) {
     //     return;
     // }
     // 微信底部会根据上下滑动添加底部栏
-    const cartImgPositionInfo = await selectQuery("#cart-img-box");
-    const addPositionInfo: PositionInfoI = await selectQuery(`#${props.type}${props.foodItem.foodID}`);
+    const cartImgPositionInfo = await selectQuery("#cart-img-box", currentInstance);
+    const addPositionInfo: PositionInfoI = await selectQuery(`#${props.type}${props.foodItem.foodID}`, currentInstance);
     const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.left;
     const offsetTop: number = cartImgPositionInfo.top - addPositionInfo.top;
     if (offsetLeft) {

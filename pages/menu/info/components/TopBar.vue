@@ -26,7 +26,7 @@
 <script lang="ts" setup>
 import { delaySync, selectQuery } from "@/utils/";
 import { barSearchTransitionTime, shopInfoTransitionTime } from "../infoConfig";
-import { ref, watch, toRefs, onMounted } from "vue";
+import { ref, watch, toRefs, onMounted , getCurrentInstance} from "vue";
 import { RefI } from "@/interface/vueInterface";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
@@ -53,9 +53,11 @@ watch(topBarInfo, (newValue: string, oldValue: string) => {
 onMounted(async () => {
     getTopBarHeight();
 });
+    const currentInstance = getCurrentInstance()
+
 async function getTopBarHeight() {
     try {
-        const res = await selectQuery("#com-top-bar-container");
+        const res = await selectQuery("#com-top-bar-container", currentInstance);
         setTopBarHeightPX(res.height);
     } catch (e) {
         console.log(e);

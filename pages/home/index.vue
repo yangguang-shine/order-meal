@@ -22,7 +22,7 @@ import RecommandInfo from "./components/RecommandInfo.vue";
 import SearchShop from "./components/SearchShop.vue";
 import { getCurrentInstance, onMounted, toRefs } from "vue";
 import { onShow, onLoad, onPageScroll, onHide, onUnload } from "@dcloudio/uni-app";
-import { AddressItemI} from "@/interface/index";
+import { AddressItemI } from "@/interface/index";
 import { hideLoading, selectQuery, showLoading, showModal, showToast, systemInfo, tabBarHeightPX } from "@/utils/";
 import router from "@/utils/router";
 import { AddressStoreI, useAddressStore } from "@/piniaStore/address";
@@ -53,22 +53,9 @@ onShow(async () => {
         // 渲染时获取不到相关元素信息 需要延迟获取
         setTimeout(() => {
             getShowTabListPosition();
-        }, 100);
+        }, 2000);
         pageHaShowFlag = true;
     }
-    setTimeout(async () => {
-        try {
-            const res = await selectQuery("#home-container");
-            if (-res.top >= tabListTop.value - topAddressSearchPX.value) {
-                setTabListFixedFlag(true);
-            } else {
-                setTabListFixedFlag(false);
-            }
-        } catch (e) {
-            console.log(e);
-        } finally {
-        }
-    }, 100);
 
     // setTimeout(() => {
     //     console.log(111)
@@ -79,7 +66,6 @@ onShow(async () => {
     // }, 0);
 });
 function handlePhoneType() {
-    console.log("systemInfo");
     const ua = systemInfo.ua || "";
     const reg = /iphone|android|ipad/i;
     const mobileFlag = reg.test(ua);
@@ -91,6 +77,7 @@ function handlePhoneType() {
         });
     }
 }
+
 async function getShowTabListPosition() {
     try {
         const res = await selectQuery("#home-container");
@@ -104,6 +91,7 @@ async function getShowTabListPosition() {
     } finally {
     }
 }
+
 onLoad(() => {
     console.log("onLoad");
 });
@@ -137,23 +125,30 @@ onPageScroll((e: any) => {
 });
 async function toGetDefaultAddress() {
     const defaultAddress: AddressItemI = await getDefaultAddress();
+    console.log("defaultAddress");
+    console.log(defaultAddress);
     if (!defaultAddress.addressID) {
-        await showModal({
-            content: "为提供更好服务，请先选择地址",
-            confirmText: "去选择地址",
-        });
-        router.navigateTo({
-            name: "address/list",
-            query: {
-                fromPage: "userHome",
-            },
-        });
+        hideLoading();
+        try {
+            await showModal({
+                content: "为提供更好服务，请先选择地址",
+                confirmText: "选择地址",
+            });
+            router.navigateTo({
+                name: "address/list",
+                query: {
+                    fromPage: "userHome",
+                },
+            });
+        } catch (e) {
+            console.log(e);
+        }
     }
 }
 async function init() {
     try {
         showLoading();
-        await toGetDefaultAddress();
+        toGetDefaultAddress();
         await getRecommandShopList({
             type: selectedTabItem.value.type,
             businessType: 2,

@@ -22,8 +22,6 @@ function clickImg() {
 const { mainAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     type: "fixedImg",
 });
-console.log(mainAnimationData)
-console.log(toStartAnimation)
 watch(
     () => homeStore.homeState.fixedImgOpacityFlag,
     (newValue: boolean, oldValue: boolean) => {

@@ -13,6 +13,7 @@ import { TabItemI } from "@/interface/index";
 import { hideLoading, selectQuery, showLoading } from "@/utils/";
 import { HomeStoreI, useHomeStore } from "@/piniaStore/home";
 import { HomeStateG } from "@/piniaStore/home/state";
+const currentInstance = getCurrentInstance()
 
 // home store
 const homeStore: HomeStoreI = useHomeStore();
@@ -35,7 +36,10 @@ onMounted(() => {
     //         .exec();
 });
 async function getTabListTop() {
-    const res = await selectQuery("#tab-list-fixed-id");
+    // const currentInstance = getCurrentInstance()
+    console.log(currentInstance)
+
+    const res = await selectQuery("#tab-list-fixed-id", currentInstance);
     setTabListTop(res.top);
 }
 const clickTabItem = async (tabItem: TabItemI) => {

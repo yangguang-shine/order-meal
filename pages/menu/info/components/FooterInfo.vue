@@ -124,13 +124,15 @@ onMounted(async () => {
     getFooterCartContainerHeight();
     getCartImgBoxHeight();
 });
+    const currentInstance = getCurrentInstance()
+
 async function getFooterCartContainerHeight() {
-    const res = await selectQuery("#footer-cart-container");
+    const res = await selectQuery("#footer-cart-container", currentInstance);
     setFooterPX(res.height);
 }
 
 async function getCartImgBoxHeight() {
-    const res = await selectQuery("#cart-img-box");
+    const res = await selectQuery("#cart-img-box", currentInstance);
     setCartImgPX(res.height);
 }
 watch(cartImgAnimationFlag, (newValue: boolean, oldValue: boolean) => {

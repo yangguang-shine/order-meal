@@ -45,7 +45,11 @@ async function userLogin() {
     };
     try {
         showLoading();
-        await fetch("account/login", params);
+        const res = await fetch("account/login", params);
+        console.log(res)
+        // #ifdef MP-WEIXIN
+        uni.setStorageSync('userToken', res.userToken);
+        // #endif
         router.reLaunchTo({
             name: "home",
         });

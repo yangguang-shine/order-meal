@@ -43,10 +43,13 @@ function toShowFoodDetail(foodItem: FoodItemI) {
     setFoodDetailFlag(true);
     setFoodInfo(foodItem);
 }
+const currentInstance = getCurrentInstance();
 const foodScrollHandle = debounce(handleScroll, 70);
 
 async function handleScroll(e: any) {
-    handleFoodCategoryListScroll();
+    handleFoodCategoryListScroll({
+        currentInstance,
+    });
 }
 defineExpose({
     foodScrollHandle,

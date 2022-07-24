@@ -7,6 +7,7 @@
 **手机体验地址：[【点餐下单】](http://yangguang.natappvip.cc) <http://yangguang.natappvip.cc>**
 
 **扫码体验图片二维码**
+
 ![http://yangguang.natappvip.cc](./static/http___yangguang.natappvip.cc.png)
 
 ## 使用的核心技术

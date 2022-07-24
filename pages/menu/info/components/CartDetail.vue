@@ -55,6 +55,9 @@ import { MenuGetterG, MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { storeToRefs } from "pinia";
 import { debounce } from "@/utils/tool";
 import { MenuStateG } from "@/piniaStore/menu/state";
+
+    const currentInstance = getCurrentInstance()
+
 // menu store
 const menuStore: MenuStoreI = useMenuStore();
 // menu state
@@ -78,7 +81,7 @@ onMounted(async () => {
     getCartDetailListBoxPositionInfo();
 });
 async function getCartDetailListBoxPositionInfo() {
-    collectFoodListBoxPositionInfo = await selectQuery("#cart-detail-list-box");
+    collectFoodListBoxPositionInfo = await selectQuery("#cart-detail-list-box", currentInstance);
 }
 
 const cartFoodList = computed(() => {
@@ -107,7 +110,7 @@ async function handleScroll(e: any) {
             for (let j = 0; j < foodItem.orderSpecifaList.length; j++) {
                 const orderSpecifaItem = foodItem.orderSpecifaList[j];
                 const idPre = `cart-food-img-${orderSpecifaItem.key}`;
-                const foodImgPositoninfo = await selectQuery(`#${idPre}-${foodItem.foodID}`);
+                const foodImgPositoninfo = await selectQuery(`#${idPre}-${foodItem.foodID}`, currentInstance);
 
                 if ((top <= foodImgPositoninfo.top && foodImgPositoninfo.top <= bottom) || (top <= foodImgPositoninfo.bottom && foodImgPositoninfo.bottom < bottom)) {
                     foodItem.currentImg = foodItem.fullImgPath;
@@ -119,7 +122,7 @@ async function handleScroll(e: any) {
             }
         } else {
             const idPre = "cart-food-img";
-            const foodImgPositoninfo = await selectQuery(`#${idPre}-${foodItem.foodID}`);
+            const foodImgPositoninfo = await selectQuery(`#${idPre}-${foodItem.foodID}`, currentInstance);
             if ((top <= foodImgPositoninfo.top && foodImgPositoninfo.top <= bottom) || (top <= foodImgPositoninfo.bottom && foodImgPositoninfo.bottom < bottom)) {
                 foodItem.currentImg = foodItem.fullImgPath;
             }

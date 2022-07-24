@@ -66,6 +66,7 @@ onMounted(async () => {
     // 获取曲线起始位置
 });
 const addList: AddItemI[] = reactive([]);
+    const currentInstance = getCurrentInstance()
 
 async function addCount() {
     if (props.foodItem.specificationList.length) {
@@ -74,9 +75,9 @@ async function addCount() {
     }
     // 微信底部会根据上下滑动添加底部栏
     console.log(1111)
-    const cartImgPositionInfo = await selectQuery("#cart-img-box");
+    const cartImgPositionInfo = await selectQuery("#cart-img-box",currentInstance);
     console.log(222)
-    const addPositionInfo: PositionInfoI = await selectQuery(`#${props.type}${props.foodItem.foodID}`);
+    const addPositionInfo: PositionInfoI = await selectQuery(`#${props.type}${props.foodItem.foodID}`, currentInstance);
     const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.left;
     const offsetTop: number = cartImgPositionInfo.top - addPositionInfo.top;
     if (offsetLeft) {

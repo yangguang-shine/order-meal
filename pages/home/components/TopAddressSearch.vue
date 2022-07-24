@@ -42,13 +42,14 @@ const { setSearchShopFlag, setTopAddressSearchPX } = homeStore;
 const addressStore: AddressStoreI = useAddressStore();
 // address state
 const { defaultAddress }: AddressStateG = toRefs(addressStore.addressState);
+const currentInstance = getCurrentInstance()
 
 onShow(() => {});
 onMounted(() => {
     getTopAddressSearchContainerHeihgt();
 });
 async function getTopAddressSearchContainerHeihgt() {
-    const res = await selectQuery("#top-address-search-container");
+    const res = await selectQuery("#top-address-search-container", currentInstance);
     setTopAddressSearchPX(res.height);
 }
 

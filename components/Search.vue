@@ -33,6 +33,7 @@ import { ref, onMounted, computed, getCurrentInstance, watch } from "vue";
 import { searchDefaultTransitionTime } from "./config";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
 import { debounce } from "@/utils/tool";
+const currentInstance = getCurrentInstance()
 interface PropsI {
     bottom?: number;
     searchResultList: any;
@@ -60,7 +61,7 @@ async function handleScroll() {
     }
     const currentCollectFoodList = props.modelValue ? props.searchResultList : props.defaultList;
     const searchListBoxId = props.modelValue ? "#result-box" : "#default-box";
-    const res = await selectQuery(searchListBoxId);
+    const res = await selectQuery(searchListBoxId, currentInstance);
     const searchBosPositionInfo = {
         top: res.top,
         bottom: res.bottom,
@@ -69,7 +70,7 @@ async function handleScroll() {
     const { top, bottom } = searchBosPositionInfo;
     for (let i = 0; i < currentCollectFoodList.length; i++) {
         const foodItem = currentCollectFoodList[i];
-        const imgPositionInfo = await selectQuery(`#${idPre}-${foodItem.foodID}`);
+        const imgPositionInfo = await selectQuery(`#${idPre}-${foodItem.foodID}`, currentInstance);
         if ((top <= imgPositionInfo.top && imgPositionInfo.top <= bottom) || (top <= imgPositionInfo.bottom && imgPositionInfo.bottom < bottom)) {
             foodItem.currentImg = foodItem.fullImgPath;
         }
