@@ -45,8 +45,8 @@ const linkList = [
     },
     {
         title: "后台体验：",
-        link: "http://yangguang.natappvip.c/manage",
-        content: "http://yangguang.natappvip.c/manage",
+        link: "http://yangguang.natappvip.cc/manage",
+        content: "http://yangguang.natappvip.cc/manage",
     },
     {
         title: "客户端代码：",
