@@ -6,6 +6,7 @@ export interface SimpleI {
     businessType: number;
     // 凑单
     requiredCategoryIDList: number[],
+    footerInfoCurrentInstance: any
 }
 
 
@@ -17,6 +18,7 @@ const simpleDefault: SimpleI = {
     topBarInfo: "点餐",
     businessType: 2,
     requiredCategoryIDList: [],
+    footerInfoCurrentInstance: {}
 }
 
 const simple: SimpleI = simpleDefault

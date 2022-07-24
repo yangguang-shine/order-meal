@@ -3,13 +3,8 @@ import { selectQuery, systemInfo } from "@/utils/";
 import menuState from "@/piniaStore/menu/state";
 import { setCategoryIDAside, setCategoryIDMain, setSelectedCategoryID } from "../setSimpleAction";
 
-export type HandleFoodCategoryListScrollI = (params: {
-    type?: "vertical" | "horizontal", currentInstance: any
-}) => Promise<void>;
-const handleFoodCategoryListScroll: HandleFoodCategoryListScrollI = async function ({
-    type = "vertical", 
-    currentInstance,
-}) {
+export type HandleFoodCategoryListScrollI = (params: { type?: "vertical" | "horizontal"; currentInstance: any }) => Promise<void>;
+const handleFoodCategoryListScroll: HandleFoodCategoryListScrollI = async function ({ type = "vertical", currentInstance }) {
     setSelectedCategoryID;
     const categoryList = menuState.categoryList;
     // const { setSelectedCategoryID, setCategoryIDMain, setCategoryIDAside} = menuStore
@@ -21,7 +16,11 @@ const handleFoodCategoryListScroll: HandleFoodCategoryListScrollI = async functi
                 setSelectedCategoryID(categoryItem.categoryID);
                 setCategoryIDMain("");
                 setCategoryIDAside(categoryItem.categoryIDAside);
-                await handleLazyImg(i, currentInstance);
+                await handleLazyImg({
+                    index: i,
+                    currentInstance,
+                    type
+                });
                 break;
             }
         } else if (type === "horizontal") {
@@ -30,22 +29,36 @@ const handleFoodCategoryListScroll: HandleFoodCategoryListScrollI = async functi
                 setSelectedCategoryID(categoryItem.categoryID);
                 setCategoryIDMain("");
                 setCategoryIDAside(categoryItem.categoryIDAside);
-                await handleLazyImg(i, currentInstance);
+                await handleLazyImg({
+                    index: i,
+                    currentInstance,
+                    type,
+                });
                 break;
             }
         }
     }
 };
 export default handleFoodCategoryListScroll;
-
-export async function handleLazyImg(index: number, currentInstance: any) {
+interface handleLazyImgParamI {
+    index: number;
+    currentInstance: any;
+    type: "vertical" | "horizontal";
+}
+export async function handleLazyImg({ index, currentInstance, type }: handleLazyImgParamI) {
     const categoryList = menuState.categoryList;
 
     const categoryItem: CategoryItemI = categoryList[index];
     let lastCategoryFlag: boolean = true;
     for (let i = 0; i < categoryItem.foodList.length; i++) {
         const foodItem = categoryItem.foodList[i];
-        const imgPositionInfo = await selectQuery(`#img-${foodItem.foodID}`, currentInstance);
+        let imgCurrentInstance;
+        if (type === 'vertical') {
+            imgCurrentInstance = menuState.foodItemVerticalImgMap[`${foodItem.foodID}`];
+        } else if (type === 'horizontal') {
+            imgCurrentInstance = menuState.foodItemHorizontalImgMap[`${foodItem.foodID}`];
+        }
+        const imgPositionInfo = await selectQuery(`#${type}-${foodItem.foodID}`, imgCurrentInstance);
         if (imgPositionInfo.top > systemInfo.windowHeight) {
             lastCategoryFlag = false;
             break;
@@ -55,7 +68,10 @@ export async function handleLazyImg(index: number, currentInstance: any) {
         }
     }
     if (lastCategoryFlag && index + 1 < categoryList.length) {
-        await handleLazyImg(index + 1, currentInstance);
+        await handleLazyImg({
+            index: index + 1,
+            currentInstance,
+            type,
+        });
     }
 }
-

@@ -26,7 +26,7 @@
                         <div class="food-price">¥{{ foodaAddspecificaPrice }}</div>
                         <div v-if="foodSpecificationInfo.unit" class="food-unit">/{{ foodSpecificationInfo.unit }}</div>
                     </div>
-                    <FoodAddMinusItemSpecificaTion :foodItem="foodSpecificationInfo" type="foodSpecification"></FoodAddMinusItemSpecificaTion>
+                    <FoodAddMinusItemSpecificaTion :foodItem="foodSpecificationInfo" type="food-specification"></FoodAddMinusItemSpecificaTion>
                 </view>
             </view>
             <image class="close-img" src="/static/img/user-menu/close-food-detail.png" mode="" @click.stop="closeFoodSpecification"></image>

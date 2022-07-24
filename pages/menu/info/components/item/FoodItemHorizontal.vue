@@ -1,12 +1,12 @@
 <template>
     <view class="food-item-horizontal-container flex-col" @click.stop="clickFoodItem(foodItem)">
-        <image :id="`img-${foodItem.foodID}`" :src="foodItem.currentImg" alt="" class="food-img"></image>
+        <image :id="`${type}-${foodItem.foodID}`"  :src="foodItem.currentImg" alt="" class="food-img"></image>
         <view class="food-name line2">
             {{ foodItem.foodName }}<span class="food-unit">/{{ foodItem.unit }}</span>
         </view>
         <view class="food-price-add flex-row flex-a-center flex-j-between" :style="{ color: $mainColor }">
             <view class="food-price" :style="{ color: $mainColor }">¥{{ foodItem.price }}</view>
-            <view v-if="foodItem.reserveCount > 0" class="food-add" :id="type + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
+            <view v-if="foodItem.reserveCount > 0" class="food-add" :id="`${type}-add-${foodItem.foodID}`" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
                 <ReserveRemain v-if="foodItem.showReserveCountFlag" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
             </view>
             <ReserveNotEnough v-else></ReserveNotEnough>
@@ -28,14 +28,14 @@ import ReserveNotEnough from "./ReserveNotEnough.vue";
 import ReserveRemain from "./ReserveRemain.vue";
 
 import { FoodItemI, PositionInfoI } from "@/interface/index";
-import {  countAddTransitionTime } from "../../infoConfig";
+import { countAddTransitionTime } from "../../infoConfig";
 import { AddItemI } from "./interface";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { MenuStateG } from "@/piniaStore/menu/state";
 
 interface PropsI {
     foodItem: FoodItemI;
-    type?: string;
+    type: string;
 }
 interface EmitI {
     (e: "clickFoodItem", id: number): void;
@@ -43,7 +43,7 @@ interface EmitI {
 
 const props: PropsI = withDefaults(defineProps<PropsI>(), {
     foodItem: {},
-    type: "main",
+    type: "horizontal",
 });
 const emit = defineEmits<EmitI>();
 interface CartChangeParamI {
@@ -54,11 +54,15 @@ interface CartChangeParamI {
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { shopInfo, cartImgPX, foodAddIconPX }: MenuStateG = toRefs(menuStore.menuState);
+const { shopInfo, cartImgPX, foodAddIconPX, footerInfoCurrentInstance }: MenuStateG = toRefs(menuStore.menuState);
 // action
-const { cartChange, setCartImgAnimationFlag, setFoodSpecificationInfo, setFoodSpecificationFlag } = menuStore;
+const { cartChange, setCartImgAnimationFlag, setFoodSpecificationInfo, setFoodSpecificationFlag, setFoodItemHorizontalImgMap } = menuStore;
+const currentInstance = getCurrentInstance();
 
 onMounted(async () => {
+    if (props.type === "horizontal") {
+        setFoodItemHorizontalImgMap(props.foodItem.foodID, currentInstance);
+    }
     // if (props.foodItem.orderCount > 0) {
     //     // 组件初次挂载不使用动画
     //     showInfoFlag.value = true;
@@ -66,7 +70,6 @@ onMounted(async () => {
     // 获取曲线起始位置
 });
 const addList: AddItemI[] = reactive([]);
-    const currentInstance = getCurrentInstance()
 
 async function addCount() {
     if (props.foodItem.specificationList.length) {
@@ -74,10 +77,12 @@ async function addCount() {
         return;
     }
     // 微信底部会根据上下滑动添加底部栏
-    console.log(1111)
-    const cartImgPositionInfo = await selectQuery("#cart-img-box",currentInstance);
-    console.log(222)
-    const addPositionInfo: PositionInfoI = await selectQuery(`#${props.type}${props.foodItem.foodID}`, currentInstance);
+    console.log(1111);
+    const cartImgPositionInfo = await selectQuery("#cart-img-box", footerInfoCurrentInstance.value);
+    console.log(222);
+    const addPositionInfo: PositionInfoI = await selectQuery(`#${props.type}-add-${props.foodItem.foodID}`, currentInstance);
+    console.log(cartImgPositionInfo)
+    console.log(addPositionInfo)
     const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.left;
     const offsetTop: number = cartImgPositionInfo.top - addPositionInfo.top;
     if (offsetLeft) {

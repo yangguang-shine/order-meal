@@ -1,5 +1,5 @@
 <template>
-    <view class="fixed-img-container" :animation="mainAnimationData">
+    <view class="fixed-img-container" :animation="mainAnimationData" :style="{'bottom': fixedImgBottom + 'px'}">
         <image class="fixed-img" @click.stop="clickImg" src="/static/img/home/fixed-img.gif"></image>
     </view>
 </template>
@@ -10,6 +10,7 @@ import { showToast } from "@/utils/";
 import router from "@/utils/router";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
 import { reactive, watch } from "vue";
+import { fixedImgBottom } from "../homeConfig";
 // import { HomeStoreI, useHomeStore } from "../../../delete/piniaStore-copy";
 
 const homeStore: HomeStoreI = useHomeStore();
@@ -42,7 +43,7 @@ watch(
     width: 100rpx;
     height: 100rpx;
     right: 30rpx;
-    bottom: 300rpx;
+    bottom: 150px;
     .fixed-img {
         width: 100%;
         height: 100%;

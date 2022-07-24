@@ -6,7 +6,7 @@
                 <view class="reduce-icon-css" :style="{ 'background-color': shopInfo.mainColor }"></view>
             </view>
             <view v-if="orderSpecifaItem.orderCount" :class="mountedTransitionFlag ? '' : 'show-food-order-count'" :animation="countAnimationData" class="food-order-count">{{ orderSpecifaItem.orderCount }}</view>
-            <view class="food-count-add" :id="`${idPre}-${orderSpecifaItem.key}-${foodItem.foodID}`" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
+            <view class="food-count-add" :id="id" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
                 <ReserveRemain v-if="foodItem.showReserveCountFlag" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
             </view>
             <view v-for="item in addList" :key="item.random" class="food-count-add-animation-x" :animation="item.animationXData">
@@ -32,6 +32,7 @@ import { MenuStateG } from "@/piniaStore/menu/state";
 interface PropsI {
     foodItem: FoodItemI;
     orderSpecifaItem: OrderSpecifaItemI;
+    type: string
 }
 interface CartChangeParamI {
     foodItem: FoodItemI;
@@ -40,13 +41,14 @@ interface CartChangeParamI {
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPX , foodAddIconPX}: MenuStateG = toRefs(menuStore.menuState);
+const { cartCategoryList, cartDetailFlag, shopInfo, cartImgPX , foodAddIconPX, footerInfoCurrentInstance}: MenuStateG = toRefs(menuStore.menuState);
 const { cartChange, setCartDetailFlag, setCartImgAnimationFlag, setFoodSpecificationInfo, setFoodSpecificationFlag } = menuStore;
-const idPre = "id";
 const props: PropsI = withDefaults(defineProps<PropsI>(), {
     foodItem: {},
     orderSpecifaItem: {},
+    type: 'cart-detail'
 });
+const id = `${props.type}-${props.orderSpecifaItem.key}-add-${props.foodItem.foodID}`
 
 const addList: AddItemI[] = reactive([]);
 const OriginFoodItem = props.foodItem;
@@ -109,8 +111,8 @@ async function addCount(e: any) {
     // }
 
     // 微信底部会根据上下滑动添加底部栏
-    const cartImgPositionInfo = await selectQuery("#cart-img-box", currentInstance);
-    const addPositionInfo: PositionInfoI = await selectQuery(`#${idPre}-${props.orderSpecifaItem.key}-${props.foodItem.foodID}`, currentInstance);
+    const cartImgPositionInfo = await selectQuery("#cart-img-box", footerInfoCurrentInstance.value);
+    const addPositionInfo: PositionInfoI = await selectQuery(`#${id}`, currentInstance);
     const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.left;
     const offsetTop: number = cartImgPositionInfo.top - addPositionInfo.top;
     if (offsetLeft) {

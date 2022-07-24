@@ -4,7 +4,7 @@
             <view class="reduce-icon-css" :style="{ 'background-color': shopInfo.mainColor }"></view>
         </view>
         <view v-if="specificationOrderCount" :class="mountedTransitionFlag ? '' : 'show-food-order-count'" :animation="countAnimationData" class="food-order-count">{{ specificationOrderCount }}</view>
-        <view class="food-count-add" :id="type + foodItem.foodID" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
+        <view class="food-count-add" :id="`${type}-${foodItem.foodID}`" :style="{ 'background-color': shopInfo.mainColor }" @click.stop="addCount($event)">
             <ReserveRemain v-if="foodItem.showReserveCountFlag" :reserveRemain="foodItem.reserveCount"></ReserveRemain>
         </view>
         <view v-for="item in addList" :key="item.random" class="food-count-add-animation-x" :animation="item.animationXData">
@@ -19,9 +19,9 @@
 import { delaySync, selectQuery } from "@/utils/index";
 import { watch, reactive, ref, getCurrentInstance, onMounted, toRefs, computed } from "vue";
 
-import { FoodItemI, PositionInfoI} from "@/interface/index";
+import { FoodItemI, PositionInfoI } from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
-import {  countAddTransitionTime, foodAddMinusTransitionTime } from "../../infoConfig";
+import { countAddTransitionTime, foodAddMinusTransitionTime } from "../../infoConfig";
 import ReserveRemain from "./ReserveRemain.vue";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 
@@ -29,7 +29,7 @@ import { AddItemI } from "./interface";
 import { MenuStateG } from "@/piniaStore/menu/state";
 interface PropsI {
     foodItem: FoodItemI;
-    type?: string; // cartDetail search collectFood main foodDetail foodSpecification
+    type: string; // cartDetail search collectFood main foodDetail foodSpecification
 }
 interface CartChangeParamI {
     foodItem: FoodItemI;
@@ -38,7 +38,7 @@ interface CartChangeParamI {
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { cartCategoryList, cartDetailFlag, shopInfo, foodSpecificationInfo, cartImgPX ,foodAddIconPX}: MenuStateG = toRefs(menuStore.menuState);
+const { cartCategoryList, cartDetailFlag, shopInfo, foodSpecificationInfo, cartImgPX, foodAddIconPX, footerInfoCurrentInstance }: MenuStateG = toRefs(menuStore.menuState);
 // action
 const specificationOrderCount = computed(() => {
     const length = foodSpecificationInfo.value.orderSpecifaList.length;
@@ -64,7 +64,7 @@ const { cartChange, setCartDetailFlag, setCartImgAnimationFlag, setFoodSpecifica
 
 const props: PropsI = withDefaults(defineProps<PropsI>(), {
     foodItem: {},
-    type: "main",
+    type: "food-specification",
 });
 
 const addList: AddItemI[] = reactive([]);
@@ -122,7 +122,7 @@ watch(
 const specificationString = computed(() => {
     return foodSpecificationInfo.value.specificationSlectedIndexList.join("");
 });
-    const currentInstance = getCurrentInstance()
+const currentInstance = getCurrentInstance();
 
 async function addCount(e: any) {
     // if (props.foodItem.specificationList.length) {
@@ -131,8 +131,8 @@ async function addCount(e: any) {
     //     return;
     // }
     // 微信底部会根据上下滑动添加底部栏
-    const cartImgPositionInfo = await selectQuery("#cart-img-box", currentInstance);
-    const addPositionInfo: PositionInfoI = await selectQuery(`#${props.type}${props.foodItem.foodID}`, currentInstance);
+    const cartImgPositionInfo = await selectQuery("#cart-img-box", footerInfoCurrentInstance.value);
+    const addPositionInfo: PositionInfoI = await selectQuery(`#${props.type}-${props.foodItem.foodID}`, currentInstance);
     const offsetLeft: number = addPositionInfo.left - cartImgPositionInfo.left;
     const offsetTop: number = cartImgPositionInfo.top - addPositionInfo.top;
     if (offsetLeft) {

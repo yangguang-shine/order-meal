@@ -206,6 +206,8 @@ export function selectQuery(id: string, currentInstance?: any): Promise<ResSelec
             query
                 .select(id)
                 .boundingClientRect((res: ResSelectQueryI | null) => {
+                    console.log(id)
+                    console.log(res)
                     if (res) {
                         if (process.env.NODE_ENV === "development") {
                             res.top = res.top + navigationBarHeightPX;

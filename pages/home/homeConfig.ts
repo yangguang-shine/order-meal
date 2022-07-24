@@ -7,3 +7,8 @@ export const topAddressSearchHeight: number = getRpxToPx(100);
 export const transitionTime100: number = 100
 export const searchShopTransitionTime: number = transitionTime100 * 2
 export const selectTypeTransitionTime: number = transitionTime100 * 2
+export let fixedImgBottom = 150
+
+// #ifdef MP-WEIXIN
+fixedImgBottom = 100;
+// #endif

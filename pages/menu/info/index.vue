@@ -121,6 +121,7 @@ onLoad(async (option: OptionI) => {
 watch(
     () => shopInfo.value.mode,
     (newValue: string, oldValue: string) => {
+        console.log(11111)
         handleCurrentLazyImg(newValue);
     }
 );
@@ -166,7 +167,7 @@ function handleCurrentLazyImg(mode: string) {
         } else {
            refFoodCategoryListHorizontal.value && refFoodCategoryListHorizontal.value.foodScrollHandle();
         }
-    }, 50);
+    }, 500);
 }
 
 function getStorageCart() {}

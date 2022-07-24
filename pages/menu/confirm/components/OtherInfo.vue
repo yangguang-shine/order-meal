@@ -30,6 +30,7 @@ const { setNoteInputFlag } = confirmStore
 
 
 function showNoteInput() {
+    console.log(111)
     setNoteInputFlag(true);
 }
 </script>

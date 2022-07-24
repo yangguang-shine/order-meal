@@ -195,3 +195,8 @@ vue3、pinia、uni-app、typescript、es6及以上语法、composition api
 ### 升级后的vue3和vuex使用踩坑 (已弃用，使用了pinia)
 
 1. mapState，mapMutation，mapAction等在setup中使用时，因无this，mapState不能使用，mapMutation，mapAction在setup中直接调用因无this一样不行，但在setup外却能使用，因为存在这个问题，自己封装了简单的mapState，mapMutation，mapAction，在utils/mapVuex中，当然仅限于基础使用
+
+
+
+小程序和H5的区别，小程序组件有严格要求，selectQuery只能查找组件内的元素，子组件和父子间获取不到。
+小程序使用组件不支持事件绑定

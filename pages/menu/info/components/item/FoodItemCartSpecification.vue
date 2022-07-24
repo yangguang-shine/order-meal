@@ -1,6 +1,6 @@
 <template>
     <view class="food-item-container flex-item flex-row" :class="'food-item-container-' + mode" @click="clickFoodItem(foodItem)">
-        <image :id="`${idPre}-${foodItem.foodID}`" class="food-img flex-shrink" :src="foodItem.currentImg" mode="scaleToFill"></image>
+        <image :id="id" class="food-img flex-shrink" :src="foodItem.currentImg" mode="scaleToFill"></image>
         <view class="food-info-box flex-item flex-col flex-j-between">
             <view class="food-name-description">
                 <view class="food-name line1">{{ foodItem.foodName }}</view>
@@ -8,7 +8,7 @@
             </view>
             <view class="food-price-button flex-row flex-j-between flex-a-center">
                 <view class="food-price" :style="{ color: $mainColor }">¥{{orderSpecifaItem.currentPrice}}</view>
-                <FoodAddMinusItemCartSpecification class="" :foodItem="foodItem" :orderSpecifaItem="orderSpecifaItem" ></FoodAddMinusItemCartSpecification>
+                <FoodAddMinusItemCartSpecification class="" :foodItem="foodItem" :orderSpecifaItem="orderSpecifaItem" :type="type"></FoodAddMinusItemCartSpecification>
             </view>
         </view>
     </view>
@@ -22,23 +22,24 @@ import { FoodItemI, OrderSpecifaItemI} from "@/interface/index";
 import { RefI } from "@/interface/vueInterface";
 import { MenuStoreI, useMenuStore } from "@/piniaStore/menu";
 import { MenuStateG } from "@/piniaStore/menu/state";
+import { setFoodItemVerticalImgMap } from "@/piniaStore/menu/actions/complexAction";
 
 interface PropsI {
     foodItem: FoodItemI;
     orderSpecifaItem: OrderSpecifaItemI;
     mode?: string; // large | midden | small
-    type?: string;
-    idPre?: string;
+    type: string;
 }
 interface EmitI {
-    (e: "clickFoodItem", id: number): void;
+    (e: "clickFoodItem", foodItem: FoodItemI): void;
 }
 const props: PropsI = withDefaults(defineProps<PropsI>(), {
     foodItem: {},
+    orderSpecifaItem: {},
     mode: "midden",
-    type: "main",
-    idPre: "img-cart",
+    type: "card-detail",
 });
+const id = `${props.type}-${props.orderSpecifaItem.key}-${props.foodItem.foodID}`
 const emit = defineEmits<EmitI>();
 const orderSpecifaText = computed(() => {
     return props.orderSpecifaItem.specifa.reduce((str, item) => {
@@ -60,8 +61,10 @@ const showInfoFlag: RefI<boolean> = ref(false);
 const menuStore: MenuStoreI = useMenuStore();
 // state
 const { shopInfo }: MenuStateG = toRefs(menuStore.menuState);
-
+const { setFoodItemCartSpecificaImgMap } = menuStore
+const currentInstance = getCurrentInstance()
 onMounted(async () => {
+    setFoodItemCartSpecificaImgMap(props.foodItem.foodID, props.orderSpecifaItem.key, currentInstance)
     if (props.foodItem.orderCount > 0) {
         // 组件初次挂载不使用动画
         showInfoFlag.value = true;

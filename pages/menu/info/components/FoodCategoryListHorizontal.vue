@@ -4,7 +4,7 @@
             <view class="category-item" v-for="(foodCategoryItem, index) in categoryList" :key="index" :id="foodCategoryItem.categoryIDMain" :style="{ 'padding-bottom': index === categoryList.length - 1 ? categoryItemLastPaddingBottom : '' }">
                 <view class="category-name">{{ foodCategoryItem.categoryName }}</view>
                 <div class="food-list-box flex-row flex-wrap">
-                    <FoodItemHorizontal v-for="foodItem in foodCategoryItem.foodList" :key="foodItem.foodID" :foodItem="foodItem" @clickFoodItem="toShowFoodDetail"></FoodItemHorizontal>
+                    <FoodItemHorizontal v-for="foodItem in foodCategoryItem.foodList" :key="foodItem.foodID" :foodItem="foodItem" @clickFoodItem="toShowFoodDetail" type="horizontal"></FoodItemHorizontal>
                 </div>
                 <!-- <FoodItem class="food-item" v-for="foodItem in foodCategoryItem.foodList" :key="foodItem.foodID" :foodItem="foodItem" @clickFoodItem="toShowFoodDetail"></FoodItem> -->
             </view>

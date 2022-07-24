@@ -1,4 +1,4 @@
-import { CategoryItemI, CategoryListMapI, CollectFoodKeyObjI, CollectFoodListItemI, CollectFoodListMapI, FoodItemI, FoodListMapI, initFoodItem, PositionInfoI } from "@/interface/menu";
+import { CategoryItemI, CategoryListMapI, CollectFoodKeyObjI, CollectFoodListItemI, CollectFoodListMapI, FoodItemI, FoodItemTypeImgMapI, FoodListMapI, initFoodItem, PositionInfoI } from "@/interface/menu";
 
 export interface ComplexI {
     categoryList: CategoryItemI[];
@@ -11,6 +11,12 @@ export interface ComplexI {
     collectFoodListMap: CollectFoodListMapI;
     collectFoodList: CollectFoodListItemI[];
     collectFoodListKeys: CollectFoodKeyObjI[];
+    foodItemVerticalImgMap: FoodItemTypeImgMapI
+    foodItemHorizontalImgMap: FoodItemTypeImgMapI
+    foodItemCartDetailImgMap: FoodItemTypeImgMapI
+    foodItemCartSpecificaImgMap: FoodItemTypeImgMapI
+    foodItemCollectFoodImgMap: FoodItemTypeImgMapI,
+    foodItemSearchFoodImgMap: FoodItemTypeImgMapI
 }
 
 
@@ -26,6 +32,12 @@ const complexDefault: ComplexI = {
     collectFoodListMap: {},
     collectFoodList: [],
     collectFoodListKeys: [],
+    foodItemVerticalImgMap: {},
+    foodItemHorizontalImgMap: {},
+    foodItemCartDetailImgMap: {},
+    foodItemCartSpecificaImgMap: {},
+    foodItemCollectFoodImgMap: {},
+    foodItemSearchFoodImgMap: {}
 }
 
 const complex: ComplexI = complexDefault

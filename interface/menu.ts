@@ -41,6 +41,13 @@ export interface CategoryListMapI {
 export interface FoodListMapI {
     [index: string]: FoodItemI;
 }
+
+export interface FoodItemTypeImgMapI {
+    [index: string]: any;
+}
+
+
+
 export interface CollectFoodListMapI {
     [index: string]: FoodItemI[];
 }

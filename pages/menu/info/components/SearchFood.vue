@@ -1,13 +1,13 @@
 <template>
     <div class="search-food-container">
-        <Search :searchResultList="searchFoodList" :defaultList="categoryFoodList" v-model="searchValue" :bottom="minusPromotionsObject.show ? footerAndMinusPX : footerPX" @clickCancel="clickCancel" type="searchFood">
+        <Search :searchResultList="searchFoodList" :defaultList="categoryFoodList" v-model="searchValue" :bottom="minusPromotionsObject.show ? footerAndMinusPX : footerPX" @clickCancel="clickCancel" type="search-food">
             <!-- <FoodItem v-for="searchFoodItem in searchFoodList" :key="searchFoodItem.foodID" class="search-food-item" :foodItem="searchFoodItem" @clickFoodItem="toShowFoodDetail"></FoodItem> -->
 
             <template #result>
-                <FoodItem v-for="searchFoodItem in searchFoodList" :key="searchFoodItem.foodID" class="search-food-item" :foodItem="searchFoodItem" type="searchFood" :idPre="idPre" @clickFoodItem="toShowFoodDetail"></FoodItem>
+                <FoodItem v-for="searchFoodItem in searchFoodList" :key="searchFoodItem.foodID" class="search-food-item" :foodItem="searchFoodItem" :type="type" @clickFoodItem="toShowFoodDetail"></FoodItem>
             </template>
             <template #default>
-                <FoodItem v-for="searchFoodItem in categoryFoodList" :key="searchFoodItem.foodID" :idPre="idPre" class="search-food-item" :foodItem="searchFoodItem" type="searchFood" @clickFoodItem="toShowFoodDetail"></FoodItem>
+                <FoodItem v-for="searchFoodItem in categoryFoodList" :key="searchFoodItem.foodID" :type="type" class="search-food-item" :foodItem="searchFoodItem"  @clickFoodItem="toShowFoodDetail"></FoodItem>
             </template>
         </Search>
     </div>
@@ -47,7 +47,7 @@ const { categoryList, footerPX }: MenuStateG = toRefs(menuStore.menuState);
 const { minusPromotionsObject, footerAndMinusPX }: MenuGetterG = storeToRefs(menuStore);
 // action
 const { setSearchFoodFlag, setFoodDetailFlag, setFoodInfo } = menuStore;
-const idPre = 'img-search'
+const type = 'search-food'
 const searchValue: RefI<string> = ref("");
 const categoryFoodList: RefI<FoodItemI[]> = computed(() => {
     const categoryFoodList: FoodItemI[] = [];

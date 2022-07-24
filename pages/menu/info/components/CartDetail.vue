@@ -23,9 +23,9 @@
                 <view class="cart-food-list">
                     <view class="food-category-item" v-for="foodCategoryItem in cartCategoryList" :key="foodCategoryItem.categoryID">
                         <div class="cart-food-item-box" v-for="cartFoodItem in foodCategoryItem.foodList" :key="cartFoodItem.foodID">
-                            <FoodItem v-if="!cartFoodItem.orderSpecifaList.length" :foodItem="cartFoodItem" mode="small" type="cartDetail" class="cart-food-item" idPre="cart-food-img"></FoodItem>
+                            <FoodItem v-if="!cartFoodItem.orderSpecifaList.length" :foodItem="cartFoodItem" mode="small" :type="type" class="cart-food-item"></FoodItem>
                             <div v-else v-for="(orderSpecifaItem, index) in cartFoodItem.orderSpecifaList" :key="index">
-                                <FoodItemCartSpecification class="cart-food-item" :foodItem="cartFoodItem" :idPre="`cart-food-img-${orderSpecifaItem.key}`" :orderSpecifaItem="orderSpecifaItem" mode="small" type="cartDetail"></FoodItemCartSpecification>
+                                <FoodItemCartSpecification class="cart-food-item" :foodItem="cartFoodItem" :orderSpecifaItem="orderSpecifaItem" mode="small" :type="type"></FoodItemCartSpecification>
                             </div>
                         </div>
                     </view>
@@ -56,12 +56,12 @@ import { storeToRefs } from "pinia";
 import { debounce } from "@/utils/tool";
 import { MenuStateG } from "@/piniaStore/menu/state";
 
-    const currentInstance = getCurrentInstance()
+const currentInstance = getCurrentInstance();
 
 // menu store
 const menuStore: MenuStoreI = useMenuStore();
 // menu state
-const { cartCategoryList, categoryList, businessType, shopInfo, showCartClickCartImgFlag }: MenuStateG = toRefs(menuStore.menuState);
+const { cartCategoryList, categoryList, businessType, shopInfo, showCartClickCartImgFlag, foodItemCartDetailImgMap, foodItemCartSpecificaImgMap }: MenuStateG = toRefs(menuStore.menuState);
 // menu getter
 const { minusPromotionsObject, cartPriceInfo, footerAndMinusPX }: MenuGetterG = storeToRefs(menuStore);
 // menu action
@@ -70,7 +70,8 @@ const { setCartDetailFlag, clearCart, setMenuPackPriceExpalinFlag, setShowCartCl
 const { overlayAnimationData, mainAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
     duration: cartDetailTransitionTime,
 });
-let collectFoodListBoxPositionInfo: ResSelectQueryI;
+let cartDetailListBoxPositionInfo: ResSelectQueryI;
+const type = "cart-detail";
 onMounted(async () => {
     toStartAnimation();
     // 获取动画前需要加载的图片
@@ -81,7 +82,7 @@ onMounted(async () => {
     getCartDetailListBoxPositionInfo();
 });
 async function getCartDetailListBoxPositionInfo() {
-    collectFoodListBoxPositionInfo = await selectQuery("#cart-detail-list-box", currentInstance);
+    cartDetailListBoxPositionInfo = await selectQuery("#cart-detail-list-box", currentInstance);
 }
 
 const cartFoodList = computed(() => {
@@ -102,27 +103,29 @@ const cartFoodList = computed(() => {
 
 const foodScrollHandle = debounce(handleScroll, 70);
 async function handleScroll(e: any) {
-    const { top, bottom } = collectFoodListBoxPositionInfo;
+    const { top, bottom } = cartDetailListBoxPositionInfo;
     for (let i = 0; i < cartFoodList.value.length; i++) {
         const foodItem: FoodItemI = cartFoodList.value[i];
-        let endLoopFlag: boolean =false
+        let endLoopFlag: boolean = false;
         if (foodItem.orderSpecifaList.length) {
             for (let j = 0; j < foodItem.orderSpecifaList.length; j++) {
                 const orderSpecifaItem = foodItem.orderSpecifaList[j];
-                const idPre = `cart-food-img-${orderSpecifaItem.key}`;
-                const foodImgPositoninfo = await selectQuery(`#${idPre}-${foodItem.foodID}`, currentInstance);
+                const id = `${type}-${orderSpecifaItem.key}-${foodItem.foodID}`;
+                const key = `${foodItem.foodID}-${orderSpecifaItem.key}`;
+                const imgCurrentInstance = foodItemCartSpecificaImgMap.value[key];
+                const foodImgPositoninfo = await selectQuery(`#${id}`, imgCurrentInstance);
 
                 if ((top <= foodImgPositoninfo.top && foodImgPositoninfo.top <= bottom) || (top <= foodImgPositoninfo.bottom && foodImgPositoninfo.bottom < bottom)) {
                     foodItem.currentImg = foodItem.fullImgPath;
                 }
                 if (foodImgPositoninfo.top > bottom) {
-                    endLoopFlag = true
+                    endLoopFlag = true;
                     break;
                 }
             }
         } else {
-            const idPre = "cart-food-img";
-            const foodImgPositoninfo = await selectQuery(`#${idPre}-${foodItem.foodID}`, currentInstance);
+            const imgCurrentInstance = foodItemCartDetailImgMap.value[`${foodItem.foodID}`];
+            const foodImgPositoninfo = await selectQuery(`#${type}-${foodItem.foodID}`, imgCurrentInstance);
             if ((top <= foodImgPositoninfo.top && foodImgPositoninfo.top <= bottom) || (top <= foodImgPositoninfo.bottom && foodImgPositoninfo.bottom < bottom)) {
                 foodItem.currentImg = foodItem.fullImgPath;
             }
@@ -131,13 +134,13 @@ async function handleScroll(e: any) {
             }
         }
         if (endLoopFlag) {
-                break;
+            break;
         }
     }
 
     // for (let i = 0; i < cartCategoryList.value.length; i++) {
     //     const cartCategoryItem = cartCategoryList.value[i];
-    //     const { top, bottom } = collectFoodListBoxPositionInfo;
+    //     const { top, bottom } = cartDetailListBoxPositionInfo;
     //     let foodImgPositoninfo: ResSelectQueryI;
     //     for (let j = 0; j < cartCategoryItem.foodList.length; j++) {
     //         const foodItem = cartCategoryItem.foodList[j];
@@ -166,7 +169,7 @@ async function handleScroll(e: any) {
     //     // }
     // }
     // const currentCollectFoodList = cartCategoryList.value[collectTabIndex.value].foodList;
-    // const { top, bottom } = collectFoodListBoxPositionInfo;
+    // const { top, bottom } = cartDetailListBoxPositionInfo;
     // for (let i = 0; i < currentCollectFoodList.length; i++) {
     //     const foodItem = currentCollectFoodList[i];
     //     const imgPositionInfo = await selectQuery(`#${idPre}-${foodItem.foodID}`);

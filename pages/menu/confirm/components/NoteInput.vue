@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, toRefs } from "vue";
+import { computed, ref, toRefs, onMounted } from "vue";
 import { RefI } from "@/interface/vueInterface";
 import { onShow, onLoad, onPageScroll } from "@dcloudio/uni-app";
 import { noteInputTransionTime } from "../comfirmConfig";
@@ -38,7 +38,7 @@ const { overlayAnimationData, mainAnimationData, toStartAnimation, toEndAnimatio
     timingFunction: "ease-in-out",
 });
 
-onLoad(() => {
+onMounted(() => {
     toStartAnimation();
 });
 async function hideNoteInput() {

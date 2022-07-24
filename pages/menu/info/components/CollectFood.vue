@@ -8,7 +8,7 @@
             </view>
             <scroll-view scroll-y class="collect-food-list-box flex-item" id="collect-food-list-box" @scroll="foodScrollHandle" :scroll-top="scrollTopNum">
                 <view class="tab-food-list">
-                    <FoodItem v-for="foodItem in collectFoodList[collectTabIndex].foodList" :key="foodItem.foodID" class="collect-food-item" :idPre="idPre" :foodItem="foodItem" type="collectFood"></FoodItem>
+                    <FoodItem v-for="foodItem in collectFoodList[collectTabIndex].foodList" :key="foodItem.foodID" class="collect-food-item" :foodItem="foodItem" :type="type"></FoodItem>
                 </view>
             </scroll-view>
         </view>
@@ -32,7 +32,7 @@ import { MenuStateG } from "@/piniaStore/menu/state";
 // menu store
 const menuStore: MenuStoreI = useMenuStore();
 // menu state
-const { cartCategoryList, categoryList, businessType, shopInfo, collectFoodList, showCollectClickCartImgFlag }: MenuStateG = toRefs(menuStore.menuState);
+const { cartCategoryList, categoryList, businessType, shopInfo, collectFoodList, showCollectClickCartImgFlag, foodItemCollectFoodImgMap }: MenuStateG = toRefs(menuStore.menuState);
 // menu getter
 const { minusPromotionsObject, cartPriceInfo, footerAndMinusPX }: MenuGetterG = storeToRefs(menuStore);
 // menu action
@@ -64,8 +64,9 @@ watch(
         }
     }
 );
+const type = "collect-food";
 const idPre = "img-collect";
-    const currentInstance = getCurrentInstance()
+const currentInstance = getCurrentInstance();
 
 const foodScrollHandle = debounce(handleScroll, 70);
 async function handleScroll(e: any) {
@@ -73,7 +74,9 @@ async function handleScroll(e: any) {
     const { top, bottom } = collectFoodListBoxPositionInfo;
     for (let i = 0; i < currentCollectFoodList.length; i++) {
         const foodItem = currentCollectFoodList[i];
-        const imgPositionInfo = await selectQuery(`#${idPre}-${foodItem.foodID}`, currentInstance);
+        const imgCurrentInstance = foodItemCollectFoodImgMap.value[`${foodItem.foodID}`];
+        const id = `${type}-${foodItem.foodID}`
+        const imgPositionInfo = await selectQuery(`#${id}`, imgCurrentInstance);
         if ((top <= imgPositionInfo.top && imgPositionInfo.top <= bottom) || (top <= imgPositionInfo.bottom && imgPositionInfo.bottom < bottom)) {
             foodItem.currentImg = foodItem.fullImgPath;
         }
@@ -104,7 +107,9 @@ async function closeCartDetail() {
 function changeTabItem(index: number) {
     // setCollectTabIndex(index);
     collectTabIndex.value = index;
-    foodScrollHandle();
+    setTimeout(() => {
+        foodScrollHandle();
+    }, 300);
     // 切换tab 回滚到最初位置
     scrollTopNum.value = scrollTopNum.value + 0.00001;
 }

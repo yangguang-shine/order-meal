@@ -92,6 +92,10 @@ export function setScrollToViewCategory(categoryID: number) {
 export function setFoodSpecificationInfo(foodInfo: FoodItemI) {
     menuState.foodSpecificationInfo = foodInfo;
 }
+export function setFooterInfoCurrentInstance(footerInfoCurrentInstance: any) {
+    menuState.footerInfoCurrentInstance = footerInfoCurrentInstance;
+}
+
 
 
 
@@ -114,6 +118,7 @@ export interface SetSimpleActionI {
     setMenuDefault: () => void;
     setScrollToViewCategory: (categoryID: number) => void;
     setFoodSpecificationInfo: (foodInfo: FoodItemI) => void;
+    setFooterInfoCurrentInstance: (footerInfoCurrentInstance: any) => void
 }
 const setSimpleAction: SetSimpleActionI = {
     setShopInfo,
@@ -134,5 +139,6 @@ const setSimpleAction: SetSimpleActionI = {
     setMenuDefault,
     setScrollToViewCategory,
     setFoodSpecificationInfo,
+    setFooterInfoCurrentInstance
 };
 export default setSimpleAction;

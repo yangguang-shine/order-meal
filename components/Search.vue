@@ -5,10 +5,9 @@
             <view class="cancel" @click="clickCancel">取消</view>
 
             <!-- <image class="search-icon"></image> -->
-                <image class="search-icon" src='/static/img/common/search.png'></image>
+            <image class="search-icon" src="/static/img/common/search.png"></image>
 
-
-                <image class="clear-input" v-if="modelValue" @click="clearInput" src='/static/img/common/close1.png'></image>
+            <image class="clear-input" v-if="modelValue" @click="clearInput" src="/static/img/common/close1.png"></image>
 
             <view class="search-title">{{ modelValue ? resultTitle : defaultTitle }}</view>
         </view>
@@ -29,11 +28,13 @@
 <script lang="ts" setup>
 import { delaySync, selectQuery } from "@/utils/";
 import Shop from "@/components/Shop.vue";
-import { ref, onMounted, computed, getCurrentInstance, watch } from "vue";
+import { ref, onMounted, computed, getCurrentInstance, watch, toRefs } from "vue";
 import { searchDefaultTransitionTime } from "./config";
 import useOverlayAnimation from "@/utils/useOverlayAnimation";
 import { debounce } from "@/utils/tool";
-const currentInstance = getCurrentInstance()
+import { FoodItemI } from "@/interface/menu";
+import { MenuStateG, MenuStoreI, useMenuStore } from "@/piniaStore/menu";
+const currentInstance = getCurrentInstance();
 interface PropsI {
     bottom?: number;
     searchResultList: any;
@@ -42,7 +43,7 @@ interface PropsI {
     animationTime?: number;
     resultTitle?: string;
     defaultTitle?: string;
-    type?: string
+    type?: string;
 }
 interface EmitI {
     (e: "clickResultItem", id: number): void;
@@ -53,11 +54,12 @@ interface EmitI {
 //     console.log(11111)
 
 // };
-const idPre = "img-search";
 const foodScrollHandle = debounce(handleScroll, 70);
+
 async function handleScroll() {
-    if (props.type !== 'searchFood') {
-        return
+    console.log(props.type)
+    if (props.type !== "search-food") {
+        return;
     }
     const currentCollectFoodList = props.modelValue ? props.searchResultList : props.defaultList;
     const searchListBoxId = props.modelValue ? "#result-box" : "#default-box";
@@ -69,8 +71,14 @@ async function handleScroll() {
 
     const { top, bottom } = searchBosPositionInfo;
     for (let i = 0; i < currentCollectFoodList.length; i++) {
-        const foodItem = currentCollectFoodList[i];
-        const imgPositionInfo = await selectQuery(`#${idPre}-${foodItem.foodID}`, currentInstance);
+        const foodItem: FoodItemI = currentCollectFoodList[i];
+        const id = `${props.type}-${foodItem.foodID}`;
+        const menuStore: MenuStoreI = useMenuStore();
+        const { foodItemSearchFoodImgMap }: MenuStateG = toRefs(menuStore.menuState);
+        foodItemSearchFoodImgMap;
+        const imgCurrentInstance = foodItemSearchFoodImgMap.value[`${foodItem.foodID}`];
+        const imgPositionInfo = await selectQuery(`#${id}`, imgCurrentInstance);
+
         if ((top <= imgPositionInfo.top && imgPositionInfo.top <= bottom) || (top <= imgPositionInfo.bottom && imgPositionInfo.bottom < bottom)) {
             foodItem.currentImg = foodItem.fullImgPath;
         }
@@ -89,7 +97,7 @@ const props: PropsI = withDefaults(defineProps<PropsI>(), {
     animationTime: searchDefaultTransitionTime,
     resultTitle: "搜索结果",
     defaultTitle: "推荐结果",
-    type: ''
+    type: "",
 });
 const emit = defineEmits<EmitI>();
 const { overlayAnimationData, toStartAnimation, toEndAnimation } = useOverlayAnimation({
@@ -163,7 +171,7 @@ async function clickCancel() {
             margin-left: 20rpx;
         }
         .search-icon {
-          position: absolute;
+            position: absolute;
             top: 35rpx;
             left: 40rpx;
             width: 50rpx;

@@ -47,7 +47,7 @@ const { startShopInfoAnimationFlag, shopInfoFlag, businessType, shopInfo, cartCa
 // getter
 const { cartPriceInfo, asideCategoryInfo }: MenuGetterG = storeToRefs(menuStore);
 // action
-const { toogleCartDetailFlag, setScrollToViewCategory, setFooterPX, setCartImgPX } = menuStore;
+const { toogleCartDetailFlag, setScrollToViewCategory, setFooterPX, setCartImgPX, setFooterInfoCurrentInstance } = menuStore;
 const cartImgAnimationData = ref(null);
 const hasOrderRequiredListFlag = computed(() => {
     let hasOrderRequiredFlag: boolean = true;
@@ -120,11 +120,13 @@ const confirmButtonInfo: RefI<ConfirmButtonInfoI> = computed((): ConfirmButtonIn
         requireText,
     };
 });
+    const currentInstance = getCurrentInstance()
+
 onMounted(async () => {
+    setFooterInfoCurrentInstance(currentInstance)
     getFooterCartContainerHeight();
     getCartImgBoxHeight();
 });
-    const currentInstance = getCurrentInstance()
 
 async function getFooterCartContainerHeight() {
     const res = await selectQuery("#footer-cart-container", currentInstance);
@@ -186,6 +188,7 @@ function toComfirmOrder() {
     }
 }
 function clickCartImg() {
+    console.log('clickCartImg')
     toogleCartDetailFlag();
 }
 </script>

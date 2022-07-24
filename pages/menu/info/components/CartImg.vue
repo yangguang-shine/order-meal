@@ -1,5 +1,5 @@
 <template>
-    <div class="cart-box flex-center">
+    <div class="cart-box flex-center" @click="clickCartImg">
         <div class="left" :style="{'color': shopInfo.mainColor}"></div>
         <div class="center" :style="{'background-color': shopInfo.mainColor}">
             <div class="fu-shou">
@@ -23,6 +23,11 @@ import { toRefs } from "vue";
 
 const menuStore: MenuStoreI = useMenuStore()
 const { shopInfo }: MenuStateG = toRefs(menuStore.menuState)
+const { toogleCartDetailFlag } = menuStore
+function clickCartImg() {
+    console.log('clickCartImg')
+    toogleCartDetailFlag();
+}
 </script>
 
 <style lang="scss" scoped>

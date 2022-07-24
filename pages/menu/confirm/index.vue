@@ -1,5 +1,5 @@
 <template>
-    <div class="comfirm-order-container" :style="{'padding-bottom': footerButtonHeightRPX + 40 + 'rpx'}">
+    <div class="comfirm-order-container">
         <AddressDeliver></AddressDeliver>
         <OrderInfo></OrderInfo>
         <OtherInfo></OtherInfo>

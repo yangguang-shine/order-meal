@@ -1,6 +1,6 @@
 <template>
     <view class="food-item-container flex-item flex-row" :class="'food-item-container-' + mode" @click="clickFoodItem(foodItem)">
-        <image :id="`${idPre}-${foodItem.foodID}`" class="food-img flex-shrink" :src="foodItem.currentImg" mode="scaleToFill"></image>
+        <image :id="`${type}-${foodItem.foodID}`" class="food-img flex-shrink" :src="foodItem.currentImg" mode="scaleToFill"></image>
         <view class="food-info-box flex-item flex-col flex-j-between">
             <view class="food-name-description">
                 <view class="food-name line1">{{ foodItem.foodName }}</view>
@@ -28,7 +28,6 @@ interface PropsI {
     foodItem: FoodItemI; 
     mode?: string; // large | midden | small
     type?: string,
-    idPre?: string
 }
 interface EmitI {
   (e: 'clickFoodItem', id: number): void
@@ -36,22 +35,32 @@ interface EmitI {
 const props: PropsI = withDefaults(defineProps<PropsI>(), {
     foodItem: {},
     mode: "midden",
-    type: 'main',
-    idPre: 'img'
+    type: 'vertical',
 });
 const emit = defineEmits<EmitI>()
 interface CartChangeParamI {
     foodItem: FoodItemI;
     count: number;
 }
+const currentInstance = getCurrentInstance()
 const showInfoFlag: RefI<boolean> = ref(false);
 
 // store
 const menuStore: MenuStoreI = useMenuStore();
 // state
-const { shopInfo  }: MenuStateG = toRefs(menuStore.menuState)
-
+const { shopInfo,   }: MenuStateG = toRefs(menuStore.menuState)
+// action
+const { setFoodItemVerticalImgMap, setFoodItemCartDetailImgMap, setFoodItemCollectFoodImgMap, setFoodItemSearchFoodImgMap } = menuStore
 onMounted(async () => {
+    if (props.type === 'vertical') {
+        setFoodItemVerticalImgMap(props.foodItem.foodID, currentInstance)
+    } else if (props.type === 'cart-detail') {
+        setFoodItemCartDetailImgMap(props.foodItem.foodID, currentInstance)
+    } else if (props.type === 'collect-food') {
+        setFoodItemCollectFoodImgMap(props.foodItem.foodID, currentInstance)
+    } else if (props.type === 'search-food') {
+        setFoodItemSearchFoodImgMap(props.foodItem.foodID, currentInstance)
+    } 
     if (props.foodItem.orderCount > 0) {
         // 组件初次挂载不使用动画
         showInfoFlag.value = true;
