@@ -6,6 +6,8 @@
 
 **手机体验地址：[【点餐下单】](http://yangguang.natappvip.cc) <http://yangguang.natappvip.cc>**
 
+**小程序版**: 目前只有体验版，需要申请体验版权限才能访问，添加体验版权限请联系 13429808281
+
 **扫码体验图片二维码**
 
 ![http://yangguang.natappvip.cc](./static/http___yangguang.natappvip.cc.png)
@@ -27,6 +29,31 @@ vue3、pinia、uni-app、typescript、es6及以上语法、composition api
 管理端github地址： http://github.com/yangguang-shine/manage
 
 服务端github地址: http://github.com/yangguang-shine/serve
+
+## 目录
+
+	order-meal
+		|----pages：		项目的页面文件
+			|----home	项目首页
+			|----menu	用户进行点单、确认订单、提交订单等一系列相关页面
+			|----order	用户下单之后的订单列表以及详情页面
+			|----center	用户个人中心页
+			|----address	用户地址相关页面
+			|----login	用户登录页面
+			|----register	用户注册页面
+			|----shop	店铺列表页面
+			|----explain	用户地址页面
+		|----components：	一般公共组件存放处
+		|----config：		关于项目相关的域名地址的配置
+		|----delete：		包含之前一些 vuex 和 option api pinia的相关store
+		|----interface：	项目 typescript 相关模块的 interface 数据定义文件
+		|----piniaStore：	vue3的全局数据状态管理，使用的 composition api 
+		|----router：		全局路由配置文件
+		|----static：		存放项目静态资源文件
+		|----style：		存放全局公共css scss样式
+		|----utils：		存放一些常用的公共方法
+	
+
 
 ## 主要功能
 
@@ -71,29 +98,7 @@ vue3、pinia、uni-app、typescript、es6及以上语法、composition api
 5. 支持取消订单
 6. 支持订单相关菜品以及其他信息展示
 
-## 目录
 
-	order-meal
-		|----pages：		项目的页面文件
-			|----home	项目首页
-			|----menu	用户进行点单、确认订单、提交订单等一系列相关页面
-			|----order	用户下单之后的订单列表以及详情页面
-			|----center	用户个人中心页
-			|----address	用户地址相关页面
-			|----login	用户登录页面
-			|----register	用户注册页面
-			|----shop	店铺列表页面
-			|----explain	用户地址页面
-		|----components：	一般公共组件存放处
-		|----config：		关于项目相关的域名地址的配置
-		|----delete：		包含之前一些 vuex 和 option api pinia的相关store
-		|----interface：	项目 typescript 相关模块的 interface 数据定义文件
-		|----piniaStore：	vue3的全局数据状态管理，使用的 composition api 
-		|----router：		全局路由配置文件
-		|----static：		存放项目静态资源文件
-		|----style：		存放全局公共css scss样式
-		|----utils：		存放一些常用的公共方法
-	
 ## 使用流程
 
 1. 安装 `node` 和 `HbuilderX` 最新版（因时间原因，项目暂未迁移为 cli 模式，目前使用该工具主要进行打包，代码编写使用的是 `vs code`）。
@@ -163,6 +168,17 @@ vue3、pinia、uni-app、typescript、es6及以上语法、composition api
 11. 数据变成初始化时，考虑下是不是加载时初始化了数据（已解决）
 12. 再来一单查看购物车时，有的图片还未加载问题（已解决）
 13. 用户体验时可能使用的是pc端 无法友好体验（已解决）
+
+### 历史工作项目访问地址
+
+1. max会员：https://u.jr.jd.com/uc-fe-wxgrowing/interest-free-card/index/
+2. max金卡：https://u.jr.jd.com/uc-fe-wxgrowing/max/index
+3. 宝宝金：https://u.jr.jd.com/uc-fe-wxgrowing/baobaojin/index
+4. 15财富节：https://u.jr.jd.com/uc-fe-growing/fortune-day/home
+5. 商城借钱页：https://u.jr.jd.com/uc-fe-growing/financial/index/
+6. 摇钱树：https://u.jr.jd.com/uc-fe-wxgrowing/moneytree/index/
+7. 购省卡：https://u.jr.jd.com/uc-fe-growing/buy-save-cards/home
+
 
 ### 思考总结
 
