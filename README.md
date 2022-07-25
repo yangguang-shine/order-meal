@@ -8,7 +8,7 @@
 
 **小程序版**: 目前只有体验版，需要申请体验版权限才能访问，添加体验版权限请联系 13429808281
 
-**扫码体验图片二维码**
+**扫码体验H5版图片二维码**
 
 ![http://yangguang.natappvip.cc](./static/http___yangguang.natappvip.cc.png)
 
