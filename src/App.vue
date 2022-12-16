@@ -4,7 +4,6 @@ import { defineComponent, computed, getCurrentInstance, ref } from "vue";
 export default defineComponent({
     onLaunch() {
         // #ifdef MP-WEIXIN
-        // toLogin()
         // #endif
     },
     onShow() {
@@ -16,6 +15,8 @@ export default defineComponent({
 })
 </script>
 
-<style>
+<style lang="scss">
 /*每个页面公共css */
+@import './uni.scss'
+
 </style>

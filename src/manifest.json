@@ -87,11 +87,11 @@
         "devServer" : {
             "open" : false,
             "port" : 6789, // 自定义修改8080端口
-            "host" : "dev.jr.jd.com",
+            "host" : "127.0.0.1",
             // 代理跨域
             "proxy" : {
                 "/api" : {
-                    "target" : "http://dev.jr.jd.com:9999",
+                    "target" : "http://127.0.0.1:9999",
                     "changeOrigin" : true
                 }
             }

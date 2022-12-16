@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+      "target": "esnext",
+      "module": "esnext",
+      "strict": true,
+      "jsx": "preserve",
+      "moduleResolution": "node",
+      "noImplicitThis": false,
+      "paths": {
+        "@/components/*": ["./components/*"],
+        "@/config/*": ["./config/*"],
+        "@/utils/": ["./utils/index"],
+        "@/utils/*": ["./utils/*"],
+        "@/pages/*": ["./pages/*"],
+        "@/static/*": ["./static/*"],
+        "@/router/*": ["./router/*"],
+        "@/interface/*": ["./interface/*"],
+        "@/style/*": ["./style/*"],
+        "@/piniaStore/*": ["./piniaStore/*"],
+        "@/piniaStore/": ["./piniaStore/index"]
+      }
+    }
+}
